@@ -1,6 +1,8 @@
 const csrf = require('csurf');
+const { check, validationResult } = require('express-validator');
 
 const csrfProtection = csrf({ cookie: true });
+const db = require('./db/models')
 
 const asyncHandler = (handler) => (req, res, next) => handler(req, res, next).catch(next);
 
@@ -9,9 +11,9 @@ const userValidators = [
         .exists({ checkFalsy: true })
         .withMessage('Please provide a value for userName')
         .isLength({ max: 50 })
-        .withMessage('UserName must not be more than 50 characters long')
+        .withMessage('Username must not be more than 50 characters long')
         .custom((value) => {
-            return db.User.findOne({ where: { userName: value } })
+            return db.User.findOne({ where: { username: value } })
                 .then((user) => {
                     if (user) {
                         return Promise.reject('The provided Email Address is already in use by another account');
@@ -28,7 +30,7 @@ const userValidators = [
         .withMessage('Please provide a value for Last Name')
         .isLength({ max: 50 })
         .withMessage('Last Name must not be more than 50 characters long'),
-    check('emailAddress')
+    check('email')
         .exists({ checkFalsy: true })
         .withMessage('Please provide a value for Email Address')
         .isLength({ max: 255 })
@@ -36,7 +38,7 @@ const userValidators = [
         .isEmail()
         .withMessage('Email Address is not a valid email')
         .custom((value) => {
-            return db.User.findOne({ where: { emailAddress: value } })
+            return db.User.findOne({ where: { email: value } })
                 .then((user) => {
                     if (user) {
                         return Promise.reject('The provided Email Address is already in use by another account');
