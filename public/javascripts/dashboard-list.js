@@ -6,7 +6,9 @@ window.addEventListener("load", async (event) => {
     const taskList = document.getElementById('task-lists');
     lists.forEach(list => {
         const li = document.createElement('li');
-        li.innerText = list.name;
+        li.innerHTML = `
+        <a href='/lists/${list.id}'>${list.name}</a>
+        `;
         taskList.appendChild(li);
     });
 })

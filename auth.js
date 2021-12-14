@@ -8,7 +8,7 @@ const loginUser = (req, res, user) => {
         userId: user.id
     };
 
-    console.log(req.session)
+    // console.log(req.session)
 };
 
 const requireAuth = (req, res, next) => {

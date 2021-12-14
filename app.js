@@ -10,6 +10,7 @@ const dashboardRouter = require('./routes/dashhboard');
 const usersRouter = require('./routes/users');
 const tasksRouter = require('./backend-api/tasks');
 const listsRouter = require('./backend-api/lists')
+const frontListsRouter = require('./routes/lists')
 const { restoreUser } = require('./auth');
 
 const app = express();
@@ -44,6 +45,7 @@ app.use('/api', tasksRouter);
 app.use(usersRouter);
 app.use('/api/lists', listsRouter);
 app.use('/api', tasksRouter);
+app.use('/lists', frontListsRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

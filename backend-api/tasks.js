@@ -1,5 +1,4 @@
 const express = require('express');
-const { noExtendLeft } = require('sequelize/types/lib/operators');
 const router = express.Router();
 const db = require('../db/models');
 const { asyncHandler } = require('../utils');
