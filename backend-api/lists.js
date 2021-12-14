@@ -9,6 +9,9 @@ const { asyncHandler, csrfProtection, listNotFoundError, validateList, handleVal
 router.use(requireAuth);
 
 router.get('/', asyncHandler(async(req,res) => {
+    // const lists = await db.List.findAll({
+    //     where: {userId: res.locals.user.id}
+    // })
     const lists = await db.List.findAll({
         where: {userId: res.locals.user.id}
     })
@@ -19,7 +22,7 @@ router.get('/', asyncHandler(async(req,res) => {
 router.post('/', validateList, handleValidationErrors, asyncHandler(async(req,res) => {
     const { name } = req.body;
     const list = await db.List.create({
-        name, 
+        name,
         userId: res.locals.user.id
     })
     res.json({list});
@@ -54,7 +57,7 @@ router.delete('/:id', asyncHandler(async(req,res,next) => {
     //     err.title = "Unauthorized";
     //     throw err;
     //   }
-    
+
     if (list) {
         await list.destroy();
         res.status(204).end;
