@@ -4,7 +4,7 @@ include utils.pug
 
 block content
     +errorSummary(errors)
-    form(action='/users/login' method='post')
+    form(action='/login' method='post')
         input(type='hidden' name='_csrf' value=csrfToken)
         +field('Username', 'username', username)
         +field('Password', 'password', password, 'password')

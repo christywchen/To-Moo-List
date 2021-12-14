@@ -7,6 +7,6 @@ html
   body
     if locals.authenticated
       span Welcome #{user.username}!
-      form(action='/users/logout' method='post')
+      form(action='/logout' method='post')
         button(type='submit') Logout
     block content
