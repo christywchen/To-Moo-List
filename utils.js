@@ -6,6 +6,37 @@ const db = require('./db/models')
 
 const asyncHandler = (handler) => (req, res, next) => handler(req, res, next).catch(next);
 
+const listNotFoundError = (id) => {
+    const err = new Error(`This list id: ${id} could not be found`)
+    err.title = "List not found.";
+    err.status = 400;
+    return err;
+};
+
+
+const handleValidationErrors = (req, res, next) => {
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty()) {
+        const errors = validationErrors.array().map((error) => error.msg);
+
+        const err = Error("Bad request.");
+        err.errors = errors;
+        err.status = 400;
+        err.title = "Bad request.";
+        next(err);
+    }
+    next();
+};
+
+const validateList = [
+    check('name')
+        .exists({ checkFalsy: true })
+        .withMessage("There must be a name for a list."),
+    check('name')
+        .isLength({ max: 50 })
+        .withMessage('The name can only be 50 characters')
+];
+
 const userValidators = [
     check('username')
         .exists({ checkFalsy: true })
@@ -79,4 +110,7 @@ module.exports = {
     asyncHandler,
     userValidators,
     loginValidator,
+    listNotFoundError,
+    validateList,
+    handleValidationErrors,
 };

@@ -8,7 +8,9 @@ const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const tasksRouter = require('./backend-api/tasks');
 const { restoreUser } = require('./auth');
+const listsRouter = require('./backend-api/lists')
 
 const app = express();
 
@@ -39,6 +41,8 @@ store.sync();
 
 app.use('/', indexRouter);
 app.use(usersRouter);
+app.use('/api/lists', listsRouter);
+app.use('/api', tasksRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
