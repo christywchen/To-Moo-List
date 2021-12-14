@@ -6,7 +6,7 @@ html
         link(rel='stylesheet' href='/stylesheets/reset.css')
   body
     if locals.authenticated
-      span Welcome #{user.userName}!
+      span Welcome #{user.username}!
       form(action='/users/logout' method='post')
         button(type='submit') Logout
     block content
