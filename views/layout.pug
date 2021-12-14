@@ -4,6 +4,7 @@ html
       block head
         title #{title}
         link(rel='stylesheet' href='/stylesheets/reset.css')
+        //- script(src="javascripts/dashboard-list.js")
   body
     if locals.authenticated
       span Welcome #{user.username}!

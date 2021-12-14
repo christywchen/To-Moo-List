@@ -25,6 +25,7 @@ router.get('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
         next(taskNotFound(taskId));
     }
 }))
+
 // post
 router.post('/lists/:id(\\d+)', asyncHandler(async (req, res) => {
     const { name } = req.body;
@@ -58,7 +59,6 @@ router.put('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     } else {
         next(taskNotFound(taskId));
     }
-
 }))
 
 
@@ -74,5 +74,12 @@ router.delete('/tasks/:id(\\d+)', asyncHandler(async (req, res) => {
     }
 }))
 
+// getting all tasks
+// router.get('/tasks/:id', asyncHandler(async (req,res) => {
+// }))
+
+// Getting tasks by listId
+// router.get('/lists/:listId/tasks', asyncHandler(async (req,res) => {
+// }))
 
 module.exports = router;
