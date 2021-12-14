@@ -1,0 +1,10 @@
+extends layout.pug
+
+include utils.pug
+
+block content
+    +errorSummary(errors)
+    form(action='/api/lists' method='post')
+        input(type='hidden' name='_csrf' value=csrfToken)
+        +field('name', 'name', name)
+        button(type='submit') Submit
