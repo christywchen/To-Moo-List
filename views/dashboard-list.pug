@@ -1,0 +1,16 @@
+
+include utils.pug
+
+div#content
+    div#topbar
+        p header
+    div#sidebar
+        ol
+            li Today's Tasks
+            li Tomorrow's Tasks
+            li All Tasks
+    div#main
+        include dashboard-tasks.pug
+
+    div#summary
+        include dashboard-summary.pug
