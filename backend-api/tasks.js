@@ -75,11 +75,17 @@ router.delete('/tasks/:id(\\d+)', asyncHandler(async (req, res) => {
 }))
 
 // getting all tasks
-// router.get('/tasks/:id', asyncHandler(async (req,res) => {
-// }))
+router.get('/tasks/:id', asyncHandler(async (req,res) => {
+}))
 
 // Getting tasks by listId
-// router.get('/lists/:listId/tasks', asyncHandler(async (req,res) => {
-// }))
+router.get('/lists/:listId/tasks', asyncHandler(async (req,res) => {
+    const tasks = await db.Task.findAll({
+        where: {
+            listId: req.params.listId
+        }
+    })
+    res.json({ tasks })
+}))
 
 module.exports = router;
