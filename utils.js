@@ -9,14 +9,14 @@ const asyncHandler = (handler) => (req, res, next) => handler(req, res, next).ca
 const userValidators = [
     check('username')
         .exists({ checkFalsy: true })
-        .withMessage('Please provide a value for userName')
+        .withMessage('Please provide a value for username')
         .isLength({ max: 50 })
         .withMessage('Username must not be more than 50 characters long')
         .custom((value) => {
             return db.User.findOne({ where: { username: value } })
                 .then((user) => {
                     if (user) {
-                        return Promise.reject('The provided Email Address is already in use by another account');
+                        return Promise.reject('The provided username is already in use by another account');
                     }
                 });
         }),
@@ -65,8 +65,18 @@ const userValidators = [
         }),
 ];
 
+const loginValidator = [
+    check('username')
+        .exists({ checkFalsy: true })
+        .withMessage('Please provide a value for username'),
+    check('password')
+        .exists({ checkFalsy: true })
+        .withMessage('Please provide a value for Password')
+]
+
 module.exports = {
     csrfProtection,
     asyncHandler,
     userValidators,
+    loginValidator,
 };
