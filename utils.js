@@ -13,6 +13,7 @@ const listNotFoundError = (id) => {
     return err;
 };
 
+
 const handleValidationErrors = (req, res, next) => {
     const validationErrors = validationResult(req);
     if (!validationErrors.isEmpty()) {
