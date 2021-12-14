@@ -6,7 +6,6 @@ const logger = require('morgan');
 const { sequelize } = require('./db/models');
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
-const apiRouters = require('./backend-api/index');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
@@ -36,7 +35,6 @@ app.use(
 // create Session table if it doesn't already exist
 store.sync();
 
-app.use('/api', apiRouters);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 

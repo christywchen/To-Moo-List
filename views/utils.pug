@@ -1,0 +1,12 @@
+mixin errorSummary(errors)
+  if errors
+    div
+      p Please fix the following error(s):
+      ul
+        each error in errors
+          li= error
+
+mixin field(fieldText, fieldName, fieldValue, fieldType = 'text', placeholder = null)
+  div
+    label(for= fieldName) #{fieldText}
+      input(type=fieldType id=fieldName name=fieldName value=fieldValue placeholder=placeholder)

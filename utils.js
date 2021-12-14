@@ -64,6 +64,7 @@ const userValidators = [
             return true;
         }),
 ];
+
 module.exports = {
     csrfProtection,
     asyncHandler,
