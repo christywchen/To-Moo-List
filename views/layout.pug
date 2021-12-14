@@ -5,4 +5,8 @@ html
         title #{title}
         link(rel='stylesheet' href='/stylesheets/reset.css')
   body
+    if locals.authenticated
+      span Welcome #{user.userName}!
+      form(action='/users/logout' method='post')
+        button(type='submit') Logout
     block content

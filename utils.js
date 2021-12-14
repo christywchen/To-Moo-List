@@ -71,7 +71,7 @@ const loginValidator = [
         .withMessage('Please provide a value for username'),
     check('password')
         .exists({ checkFalsy: true })
-        .withMessage('Please provide a value for Password')
+        .withMessage('Please provide a valid Password')
 ]
 
 module.exports = {

@@ -6,6 +6,6 @@ block content
     +errorSummary(errors)
     form(action='/users/login' method='post')
         input(type='hidden' name='_csrf' value=csrfToken)
-        +field('Username', 'userName', userName)
+        +field('Username', 'username', username)
         +field('Password', 'password', password, 'password')
         button(type='submit') Submit
