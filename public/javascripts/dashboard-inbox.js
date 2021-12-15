@@ -29,5 +29,4 @@ async function queryEvents(fetchPath) {
         div.innerHTML = createTaskHtml(task.name);
         taskContainer.appendChild(div);
     })
-
 }
