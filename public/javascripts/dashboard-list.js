@@ -15,7 +15,7 @@ window.addEventListener("load", async (event) => {
         const { tasks } = await taskRes.json();
 
         // get task div
-        const tasksContainer = document.getElementById("tasks-container");
+        const taskContainer = document.getElementById("taskContainer");
         tasks.forEach(task => {
             const div = document.createElement("div");
             div.classList.add('task')
@@ -24,7 +24,7 @@ window.addEventListener("load", async (event) => {
             <label for="${task.name}">${task.name}</label>
             <div hidden class='categories'>mwhahahah</div>
             `
-            tasksContainer.appendChild(div);
+            taskContainer.appendChild(div);
         })
 
         // append tasks to task div

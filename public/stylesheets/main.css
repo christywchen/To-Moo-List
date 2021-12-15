@@ -42,11 +42,11 @@
     overflow: hidden;
 }
 
-#tasks-container:hover {
+#taskContainer:hover {
     overflow-y: scroll;
 }
 
-#tasks-container div {
+#taskContainer div {
     padding: 0 3px;
     border-bottom: 1px dotted lightgray;
 }
