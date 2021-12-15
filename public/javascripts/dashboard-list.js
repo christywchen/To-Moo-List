@@ -10,22 +10,23 @@ window.addEventListener("load", async (event) => {
 
     const fetchListTasks = async (e) => {
         e.preventDefault();
-       // console.log(e.target.className)
+        // console.log(e.target.className)
         const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
         const { tasks } = await taskRes.json();
-        
+
         // get task div
-        const taskContainer = document.getElementById("taskContainer");
+        const tasksContainer = document.getElementById("tasks-container");
         tasks.forEach(task => {
             const div = document.createElement("div");
+            div.classList.add('task')
             div.innerHTML = `
             <input type="checkbox" id="${task.name}" name="${task.name}" value="${task.name}">
             <label for="${task.name}">${task.name}</label>
             <div hidden class='categories'>mwhahahah</div>
             `
-            taskContainer.appendChild(div);
+            tasksContainer.appendChild(div);
         })
-    
+
         // append tasks to task div
     }
     // // <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
@@ -38,4 +39,5 @@ window.addEventListener("load", async (event) => {
         li.addEventListener('click', fetchListTasks)
         taskList.appendChild(li);
     });
+
 })

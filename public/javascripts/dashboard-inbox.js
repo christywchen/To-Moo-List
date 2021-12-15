@@ -42,4 +42,27 @@ window.addEventListener("load", async (e) => {
         })
     });
 
+    const addTaskFormDiv = document.querySelector('#add-task-form');
+    const addTaskInp = document.querySelector('input#name.inp-field');
+    const addTaskButtonDiv = document.querySelector('.add-task-button');
+    const addTaskButton = document.querySelector('.add-task-button button');
+
+    document.addEventListener('click', (e) => {
+        // show submit button if event target is a descendent of addTaskFormDiv
+        // otherwise, do not show the submit button
+        if (addTaskFormDiv.contains(e.target)) {
+            addTaskButtonDiv.classList.add('add-task-button-transition');
+        }
+        else {
+            addTaskButtonDiv.classList.remove('add-task-button-transition');
+        }
+    });
+
+    addTaskInp.addEventListener('keyup', () => {
+        if (addTaskInp.value) {
+            addTaskButton.disabled = false;
+        } else {
+            addTaskButton.disabled = true;
+        }
+    });
 })
