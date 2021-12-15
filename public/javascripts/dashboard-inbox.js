@@ -3,16 +3,19 @@ import { createTaskHtml } from './dashboard-list.js';
 window.addEventListener("load", async (e) => {
 
     const allTasks = document.getElementById("all");
-    const tomorrow = document.getElementById("tomrrow");
+    const tomorrow = document.getElementById("tomorrow");
     const today = document.getElementById("today");
-    const todaysDate = new Date().toISOString().split('T')[0];
 
     const allTasksRoute = `/api/tasks`;
-    const todayTasksRoute = `/api/tasks/2021-12-14`;
-    const tomorrowTasksRoute = '' // TODO
+    const todayTasksRoute = `/api/tasks/today`; 
+    const tomorrowTasksRoute = `/api/tasks/tomorrow`; 
 
     today.addEventListener('click', (e) => {
         queryEvents(todayTasksRoute);
+    });
+
+    tomorrow.addEventListener('click', (e) => {
+        queryEvents(tomorrowTasksRoute);
     });
 
     allTasks.addEventListener("click", (e) => {
