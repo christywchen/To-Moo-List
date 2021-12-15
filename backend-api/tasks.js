@@ -30,12 +30,14 @@ router.get('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
 
 // post
 router.post('/lists/:id(\\d+)', asyncHandler(async (req, res) => {
-    const { name } = req.body;
-    const { listId } = req.params;
+    const { name, listId } = req.body;
+    // const { listId } = req.params;
+    console.log('HERE!!!!: ', name, listId, res.locals.user.id)
     const task = await db.Task.create({
         name,
-        userId: req.user.id,
+        userId: res.locals.user.id,
         listId,
+        categoryId: 1,
     })
     res.status(201);
     res.json({ task });

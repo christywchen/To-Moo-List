@@ -58,6 +58,15 @@ ol#default-lists {
     border-bottom: 1px dotted gray;
 }
 
+#form-container {
+    display:flex;
+    align-items: center;
+}
+
+.addTaskbutton {
+    justify-self: flex-end;
+}
+
 .lists {
     line-height: 2em;
 }
