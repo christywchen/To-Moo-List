@@ -16,7 +16,7 @@ const initializePage = async () => {
 
         // TODO look into window.history.pushState
         // Look into remove listId from closure and get from fragment URL
-        window.history.replaceState(stateId, `List ${e.target.className}`, `dashboard/#list/${e.target.className}`);
+        window.history.replaceState(stateId, `List ${e.target.className}`, `/dashboard/#list/${e.target.className}`);
     };
 
     const res = await fetch('/api/lists')
@@ -79,8 +79,8 @@ window.addEventListener("load", async (event) => {
     document.addEventListener('click', (e) => {
         // show submit button if event target is a descendent of addTaskFormDiv
         // otherwise, do not show the submit button
-        e.preventDefault()
         if (addTaskFormDiv.contains(e.target)) {
+            e.preventDefault()
             addTaskButtonDiv.classList.add('add-task-button-transition');
         }
         else {
