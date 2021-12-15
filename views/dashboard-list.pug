@@ -9,15 +9,16 @@ block content
             p header
         div#sidebar
             ol#task-lists
-                li Today's Tasks
-                li Tomorrow's Tasks
-                li All Tasks
+                li#today Today's Tasks
+                li#tomrrow Tomorrow's Tasks
+                li#all All Tasks
         div#main
             include dashboard-task.pug
-        //- script(src="javascripts/dashboard-task.js")
+        //- script(src="/javascripts/dashboard-task.js")
         
 
         div#summary
             include dashboard-summary.pug
-        //- script(src="http://localhost:8080/public/javascripts/dashboard-list.js")
-        script(src="javascripts/dashboard-list.js")
+        script(src="/javascripts/dashboard-list.js")
+        script(src="/javascripts/dashboard-inbox.js")
+        

@@ -3,10 +3,15 @@ window.addEventListener("load", async (event) => {
     const res = await fetch('http://localhost:8080/api/lists')
     const { lists } = await res.json();
 
+    const today = new Date().toISOString().split('T')[0];
+    //const tasks = await fetch(`http://localhost:8080/api/tasks/${today}`);
+    //console.log(today);
+
+
     const fetchListTasks = async (e) => {
         e.preventDefault();
-        console.log(e.target.className)
-        const taskRes = await fetch(`http://localhost:8080/api/lists/${e.target.className}/tasks`)
+       // console.log(e.target.className)
+        const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
         const { tasks } = await taskRes.json();
         
         // get task div

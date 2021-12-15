@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/models');
 const { asyncHandler } = require('../utils');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 const taskNotFound = taskId => {
     const err = new Error(`Task with id ${taskId} could not be found.`)
@@ -74,8 +76,26 @@ router.delete('/tasks/:id(\\d+)', asyncHandler(async (req, res) => {
     }
 }))
 
-// getting all tasks
-router.get('/tasks/:id', asyncHandler(async (req,res) => {
+// getting all tasks by userId
+router.get('/tasks', asyncHandler(async (req,res) => {
+    const tasks = await db.Task.findAll({
+        where: {userId: res.locals.user.id}
+    })
+    res.json({ tasks });
+}));
+
+// getting tasks by date
+router.get('/tasks/:dueToday', asyncHandler(async (req,res) => {
+    const tasks = await db.Task.findAll({
+        where: {
+            userId: res.locals.user.id,
+            deadline: {
+                [Op.gte]: req.params.dueToday
+            }
+        }
+    })
+
+    res.json({ tasks });
 }))
 
 // Getting tasks by listId
