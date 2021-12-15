@@ -1,5 +1,7 @@
-window.addEventListener("load", async (e) => {
+//import {hello} from './dashboard-list.js';
 
+window.addEventListener("load", async (e) => {
+    
     const allTasks = document.getElementById("all");
     const tomorrow = document.getElementById("tomrrow");
     const today = document.getElementById("today");
@@ -10,7 +12,7 @@ window.addEventListener("load", async (e) => {
         e.preventDefault();
         const taskRes = await fetch(`/api/tasks/2021-12-14`); // need to change later
         const { tasks } = await taskRes.json();
-        const taskContainer = document.getElementById("taskContainer");
+        const taskContainer = document.getElementById("tasksContainer");
 
         tasks.forEach(task => {
             const div = document.createElement("div");
@@ -21,6 +23,7 @@ window.addEventListener("load", async (e) => {
             `
             taskContainer.appendChild(div);
         })
+        //hello();
     })
 
     allTasks.addEventListener("click", async (e) => {

@@ -1,5 +1,9 @@
 let listId;
 
+// export const hello = () => {
+//     console.log("hello")
+// }
+
 // Initialze Page
 const initializePage = async () => {
     const fetchListTasks = async (e) => {
@@ -64,6 +68,8 @@ const createTask = async (e) => {
             // TODO finish error handling
             console.error('-Unable to reach database-');
         }
+        const addTaskInp = document.querySelector('input#name.inp-field');
+        addTaskInp.value = "";
     }
 };
 
