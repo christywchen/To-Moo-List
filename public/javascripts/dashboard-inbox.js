@@ -41,5 +41,4 @@ window.addEventListener("load", async (e) => {
             taskContainer.appendChild(div);
         })
     });
-
 })

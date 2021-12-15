@@ -1,0 +1,31 @@
+/* topbar styling */
+span.welcome {
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+/* general form styling */
+input {
+    padding: 8px;
+    margin: 10px 0px;
+    border: 1px solid lightgrey;
+    border-radius: 3px;
+}
+
+input:focus {
+    border: 1px solid var(--secondary-color);
+    outline: none;
+}
+
+button {
+    padding: 6px 10px;
+    color: #ffffff;
+    font-weight: bold;
+    background-color: var(--button-color-light);
+    border-radius: 3px;
+    border: none;
+}
+
+button:disabled {
+    background-color: var(--tertiary-color);
+}
