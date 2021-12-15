@@ -38,7 +38,7 @@ const initializePage = async () => {
 }
 
 // Helper Functions
-function createTaskHtml(taskName) {
+export function createTaskHtml(taskName) {
     return ` <input type="checkbox" id="${taskName}" name="${taskName}" value="${taskName}">
                 <label for="${taskName}">${taskName}</label>
                 <div hidden class='categories'>mwhahahah</div>`;
