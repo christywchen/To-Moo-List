@@ -5,12 +5,11 @@ include utils.pug
 block content
     p My Tasks
         +errorSummary(errors)
-        div#form-container
-            form(id="add-task-form")
-                input(type='hidden' name='_csrf' value=csrfToken)
+        div#add-task-form
+            form(id='add-task-input')
+                input(type='hidden' name='_csrf' value=csrfToken id='add-task-input')
                 +field('', 'name', name, '', 'Add a task...')
-            div.addTaskDiv.hidden-add(hidden='true')
-                button#taskButton.addTaskButton.hidden-add(type='submit' hidden="true") Add
+                div.add-task-button
+                    button(type='submit' disabled='true') Moo
 
-
-    div#taskContainer
+    div#tasksContainer
