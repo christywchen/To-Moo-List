@@ -1,15 +1,12 @@
-extends layout.pug
-
 include utils.pug
 
-block content
-    p My Tasks
-        +errorSummary(errors)
-        div#add-task-form
-            form(id='add-task-input')
-                input(type='hidden' name='_csrf' value=csrfToken id='add-task-input')
-                +field('', 'name', name, '', 'Add a task...')
-                div.add-task-button
-                    button(type='submit' disabled='true') Moo
+p My Tasks
+    +errorSummary(errors)
+    div#add-task-form
+        form(id='add-task-input')
+            input(type='hidden' name='_csrf' value=csrfToken id='add-task-input')
+            +field('', 'name', name, '', 'Add a task...')
+            div.add-task-button
+                button(type='submit' disabled='true') Moo
 
-    div#tasksContainer
+div#tasksContainer

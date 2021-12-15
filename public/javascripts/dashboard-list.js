@@ -2,6 +2,20 @@ let listId;
 
 // Initialze Page
 const initializePage = async () => {
+    const fetchTaskSummary = async (e) => {
+        const taskSummaryContainer = document.querySelector('#summary')
+        const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
+        const { task } = summaryRes.json();
+
+        const taskSummary = document.createElement('div');
+        taskSummary.classList.add('task-summary');
+        taskSummary.innerHTML = `
+        <div class="summary-title" contenteditable="true"><h2>task name</h2></div>
+        <div class="summary-due-date">due date <span class="summary-due-date-container" contenteditable="true">due date</span></div>
+        `
+
+    }
+
     const fetchListTasks = async (e) => {
         e.preventDefault();
         const stateId = { id: "100" };
@@ -10,7 +24,10 @@ const initializePage = async () => {
         const taskContainer = document.getElementById("tasksContainer");
         tasks.forEach(task => {
             const div = document.createElement("div");
-            div.innerHTML = createTaskHtml(task.name);
+            div.setAttribute('data-task', `${task.id}`);
+            div.classList.add('single-task')
+            div.innerHTML = createTaskHtml(task.name, task.id);
+            div.addEventListener('click', fetchTaskSummary);
             taskContainer.appendChild(div);
         })
         // TODO look into window.history.pushState
@@ -27,15 +44,15 @@ const initializePage = async () => {
         const li = document.createElement('li');
         li.innerText = list.name
         li.className = list.id
-        li.addEventListener('click', fetchListTasks)
+        li.addEventListener('click', fetchListTasks);
         taskList.appendChild(li);
     });
 }
 
 // Helper Functions
-export function createTaskHtml(taskName) {
-    return ` <input type="checkbox" id="${taskName}" name="${taskName}" value="${taskName}">
-                <label for="${taskName}">${taskName}</label>
+export function createTaskHtml(taskName, taskId) {
+    return ` <input type="checkbox" data-task="${taskId}" name="${taskName}" value="${taskName}">
+                <label for="${taskName}" data-task="${taskId}">${taskName}</label>
                 <div hidden class='categories'>mwhahahah</div>`;
 };
 
@@ -94,7 +111,6 @@ const addTaskFormDiv = document.querySelector('#add-task-form');
 const addTaskInp = document.querySelector('input#name.inp-field');
 const addTaskButtonDiv = document.querySelector('.add-task-button');
 const addTaskButton = document.querySelector('.add-task-button button');
-
 
 // Load events
 window.addEventListener("load", async (event) => {
