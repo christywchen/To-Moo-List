@@ -85,12 +85,41 @@ router.get('/tasks', asyncHandler(async (req,res) => {
 }));
 
 // getting tasks by date
-router.get('/tasks/:dueToday', asyncHandler(async (req,res) => {
+router.get('/tasks/today', asyncHandler(async (req,res) => {
+    
+    const today = new Date();
+    let tomorrow =  new Date();
+    tomorrow.setDate(today.getDate() + 1);
+    let yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
     const tasks = await db.Task.findAll({
         where: {
             userId: res.locals.user.id,
             deadline: {
-                [Op.gte]: req.params.dueToday
+                [Op.lt]: tomorrow,
+                [Op.gt]: yesterday
+            }
+        }
+    })
+
+    res.json({ tasks });
+}))
+
+router.get('/tasks/tomorrow', asyncHandler(async (req,res) => {
+    
+    const today = new Date();
+    let tomorrow =  new Date();
+    tomorrow.setDate(today.getDate() + 2);
+    let yesterday = new Date();
+    yesterday.setDate(today.getDate());
+
+    const tasks = await db.Task.findAll({
+        where: {
+            userId: res.locals.user.id,
+            deadline: {
+                [Op.lt]: tomorrow,
+                [Op.gt]: yesterday
             }
         }
     })
