@@ -3,19 +3,31 @@ extends layout
 include utils.pug
 
 block content
-
+    div#header
+        div#user
+            if locals.authenticated
+                span.welcome Welcome #{user.username}!
+                form(action='/logout' method='post')
+                    button(type='submit') Logout
     div#content
-        div#topbar
-            p header
         div#sidebar
-            ol#task-lists
-                li#today Today's Tasks
-                li#tomrrow Tomorrow's Tasks
-                li#all All Tasks
+            div.lists
+                div.list-header Inbox
+                ol#default-lists
+                    li#today Today's Tasks
+                    li#tomorrow Tomorrow's Tasks
+                    li#all All Tasks
+            div.lists
+                div.list-header Lists
+                ol#task-lists
+            div.lists
+                div.list-header Categories
+                ol#task-categories
         div#main
-            include dashboard-task.pug
-        //- script(src="/javascripts/dashboard-task.js")
-        
+            div#add-task
+                include dashboard-task.pug
+        //- script(src="javascripts/dashboard-task.js")
+
 
         div#summary
             include dashboard-summary.pug

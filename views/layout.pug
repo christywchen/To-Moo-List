@@ -3,12 +3,12 @@ html
   head
       block head
         title #{title}
-        link(rel='stylesheet' href='/stylesheets/reset.css')
+        link(rel='stylesheet' href='/stylesheets/index.css')
         //- script(src="javascripts/dashboard-list.js")
   body
-    if locals.authenticated
-      span Welcome #{user.username}!
-      form(action='/logout' method='post')
-        button(type='submit') Logout
+    //- if locals.authenticated
+    //-   span Welcome #{user.username}!
+    //-   form(action='/logout' method='post')
+    //-     button(type='submit') Logout
 
     block content

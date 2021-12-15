@@ -3,13 +3,11 @@ extends layout.pug
 include utils.pug
 
 block content
-    p list content
+    p My Tasks
         +errorSummary(errors)
         form(action='/api/tasks' method='post')
             input(type='hidden' name='_csrf' value=csrfToken)
-            +field('name', 'name', name, '', 'name')
-            button(type='submit') Submit
+            +field('', 'name', name, '', 'Add a task...')
+            button(type='submit') Add
 
     div#taskContainer
-    
-    
