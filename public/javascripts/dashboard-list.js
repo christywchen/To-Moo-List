@@ -1,4 +1,4 @@
-let listId = 0
+let listId;
 
 // Initialze Page
 const initializePage = async () => {
@@ -21,7 +21,7 @@ const initializePage = async () => {
     const res = await fetch('/api/lists')
     const { lists } = await res.json();
     const taskList = document.getElementById('task-lists');
-    // listId = lists[0].id;
+    listId = lists[0].id;
 
     lists.forEach(list => {
         const li = document.createElement('li');
