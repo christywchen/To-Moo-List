@@ -19,7 +19,7 @@ const initializePage = async () => {
         window.history.replaceState(stateId, `List ${e.target.className}`, `dashboard/#list/${e.target.className}`);
     };
 
-    const res = await fetch('http://localhost:8080/api/lists')
+    const res = await fetch('/api/lists')
     const { lists } = await res.json();
     const taskList = document.getElementById('task-lists');
     listId = lists[0].id;
@@ -67,36 +67,15 @@ const createTask = async (e) => {
     }
 };
 
-// const submitDiv = document.querySelector('#add-task-form');
-// const addTask  = document.querySelector('.addTaskButton');
-// const taskDiv = document.querySelector('.addTaskDiv');
-
 const addTaskFormDiv = document.querySelector('#add-task-form');
 const addTaskInp = document.querySelector('input#name.inp-field');
 const addTaskButtonDiv = document.querySelector('.add-task-button');
 const addTaskButton = document.querySelector('.add-task-button button');
 
-
-// const showButton = (e) => {
-//     addTask.hidden = false;
-//     taskDiv.hidden = false;
-//     console.log(taskDiv.hidden, addTask.hidden)
-// };
-// const hideButton = (e) => {
-//     e.stopPropagation()
-//     if (e.target.id !== ('name' || 'taskButton')) {
-//         addTask.hidden = true;
-//         taskDiv.hidden = true;
-//     }
-// };
-
-
 // Load events
 window.addEventListener("load", async (event) => {
     initializePage();
     addTaskButton.addEventListener('click', createTask);
-    // submitDiv.addEventListener('click', showButton);
-    // document.addEventListener('click', hideButton);
     document.addEventListener('click', (e) => {
         // show submit button if event target is a descendent of addTaskFormDiv
         // otherwise, do not show the submit button
