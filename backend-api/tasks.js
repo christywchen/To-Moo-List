@@ -13,13 +13,13 @@ const taskNotFound = taskId => {
 }
 
 // get
-router.get('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
-    const { taskId } = req.params
+router.get('/tasks/:id', asyncHandler(async (req, res, next) => {
+    const taskId = parseInt(req.params.id, 10);
 
     // const { userId } = req.session.auth;
-    const { userId } = res.locals.user.id
+    const { userId } = res.locals.user.id;
 
-    const task = await db.Task.findByPk(taskId, { where: { userId } })
+    const task = await db.Task.findByPk(taskId, { where: userId });
 
     if (task) {
         res.json({ task });
@@ -77,15 +77,15 @@ router.delete('/tasks/:id(\\d+)', asyncHandler(async (req, res) => {
 }))
 
 // getting all tasks by userId
-router.get('/tasks', asyncHandler(async (req,res) => {
+router.get('/tasks', asyncHandler(async (req, res) => {
     const tasks = await db.Task.findAll({
-        where: {userId: res.locals.user.id}
+        where: { userId: res.locals.user.id }
     })
     res.json({ tasks });
 }));
 
 // getting tasks by date
-router.get('/tasks/:dueToday', asyncHandler(async (req,res) => {
+router.get('/tasks/:dueToday', asyncHandler(async (req, res) => {
     const tasks = await db.Task.findAll({
         where: {
             userId: res.locals.user.id,
@@ -99,7 +99,7 @@ router.get('/tasks/:dueToday', asyncHandler(async (req,res) => {
 }))
 
 // Getting tasks by listId
-router.get('/lists/:listId/tasks', asyncHandler(async (req,res) => {
+router.get('/lists/:listId/tasks', asyncHandler(async (req, res) => {
     const tasks = await db.Task.findAll({
         where: {
             listId: req.params.listId
