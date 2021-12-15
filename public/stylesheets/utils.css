@@ -26,6 +26,6 @@ button {
     border: none;
 }
 
-button:disabled {
+#add-task-input button:disabled {
     background-color: var(--tertiary-color);
 }

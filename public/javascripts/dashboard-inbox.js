@@ -4,15 +4,11 @@ window.addEventListener("load", async (e) => {
     const tomorrow = document.getElementById("tomrrow");
     const today = document.getElementById("today");
 
-    const todaysDate = new Date().toISOString().split('T')[0]; // 2021-12-15
-    console.log(todaysDate);
-    // const getTaskByDate = (date) => {
-
-    // }
+    const todaysDate = new Date().toISOString().split('T')[0]; 
 
     today.addEventListener("click", async (e) => {
         e.preventDefault();
-        const taskRes = await fetch(`/api/tasks/2021-12-14`);
+        const taskRes = await fetch(`/api/tasks/2021-12-14`); // need to change later
         const { tasks } = await taskRes.json();
         const taskContainer = document.getElementById("taskContainer");
 
