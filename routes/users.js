@@ -43,7 +43,7 @@ router.post('/signup', csrfProtection, userValidators, asyncHandler(async (req, 
 
     loginUser(req, res, user);
 
-    res.redirect('/');
+    res.redirect('/dashboard');
   } else {
     const errors = validatorErrors.array().map(error => error.msg);
 
