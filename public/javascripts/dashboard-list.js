@@ -1,5 +1,6 @@
-let listId = 0;
+let listId;
 
+// Initialze Page
 const initializePage = async () => {
     const fetchListTasks = async (e) => {
         e.preventDefault();
@@ -74,12 +75,14 @@ const showButton = (e) => {
 };
 const hideButton = (e) => {
     e.stopPropagation()
-    if (e.target.id !== 'name') {
+    if (e.target.id !== ('name' || 'taskButton')) {
         addTask.hidden = true;
         taskDiv.hidden = true;
     }
 };
 
+
+// Load events
 window.addEventListener("load", async (event) => {
     initializePage();
     addTask.addEventListener('click', createTask);

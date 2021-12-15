@@ -10,7 +10,7 @@ block content
                 input(type='hidden' name='_csrf' value=csrfToken)
                 +field('', 'name', name, '', 'Add a task...')
             div.addTaskDiv.hidden-add(hidden='true')
-                button.addTaskButton.hidden-add(type='submit' hidden="true") Add
+                button#taskButton.addTaskButton.hidden-add(type='submit' hidden="true") Add
 
 
     div#taskContainer
