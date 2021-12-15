@@ -40,7 +40,7 @@ app.use(restoreUser);
 // create Session table if it doesn't already exist
 store.sync();
 
-app.use('/', dashboardRouter);
+app.use('/dashboard', dashboardRouter);
 app.use(usersRouter);
 app.use('/api/lists', listsRouter);
 app.use('/api', tasksRouter);

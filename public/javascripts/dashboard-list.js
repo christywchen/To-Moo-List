@@ -14,7 +14,9 @@ const initializePage = async () => {
             taskContainer.appendChild(div);
         })
 
-        window.history.replaceState(stateId, `List ${e.target.className}`, `/#list/${e.target.className}`);
+        // TODO look into window.history.pushState
+        // Look into remove listId from closure and get from fragment URL
+        window.history.replaceState(stateId, `List ${e.target.className}`, `dashboard/#list/${e.target.className}`);
     };
 
     const res = await fetch('http://localhost:8080/api/lists')
