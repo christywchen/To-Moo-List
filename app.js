@@ -6,11 +6,12 @@ const logger = require('morgan');
 const { sequelize } = require('./db/models');
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
-const indexRouter = require('./routes/index');
+const dashboardRouter = require('./routes/dashhboard');
 const usersRouter = require('./routes/users');
 const tasksRouter = require('./backend-api/tasks');
-const { restoreUser } = require('./auth');
 const listsRouter = require('./backend-api/lists')
+const frontListsRouter = require('./routes/lists')
+const { restoreUser } = require('./auth');
 
 const app = express();
 
@@ -21,7 +22,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser('superSecret'));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname,'public')));
 
 // set up session middleware
 const store = new SequelizeStore({ db: sequelize });
@@ -39,10 +40,11 @@ app.use(restoreUser);
 // create Session table if it doesn't already exist
 store.sync();
 
-app.use('/', indexRouter);
+app.use('/dashboard', dashboardRouter);
 app.use(usersRouter);
 app.use('/api/lists', listsRouter);
 app.use('/api', tasksRouter);
+app.use('/lists', frontListsRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -54,7 +56,7 @@ app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
+  // console.log(err);
   // render the error page
   res.status(err.status || 500);
   res.render('error');

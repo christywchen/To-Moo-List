@@ -21,6 +21,18 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       },
+      {
+        name: 'To-dos',
+        userId: 2,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Fun Stuff',
+        userId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
 
     ]);
   },
