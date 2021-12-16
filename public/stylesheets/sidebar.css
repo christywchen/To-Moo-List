@@ -1,4 +1,12 @@
 /* sidebar elements */
+.sidebar-logo {
+    background-image: url("../images/logo-o.png");
+    background-repeat: no-repeat;
+    background-size: 150px auto;
+    height: 100px;
+    width: 100%;
+}
+
 ol#task-lists,
 ol#default-lists {
     margin-bottom: 10px;

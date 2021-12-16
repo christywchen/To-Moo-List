@@ -1,3 +1,73 @@
+/* summary child containers */
+.task-recap {
+    position: absolute;
+    /* width: 100%; */
+    height: 100%;
+    padding: 20px;
+}
+
+.task-summary {
+    position: absolute;
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    padding: 30px;
+    border-radius: 5px 5px 0 0;
+}
+
+/* summary details elements */
+#summary-title {
+    grid-area: edit-name;
+    font-size: 1.5em;
+    margin: 10px 0;
+}
+
+#deadline-div,
+#list-div {
+    display: flex;
+    align-items: center;
+}
+
+#desc-div {
+    padding: 3px;
+}
+
 .summary-inp {
-    border: 1px solid black;
+    border: 1px solid white;
+    outline: none;
+    padding: 0px;
+    border-radius: 3px;
+    font-size: 1.1em;
+}
+
+textarea.summary-inp {
+    border: 1px solid var(--inp-border);
+}
+
+.summary-inp:hover,
+.summary-inp:active {
+    border: 1px solid var(--inp-border);
+    outline: none;
+}
+
+#summary-deadline,
+#summary-list {
+    padding: 3px;
+    flex-basis: 20%;
+}
+
+#summary-list-select {
+    padding: 0px;
+}
+
+textarea.summary-inp {
+    width: 100%;
+    resize: none;
+}
+
+textarea.summary-inp:focus {
+    height: 100px;
+    resize: none;
+    transition: all 1s;
+    transition-timing-function: ease-in;
 }

@@ -19,25 +19,29 @@ const initializePage = async () => {
         taskSummary.classList.add('task-summary');
 
         const titleDiv = document.createElement('div');
+        titleDiv.setAttribute('id', 'title-div');
         titleDiv.innerHTML = `
             <div id="summary-title" contenteditable="true" class="summary-inp">${task.name}</div>`;
 
         // TO DO: decide how to populate the deadline input box: dropdown with dates or manual input
         const deadlineDiv = document.createElement('div');
+        deadlineDiv.setAttribute('id', 'deadline-div');
         deadlineDiv.innerHTML = `
             <div id="summary-deadline">Due Date</div>
-            <div id="summary-due-date-inp" contenteditable="true" class="summary-inp">${task.deadline}</div>
+            <input type="date" id="summary-due-date-inp" class="summary-inp"></input>
             `;
 
         const listDiv = document.createElement('div');
+        listDiv.setAttribute('id', 'list-div');
         listDiv.innerHTML = `
             <div id="summary-list">List</div>
-            <select id="summary-list-select" class="summary-list-selections">
+            <select id="summary-list-select" class="summary-inp">
                 <option value="${task.listId}">${task.List.name}</option>
             </select>
             `;
 
         const descDiv = document.createElement('div');
+        descDiv.setAttribute('id', 'desc-div');
         let descText = '';
         if (task.description) {
             descText = task.description;
@@ -45,10 +49,11 @@ const initializePage = async () => {
 
         descDiv.innerHTML = `
             <div id="summary-desc">Task Details</div>
-            <textarea id="summary-desc-textarea" placeholder="Add a description...">${descText}</textarea>
+            <textarea id="summary-desc-textarea" class="summary-inp" placeholder="Add a description...">${descText}</textarea>
             `;
 
         const isCompleteDiv = document.createElement('div');
+        isCompleteDiv.classList.add('iscomplete-div');
         isCompleteDiv.innerHTML = `
             <div class="summary-is-complete">
                 <button class="summary-mark-complete">Mark Complete</button>
@@ -78,6 +83,13 @@ const initializePage = async () => {
                 listOptions.appendChild(listOpt);
             }
         });
+
+        // TO DO: ADD EVENT LISTENER TO CREATE LIST VIA LIST DROPDOWN
+        // const createListOpt = document.createElement('option');
+        // createListOpt.setAttribute('value', 'create-new');
+        // createListOpt.innerText = 'Create New';
+        // listOptions.appendChild(createListOpt)
+
 
         summaryTitleInp.addEventListener('blur', changeTaskName);
         summaryDeadlineInp.addEventListener('blur', changeTaskDeadline);
@@ -209,12 +221,12 @@ const createList = async (e) => {
                 },
             })
             if (!res.ok) throw res
-                const newList = await res.json()
-                const listId = newList.list.id;
-                li.className = listId;
-                li.innerText = newList.list.name
-                li.addEventListener('click', fetchListTasks);
-                tasksList.appendChild(li);
+            const newList = await res.json()
+            const listId = newList.list.id;
+            li.className = listId;
+            li.innerText = newList.list.name
+            li.addEventListener('click', fetchListTasks);
+            tasksList.appendChild(li);
         } catch (error) {
 
         }
@@ -237,10 +249,10 @@ const hideCreateTaskDiv = (e) => {
             e.target.className === 'submit-list' ||
             e.target.className === 'cancel-submit-list' ||
             e.target.className === 'close') {
-                e.preventDefault()
-                addListDiv.style.display = 'none';
-                const form = document.getElementById('addList');
-                form.value = '';
+            e.preventDefault()
+            addListDiv.style.display = 'none';
+            const form = document.getElementById('addList');
+            form.value = '';
         }
     }
 };
