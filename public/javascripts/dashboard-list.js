@@ -1,4 +1,4 @@
-import { changeTaskName, changeTaskDeadline, changeList, changeDesc } from './dashboard-summary.js';
+import { changeTaskName, changeTaskDeadline, changeList, changeDesc, showTaskSummary, expandTextarea, shrinkTextarea } from './dashboard-summary.js';
 import { finishTask, deleteTask, moveTask } from './dashboard-tasks.js';
 
 let listId;
@@ -12,17 +12,17 @@ const initializePage = async () => {
         const taskSummaryContainer = document.querySelector('.task-summary');
 
         if (taskSummaryContainer.innerText.length) taskSummaryContainer.innerText = "";
+        showTaskSummary(true);
 
         const currentTask = task.name;
         const currentTaskId = task.id;
         const currentListId = task.listId;
         const currentList = task.List.name;
-        taskSummaryContainer.classList.add('task-summary-display');
 
         const titleDiv = document.createElement('div');
         titleDiv.setAttribute('id', 'title-div');
         titleDiv.innerHTML = `
-            <div id="summary-title" contenteditable="true" class="summary-inp">${task.name}</div>`;
+            <div id="summary-title" contenteditable="true" class="summary-inp">${currentTask}</div>`;
 
         // TO DO: decide how to populate the deadline input box: dropdown with dates or manual input
         const deadlineDiv = document.createElement('div');
@@ -37,7 +37,7 @@ const initializePage = async () => {
         listDiv.innerHTML = `
             <div id="summary-list">List</div>
             <select id="summary-list-select" class="summary-inp">
-                <option value="${task.listId}">${task.List.name}</option>
+                <option value="${currentListId}">${currentList}</option>
             </select>
             `;
 
@@ -84,25 +84,25 @@ const initializePage = async () => {
             }
         });
 
-        // TO DO: ADD EVENT LISTENER TO CREATE LIST VIA LIST DROPDOWN
-        // const createListOpt = document.createElement('option');
-        // createListOpt.setAttribute('value', 'create-new');
-        // createListOpt.innerText = 'Create New';
-        // createListOpt.addEventListener('click', showCreateList);
-        // listOptions.appendChild(createListOpt)
+        const createListOpt = document.createElement('option');
+        createListOpt.setAttribute('value', 'create-new');
+        createListOpt.innerText = 'Create New';
+        listOptions.appendChild(createListOpt)
 
 
         summaryTitleInp.addEventListener('blur', changeTaskName);
         summaryDeadlineInp.addEventListener('blur', changeTaskDeadline);
         summarySelectInp.addEventListener('change', changeList);
+        summaryDescInp.addEventListener('focus', expandTextarea);
         summaryDescInp.addEventListener('blur', changeDesc);
+        summaryDescInp.addEventListener('blur', shrinkTextArea);
 
         window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/#list/${task.listId}/tasks/${task.id}`);
     }
 
     const fetchListTasks = async (e) => {
         e.preventDefault();
-        
+
         const stateId = { id: "100" };
         const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
         const { tasks } = await taskRes.json();
