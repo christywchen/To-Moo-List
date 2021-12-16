@@ -76,3 +76,23 @@
     top: 200px;
     box-shadow: 0 6px 12px rgb(0 0 0 / 10%);
 }
+
+.checkbox-container{
+    display:grid;
+    grid-template-columns: repeat(7, auto);
+    justify-items: center;
+    align-items: center;
+}
+
+.grid-square{
+    display: grid;
+    border: 1px solid lightgray;
+    width: 50px;
+    height: 30px;
+    justify-items: center;
+    align-items: center;
+}
+
+.grid-square:hover{
+    background-color: #ffffc9;
+}
