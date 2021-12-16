@@ -1,4 +1,5 @@
 import { changeTaskName, changeTaskDeadline, changeList, changeDesc } from './dashboard-summary.js';
+import { finishTask, deleteTask, moveTask } from './dashboard-tasks.js';
 
 let listId;
 
@@ -105,6 +106,14 @@ const initializePage = async () => {
         const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
         const { tasks } = await taskRes.json();
 
+        const taskDivs = document.querySelector("#tasksContainer").childNodes;
+        console.log(taskDivs);
+        if (taskDivs) {
+            taskDivs.forEach(child => {
+                child.remove();
+            })
+        }
+
         const taskContainer = document.getElementById("tasksContainer");
         tasks.forEach(task => {
             const div = document.createElement("div");
@@ -112,6 +121,9 @@ const initializePage = async () => {
             div.classList.add('single-task')
             div.innerHTML = createTaskHtml(task.name, task.id);
             div.addEventListener('click', fetchTaskSummary);
+            div.addEventListener('click', finishTask);
+            div.addEventListener('click', deleteTask);
+            div.addEventListener('click', moveTask);
             taskContainer.appendChild(div);
         })
         // TODO look into window.history.pushState
@@ -156,8 +168,8 @@ async function fetchListTasks(e) {
     const stateId = { id: "100" };
     const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
     const { tasks } = await taskRes.json();
-
     const taskContainer = document.getElementById("tasksContainer");
+
     tasks.forEach(task => {
         const div = document.createElement("div");
         div.setAttribute('data-task', `${task.id}`);
