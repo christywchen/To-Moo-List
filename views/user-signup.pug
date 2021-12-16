@@ -6,7 +6,7 @@ block content
     +errorSummary(errors)
     form(action='/signup' method='post')
         input(type='hidden' name='_csrf' value=csrfToken)
-        +field('Username', 'username', username)
+        +field('Username', 'username', username )
         +field('First Name', 'firstName', firstName)
         +field('Last Name', 'lastName', lastName)
         +field('Email Address', 'email', email, 'email')

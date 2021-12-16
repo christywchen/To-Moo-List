@@ -1,4 +1,4 @@
-extends layout
+extends layout.pug
 
 include utils.pug
 
@@ -8,7 +8,7 @@ block content
             if locals.authenticated
                 span.welcome Welcome #{user.username}!
                 form(action='/logout' method='post')
-                    button(type='submit') Logout
+                    button.logout(type='submit') Logout
     div#content
         div#sidebar
             div.lists
@@ -31,6 +31,7 @@ block content
 
         div#add-list(style='display: none')
             div.add-task-box
+                div.close
                 p Add a List
                 form(id='add-list-form')
                     +field('Please enter a new list name:', 'addList', '')
@@ -38,10 +39,9 @@ block content
                         button.submit-list(type="submit") Add
                         button.cancel-submit-list(type="submit") Cancel
 
-
         div#summary
             include dashboard-summary.pug
         script(src="/javascripts/dashboard-list.js" type="module")
         script(src="/javascripts/dashboard-inbox.js" type="module")
         script(src="/javascripts/dashboard-tasks.js" type="module")
-        script(src="/javascripts/dashboard-summary.js" type="module")
+        //- script(src="/javascripts/dashboard-summary.js" type="module")

@@ -1,12 +1,29 @@
 include utils.pug
 
-p My Tasks
-    +errorSummary(errors)
-    div#add-task-form
-        form(id='add-task-input')
-            input(type='hidden' name='_csrf' value=csrfToken id='add-task-input')
-            +field('', 'name', name, '', 'Add a task...')
-            div.add-task-button
-                button(type='submit' disabled='true') Moo
+append head
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css")
+
+div.checkbox-container
+    div(class="checkbox grid-square")
+        input(type="checkbox")
+    div(class="completed grid-square")
+        i(class="fas fa-check")
+    div(class="postpone grid-square")
+        i(class="fas fa-calendar-plus")
+    div(class="prioritize grid-square")
+        i(class="fas fa-exclamation")
+    div(class="due grid-square")
+        i(class="fas fa-calendar-week")
+    div(class="moveTo grid-square")
+        i(class="fas fa-list-alt")
+    div(class="category grid-square")
+        i(class="fas fa-tag")
++errorSummary(errors)
+div#add-task-form
+    form(id='add-task-input')
+        input(type='hidden' name='_csrf' value=csrfToken id='add-task-input')
+        +field('', 'name', name, '', 'Add a task...')
+        div.add-task-button
+            button(type='submit' disabled='true') Moo
 
 div#tasksContainer
