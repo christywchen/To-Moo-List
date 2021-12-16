@@ -6,17 +6,17 @@ let listId;
 const initializePage = async () => {
     const fetchTaskSummary = async (e) => {
         const stateId = { id: "99" };
-        const taskSummaryContainer = document.querySelector('.task-details');
-        const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
+        const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`); x
         const { task } = await summaryRes.json();
+        const taskSummaryContainer = document.querySelector('.task-summary');
 
         if (taskSummaryContainer.innerText.length) taskSummaryContainer.innerText = "";
 
+        const currentList = task.name;
         const currentTaskId = task.id;
         const currentListId = task.listId;
         const currentList = task.List.name;
-        const taskSummary = document.createElement('div');
-        taskSummary.classList.add('task-summary');
+        taskSummaryContainer.classList.add('task-summary-display');
 
         const titleDiv = document.createElement('div');
         titleDiv.setAttribute('id', 'title-div');
@@ -60,11 +60,10 @@ const initializePage = async () => {
             </div>
             `;
 
-        taskSummary.appendChild(titleDiv);
-        taskSummary.appendChild(deadlineDiv);
-        taskSummary.appendChild(listDiv);
-        taskSummary.appendChild(descDiv);
-        taskSummaryContainer.appendChild(taskSummary);
+        taskSummaryContainer.appendChild(titleDiv);
+        taskSummaryContainer.appendChild(deadlineDiv);
+        taskSummaryContainer.appendChild(listDiv);
+        taskSummaryContainer.appendChild(descDiv);
 
         const summaryTitleInp = document.querySelector('#summary-title');
         const summaryDeadlineInp = document.querySelector('#summary-due-date-inp');
