@@ -12,15 +12,24 @@ block content
                 div#image
                     img(src='images/office.png')
             div#form_container
-                div#errMsg
-                    +errorSummary(errors)
-                div#singupForm
-                    form(action='/signup' method='post')
-                    input(type='hidden' name='_csrf' value=csrfToken)
-                    +field('Username', 'username', username)
-                    +field('First Name', 'firstName', firstName)
-                    +field('Last Name', 'lastName', lastName)
-                    +field('Email Address', 'email', email, 'email')
-                    +field('Password', 'password', password, 'password')
-                    +field('Confirm Password', 'confirmPassword', confirmPassword, 'password')
-                    button(type='submit') Sign Up
+                //- div#errMsg
+                    //- +errorSummary(errors)
+                form(action='/signup' method='post')
+                    div#singupForm
+                        input(type='hidden' name='_csrf' value=csrfToken)
+                        div#username_box
+                            +field('Username', 'username', username)
+                        div#firstname_box
+                            +field('First Name', 'firstName', firstName)
+                        div#lastname_box
+                            +field('Last Name', 'lastName', lastName)
+                        div#email_box
+                            +field('Email Address', 'email', email, 'email')
+                        div#password_box
+                            +field('Password', 'password', password, 'password')
+                        div#confirm_box
+                            +field('Confirm Password', 'confirmPassword', confirmPassword, 'password')
+                        button(type='submit') Sign Up
+                            if !errors
+                                a(href='/dashboard')
+

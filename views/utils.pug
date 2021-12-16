@@ -6,7 +6,13 @@ mixin errorSummary(errors)
         each error in errors
           li= error
 
-mixin field(fieldText, fieldName, fieldValue, fieldType = 'text', placeholder = null, autocomplete = 'off', errorFlag)
+mixin field(fieldText, fieldName, fieldValue, fieldType = 'text', placeholder = null, autocomplete = 'off')
   div(class='inp-div')
-    label(for= fieldName) #{fieldText}
-    input(class='inp-field' type=fieldType id=fieldName name=fieldName value=fieldValue placeholder=placeholder autocomplete=autocomplete)
+    if !errors
+      label(for= fieldName) #{fieldText}
+      input(class='inp-field' type=fieldType id=fieldName name=fieldName value=fieldValue placeholder=placeholder autocomplete=autocomplete)
+    else
+      div#error_emb
+        label(for= fieldName) #{fieldText}
+        input(class='inp-field' type=fieldType id=fieldName name=fieldName value=fieldValue placeholder=placeholder autocomplete=autocomplete)
+        

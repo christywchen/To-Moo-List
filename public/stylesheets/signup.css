@@ -26,6 +26,42 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    align-items: center;
     
 }
+
+#form_container{
+    display:flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-start;
+
+}
+
+#signupForm {
+    display:flex;
+    flex-direction:column;
+    justify-content: space-around;
+    line-height: 2em;
+}
+
+
+#error_emb > input {
+    border: solid 1px red;
+}
+
+/* .inp-div {
+    display:flex;
+    flex-direction:row;
+    justify-content:space-between;
+    line-height: 2em;
+} */
+
+#username_box{
+    display:flex;
+    flex-direction:column;
+    justify-content:space-around;
+    line-height: 2em;
+}
+
 

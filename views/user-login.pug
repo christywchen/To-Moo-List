@@ -7,7 +7,7 @@ block content
        button(type='submit')
             a(href="/signup") Sign Up
     div#login_main
-        +errorSummary(errors)
+        //- +errorSummary(errors)
         form(action='/login' method='post')
             div#login_form
                 input(type='hidden' name='_csrf' value=csrfToken)
@@ -16,3 +16,5 @@ block content
                 div#password_form
                     +field('Password', 'password', password, 'password')
                 button(type='submit') Log In
+                    if !errors
+                        a(href='/dashboard')

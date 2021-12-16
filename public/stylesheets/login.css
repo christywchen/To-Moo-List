@@ -29,3 +29,7 @@
     justify-content: space-around;
     line-height: 2em;
 }
+
+#error_emb > input {
+    border: solid 1px red;
+}
