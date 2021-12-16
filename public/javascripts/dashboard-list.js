@@ -106,11 +106,16 @@ const initializePage = async () => {
         const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
         const { tasks } = await taskRes.json();
 
-        const taskDivs = document.querySelector("#tasksContainer").childNodes;
-        console.log(taskDivs);
+
+        if (e.target.parentNode.id = 'task-list') listId = e.target.className;
+        console.log(listId)
+
+        const taskDivs = document.querySelectorAll('.single-task')
+        console.log(taskDivs)
         if (taskDivs) {
             taskDivs.forEach(child => {
                 child.remove();
+                console.log('hey')
             })
         }
 
