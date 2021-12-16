@@ -94,6 +94,14 @@ const initializePage = async () => {
         const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
         const { tasks } = await taskRes.json();
 
+        const taskDivs = document.querySelector("#tasksContainer").childNodes;
+        console.log(taskDivs);
+        if (taskDivs) {
+            taskDivs.forEach(child => {
+                child.remove();
+            })
+        }
+
         const taskContainer = document.getElementById("tasksContainer");
         tasks.forEach(task => {
             const div = document.createElement("div");
@@ -148,8 +156,8 @@ async function fetchListTasks(e) {
     const stateId = { id: "100" };
     const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
     const { tasks } = await taskRes.json();
-
     const taskContainer = document.getElementById("tasksContainer");
+
     tasks.forEach(task => {
         const div = document.createElement("div");
         div.setAttribute('data-task', `${task.id}`);
