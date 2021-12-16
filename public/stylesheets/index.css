@@ -4,6 +4,7 @@
 @import url("/stylesheets/utils.css");
 @import url("/stylesheets/signup.css");
 @import url("/stylesheets/login.css");
+@import url("/stylesheets/errors.css");
 
 :root {
     --main-color: #0055b2;

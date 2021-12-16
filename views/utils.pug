@@ -2,17 +2,12 @@ mixin errorSummary(errors)
   if errors
     div
       p Please fix the following error(s):
-      ul
+      ul.errors
         each error in errors
           li= error
 
 mixin field(fieldText, fieldName, fieldValue, fieldType = 'text', placeholder = null, autocomplete = 'off')
   div(class='inp-div')
-    if !errors
-      label(for= fieldName) #{fieldText}
-      input(class='inp-field' type=fieldType id=fieldName name=fieldName value=fieldValue placeholder=placeholder autocomplete=autocomplete)
-    else
-      div#error_emb
-        label(for= fieldName) #{fieldText}
-        input(class='inp-field' type=fieldType id=fieldName name=fieldName value=fieldValue placeholder=placeholder autocomplete=autocomplete)
+    label(for= fieldName) #{fieldText}
+    input(class='inp-field' type=fieldType id=fieldName name=fieldName value=fieldValue placeholder=placeholder autocomplete=autocomplete)
         

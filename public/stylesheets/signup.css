@@ -22,11 +22,26 @@ body {
     
 }
 
+#img_container{
+    flex-basis: 50%;
+    justify-self: center;
+    align-self:center;
+
+}
+
 #signup_container{
+    /* display: grid;
+    grid-template-columns: 30% 70%;
+    grid-template-rows: 100%; */
+    
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    align-items: center;
+    /* align-items: center; */
+    /* align-self: flex-end; */
+    position:absolute;
+    width: 100%;
+    height: 100%; 
     
 }
 
@@ -34,7 +49,10 @@ body {
     display:flex;
     flex-direction: column;
     justify-content: space-around;
-    align-items: flex-start;
+    justify-self:flex-start;
+    align-items: center;
+    width: 100%;
+    flex-basis: 50%;
 
 }
 
@@ -42,7 +60,10 @@ body {
     display:flex;
     flex-direction:column;
     justify-content: space-around;
+    align-self:flex-start;
+    justify-self:flex-start;
     line-height: 2em;
+    width:100%;
 }
 
 
@@ -50,12 +71,6 @@ body {
     border: solid 1px red;
 }
 
-/* .inp-div {
-    display:flex;
-    flex-direction:row;
-    justify-content:space-between;
-    line-height: 2em;
-} */
 
 #username_box{
     display:flex;
@@ -64,4 +79,9 @@ body {
     line-height: 2em;
 }
 
+
+#username_box, #firstname_box, #lastname_box,
+#email_box, #password_box, #confirm_box {
+    line-height: 1.5em;
+}
 
