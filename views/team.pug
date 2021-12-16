@@ -1,0 +1,97 @@
+extends layout.pug
+
+append head
+  //- add page specific styles by appending to the head
+  link(rel="stylesheet" href="/stylesheets/team.css")
+  link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css")
+
+block content
+    header
+        div.navbar-container
+            div.navbar
+                a(href='/' class="moogo")
+                    img(src='images/logo.png', alt="cow-on-computer" id="logo")
+                
+                ul
+                    li 
+                        a(href="/") Home
+                    li 
+                        a(href="/upgrade") Upgrade  
+                    
+                    li 
+                        a(href="/team") Meet the team 
+                    li 
+                        a(href="/login") Log in
+                    li(class="signup") 
+                        a(href="/signup") Sign up for free 
+            
+            div.header-content
+                h1 Meets your amazing team!
+                h2 Thank you for your hard work!
+                img(src="images/cowow.png", alt="cow money")
+    main
+        div(class="c-cow cow")
+            img(src="images/ccow.png", alt="cow in yellow shirt")
+            div.about-left
+                h2 Christy
+                p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        div(class="h-cow cow")
+            div.about-right
+                h2 Haozhen
+                p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            img(src="images/hcow.png", alt="cow on phone")
+        div(class="j-cow cow")
+            img(src="images/jcow.png", alt="rock star cow")
+            div.about-left
+                h2 Justin
+                p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        div(class="p-cow cow")
+            div.about-right
+                h2 Peter
+                p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            img(src="images/pcow.png", alt="nerd cow")
+            
+    footer
+        div.social-container
+            div.social-links 
+                div(class="christy person") 
+                    h4 Christy
+                    ul
+                        li
+                            a(href="#") Linkedin
+                        li
+                            a(href="#") Github
+                        li
+                            a(href="#") Instagram
+                div(class="haozhen person") 
+                    h4 Haozhen
+                    ul
+                        li
+                            a(href="#") Linkedin
+                        li
+                            a(href="#") Github
+                        li
+                            a(href="#") Instagram
+                div(class="justin person")
+                    h4 Justin
+                    ul
+                        li
+                            a(href="#") Linkedin
+                        li
+                            a(href="#") Github
+                        li
+                            a(href="#") Instagram
+                div(class="peter person")
+                    h4 Peter
+                    ul
+                        li
+                            a(href="#") Linkedin
+                        li
+                            a(href="#") Github
+                        li
+                            a(href="#") Instagram
+        div.copyright
+            p &copy; Copyright 2021 To Moo List
+            a(href="#") Terms
+            a(href="#") Privacy
+            a(href="#") Security
