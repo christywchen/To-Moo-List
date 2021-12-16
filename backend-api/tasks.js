@@ -51,7 +51,7 @@ router.put('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     if (task) {
         //may need to change;
         const { name, description, listId, deadline, isCompleted, categoryId } = req.body;
-        await task.updata({
+        await task.update({
             name,
             description,
             listId,
@@ -66,6 +66,29 @@ router.put('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     }
 }))
 
+// patch
+router.patch('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
+    const taskId = parseInt(req.params.id, 10);
+    const task = await db.Task.findByPk(taskId);
+
+    console.log('test')
+    if (task) {
+        //may need to change;
+        const { name, description, listId, deadline, isCompleted, categoryId } = req.body;
+        await task.update({
+            name,
+            description,
+            listId,
+            deadline,
+            isCompleted,
+            categoryId,
+        })
+        res.status(200);
+        res.json({ task }) //may need to change;
+    } else {
+        next(taskNotFound(taskId));
+    }
+}))
 
 // delete
 router.delete('/tasks/:id(\\d+)', asyncHandler(async (req, res) => {
