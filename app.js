@@ -40,11 +40,18 @@ app.use(restoreUser);
 // create Session table if it doesn't already exist
 store.sync();
 
-app.use('/', dashboardRouter);
+app.use('/dashboard', dashboardRouter);
 app.use(usersRouter);
 app.use('/api/lists', listsRouter);
 app.use('/api', tasksRouter);
 app.use('/lists', frontListsRouter)
+
+// Gets the splash page
+app.get('/', (req,res) => {
+  res.render('home', {
+    title: "To Moo List"
+  })
+})
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -61,5 +68,8 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+
 
 module.exports = app;

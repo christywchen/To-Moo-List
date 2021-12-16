@@ -6,7 +6,7 @@ mixin errorSummary(errors)
         each error in errors
           li= error
 
-mixin field(fieldText, fieldName, fieldValue, fieldType = 'text', placeholder = null)
-  div
+mixin field(fieldText, fieldName, fieldValue, fieldType = 'text', placeholder = null, autocomplete = 'off')
+  div(class='inp-div')
     label(for= fieldName) #{fieldText}
-      input(type=fieldType id=fieldName name=fieldName value=fieldValue placeholder=placeholder)
+      input(class='inp-field' type=fieldType id=fieldName name=fieldName value=fieldValue placeholder=placeholder autocomplete=autocomplete)

@@ -1,0 +1,78 @@
+/* main container elements */
+#main #add-task-form {
+    padding: 10px 0 10px;
+    border-bottom: 1px dotted lightgray;
+}
+#main form {
+    display: flex;
+    flex-direction: column;
+}
+
+#main form .inp-div {
+    background-color: white;
+    z-index: 1;
+}
+
+#main form input {
+    width: 100%;
+}
+
+.add-task-button {
+    align-self: flex-end;
+    margin-top: -40px;
+    transition: all 0.4s;
+}
+
+.add-task-button button {
+    color: #ffffff;
+    font-weight: bold;
+    background-color: var(--main-color);
+    border-radius: 3px;
+    border: none;
+}
+
+.add-task-button-transition {
+    margin-top: 0px;
+    transition: all 0.4s;
+}
+
+#tasks-container {
+    position: relative;
+    height: 700px; /* needs revision so that it will fill the height of the parent container */
+    overflow: hidden;
+}
+
+#tasksContainer:hover {
+    overflow-y: scroll;
+}
+
+#tasksContainer div {
+    padding: 0 3px;
+    border-bottom: 1px dotted lightgray;
+}
+
+#tasksContainer div:hover {
+    background-color: #ffffc9;
+}
+
+.task {
+    display: flex;
+    align-items: center;
+}
+
+.task:hover {
+    background-color: #ffffc9;
+}
+
+.task > label {
+    padding: 0 8px;
+}
+
+
+/* add-task css needs lovin */
+#add-list {
+    border: rgba(41, 36, 36, 0.37) 1px solid;
+    left: 300px;
+    top: 200px;
+    box-shadow: 0 6px 12px rgb(0 0 0 / 10%);
+}

@@ -43,7 +43,7 @@ router.post('/signup', csrfProtection, userValidators, asyncHandler(async (req, 
 
     loginUser(req, res, user);
 
-    res.redirect('/');
+    res.redirect('/dashboard');
   } else {
     const errors = validatorErrors.array().map(error => error.msg);
 
@@ -76,7 +76,7 @@ router.post('/login', csrfProtection, loginValidator, asyncHandler(async (req, r
       const passMatch = await bcrypt.compare(password, user.hashedPassword.toString());
       if (passMatch) {
         loginUser(req, res, user);
-        res.redirect('/');
+        return res.redirect('/dashboard');
       }
     }
     errors.push("Login failed. Wrong username/password.");

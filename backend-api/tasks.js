@@ -14,12 +14,12 @@ const taskNotFound = taskId => {
 
 // get
 router.get('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
-    const { taskId } = req.params
+    const taskId = parseInt(req.params.id, 10);
 
     // const { userId } = req.session.auth;
-    const { userId } = res.locals.user.id
+    const { userId } = res.locals.user.id;
 
-    const task = await db.Task.findByPk(taskId, { where: { userId } })
+    const task = await db.Task.findByPk(taskId, { where: userId });
 
     if (task) {
         res.json({ task });
@@ -30,12 +30,12 @@ router.get('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
 
 // post
 router.post('/lists/:id(\\d+)', asyncHandler(async (req, res) => {
-    const { name } = req.body;
-    const { listId } = req.params;
+    const { name, listId } = req.body;
     const task = await db.Task.create({
         name,
-        userId: req.user.id,
+        userId: res.locals.user.id,
         listId,
+        categoryId: 1,
     })
     res.status(201);
     res.json({ task });
@@ -77,20 +77,49 @@ router.delete('/tasks/:id(\\d+)', asyncHandler(async (req, res) => {
 }))
 
 // getting all tasks by userId
-router.get('/tasks', asyncHandler(async (req,res) => {
+router.get('/tasks', asyncHandler(async (req, res) => {
     const tasks = await db.Task.findAll({
-        where: {userId: res.locals.user.id}
+        where: { userId: res.locals.user.id }
     })
     res.json({ tasks });
 }));
 
 // getting tasks by date
-router.get('/tasks/:dueToday', asyncHandler(async (req,res) => {
+router.get('/tasks/today', asyncHandler(async (req, res) => {
+
+    const today = new Date();
+    let tomorrow = new Date();
+    tomorrow.setDate(today.getDate() + 1);
+    let yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
     const tasks = await db.Task.findAll({
         where: {
             userId: res.locals.user.id,
             deadline: {
-                [Op.gte]: req.params.dueToday
+                [Op.lt]: tomorrow,
+                [Op.gt]: yesterday
+            }
+        }
+    })
+
+    res.json({ tasks });
+}))
+
+router.get('/tasks/tomorrow', asyncHandler(async (req, res) => {
+
+    const today = new Date();
+    let tomorrow = new Date();
+    tomorrow.setDate(today.getDate() + 2);
+    let yesterday = new Date();
+    yesterday.setDate(today.getDate());
+
+    const tasks = await db.Task.findAll({
+        where: {
+            userId: res.locals.user.id,
+            deadline: {
+                [Op.lt]: tomorrow,
+                [Op.gt]: yesterday
             }
         }
     })
@@ -99,7 +128,7 @@ router.get('/tasks/:dueToday', asyncHandler(async (req,res) => {
 }))
 
 // Getting tasks by listId
-router.get('/lists/:listId/tasks', asyncHandler(async (req,res) => {
+router.get('/lists/:listId/tasks', asyncHandler(async (req, res) => {
     const tasks = await db.Task.findAll({
         where: {
             listId: req.params.listId

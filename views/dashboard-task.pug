@@ -1,13 +1,26 @@
-extends layout.pug
-
 include utils.pug
 
-block content
-    p My Tasks
-        +errorSummary(errors)
-        form(action='/api/tasks' method='post')
-            input(type='hidden' name='_csrf' value=csrfToken)
-            +field('', 'name', name, '', 'Add a task...')
-            button(type='submit') Add
+div.checkbox-container
+    div(class="checkbox grid-square")
+        input(type="checkbox")
+    div(class="completed grid-square")
+        i(class="fas fa-check")
+    div(class="postpone grid-square")
+        i(class="fas fa-calendar-plus")
+    div(class="prioritize grid-square")
+        i(class="fas fa-exclamation")
+    div(class="due grid-square")
+        i(class="fas fa-calendar-week")
+    div(class="moveTo grid-square")
+        i(class="fas fa-list-alt")
+    div(class="category grid-square")
+        i(class="fas fa-tag")
++errorSummary(errors)
+div#add-task-form
+    form(id='add-task-input')
+        input(type='hidden' name='_csrf' value=csrfToken id='add-task-input')
+        +field('', 'name', name, '', 'Add a task...')
+        div.add-task-button
+            button(type='submit' disabled='true') Moo
 
-    div#taskContainer
+div#tasksContainer
