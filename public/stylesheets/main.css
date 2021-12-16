@@ -138,15 +138,9 @@
     background-color: white;
 }
 
-<<<<<<< HEAD
 .checkbox-container {
     display: grid;
-    grid-template-columns: repeat(7, auto);
-=======
-.checkbox-container{
-    display:grid;
     grid-template-columns: repeat(8, auto);
->>>>>>> origin/dashboard-task
     justify-items: center;
     align-items: center;
 }
