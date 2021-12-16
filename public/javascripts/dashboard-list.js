@@ -1,5 +1,6 @@
 import { changeTaskName, changeTaskDeadline, changeList, changeDesc } from './dashboard-summary.js';
 import { finishTask, deleteTask, moveTask } from './dashboard-tasks.js';
+import { clearDOMTasks } from './clean-dom.js';
 
 let listId;
 
@@ -102,23 +103,11 @@ const initializePage = async () => {
 
     const fetchListTasks = async (e) => {
         e.preventDefault();
-
+        clearDOMTasks();
         const stateId = { id: "100" };
         const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
         const { tasks } = await taskRes.json();
-
-
         if (e.target.parentNode.id = 'task-list') listId = e.target.className;
-        console.log(listId)
-
-        const taskDivs = document.querySelectorAll('.single-task')
-        console.log(taskDivs)
-        if (taskDivs) {
-            taskDivs.forEach(child => {
-                child.remove();
-                console.log('hey')
-            })
-        }
 
         const taskContainer = document.getElementById("tasksContainer");
         tasks.forEach(task => {

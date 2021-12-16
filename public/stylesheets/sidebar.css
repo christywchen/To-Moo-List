@@ -7,6 +7,10 @@
     width: 100%;
 }
 
+li {
+    list-style-type: none;
+}
+
 ol#task-lists,
 ol#default-lists {
     margin-bottom: 10px;
