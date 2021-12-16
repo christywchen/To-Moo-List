@@ -1,0 +1,31 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+#loginBtCon {
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+#loginBtCon > button > a {
+    color:white;
+}
+
+#signup_main{
+    display:flex;
+    flex-direction:column;
+    justify-content:space-around;
+    align-items: flex-start;
+    
+}
+
+#signup_container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    
+}
+
