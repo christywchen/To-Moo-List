@@ -20,25 +20,16 @@ export const finishTask = (e) => {
     })    
 }
 
-export const deleteTask = (e) => {
-    const trashTask = document.querySelector(".delete");
-    const taskId = e.target.dataset.task;
-    
-    trashTask.addEventListener('click', async (e) => {
-        const res = await fetch(`/api/tasks/${taskId}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            },
-        })
-        if (!res.ok) {
-            console.log("Something went wrong")
-        } else {
-            console.log("it worked")
-            const deleteDiv = document.querySelector(`[data-task="${taskId}"]`);
-            deleteDiv.remove();
-        }
-    })
+const postPoneTask = (e) => {
+    const extendCal = document.querySelector(".postpone");
+}
+
+const prioritizeTask = (e) => {
+    const exclamation = document.querySelector(".prioritize");
+}
+
+const changeDueDate = (e) => {
+    const dueCal = document.querySelector(".due");
 }
 
 export const moveTask = (e) => {
@@ -62,5 +53,28 @@ export const moveTask = (e) => {
         }
     })
 }
-// window.addEventListener("load", async (e) => {
-// })
+
+const changeCategory = (e) => {
+    const tag = document.querySelector(".category");
+}
+
+export const deleteTask = (e) => {
+    const trashTask = document.querySelector(".delete");
+    const taskId = e.target.dataset.task;
+    
+    trashTask.addEventListener('click', async (e) => {
+        const res = await fetch(`/api/tasks/${taskId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        })
+        if (!res.ok) {
+            console.log("Something went wrong")
+        } else {
+            console.log("it worked")
+            const deleteDiv = document.querySelector(`[data-task="${taskId}"]`);
+            deleteDiv.remove();
+        }
+    })
+}
