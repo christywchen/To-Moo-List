@@ -1,4 +1,5 @@
 import { changeTaskName, changeTaskDeadline, changeList, changeDesc } from './dashboard-summary.js';
+import { finishTask, deleteTask, moveTask } from './dashboard-tasks.js';
 
 let listId;
 
@@ -100,6 +101,9 @@ const initializePage = async () => {
             div.classList.add('single-task')
             div.innerHTML = createTaskHtml(task.name, task.id);
             div.addEventListener('click', fetchTaskSummary);
+            div.addEventListener('click', finishTask);
+            div.addEventListener('click', deleteTask);
+            div.addEventListener('click', moveTask);
             taskContainer.appendChild(div);
         })
         // TODO look into window.history.pushState

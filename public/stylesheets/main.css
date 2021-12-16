@@ -141,7 +141,7 @@
 
 .checkbox-container{
     display:grid;
-    grid-template-columns: repeat(7, auto);
+    grid-template-columns: repeat(8, auto);
     justify-items: center;
     align-items: center;
 }
