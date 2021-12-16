@@ -5,4 +5,4 @@ export function clearDOMTasks() {
             child.remove();
         })
     }
-}
+};
