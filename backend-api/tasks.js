@@ -19,7 +19,10 @@ router.get('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     // const { userId } = req.session.auth;
     const { userId } = res.locals.user.id;
 
-    const task = await db.Task.findByPk(taskId, { where: userId });
+    const task = await db.Task.findByPk(taskId, {
+        where: userId,
+        include: db.List
+    });
 
     if (task) {
         res.json({ task });

@@ -7,13 +7,54 @@ const initializePage = async () => {
         const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
         const { task } = await summaryRes.json();
 
-        console.log(task)
+        const currentTask = task.name;
+        const currentList = task.List.name;
         const taskSummary = document.createElement('div');
         taskSummary.classList.add('task-summary');
         taskSummary.innerHTML = `
-        <div class="summary-title" contenteditable="true"><h2>task name</h2></div>
-        <div class="summary-due-date">due date <span class="summary-due-date-container" contenteditable="true">due date</span></div>
-        `
+        <div class="summary-title" contenteditable="true">
+            <h2>${currentTask}</h2>
+        </div>
+        <div class="summary-due-date">
+            due date
+            <span class="summary-due-date-container" contenteditable="true">
+                due date
+            </span>
+        </div>
+        <div class="summary-list">list
+            <select class="summary-list-options">
+            <option value="${task.id}">${currentList}</option>
+            </select>
+        </div>
+        <div class="summary-descrip">
+            description
+            <span class="summary-descrip-textarea" contenteditable="true">
+                <span class="summary-descrip-default">Add a description....</a>
+            </div>
+        </div>
+        <div class="summary-is-complete"><button class="summary-mark-complete">Mark Complete</button></div>`
+
+        taskSummaryContainer.appendChild(taskSummary)
+
+        const listsRes = await fetch(`/api/lists`);
+        const { lists } = await listsRes.json();
+        const listOptions = document.querySelector('.summary-list-options');
+
+        lists.forEach(list => {
+            if (list.name !== currentList) {
+                const listOpt = document.createElement('option');
+                listOpt.setAttribute('value', list.id);
+                listOpt.innerText = list.name;
+                listOptions.appendChild(listOpt);
+            }
+        });
+
+        const descriptionContainer = document.querySelector('.summary-descrip-textarea');
+
+        if (task.description) {
+            descriptionContainer.innerHTML = task.description;
+        }
+
     }
 
     const fetchListTasks = async (e) => {
