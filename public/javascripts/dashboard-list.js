@@ -128,17 +128,25 @@ const hideTaskButton = (e) => {
     }
     else addTaskButtonDiv.classList.remove('add-task-button-transition');
 };
+
 const hideCreateTaskDiv = (e) => {
-    if (!addListDiv.contains(e.target) && e.target.className !== 'add-list-button') {
-        e.preventDefault()
-        addListDiv.style.display = 'none';
+    // if (e.target.className)
+    console.log(e.target.className)
+    if ((!addListDiv.contains(e.target) &&
+        e.target.className !== 'add-list-button') ||
+        e.target.className === 'submit-list' ||
+        e.target.className === 'cancel-submit-list') {
+            e.preventDefault()
+            addListDiv.style.display = 'none';
+            const form = document.getElementById('addList');
+            form.value = '';
     }
 };
 
 const showCreateList = async (e) => {
     e.preventDefault();
     addListDiv.style.display = 'block';
-    addListDiv.style.position = 'absolute';
+    addListDiv.style.position = 'fixed';
 }
 
 const showTaskButton = (e) => {
@@ -169,6 +177,7 @@ window.addEventListener("load", async (event) => {
     addTaskInp.addEventListener('keyup', showTaskButton);
     addListButton.addEventListener('click', showCreateList);
     submitListButton.addEventListener('click', createList);
+    submitListButton.addEventListener('click', hideCreateTaskDiv);
 });
 //-------
 

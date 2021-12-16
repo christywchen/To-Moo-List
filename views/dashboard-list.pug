@@ -30,11 +30,13 @@ block content
                 include dashboard-task.pug
 
         div#add-list(style='display: none')
-            p Add a List
-            form(id='add-list-form')
-                +field('Please enter a new list name:', 'addList', '')
-                button.submit-list(type="submit") Add
-                button.cancel-submit-list(type="submit") Cancel
+            div.add-task-box
+                p Add a List
+                form(id='add-list-form')
+                    +field('Please enter a new list name:', 'addList', '')
+                    div.add-list-buttons
+                        button.submit-list(type="submit") Add
+                        button.cancel-submit-list(type="submit") Cancel
 
 
         div#summary
