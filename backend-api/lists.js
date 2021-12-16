@@ -8,27 +8,27 @@ const { asyncHandler, csrfProtection, listNotFoundError, validateList, handleVal
 
 router.use(requireAuth);
 
-router.get('/', asyncHandler(async(req,res) => {
+router.get('/', asyncHandler(async (req, res) => {
     // const lists = await db.List.findAll({
     //     where: {userId: res.locals.user.id}
     // })
     const lists = await db.List.findAll({
-        where: {userId: res.locals.user.id}
+        where: { userId: res.locals.user.id }
     })
     res.json({ lists });
     // res.render("list");
 }));
 
-router.post('/', validateList, handleValidationErrors, asyncHandler(async(req,res) => {
+router.post('/', validateList, handleValidationErrors, asyncHandler(async (req, res) => {
     const { name } = req.body;
     const list = await db.List.create({
         name,
         userId: res.locals.user.id
     })
-    res.json({list});
+    res.json({ list });
 }));
 
-router.put('/:id', validateList, handleValidationErrors, asyncHandler(async(req,res,next) => {
+router.put('/:id', validateList, handleValidationErrors, asyncHandler(async (req, res, next) => {
     const list = await db.List.findByPk(req.params.id);
 
     // if (res.locals.user.id !== db.List.userId) {
@@ -39,7 +39,7 @@ router.put('/:id', validateList, handleValidationErrors, asyncHandler(async(req,
     //     throw err;
     //   }
 
-    if (list){
+    if (list) {
         await list.update({ name: req.body.name });
         res.json({ list })
     } else {
@@ -47,7 +47,7 @@ router.put('/:id', validateList, handleValidationErrors, asyncHandler(async(req,
     }
 }));
 
-router.delete('/:id', asyncHandler(async(req,res,next) => {
+router.delete('/:id', asyncHandler(async (req, res, next) => {
     const list = await db.List.findByPk(req.params.id)
 
     // if (res.locals.user.id !== db.List.userId) {

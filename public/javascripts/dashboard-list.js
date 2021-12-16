@@ -1,4 +1,4 @@
-import { changeTaskName, changeTaskDeadline, changeList } from './dashboard-summary.js';
+import { changeTaskName, changeTaskDeadline, changeList, changeDesc } from './dashboard-summary.js';
 
 let listId;
 
@@ -12,84 +12,79 @@ const initializePage = async () => {
 
         if (taskSummaryContainer.innerText.length) taskSummaryContainer.innerText = "";
 
-        const currentTask = task.name;
         const currentTaskId = task.id;
         const currentListId = task.listId;
         const currentList = task.List.name;
         const taskSummary = document.createElement('div');
         taskSummary.classList.add('task-summary');
 
-        const summaryTitle = document.createElement('div');
-        summaryTitle.setAttribute('contenteditable', 'true');
-        summaryTitle.setAttribute('id', 'summary-title');
-        summaryTitle.innerHTML = `${currentTask}`;
-        summaryTitle.setAttribute('class', 'summary-inp');
+        const titleDiv = document.createElement('div');
+        titleDiv.innerHTML = `
+            <div id="summary-title" contenteditable="true" class="summary-inp">${task.name}</div>`;
 
-        // TO DO: decide how to populate the deadline input box
-        const summaryDeadline = document.createElement('div');
-        const summaryDeadlineInp = document.createElement('div');
-        summaryDeadline.innerHTML = `Due Date`;
-        summaryDeadline.setAttribute('id', 'summary-deadline');
-        summaryDeadlineInp.setAttribute('contenteditable', 'true');
-        summaryDeadlineInp.setAttribute('id', 'summary-due-date-inp');
-        summaryDeadlineInp.setAttribute('class', 'summary-inp');
+        // TO DO: decide how to populate the deadline input box: dropdown with dates or manual input
+        const deadlineDiv = document.createElement('div');
+        deadlineDiv.innerHTML = `
+            <div id="summary-deadline">Due Date</div>
+            <div id="summary-due-date-inp" contenteditable="true" class="summary-inp">${task.deadline}</div>
+            `;
 
-        const summaryList = document.createElement('div');
-        const summaryListSelectDiv = document.createElement('div');
-        const summaryListSelect = document.createElement('select');
-        summaryListSelect.setAttribute('id', 'summary-list');
-        summaryListSelect.setAttribute('class', 'summary-list-selections');
-        summaryListSelectDiv.setAttribute('class', 'summary-list-select');
-        summaryList.innerHTML = `List`;
-        summaryListSelect.innerHTML = `<option value="${task.id}">${currentList}</option>`;
+        const listDiv = document.createElement('div');
+        listDiv.innerHTML = `
+            <div id="summary-list">List</div>
+            <select id="summary-list-select" class="summary-list-selections">
+                <option value="${task.listId}">${task.List.name}</option>
+            </select>
+            `;
 
+        const descDiv = document.createElement('div');
+        let descText = '';
+        if (task.description) {
+            descText = task.description;
+        }
 
-        summaryTitle.addEventListener('blur', changeTaskName);
-        summaryDeadlineInp.addEventListener('blur', changeTaskName);
-        summaryListSelect.addEventListener('change', changeList);
+        descDiv.innerHTML = `
+            <div id="summary-desc">Task Details</div>
+            <textarea id="summary-desc-textarea" placeholder="Add a description...">${descText}</textarea>
+            `;
 
+        const isCompleteDiv = document.createElement('div');
+        isCompleteDiv.innerHTML = `
+            <div class="summary-is-complete">
+                <button class="summary-mark-complete">Mark Complete</button>
+            </div>
+            `;
 
-        summaryListSelectDiv.appendChild(summaryListSelect)
-        taskSummary.appendChild(summaryTitle)
-        taskSummary.appendChild(summaryDeadline)
-        taskSummary.append(summaryDeadlineInp);
-        taskSummary.appendChild(summaryDeadlineInp);
-        taskSummary.append(summaryList);
-        taskSummary.append(summaryListSelectDiv);
+        taskSummary.appendChild(titleDiv);
+        taskSummary.appendChild(deadlineDiv);
+        taskSummary.appendChild(listDiv);
+        taskSummary.appendChild(descDiv);
+        taskSummaryContainer.appendChild(taskSummary);
 
-
-
-        window.history.replaceState(stateId, `Task ${currentTaskId}`, `/dashboard/#list/${currentListId}/tasks/${currentTaskId}`);
-
-        // <div class="summary-descrip">
-        //     description
-        //     <span class="summary-descrip-textarea" contenteditable="true">
-        //         <span class="summary-descrip-default">Add a description....</a>
-        //     </div>
-        // </div>
-        // <div class="summary-is-complete"><button class="summary-mark-complete">Mark Complete</button></div>`
-
-        taskSummaryContainer.appendChild(taskSummary)
+        const summaryTitleInp = document.querySelector('#summary-title');
+        const summaryDeadlineInp = document.querySelector('#summary-due-date-inp');
+        const summarySelectInp = document.querySelector('#summary-list-select');
+        const summaryDescInp = document.querySelector('#summary-desc-textarea');
 
         const listsRes = await fetch(`/api/lists`);
         const { lists } = await listsRes.json();
-        const listOptions = document.querySelector('.summary-list-options');
+        const listOptions = document.querySelector('#summary-list-select');
 
         lists.forEach(list => {
             if (list.name !== currentList) {
                 const listOpt = document.createElement('option');
                 listOpt.setAttribute('value', list.id);
                 listOpt.innerText = list.name;
-                summaryListSelect.appendChild(listOpt);
+                listOptions.appendChild(listOpt);
             }
         });
 
-        const descriptionContainer = document.querySelector('.summary-descrip-textarea');
+        summaryTitleInp.addEventListener('blur', changeTaskName);
+        summaryDeadlineInp.addEventListener('blur', changeTaskDeadline);
+        summarySelectInp.addEventListener('change', changeList);
+        summaryDescInp.addEventListener('blur', changeDesc);
 
-        if (task.description) {
-            descriptionContainer.innerHTML = task.description;
-        }
-
+        window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/#list/${task.listId}/tasks/${task.id}`);
     }
 
     const fetchListTasks = async (e) => {
@@ -131,7 +126,7 @@ const initializePage = async () => {
 
 
 // Custom Event Listeners
-async function fetchTaskSummary (e) {
+async function fetchTaskSummary(e) {
     const taskSummaryContainer = document.querySelector('#summary')
     const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
     const { task } = await summaryRes.json();
@@ -218,13 +213,13 @@ const createList = async (e) => {
                 },
             })
             if (!res.ok) throw res
-                console.log(tasksList)
-                const newList = await res.json()
-                const listId = newList.list.id;
-                li.className = listId;
-                li.innerText = newList.list.name
-                li.addEventListener('click', fetchListTasks);
-                tasksList.appendChild(li);
+            console.log(tasksList)
+            const newList = await res.json()
+            const listId = newList.list.id;
+            li.className = listId;
+            li.innerText = newList.list.name
+            li.addEventListener('click', fetchListTasks);
+            tasksList.appendChild(li);
         } catch (error) {
 
         }
