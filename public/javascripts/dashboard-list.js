@@ -5,15 +5,15 @@ const initializePage = async () => {
     const fetchTaskSummary = async (e) => {
         const taskSummaryContainer = document.querySelector('#summary')
         const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
-        const { task } = summaryRes.json();
+        const { task } = await summaryRes.json();
 
+        console.log(task)
         const taskSummary = document.createElement('div');
         taskSummary.classList.add('task-summary');
         taskSummary.innerHTML = `
         <div class="summary-title" contenteditable="true"><h2>task name</h2></div>
         <div class="summary-due-date">due date <span class="summary-due-date-container" contenteditable="true">due date</span></div>
         `
-
     }
 
     const fetchListTasks = async (e) => {
@@ -21,6 +21,9 @@ const initializePage = async () => {
         const stateId = { id: "100" };
         const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
         const { tasks } = await taskRes.json();
+        console.log(taskRes)
+        console.log(tasks)
+
         const taskContainer = document.getElementById("tasksContainer");
         tasks.forEach(task => {
             const div = document.createElement("div");

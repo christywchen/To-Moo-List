@@ -13,7 +13,7 @@ const taskNotFound = taskId => {
 }
 
 // get
-router.get('/tasks/:id', asyncHandler(async (req, res, next) => {
+router.get('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     const taskId = parseInt(req.params.id, 10);
 
     // const { userId } = req.session.auth;
@@ -85,13 +85,10 @@ router.get('/tasks', asyncHandler(async (req, res) => {
 }));
 
 // getting tasks by date
-<<<<<<< HEAD
-router.get('/tasks/:dueToday', asyncHandler(async (req, res) => {
-=======
-router.get('/tasks/today', asyncHandler(async (req,res) => {
-    
+router.get('/tasks/today', asyncHandler(async (req, res) => {
+
     const today = new Date();
-    let tomorrow =  new Date();
+    let tomorrow = new Date();
     tomorrow.setDate(today.getDate() + 1);
     let yesterday = new Date();
     yesterday.setDate(today.getDate() - 1);
@@ -109,15 +106,14 @@ router.get('/tasks/today', asyncHandler(async (req,res) => {
     res.json({ tasks });
 }))
 
-router.get('/tasks/tomorrow', asyncHandler(async (req,res) => {
-    
+router.get('/tasks/tomorrow', asyncHandler(async (req, res) => {
+
     const today = new Date();
-    let tomorrow =  new Date();
+    let tomorrow = new Date();
     tomorrow.setDate(today.getDate() + 2);
     let yesterday = new Date();
     yesterday.setDate(today.getDate());
 
->>>>>>> main
     const tasks = await db.Task.findAll({
         where: {
             userId: res.locals.user.id,
