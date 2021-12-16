@@ -144,8 +144,6 @@ async function fetchListTasks(e) {
     const stateId = { id: "100" };
     const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
     const { tasks } = await taskRes.json();
-    console.log(taskRes)
-    console.log(tasks)
 
     const taskContainer = document.getElementById("tasksContainer");
     tasks.forEach(task => {
@@ -172,8 +170,6 @@ const createTask = async (e) => {
     const input = document.getElementById('name');
     div.classList.add('task')
     if (input.value.length) {
-        // console.log(listId)
-        console.log(name, listId)
         try {
             const res = await fetch(`/api/lists/${listId}`, {
                 method: 'POST',
@@ -213,13 +209,12 @@ const createList = async (e) => {
                 },
             })
             if (!res.ok) throw res
-            console.log(tasksList)
-            const newList = await res.json()
-            const listId = newList.list.id;
-            li.className = listId;
-            li.innerText = newList.list.name
-            li.addEventListener('click', fetchListTasks);
-            tasksList.appendChild(li);
+                const newList = await res.json()
+                const listId = newList.list.id;
+                li.className = listId;
+                li.innerText = newList.list.name
+                li.addEventListener('click', fetchListTasks);
+                tasksList.appendChild(li);
         } catch (error) {
 
         }
@@ -233,17 +228,29 @@ const hideTaskButton = (e) => {
     }
     else addTaskButtonDiv.classList.remove('add-task-button-transition');
 };
+
 const hideCreateTaskDiv = (e) => {
-    if (!addListDiv.contains(e.target) && e.target.className !== 'add-list-button') {
-        e.preventDefault()
-        addListDiv.style.display = 'none';
+    // console.log(e.target.className !== 'log')
+    if (e.target.className !== 'logout') {
+        if ((!addListDiv.contains(e.target) &&
+            e.target.className !== 'add-list-button') ||
+            e.target.className === 'submit-list' ||
+            e.target.className === 'cancel-submit-list' ||
+            e.target.className === 'close') {
+                e.preventDefault()
+                addListDiv.style.display = 'none';
+                const form = document.getElementById('addList');
+                form.value = '';
+        }
     }
 };
 
 const showCreateList = async (e) => {
     e.preventDefault();
+    console.log(addListDiv)
     addListDiv.style.display = 'block';
-    addListDiv.style.position = 'absolute';
+    addListDiv.style.position = 'fixed';
+    console.log(addListDiv)
 }
 
 const showTaskButton = (e) => {
@@ -264,6 +271,7 @@ const addTaskButton = document.querySelector('.add-task-button button');
 const addListButton = document.querySelector('.add-list-button');
 const addListDiv = document.querySelector('#add-list');
 const submitListButton = document.querySelector('.submit-list');
+const closeListSubmission = document.querySelector('.close');
 
 // Load events
 window.addEventListener("load", async (event) => {
@@ -274,12 +282,13 @@ window.addEventListener("load", async (event) => {
     addTaskInp.addEventListener('keyup', showTaskButton);
     addListButton.addEventListener('click', showCreateList);
     submitListButton.addEventListener('click', createList);
+    submitListButton.addEventListener('click', hideCreateTaskDiv);
+    closeListSubmission.addEventListener('click', hideCreateTaskDiv)
 });
 //-------
 
 
 // Helper Functions
-
 export function createTaskHtml(taskName, taskId) {
     return ` <input type="checkbox" data-task="${taskId}" name="${taskName}" value="${taskName}">
                 <label for="${taskName}" data-task="${taskId}">${taskName}</label>

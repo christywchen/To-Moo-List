@@ -8,7 +8,7 @@ block content
             if locals.authenticated
                 span.welcome Welcome #{user.username}!
                 form(action='/logout' method='post')
-                    button(type='submit') Logout
+                    button.logout(type='submit') Logout
     div#content
         div#sidebar
             div.lists
@@ -30,11 +30,14 @@ block content
                 include dashboard-task.pug
 
         div#add-list(style='display: none')
-            p Add a List
-            form(id='add-list-form')
-                +field('Please enter a new list name:', 'addList', '')
-                button.submit-list(type="submit") Add
-                button.cancel-submit-list(type="submit") Cancel
+            div.add-task-box
+                div.close
+                p Add a List
+                form(id='add-list-form')
+                    +field('Please enter a new list name:', 'addList', '')
+                    div.add-list-buttons
+                        button.submit-list(type="submit") Add
+                        button.cancel-submit-list(type="submit") Cancel
 
         div#summary
             include dashboard-summary.pug
