@@ -102,7 +102,7 @@ const initializePage = async () => {
 
     const fetchListTasks = async (e) => {
         e.preventDefault();
-        
+
         const stateId = { id: "100" };
         const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
         const { tasks } = await taskRes.json();
@@ -198,7 +198,7 @@ const createTask = async (e) => {
     const body = { name, listId };
     const div = document.createElement('div');
     const input = document.getElementById('name');
-    div.classList.add('task')
+    div.classList.add('single-task')
     if (input.value.length) {
         try {
             const res = await fetch(`/api/lists/${listId}`, {
