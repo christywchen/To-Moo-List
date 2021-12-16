@@ -1,36 +1,29 @@
-extends layout
-
 include utils.pug
 
-block content
-    div#header
-        div#user
-            if locals.authenticated
-                span.welcome Welcome #{user.username}!
-                form(action='/logout' method='post')
-                    button(type='submit') Logout
-    div#content
-        div#sidebar
-            div.lists
-                div.list-header Inbox
-                ol#default-lists
-                    li#today Today's Tasks
-                    li#tomorrow Tomorrow's Tasks
-                    li#all All Tasks
-            div.lists
-                div.list-header Lists
-                ol#task-lists
-            div.lists
-                div.list-header Categories
-                ol#task-categories
-        div#main
-            div#add-task
-                include dashboard-task.pug
-        //- script(src="javascripts/dashboard-task.js")
+append head
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css")
 
+div.checkbox-container
+    div(class="checkbox grid-square")
+        input(type="checkbox")
+    div(class="completed grid-square")
+        i(class="fas fa-check")
+    div(class="postpone grid-square")
+        i(class="fas fa-calendar-plus")
+    div(class="prioritize grid-square")
+        i(class="fas fa-exclamation")
+    div(class="due grid-square")
+        i(class="fas fa-calendar-week")
+    div(class="moveTo grid-square")
+        i(class="fas fa-list-alt")
+    div(class="category grid-square")
+        i(class="fas fa-tag")
++errorSummary(errors)
+div#add-task-form
+    form(id='add-task-input')
+        input(type='hidden' name='_csrf' value=csrfToken id='add-task-input')
+        +field('', 'name', name, '', 'Add a task...')
+        div.add-task-button
+            button(type='submit' disabled='true') Moo
 
-        div#summary
-            include dashboard-summary.pug
-        script(src="/javascripts/dashboard-list.js")
-        script(src="/javascripts/dashboard-inbox.js")
-        
+div#tasksContainer
