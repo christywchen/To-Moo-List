@@ -6,13 +6,13 @@ let listId;
 const initializePage = async () => {
     const fetchTaskSummary = async (e) => {
         const stateId = { id: "99" };
-        const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`); x
+        const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
         const { task } = await summaryRes.json();
         const taskSummaryContainer = document.querySelector('.task-summary');
 
         if (taskSummaryContainer.innerText.length) taskSummaryContainer.innerText = "";
 
-        const currentList = task.name;
+        const currentTask = task.name;
         const currentTaskId = task.id;
         const currentListId = task.listId;
         const currentList = task.List.name;
@@ -87,6 +87,7 @@ const initializePage = async () => {
         // const createListOpt = document.createElement('option');
         // createListOpt.setAttribute('value', 'create-new');
         // createListOpt.innerText = 'Create New';
+        // createListOpt.addEventListener('click', showCreateList);
         // listOptions.appendChild(createListOpt)
 
 
@@ -256,7 +257,7 @@ const hideCreateTaskDiv = (e) => {
     }
 };
 
-const showCreateList = async (e) => {
+async function showCreateList(e) {
     e.preventDefault();
     console.log(addListDiv)
     addListDiv.style.display = 'block';
