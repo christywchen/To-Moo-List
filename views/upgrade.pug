@@ -2,7 +2,7 @@ extends layout.pug
 
 append head
   //- add page specific styles by appending to the head
-  link(rel="stylesheet" href="/stylesheets/home.css")
+  link(rel="stylesheet" href="/stylesheets/upgrade.css")
   link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css")
 
 block content
@@ -16,22 +16,20 @@ block content
                     li 
                         a(href="#") Tour
                     li 
-                        a(href="#") Upgrade  
+                        a(href="/upgrade") Upgrade  
                     
                     li 
-                        a(href="#") Meet the team 
+                        a(href="/team") Meet the team 
                     li 
                         a(href="/login") Log in
                     li(class="signup") 
                         a(href="/signup") Sign up for free 
         
         div.header-content
-            div.header-slogan
-                h1 Get mooore done today!
-            div.content-media
-                a(href="#") Upgrade Now
-                h3 Only $999.99 per year
-                img(src="images/money-cow.png", alt="cow with money spot")
+            h1 Get mooore done today!
+            a(href="#") Upgrade Now
+            h3 Only $999.99 per year
+            img(src="images/money-cow.png", alt="cow money")
     footer
         div.social-container
             div.social-links 
@@ -45,7 +43,7 @@ block content
                         li
                             a(href="#") Instagram
                 div(class="haozhen person") 
-                    h4 Haozen
+                    h4 Haozhen
                     ul
                         li
                             a(href="#") Linkedin
@@ -75,5 +73,4 @@ block content
             p &copy; Copyright 2021 To Moo List
             a(href="#") Terms
             a(href="#") Privacy
-            a(href="#") Security
-    script(src="/javascripts/splash-page.js")
+            a(href="#") Security 

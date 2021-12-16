@@ -60,7 +60,7 @@ app.get('/team', (req,res) => {
 })
 
 app.get('/upgrade', (req,res) => {
-  res.render('team', {
+  res.render('upgrade', {
     title: "Upgrade"
   })
 })
