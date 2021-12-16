@@ -7,6 +7,13 @@
 body {
     font-family: Helvetica, Arial, sans-serif;
     font-size: 15px;
+    overflow-y: auto;
+}
+
+footer {
+    background-color: white;
+    padding-top: 70px;
+    padding-bottom: 70px;
 }
 
 .navbar-container{
@@ -185,7 +192,7 @@ h1 {
 .social-container{
     max-width: 1170px;
     width: 70%;
-    margin: 70px auto;
+    margin: 0 auto;
 }
 
 .social-links{
@@ -225,7 +232,7 @@ h1 {
 .copyright{
     display: flex;
     justify-content: center;
-    padding-bottom: 20px;
+    margin-top: 50px;
 }
 
 .copyright p{
