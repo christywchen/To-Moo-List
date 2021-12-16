@@ -53,6 +53,18 @@ app.get('/', (req,res) => {
   })
 })
 
+app.get('/team', (req,res) => {
+  res.render('team', {
+    title: "Dream Team"
+  })
+})
+
+app.get('/upgrade', (req,res) => {
+  res.render('upgrade', {
+    title: "Upgrade"
+  })
+})
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

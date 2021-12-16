@@ -67,3 +67,94 @@
 .task > label {
     padding: 0 8px;
 }
+
+/* add-task css needs lovin */
+#add-list {
+    display: flex;
+    border: 1px solid #d1d1d1;
+    border-radius: 5px;
+    top: 40%;
+    left: 40%;
+    box-shadow: 0 6px 12px rgb(0 0 0 / 10%);
+    background-color: white;
+    background-clip: padding-box;
+    padding: 29px 37px;
+    border-radius: 5px;
+    width: 390px;
+    height: 211px;
+    margin-top: 30px;
+}
+
+.add-task-box {
+    /* border: 1px red solid; */
+    margin-top: 5px;
+
+}
+
+#add-list-form {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#add-list-form label{
+    /* border: 1px red solid; */
+    top: 30px;
+}
+
+#add-list-form input{
+
+    align-self: center;
+    justify-self: center;
+    top: 70px;
+    right: 60px;
+    width: 315px;
+}
+
+.add-list-buttons {
+    display: flex;
+    flex-direction: row;
+}
+
+.add-list-buttons > button {
+    width: 70px;
+    height: 32px;
+    margin: 3px;
+}
+
+.cancel-submit-list {
+    background-color: #FBFBFA;
+    color: #444444;
+    /* box-shadow: 0 2px 6px rgb(0 0 0 / 10%); */
+    border: 1px solid #d1d1d1;
+}
+
+.close {
+    background-image: url('../images/close-x.png');
+    background-repeat: no-repeat;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    height: 20px;
+    width: 20px;
+    background-color: white;
+}
+
+.checkbox-container{
+    display:grid;
+    grid-template-columns: repeat(7, auto);
+    justify-items: center;
+    align-items: center;
+}
+
+.grid-square{
+    display: grid;
+    border: 1px solid lightgray;
+    width: 50px;
+    height: 30px;
+    justify-items: center;
+    align-items: center;
+}
+
+.grid-square:hover{
+    background-color: #ffffc9;
+}

@@ -13,13 +13,16 @@ const taskNotFound = taskId => {
 }
 
 // get
-router.get('/tasks/:id', asyncHandler(async (req, res, next) => {
+router.get('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     const taskId = parseInt(req.params.id, 10);
 
     // const { userId } = req.session.auth;
     const { userId } = res.locals.user.id;
 
-    const task = await db.Task.findByPk(taskId, { where: userId });
+    const task = await db.Task.findByPk(taskId, {
+        where: userId,
+        include: db.List
+    });
 
     if (task) {
         res.json({ task });
@@ -48,7 +51,7 @@ router.put('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     if (task) {
         //may need to change;
         const { name, description, listId, deadline, isCompleted, categoryId } = req.body;
-        await task.updata({
+        await task.update({
             name,
             description,
             listId,
@@ -63,6 +66,29 @@ router.put('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     }
 }))
 
+// patch
+router.patch('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
+    const taskId = parseInt(req.params.id, 10);
+    const task = await db.Task.findByPk(taskId);
+
+    console.log('test')
+    if (task) {
+        //may need to change;
+        const { name, description, listId, deadline, isCompleted, categoryId } = req.body;
+        await task.update({
+            name,
+            description,
+            listId,
+            deadline,
+            isCompleted,
+            categoryId,
+        })
+        res.status(200);
+        res.json({ task }) //may need to change;
+    } else {
+        next(taskNotFound(taskId));
+    }
+}))
 
 // delete
 router.delete('/tasks/:id(\\d+)', asyncHandler(async (req, res) => {
@@ -85,13 +111,10 @@ router.get('/tasks', asyncHandler(async (req, res) => {
 }));
 
 // getting tasks by date
-<<<<<<< HEAD
-router.get('/tasks/:dueToday', asyncHandler(async (req, res) => {
-=======
-router.get('/tasks/today', asyncHandler(async (req,res) => {
-    
+router.get('/tasks/today', asyncHandler(async (req, res) => {
+
     const today = new Date();
-    let tomorrow =  new Date();
+    let tomorrow = new Date();
     tomorrow.setDate(today.getDate() + 1);
     let yesterday = new Date();
     yesterday.setDate(today.getDate() - 1);
@@ -109,15 +132,14 @@ router.get('/tasks/today', asyncHandler(async (req,res) => {
     res.json({ tasks });
 }))
 
-router.get('/tasks/tomorrow', asyncHandler(async (req,res) => {
-    
+router.get('/tasks/tomorrow', asyncHandler(async (req, res) => {
+
     const today = new Date();
-    let tomorrow =  new Date();
+    let tomorrow = new Date();
     tomorrow.setDate(today.getDate() + 2);
     let yesterday = new Date();
     yesterday.setDate(today.getDate());
 
->>>>>>> main
     const tasks = await db.Task.findAll({
         where: {
             userId: res.locals.user.id,

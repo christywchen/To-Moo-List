@@ -1,0 +1,42 @@
+@import url("/stylesheets/home.css");
+
+.header-content h2{
+    color: #FFFFFF;
+    margin: 15px;
+}
+
+.cow{
+    display: flex;
+}
+
+.cow div h2{
+    font-size: 1.75rem;
+    margin-bottom: 10px;
+}
+
+.cow div p{
+    line-height: 1.35;
+}
+
+.c-cow, .j-cow{
+    background-color: #FFFFFF;
+    margin: 0 auto;
+    justify-content: center;
+}
+
+.h-cow, .p-cow{
+    background-color: #075CBE;
+    margin: 0 auto;
+    justify-content: center;
+    color: white;
+}
+
+.about-left{
+    align-self: center;
+    width: 45%;
+}
+
+.about-right{
+    align-self: center;
+    width: 45%;
+}
