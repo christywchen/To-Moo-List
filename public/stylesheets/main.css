@@ -67,3 +67,12 @@
 .task > label {
     padding: 0 8px;
 }
+
+
+/* add-task css needs lovin */
+#add-list {
+    border: rgba(41, 36, 36, 0.37) 1px solid;
+    left: 300px;
+    top: 200px;
+    box-shadow: 0 6px 12px rgb(0 0 0 / 10%);
+}

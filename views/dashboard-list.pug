@@ -19,13 +19,23 @@ block content
                     li#all All Tasks
             div.lists
                 div.list-header Lists
+                div.add-list-button(role='button') +
                 ol#task-lists
             div.lists
                 div.list-header Categories
+
                 ol#task-categories
         div#main
             div#add-task
                 include dashboard-task.pug
+
+        div#add-list(style='display: none')
+            p Add a List
+            form(id='add-list-form')
+                +field('Please enter a new list name:', 'addList', '')
+                button.submit-list(type="submit") Add
+                button.cancel-submit-list(type="submit") Cancel
+
 
         div#summary
             include dashboard-summary.pug
