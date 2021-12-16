@@ -2,6 +2,83 @@ let listId;
 
 // Initialze Page
 const initializePage = async () => {
+    const fetchTaskSummary = async (e) => {
+        const taskSummaryContainer = document.querySelector('#summary')
+        const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
+        const { task } = await summaryRes.json();
+
+        const currentTask = task.name;
+        const currentList = task.List.name;
+        const taskSummary = document.createElement('div');
+        taskSummary.classList.add('task-summary');
+        taskSummary.innerHTML = `
+        <div class="summary-title" contenteditable="true">
+            <h2>${currentTask}</h2>
+        </div>
+        <div class="summary-due-date">
+            due date
+            <span class="summary-due-date-container" contenteditable="true">
+                due date
+            </span>
+        </div>
+        <div class="summary-list">list
+            <select class="summary-list-options">
+            <option value="${task.id}">${currentList}</option>
+            </select>
+        </div>
+        <div class="summary-descrip">
+            description
+            <span class="summary-descrip-textarea" contenteditable="true">
+                <span class="summary-descrip-default">Add a description....</a>
+            </div>
+        </div>
+        <div class="summary-is-complete"><button class="summary-mark-complete">Mark Complete</button></div>`
+
+        taskSummaryContainer.appendChild(taskSummary)
+
+        const listsRes = await fetch(`/api/lists`);
+        const { lists } = await listsRes.json();
+        const listOptions = document.querySelector('.summary-list-options');
+
+        lists.forEach(list => {
+            if (list.name !== currentList) {
+                const listOpt = document.createElement('option');
+                listOpt.setAttribute('value', list.id);
+                listOpt.innerText = list.name;
+                listOptions.appendChild(listOpt);
+            }
+        });
+
+        const descriptionContainer = document.querySelector('.summary-descrip-textarea');
+
+        if (task.description) {
+            descriptionContainer.innerHTML = task.description;
+        }
+
+    }
+
+    const fetchListTasks = async (e) => {
+        e.preventDefault();
+        const stateId = { id: "100" };
+        const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
+        const { tasks } = await taskRes.json();
+        console.log(taskRes)
+        console.log(tasks)
+
+        const taskContainer = document.getElementById("tasksContainer");
+        tasks.forEach(task => {
+            const div = document.createElement("div");
+            div.setAttribute('data-task', `${task.id}`);
+            div.classList.add('single-task')
+            div.innerHTML = createTaskHtml(task.name, task.id);
+            div.addEventListener('click', fetchTaskSummary);
+            taskContainer.appendChild(div);
+        })
+        // TODO look into window.history.pushState
+        // Look into remove listId from closure and get from fragment URL
+        window.history.replaceState(stateId, `List ${e.target.className}`, `/dashboard/#list/${e.target.className}`);
+    };
+
     const res = await fetch('/api/lists')
     const { lists } = await res.json();
     const taskList = document.getElementById('task-lists');
