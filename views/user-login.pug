@@ -12,7 +12,7 @@ block content
             div#login_img_container
                 img(src="images/steak.png")
             div#login_form_container
-                form(action='/login' method='post' class="logo_form")
+                form(action='/login' method='post' class="login_form")
                     input(type='hidden' name='_csrf' value=csrfToken)
                     div#user_form
                         +field('Username', 'username', username)

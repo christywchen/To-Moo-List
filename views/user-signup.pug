@@ -12,7 +12,7 @@ block content
             div#img_container
                 img(src='images/office.png')
             div#form_container
-                form(action='/signup' method='post' class="form")
+                form(action='/signup' method='post' class="signup_form")
                     input(type='hidden' name='_csrf' value=csrfToken)
                     div#username_box
                         +field('Username', 'username', username)
