@@ -1,6 +1,5 @@
 import { finishTask, deleteTask, postPoneTask, changeCategory, moveTask, getDropMenu, createDropDownMenu } from './dashboard-tasks.js';
 import { showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
-//import { finishTask, deleteTask, moveTask } from './dashboard-tasks.js';
 import { clearDOMTasks } from './clean-dom.js';
 import { createListDiv, buildTaskSummary, createTaskHtml } from './create-dom-elements.js';
 import { showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown } from './display.js';
@@ -48,7 +47,7 @@ async function createTask(e) {
             if (!res.ok) throw res // May need to change this
             else {
                 const { task } = await res.json();
-                div.innerHTML = createTaskHtml(name);
+                div.innerHTML = createTaskHtml(name,task.id);
                 div.setAttribute('data-task', `${task.id}`);
                 div.addEventListener('click', fetchTaskSummary);
                 taskContainer.appendChild(div);
@@ -252,6 +251,14 @@ window.addEventListener("load", async (event) => {
 function highlightTask(e) {
     const prevSelection = window.location.href.split('/')[7];
     const nextSelection = e.target.dataset.task;
+
+    // const checkbox = document.querySelector(`.boxId-${e.target.dataset.task}`).checked = true;
+    // if (checkbox.checked) {
+    //     console.log("hello")
+    // }
+    // console.log(checkbox.checked);
+    
+    
     if (prevSelection) {
         const prevSelectionDiv = document.querySelector(`[data-task="${prevSelection}"]`);
         if (prevSelectionDiv) prevSelectionDiv.classList.remove('single-task-selected');

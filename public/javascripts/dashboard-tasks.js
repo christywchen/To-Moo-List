@@ -1,119 +1,130 @@
-// import { createTaskDiv } from './dashboard-list'
-
-
-
+import { showCreateList } from './display.js'
 
 export const finishTask = (e) => {
     const completeTask = document.querySelector(".completed");
-    const taskId = e.target.dataset.task;
     completeTask.addEventListener("click", async (e) => {
-        const res = await fetch(`/api/tasks/${taskId}`, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ isCompleted: true })
-        });
-        if (!res.ok) {
-            console.log("Something went wrong")
-        } else {
-            console.log("it worked")
-        }
+        const selectedTasks = document.querySelectorAll(".single-task > input");
+        selectedTasks.forEach(async (e) => {
+            if (e.checked) {
+                const res = await fetch(`/api/tasks/${e.dataset.task}`, {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ isCompleted: true })
+                });
+                if (!res.ok) {
+                    console.log("Something went wrong")
+                } else {
+                    console.log("it worked")
+                    const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
+                    if (deleteDiv) deleteDiv.remove();
+                }
+            }
+        })
     })
 }
 
 export const postPoneTask = async (e) => {
-    const url = window.location.href
-    const taskId = url.split('/')[url.split('/').length - 1];
-
+    const selectedTasks = document.querySelectorAll(".single-task > input");
     const extendCal = document.querySelector(".postpone-dates");
-    // console.log(e.target, e.target.getAttribute("value"));
-    const res = await fetch(`/api/tasks/${taskId}`, {
-        method: "PATCH",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ deadline: `${e.target.getAttribute("value")}` })
+    const timeStamp = e.target.getAttribute("value");
+
+    selectedTasks.forEach(async (e) => {
+        if (e.checked) {
+            const res = await fetch(`/api/tasks/${e.dataset.task}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ deadline: `${timeStamp}` })
+            })
+            if (!res.ok) {
+                console.log("Something went wrong");
+            } else {
+                console.log("it worked");
+            }
+            extendCal.style.display = 'none';
+        }
     })
-    if (!res.ok) {
-        console.log("Something went wrong");
-    } else {
-        console.log("it worked");
-        extendCal.style.display = 'none';
-    }
 }
 
 export const moveTask = async (e) => {
-    const url = window.location.href
-    const taskId = url.split('/')[url.split('/').length - 1];
-    // const moveCal = document.querySelector(".moveTo");
-    // const taskId = e.target.dataset.task;
-
-    // // building a toggle to show list
+    const selectedTask = document.querySelectorAll(".single-task > input");
     const listMenu = document.querySelector('.list-of-lists');
+    const listId = e.target.id;
 
-    // moveCal.addEventListener("click", async (e) => {
-    // listMenu.style.display = 'block';
-    const res = await fetch(`/api/tasks/${taskId}`, {
-        method: "PATCH",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ listId: `${e.target.id}` })
+    selectedTask.forEach(async (e) => {
+        if (e.checked) {
+            const res = await fetch(`/api/tasks/${e.dataset.task}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ listId: `${listId}` })
+            })
+            if (!res.ok) {
+                console.log("Something went wrong");
+            } else {
+                console.log("it worked");
+                const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
+                deleteDiv.remove();
+            }
+            listMenu.style.display = 'none';
+        }
+
     })
-    if (!res.ok) {
-        console.log("Something went wrong");
-    } else {
-        console.log("it worked");
-        listMenu.style.display = 'none';
-        const deleteDiv = document.querySelector(`[data-task="${taskId}"]`);
-        deleteDiv.remove();
-    }
-    // })
 }
 
 export const changeCategory = async (e) => {
+    const selectedTasks = document.querySelectorAll(".single-task > input");
     const tag = document.querySelector(".category");
-    const taskId = e.target.dataset.task;
+    const tagId = e.target.id;
 
-    // const res = await fetch(`/api/tasks/${taskId}`, {
-    //     method: "PATCH",
-    //     headers: {
-    //         "Content-Type": "application/json"
-    //     },
-    //     body: JSON.stringify({listId: `${e.target.id}`})
-    // })
-    // if (!res.ok) {
-    //     console.log("Something went wrong");
-    // } else {
-    //     console.log("it worked");
-    //     listMenu.style.display = 'none';
-    //     const deleteDiv = document.querySelector(`[data-task="${taskId}"]`);
-    //     deleteDiv.remove();
-    // }
+    selectedTasks.forEach(async (e) => {
+        if (e.checked) {
+            const res = await fetch(`/api/tasks/${e.dataset.task}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ categoryId: `${tagId}` })
+            })
+            if (!res.ok) {
+                console.log("Something went wrong");
+            } else {
+                console.log("it worked");
+            }
+            tag.style.display = 'none';
+        }
+    })
+
+
 }
 
 export const deleteTask = async (e) => {
     const trashTask = document.querySelector(".delete");
-    const taskId = e.target.dataset.task;
 
     trashTask.addEventListener('click', async (e) => {
-        // console.log('-------------------------------');
-        // console.log(taskId);
-        const res = await fetch(`/api/tasks/${taskId}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: null
+        const selectedTasks = document.querySelectorAll(".single-task > input");
+        selectedTasks.forEach(async (e) => {
+            if (e.checked) {
+                const res = await fetch(`/api/tasks/${e.dataset.task}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: null
+                })
+                if (!res.ok) {
+                    console.log("Something went wrong")
+                } else {
+                    console.log("Task deleted")
+                    const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
+                    if (deleteDiv) deleteDiv.remove();
+                }
+            }
         })
-        if (!res.ok) {
-            console.log("Something went wrong")
-        } else {
-            console.log("Task deleted")
-            const deleteDiv = document.querySelector(`[data-task="${taskId}"]`);
-            deleteDiv.remove();
-        }
     })
 }
 
@@ -154,6 +165,12 @@ const createListDropDown = async () => {
         listOption.addEventListener("click", moveTask);
         listMenu.appendChild(listOption);
     })
+    const hr = document.createElement('hr');
+    listMenu.appendChild(hr);
+    const div = document.createElement('div');
+    div.innerText = "Create new list";
+    div.addEventListener("click", showCreateList);
+    listMenu.appendChild(div);
 }
 
 const createPostPoneList = async () => {
@@ -181,9 +198,17 @@ const createTagList = async () => {
         div.innerText = tag.name
         div.setAttribute("name", tag.name);
         div.setAttribute("value", tag.name);
+        div.setAttribute("id", tag.id);
         div.addEventListener("click", changeCategory);
         categoryList.appendChild(div);
     });
+
+    const hr = document.createElement('hr');
+    categoryList.appendChild(hr);
+    const div = document.createElement('div');
+    div.innerText = "Create new tag";
+    //div.addEventListener("click", stuff);
+    categoryList.appendChild(div);
 }
 
 

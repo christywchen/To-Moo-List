@@ -177,7 +177,7 @@ function buildDescDiv(currentDesc) {
 
 
 export function createTaskHtml(taskName, taskId) {
-    return ` <input type="checkbox" data-task="${taskId}" name="${taskName}" value="${taskName}">
+    return `<input type="checkbox" data-task="${taskId}" name="${taskName}" value="${taskName} class="boxId-${taskId}">
                 <label for="${taskName}" data-task="${taskId}">${taskName}</label>
                 <div hidden class='categories'>mwhahahah</div>`;
 };
