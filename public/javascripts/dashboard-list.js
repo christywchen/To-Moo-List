@@ -1,32 +1,13 @@
-import { buildTaskSummary, showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
-import { finishTask, deleteTask, moveTask } from './dashboard-tasks.js';
+import { finishTask, deleteTask, postPoneTask, changeCategory, moveTask, getDropMenu } from './dashboard-tasks.js';
+import { showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
+//import { finishTask, deleteTask, moveTask } from './dashboard-tasks.js';
 import { clearDOMTasks } from './clean-dom.js';
-import { createListDiv } from './create-dom-elements.js';
+import { createListDiv, buildTaskSummary } from './create-dom-elements.js';
 
 let listId;
 
 // Initialze Page
 const initializePage = async () => {
-    // const fetchTaskSummary = async (e) => {
-    //     console.log("halp")
-    //     const stateId = { id: "99" };
-    //     const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
-    //     const { task } = await summaryRes.json();
-
-    //     const currentTask = task.name;
-    //     const currentTaskId = task.id;
-    //     const currentDeadline = task.deadline;
-    //     const currentListId = task.listId;
-    //     const currentList = task.List.name;
-    //     const currentDesc = task.description;
-
-    //     buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc);
-    //     addTaskSummaryEventListeners()
-    //     showTaskSummary(true);
-
-    //     window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/#list/${task.listId}/tasks/${task.id}`);
-    // }
-
     const res = await fetch('/api/lists')
     const { lists } = await res.json();
     const taskList = document.getElementById('task-lists');
@@ -49,7 +30,19 @@ const initializePage = async () => {
 
 // Custom Event Listeners
 async function fetchTaskSummary(e) {
-    console.log("halp")
+
+    function highLightTask() {
+        const prevSelection = window.location.href.split('/')[7];
+        const nextSelection = e.target.dataset.task;
+        if (prevSelection) {
+            const prevSelectionDiv = document.querySelector(`[data-task="${prevSelection}"]`);
+            if (prevSelectionDiv) prevSelectionDiv.classList.remove('single-task-selected');
+        }
+        const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
+        nextSelectionDiv.classList.add('single-task-selected')
+    }
+
+    highLightTask()
     const stateId = { id: "99" };
     const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
     const { task } = await summaryRes.json();
@@ -61,7 +54,13 @@ async function fetchTaskSummary(e) {
     const currentList = task.List.name;
     const currentDesc = task.description;
 
-    buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc);
+    buildTaskSummary(
+        currentTask,
+        currentDeadline,
+        currentTaskId,
+        currentListId,
+        currentList,
+        currentDesc);
     addTaskSummaryEventListeners()
     showTaskSummary(true);
 
@@ -91,17 +90,107 @@ export async function fetchListTasks(e) {
             div.addEventListener('click', fetchTaskSummary);
             div.addEventListener('click', finishTask);
             div.addEventListener('click', deleteTask);
-            div.addEventListener('click', moveTask);
+            div.addEventListener('click', getDropMenu);
             taskContainer.appendChild(div);
         })
+        // TODO look into window.history.pushState
+        // Look into remove listId from closure and get from fragment URL
+        window.history.replaceState(stateId, `List ${e.target.className}`, `/dashboard/#list/${e.target.className}`);
+    };
+
+    const res = await fetch('/api/lists')
+    const { lists } = await res.json();
+    const taskList = document.getElementById('task-lists');
+
+    // might not need this
+    listId = lists[0].id;
+
+    const listMenu = document.querySelector('.list-of-lists');
+    lists.forEach(list => {
+        const li = document.createElement('li');
+        // if (!maxListId || list.id > maxListId) maxListId = list.id
+        li.innerText = list.name;
+        li.className = list.id;
+        li.addEventListener('click', fetchListTasks);
+        taskList.appendChild(li);
+
+        //populates the list drop down menu
+        const div = document.createElement('div');
+        div.innerHTML = `${list.name}`;
+        div.setAttribute("class", "dropdown-row");
+        div.setAttribute("id", list.id);
+        div.setAttribute("name", list.name);
+        div.setAttribute("value", list.name);
+        div.addEventListener("click", moveTask);
+        listMenu.appendChild(div);
+    });
+
+    // creats & fill the hidden div with date objects
+    const postponeList = document.querySelector('.postpone-dates');
+    const today = new Date();
+    const date = ["1 days", '2 days', '3 days', '4 days', '5 days' ]
+    for(let i=0;i<5;i++){
+        today.setDate(today.getDate() + 1);
+        const readable = new Date(today).toISOString().split('T')[0]
+        const div = document.createElement('div');
+        div.innerText = date[i] + " (" + readable + ")";
+        div.setAttribute("name", "date");
+        div.setAttribute("value", today);
+        div.addEventListener("click", postPoneTask);
+        postponeList.appendChild(div);
     }
-    // TODO look into window.history.pushState
-    // Look into remove listId from closure and get from fragment URL
-    window.history.replaceState(
-        stateId, `List ${e.target.dataset.listid}`,
-        `/dashboard/#list/${e.target.dataset.listid}`
-    );
+
+    // creats & fills the hidden div with category/tags
+    const categoryList = document.querySelector('.list-of-tags');
+    const tags = await fetch('/api/categories');
+    const { categories } = await tags.json();
+    categories.forEach( tag => {
+        const div = document.createElement('div');
+        div.innerText = tag.name
+        div.setAttribute("name", tag.name);
+        div.setAttribute("value", tag.name);
+        div.addEventListener("click", changeCategory);
+        categoryList.appendChild(div);
+    });
 };
+
+
+// // Custom Event Listeners
+// async function fetchTaskSummary(e) {
+//     const taskSummaryContainer = document.querySelector('#summary')
+//     const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
+//     const { task } = await summaryRes.json();
+
+//     const taskSummary = document.createElement('div');
+//     taskSummary.classList.add('task-summary');
+//     taskSummary.innerHTML = `
+//         <div class="summary-title" contenteditable="true"><h2>task name</h2></div>
+//         <div class="summary-due-date">due date <span class="summary-due-date-container" contenteditable="true">due date</span></div>
+//         `
+// };
+
+// async function fetchListTasks(e) {
+//     e.preventDefault();
+//     const stateId = { id: "100" };
+//     const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
+//     const { tasks } = await taskRes.json();
+//     const taskContainer = document.getElementById("tasksContainer");
+
+//     tasks.forEach(task => {
+//         const div = document.createElement("div");
+//         div.setAttribute('data-task', `${task.id}`);
+//         div.classList.add('single-task')
+//         div.innerHTML = createTaskHtml(task.name, task.id);
+//         div.addEventListener('click', fetchTaskSummary);
+//         taskContainer.appendChild(div);
+//     })
+//     // TODO look into window.history.pushState
+//     // Look into remove listId from closure and get from fragment URL
+//     window.history.replaceState(
+//         stateId, `List ${e.target.dataset.listid}`,
+//         `/dashboard/#list/${e.target.dataset.listid}`
+//     );
+// };
 
 const createTask = async (e) => {
     e.preventDefault();
@@ -120,9 +209,14 @@ const createTask = async (e) => {
                 body: JSON.stringify(body),
                 headers: { "Content-Type": "application/json" }
             })
+
+
             if (!res.ok) throw res // May need to change this
             else {
+                const { task } = await res.json();
                 div.innerHTML = createTaskHtml(name);
+                div.setAttribute('data-task', `${task.id}`);
+                div.addEventListener('click', fetchTaskSummary);
                 taskContainer.appendChild(div);
                 input.value = "";
             }
@@ -227,8 +321,20 @@ const hideListNameDiv = (e) => {
 };
 
 
+const hideDropDown = (e) => {
+    if (e.target.className !== 'logout') {
+        if (!listMenu.className.includes(e.target) &&
+        !e.target.className.includes('grid-square') && 
+        !e.target.className.includes('fas')){
+            e.preventDefault()
+            listMenu.style.display = 'none';
+            postponeMenu.style.display = 'none';
+            categoryList.style.display = 'none';
+        }
+    }
+}
 
-export async function showCreateList(e) {
+async function showCreateList(e) {
     // e.preventDefault();
     addListDiv.style.display = 'block';
     addListDiv.style.position = 'fixed';
@@ -254,6 +360,11 @@ const submitListButton = document.querySelector('.submit-list');
 const closeListSubmission = document.querySelector('.close');
 const renameListButton = document.querySelector('.rename-list');
 
+// have to refactor where can get all the dropdown menu
+const listMenu = document.querySelector(".list-of-lists");
+const postponeMenu = document.querySelector(".postpone-dates");
+const categoryList = document.querySelector('.list-of-tags');
+
 // Load events
 window.addEventListener("load", async (event) => {
     initializePage();
@@ -261,6 +372,8 @@ window.addEventListener("load", async (event) => {
     document.addEventListener('click', hideTaskButton);
     document.addEventListener('click', hideListNameDiv);
     document.addEventListener('click', hideListOptions)
+    //document.addEventListener('click', hideCreateTaskDiv);
+    document.addEventListener('click', hideDropDown);
     addTaskInp.addEventListener('keyup', showTaskButton);
     addListButton.addEventListener('click', showCreateList);
     submitListButton.addEventListener('click', createList);
