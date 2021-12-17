@@ -106,9 +106,15 @@ const createTask = async (e) => {
             })
             if (!res.ok) throw res // May need to change this
             else {
+                const { task } = await res.json();
                 div.innerHTML = createTaskHtml(name);
+                div.setAttribute('data-task', `${task.id}`);
+                div.addEventListener('click', fetchTaskSummary);
                 taskContainer.appendChild(div);
                 input.value = "";
+                // div.innerHTML = createTaskHtml(name);
+                // taskContainer.appendChild(div);
+                // input.value = "";
             }
         } catch (err) {
             // TODO finish error handling
@@ -136,7 +142,7 @@ const createList = async (e) => {
                     "Content-Type": "application/json",
                 },
             })
-            if (!res.ok) throw res
+            if (!res.ok) throw res 
             const newList = await res.json()
             const listId = newList.list.id;
             const div = createListDiv(newList.list.name, listId);
