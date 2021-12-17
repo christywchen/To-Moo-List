@@ -7,3 +7,7 @@
 .list-header-container:hover + #task-lists {
     display: block;
 }
+
+#task-lists:hover {
+    display: block;
+}
