@@ -48,7 +48,10 @@ router.put('/:id', validateList, handleValidationErrors, asyncHandler(async (req
 }));
 
 router.delete('/:id', asyncHandler(async (req, res, next) => {
-    const list = await db.List.findByPk(req.params.id)
+    const listId = parseInt(req.params.id, 10);
+    console.log('listId: ', listId);
+    const list = await db.List.findByPk(listId)
+    console.log(list);
 
     // if (res.locals.user.id !== db.List.userId) {
     //     const err = new Error("Unauthorized");
@@ -61,8 +64,10 @@ router.delete('/:id', asyncHandler(async (req, res, next) => {
     if (list) {
         await list.destroy();
         res.status(204).end;
+        console.log('WORKED')
     } else {
-        next(listNotFoundError(req.params.id));
+        console.log('FAILED')
+        next(listNotFoundError(listId));
     }
 }))
 

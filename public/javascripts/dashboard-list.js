@@ -69,10 +69,11 @@ async function fetchTaskSummary(e) {
 };
 
 export async function fetchListTasks(e) {
-    e.preventDefault();
+    // e.preventDefault();
     e.stopPropagation();
     clearDOMTasks();
     const stateId = { id: "100" };
+    console.log(e.target);
 
     if (e.target.className = 'list-item') {
         // --------------------------------------------------

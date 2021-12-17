@@ -1,16 +1,17 @@
 import { fetchListTasks } from './dashboard-list.js';
-// import { deleteTask } from './dashboard-tasks.js';
+import { clearDOMTasks } from './clean-dom.js';
 
 
 export function createListDiv(name, listId) {
     const container = document.createElement('div');
     const listDiv = document.createElement('div');
     container.className = 'list-box';
+    container.style.position = 'relative';
+
     listDiv.innerText = name;
-
     listDiv.setAttribute('data-listId', `${listId}`);
-
     listDiv.className = 'list-item';
+
     const iconsBox = document.createElement('div');
     iconsBox.className = 'list-icons';
     const editIcon = document.createElement('div');
@@ -18,11 +19,10 @@ export function createListDiv(name, listId) {
     // TO DO add image to icon box
     // make invisible edit icon
 
-    container.style.position = 'relative';
 
-    iconsBox.appendChild(editIcon);
     container.appendChild(listDiv);
     container.appendChild(iconsBox);
+    iconsBox.appendChild(editIcon);
     editIcon.addEventListener('click', (e) => {
         container.appendChild(listEditDropDown())
     });
@@ -56,18 +56,43 @@ export function listEditDropDown() {
 }
 
 
-function deleteList(e) {
+async function deleteList (e) {
+    e.stopPropagation()
     const list = e.target
-    .parentNode.parentNode
-    .querySelector('.list-item')
+        .parentNode.parentNode
+        .querySelector('.list-item')
     console.log(list.dataset.listid)
     const listId = list.dataset.listid;
 
-    // try {
-    //     const res = await fetch(`/api/lists/${listId}`)
-    // } catch (error) {
+    const res = await fetch(`/api/lists/${listId}`, {
+        method: 'DELETE',
+        headers: {
+            "Content-Type": "application/json"
+        },
+    })
+    if (!res.ok) {
+        console.log('Something went wrong')
+    } else {
+        console.log('List deleted')
+        list.remove();
+        clearDOMTasks();
+    }
 
-    // }
+
+}
+
+async function updateList (e) {
+    const list = e.target
+        .parentNode.parentNode
+        .querySelector('.list-item')
+    const listId = list.dataset.listid;
+
+    const res = await fetch(`/api/lists/${listId}`, {
+        method: 'PATCH',
+        headers: {
+            "Content-Type": "application/json"
+        },
+    })
 
 }
 

@@ -10,7 +10,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Task.associate = function(models) {
     Task.belongsTo(models.User, { foreignKey: 'userId' });
-    Task.belongsTo(models.List, { foreignKey: 'listId' });
+    Task.belongsTo(models.List, {
+      foreignKey: 'listId',
+      onDelete: 'CASCADE'
+    });
     Task.belongsTo(models.Category, { foreignKey: 'categoryId' });
   };
   return Task;

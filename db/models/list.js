@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     List.hasMany(models.Task, {
       foreignKey: 'listId',
       onDelete: 'CASCADE',
+      hooks: true,
     });
   };
 

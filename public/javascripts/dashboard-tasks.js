@@ -17,7 +17,7 @@ export const finishTask = (e) => {
         } else {
             console.log("it worked")
         }
-    })    
+    })
 }
 
 const postPoneTask = (e) => {
@@ -61,7 +61,7 @@ const changeCategory = (e) => {
 export const deleteTask = (e) => {
     const trashTask = document.querySelector(".delete");
     const taskId = e.target.dataset.task;
-    
+
     trashTask.addEventListener('click', async (e) => {
         const res = await fetch(`/api/tasks/${taskId}`, {
             method: "DELETE",
@@ -72,7 +72,7 @@ export const deleteTask = (e) => {
         if (!res.ok) {
             console.log("Something went wrong")
         } else {
-            console.log("it worked")
+            console.log("Task deleted")
             const deleteDiv = document.querySelector(`[data-task="${taskId}"]`);
             deleteDiv.remove();
         }
