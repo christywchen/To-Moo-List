@@ -1,4 +1,4 @@
-import { createTaskHtml } from './dashboard-list.js';
+import { createTaskHtml } from './create-dom-elements.js';
 import { clearDOMTasks } from './clean-dom.js';
 
 window.addEventListener("load", async (e) => {

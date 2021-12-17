@@ -71,7 +71,6 @@ router.patch('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     const taskId = parseInt(req.params.id, 10);
     const task = await db.Task.findByPk(taskId);
 
-    console.log('test')
     if (task) {
         //may need to change;
         const { name, description, listId, deadline, isCompleted, categoryId } = req.body;
