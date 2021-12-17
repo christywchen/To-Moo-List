@@ -12,7 +12,6 @@ const initializePage = async () => {
     const { lists } = await res.json();
     const taskList = document.getElementById('task-lists');
 
-    // listId = lists[0].id;
     lists.forEach(list => {
         const div = createListDiv(list.name, list.id);
         div.addEventListener('click', fetchListTasks);
@@ -26,7 +25,6 @@ const initializePage = async () => {
 
 // C-R-U-D Functions
 // C
-
 async function createTask(e) {
     e.preventDefault();
     const taskData = document.querySelector('#add-task-input');

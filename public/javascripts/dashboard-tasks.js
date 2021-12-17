@@ -94,6 +94,17 @@ export const changeCategory = async (e) => {
 }
 
 export const deleteTask = (e) => {
+
+    // const delteOccupied = querySelector.(DELETETASK)
+
+
+
+    // if (!delete Occupied )
+        // add class of DELETETASK
+        // univeral selectors 
+        // do the following
+
+
     const trashTask = document.querySelector(".delete");
     const taskId = e.target.dataset.task;
 
@@ -189,4 +200,3 @@ export const createDropDownMenu = () => {
     createPostPoneList();
     createTagList();
 }
-

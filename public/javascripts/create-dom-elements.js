@@ -1,7 +1,7 @@
 import { fetchListTasks, updateListId } from './dashboard-list.js';
 import { clearDOMTasks } from './clean-dom.js';
-import {  updateList } from './dashboard-list.js';
-import { showRenameList, showCreateList } from './display.js';
+import {  updateList, deleteList } from './dashboard-list.js';
+import { showRenameList, showContainer, hideContainer } from './display.js';
 
 export function createListDiv(name, listId) {
     const container = document.createElement('div');
@@ -18,19 +18,22 @@ export function createListDiv(name, listId) {
     const editIcon = document.createElement('div');
     editIcon.innerText = 'v'
     editIcon.setAttribute('data-listId', `${listId}`);
-    // TO DO add image to icon box
-    // make invisible edit icon
+
 
     container.appendChild(listDiv);
     container.appendChild(iconsBox);
     iconsBox.appendChild(editIcon);
-    editIcon.addEventListener('click', (e) => {
-        container.appendChild(listEditDropDown())
-    });
+
     editIcon.addEventListener('click', updateListId);
     container.addEventListener('click', fetchListTasks);
+    editIcon.addEventListener('click', async (e) => {
+        await hideContainer('list-edit-dropdown');
+        await showContainer(container, listEditDropDown);
+    });
     return container
 }
+
+// FIND OPTION DROPDOWN
 
 
 export function listEditDropDown() {
@@ -51,22 +54,6 @@ export function listEditDropDown() {
     deleteListOp.addEventListener('click', deleteList);
 
     return container;
-}
-
-
-function deleteList(e) {
-    const list = e.target
-        .parentNode.parentNode
-        .querySelector('.list-item')
-    console.log(list.dataset.listid)
-    const listId = list.dataset.listid;
-
-    // try {
-    //     const res = await fetch(`/api/lists/${listId}`)
-    // } catch (error) {
-
-    // }
-
 }
 
 

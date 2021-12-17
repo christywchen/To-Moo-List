@@ -35,7 +35,21 @@ export async function showCreateList(e) {
 
 export function hideListOptions(e) {
     const box = document.querySelector('.list-edit-dropdown')
-    if (box) box.remove();
+    if (box) {
+        // const currentBox = e.target.dataset.listid;
+        console.log('C: ', e.target)
+
+        box.remove();
+    }
+}
+
+export async function hideDuplicateBox(className) {
+    console.log('out')
+    const box = document.querySelector(`.${className}`);
+    if (box) {
+        console.log('in: ', box)
+        box.remove();
+    }
 }
 
 export function hideListNameDiv (e) {
@@ -55,6 +69,8 @@ export function hideListNameDiv (e) {
             form.value = '';
         }
     }
+
+    // find all select box classes and remove them.
 };
 
 export function hideDropDown(e) {
@@ -71,4 +87,21 @@ export function hideDropDown(e) {
             categoryList.style.display = 'none';
         }
     }
-}
+};
+
+// Promises
+
+export function showContainer(container, showFn) {
+    return new Promise(function (res, rej) {
+        const newContainer = showFn()
+        container.appendChild(newContainer)
+        res()
+    })
+};
+
+export function hideContainer(className) {
+    return new Promise(function (res, rej) {
+        hideDuplicateBox(className);
+        res()
+    })
+};
