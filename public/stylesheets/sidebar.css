@@ -7,6 +7,10 @@
     width: 100%;
 }
 
+li {
+    list-style-type: none;
+}
+
 ol#task-lists,
 ol#default-lists {
     margin-bottom: 10px;
@@ -31,4 +35,34 @@ ol#default-lists {
 
 ol li {
     line-height: 2em;
+}
+
+.list-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 22px;
+}
+
+.list-edit-dropdown {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    left: 40px;
+    width: 120px;
+    top: 15px;
+    background-color: white;
+    z-index: 3;
+}
+
+.list-edit-option {
+    width: 100%;
+    padding: 2px;
+    margin-left: 5px;
+}
+
+.list-edit-option:hover {
+    background-color: var(--divider-color);
+    padding-left: 5px;
 }

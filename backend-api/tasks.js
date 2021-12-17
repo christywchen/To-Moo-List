@@ -71,7 +71,6 @@ router.patch('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     const taskId = parseInt(req.params.id, 10);
     const task = await db.Task.findByPk(taskId);
 
-    console.log('test')
     if (task) {
         //may need to change;
         const { name, description, listId, deadline, isCompleted, categoryId } = req.body;
@@ -112,7 +111,6 @@ router.get('/tasks', asyncHandler(async (req, res) => {
 
 // getting tasks by date
 router.get('/tasks/today', asyncHandler(async (req, res) => {
-
     const today = new Date();
     let tomorrow = new Date();
     tomorrow.setDate(today.getDate() + 1);
@@ -123,7 +121,7 @@ router.get('/tasks/today', asyncHandler(async (req, res) => {
         where: {
             userId: res.locals.user.id,
             deadline: {
-                [Op.lt]: tomorrow,
+                [Op.lt]: today,
                 [Op.gt]: yesterday
             }
         }
@@ -135,8 +133,8 @@ router.get('/tasks/today', asyncHandler(async (req, res) => {
 router.get('/tasks/tomorrow', asyncHandler(async (req, res) => {
 
     const today = new Date();
-    let tomorrow = new Date();
-    tomorrow.setDate(today.getDate() + 2);
+    let twoDaysAhead = new Date();
+    twoDaysAhead.setDate(today.getDate() + 2);
     let yesterday = new Date();
     yesterday.setDate(today.getDate());
 
@@ -144,7 +142,7 @@ router.get('/tasks/tomorrow', asyncHandler(async (req, res) => {
         where: {
             userId: res.locals.user.id,
             deadline: {
-                [Op.lt]: tomorrow,
+                [Op.lt]: twoDaysAhead,
                 [Op.gt]: yesterday
             }
         }

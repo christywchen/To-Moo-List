@@ -12,7 +12,18 @@ module.exports = {
         name: 'work',
         createdAt: new Date(),
         updatedAt: new Date()
-      }
+      },
+      {
+        name: 'fun',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'urgent',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+
     ])
   },
 

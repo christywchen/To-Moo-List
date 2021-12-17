@@ -1,7 +1,23 @@
+export function addTaskSummaryEventListeners() {
+    const summaryTitleInp = document.querySelector('#summary-title');
+    const summaryDeadlineInp = document.querySelector('#summary-due-date-inp');
+    const summarySelectInp = document.querySelector('#summary-list-select');
+    const summaryDescInp = document.querySelector('#summary-desc-textarea');
+
+    console.log(summaryTitleInp)
+    summaryTitleInp.addEventListener('blur', changeTaskName);
+    summaryDeadlineInp.addEventListener('blur', changeTaskDeadline);
+    summarySelectInp.addEventListener('change', changeList);
+    summaryDescInp.addEventListener('focus', expandTextarea);
+    summaryDescInp.addEventListener('blur', changeDesc);
+}
+
 export const changeTaskName = async (e) => {
     const taskId = window.location.href.split('/')[7];
     const newTaskName = e.target.innerText;
     const body = { name: newTaskName }
+
+    console.log(e.target.innerText)
 
     if (newTaskName) {
         await fetch(`/api/tasks/${taskId}`, {
@@ -28,24 +44,34 @@ export const changeTaskDeadline = async (e) => {
 };
 
 export const changeList = async (e) => {
+    e.stopPropagation();
     const stateId = { id: "99" };
     const listId = window.location.href.split('/')[5];
     const taskId = window.location.href.split('/')[7];
 
     const newlistId = e.target.value;
-    const body = { listId: parseInt(newlistId, 10) }
 
-    await fetch(`/api/tasks/${taskId}`, {
-        method: "PATCH",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body)
-    });
+
+    console.log(newlistId)
+
+    if (newlistId === "create-new") {
+        addListDiv.style.display = 'block';
+        addListDiv.style.position = 'fixed';
+    } else {
+        const body = { listId: parseInt(newlistId, 10) }
+        await fetch(`/api/tasks/${taskId}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        });
+    }
 
     const taskContainer = document.querySelector('#tasksContainer');
     const movedTask = document.querySelector(`[data-task="${taskId}"]`);
     taskContainer.removeChild(movedTask);
+    showTaskSummary(false)
 
     window.history.replaceState(stateId, `List ${listId}`, `/dashboard/#list/${listId}`);
 };
@@ -63,5 +89,24 @@ export const changeDesc = async (e) => {
             },
             body: JSON.stringify(body)
         });
-    }
+    };
 };
+
+export function showTaskSummary(visible) {
+    const taskDetailsDiv = document.querySelector('#task-details');
+    if (visible === true) {
+        taskDetailsDiv.classList.add('task-details-display');
+    } else {
+        taskDetailsDiv.classList.remove('task-details-display');
+    }
+}
+
+export async function expandTextarea(e) {
+    const summaryDescInp = document.querySelector('#summary-desc-textarea');
+    summaryDescInp.classList.add('summary-inp-focus');
+}
+
+export async function shrinkTextarea(e) {
+    const summaryDescInp = document.querySelector('#summary-desc-textarea');
+    summaryDescInp.classList.remove('summary-inp-focus');
+}

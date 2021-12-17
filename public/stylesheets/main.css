@@ -51,7 +51,7 @@
     border-bottom: 1px dotted lightgray;
 }
 
-#tasksContainer div:hover {
+.single-task-selected {
     background-color: #ffffc9;
 }
 
@@ -69,7 +69,8 @@
 }
 
 /* add-task css needs lovin */
-#add-list {
+#add-list,
+#rename-list {
     display: flex;
     border: 1px solid #d1d1d1;
     border-radius: 5px;
@@ -97,7 +98,6 @@
 }
 
 #add-list-form label {
-    /* border: 1px red solid; */
     top: 30px;
 }
 

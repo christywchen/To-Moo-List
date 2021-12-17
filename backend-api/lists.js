@@ -29,15 +29,8 @@ router.post('/', validateList, handleValidationErrors, asyncHandler(async (req, 
 }));
 
 router.put('/:id', validateList, handleValidationErrors, asyncHandler(async (req, res, next) => {
+    // TO DO change listId method. Check path
     const list = await db.List.findByPk(req.params.id);
-
-    // if (res.locals.user.id !== db.List.userId) {
-    //     const err = new Error("Unauthorized");
-    //     err.status = 401;
-    //     err.message = "You are not authorized to edit this list.";
-    //     err.title = "Unauthorized";
-    //     throw err;
-    //   }
 
     if (list) {
         await list.update({ name: req.body.name });
@@ -47,8 +40,31 @@ router.put('/:id', validateList, handleValidationErrors, asyncHandler(async (req
     }
 }));
 
+router.patch('/:id', validateList, handleValidationErrors, asyncHandler(async (req, res, next) => {
+    const listId = parseInt(req.params.id, 10);
+    console.log('!!!!!!')
+    console.log(listId)
+    const list = await db.List.findByPk(listId);
+
+    console.log(list)
+
+    if (list) {
+        const { name } = req.body;
+        console.log('!!!', name)
+        await list.update({ name });
+        console.log('here')
+        res.status(200);
+        res.json({ list })
+    } else {
+        next(listNotFoundError(listId));
+    }
+}));
+
 router.delete('/:id', asyncHandler(async (req, res, next) => {
-    const list = await db.List.findByPk(req.params.id)
+    const listId = parseInt(req.params.id, 10);
+    console.log('listId: ', listId);
+    const list = await db.List.findByPk(listId)
+    // console.log(list);
 
     // if (res.locals.user.id !== db.List.userId) {
     //     const err = new Error("Unauthorized");
@@ -61,8 +77,10 @@ router.delete('/:id', asyncHandler(async (req, res, next) => {
     if (list) {
         await list.destroy();
         res.status(204).end;
+        console.log('WORKED')
     } else {
-        next(listNotFoundError(req.params.id));
+        console.log('FAILED')
+        next(listNotFoundError(listId));
     }
 }))
 

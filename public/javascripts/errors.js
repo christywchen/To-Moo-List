@@ -83,11 +83,3 @@ window.addEventListener("load", async (event) => {
 
     
 });
-
-function findText(error, errorName) {
-    return error.innerText.includes(errorName)
-<<<<<<< HEAD
-}
-=======
-}
->>>>>>> splash-signup

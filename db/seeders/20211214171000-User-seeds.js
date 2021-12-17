@@ -4,20 +4,11 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('Users', [
       {
-        username: 'jstnswn',
+        username: 'demo',
         hashedPassword: '$2a$10$P8SC6WjSWo7W4GZBeZY9jOM19lSTnp0w5D.smI9PJf6aIpmMElGxa',
-        firstName: 'Justin',
-        lastName: 'Sweeney',
-        email: 'justin@justin.com',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        username: 'haozhen',
-        hashedPassword: '$2a$10$P8SC6WjSWo7W4GZBeZY9jOM19lSTnp0w5D.smI9PJf6aIpmMElGxa',
-        firstName: 'Haozhen',
-        lastName: 'Shu',
-        email: 'haozhen@haozhen.com',
+        firstName: 'Demo',
+        lastName: 'McDemo',
+        email: 'demo@demo.com',
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -25,8 +16,17 @@ module.exports = {
         username: 'barry',
         hashedPassword: '$2a$10$P8SC6WjSWo7W4GZBeZY9jOM19lSTnp0w5D.smI9PJf6aIpmMElGxa',
         firstName: 'Barry',
-        lastName: 'Barry',
-        email: 'barry@barry.com',
+        lastName: 'Lasty',
+        email: 'barry@lasty.com',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        username: 'sneaky',
+        hashedPassword: '$2a$10$P8SC6WjSWo7W4GZBeZY9jOM19lSTnp0w5D.smI9PJf6aIpmMElGxa',
+        firstName: 'Alaia',
+        lastName: 'Butters',
+        email: 'alaia@butters.com',
         createdAt: new Date(),
         updatedAt: new Date()
       }

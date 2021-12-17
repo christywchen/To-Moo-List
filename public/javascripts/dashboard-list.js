@@ -1,143 +1,13 @@
-import { changeTaskName, changeTaskDeadline, changeList, changeDesc } from './dashboard-summary.js';
 import { finishTask, deleteTask, postPoneTask, changeCategory, moveTask, getDropMenu } from './dashboard-tasks.js';
+import { showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
+//import { finishTask, deleteTask, moveTask } from './dashboard-tasks.js';
+import { clearDOMTasks } from './clean-dom.js';
+import { createListDiv, buildTaskSummary } from './create-dom-elements.js';
 
 let listId;
 
 // Initialze Page
 const initializePage = async () => {
-    const fetchTaskSummary = async (e) => {
-        const stateId = { id: "99" };
-        const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
-        const { task } = await summaryRes.json();
-        const taskSummaryContainer = document.querySelector('.task-summary');
-
-        if (taskSummaryContainer.innerText.length) taskSummaryContainer.innerText = "";
-
-        const currentTask = task.name;
-        const currentTaskId = task.id;
-        const currentListId = task.listId;
-        const currentList = task.List.name;
-        taskSummaryContainer.classList.add('task-summary-display');
-
-        const titleDiv = document.createElement('div');
-        titleDiv.setAttribute('id', 'title-div');
-        titleDiv.innerHTML = `
-            <div id="summary-title" contenteditable="true" class="summary-inp">${task.name}</div>`;
-
-        // TO DO: decide how to populate the deadline input box: dropdown with dates or manual input
-        const deadlineDiv = document.createElement('div');
-        deadlineDiv.setAttribute('id', 'deadline-div');
-        deadlineDiv.innerHTML = `
-            <div id="summary-deadline">Due Date</div>
-            <input type="date" id="summary-due-date-inp" class="summary-inp"></input>
-            `;
-
-        const listDiv = document.createElement('div');
-        listDiv.setAttribute('id', 'list-div');
-        listDiv.innerHTML = `
-            <div id="summary-list">List</div>
-            <select id="summary-list-select" class="summary-inp">
-                <option value="${task.listId}">${task.List.name}</option>
-            </select>
-            `;
-
-        const descDiv = document.createElement('div');
-        descDiv.setAttribute('id', 'desc-div');
-        let descText = '';
-        if (task.description) {
-            descText = task.description;
-        }
-
-        descDiv.innerHTML = `
-            <div id="summary-desc">Task Details</div>
-            <textarea id="summary-desc-textarea" class="summary-inp" placeholder="Add a description...">${descText}</textarea>
-            `;
-
-        const isCompleteDiv = document.createElement('div');
-        isCompleteDiv.classList.add('iscomplete-div');
-        isCompleteDiv.innerHTML = `
-            <div class="summary-is-complete">
-                <button class="summary-mark-complete">Mark Complete</button>
-            </div>
-            `;
-
-        taskSummaryContainer.appendChild(titleDiv);
-        taskSummaryContainer.appendChild(deadlineDiv);
-        taskSummaryContainer.appendChild(listDiv);
-        taskSummaryContainer.appendChild(descDiv);
-
-        const summaryTitleInp = document.querySelector('#summary-title');
-        const summaryDeadlineInp = document.querySelector('#summary-due-date-inp');
-        const summarySelectInp = document.querySelector('#summary-list-select');
-        const summaryDescInp = document.querySelector('#summary-desc-textarea');
-
-        const listsRes = await fetch(`/api/lists`);
-        const { lists } = await listsRes.json();
-        const listOptions = document.querySelector('#summary-list-select');
-
-        
-        lists.forEach(list => {
-            if (list.name !== currentList) {
-                const listOpt = document.createElement('option');
-                listOpt.setAttribute('value', list.id);
-                listOpt.innerText = list.name;
-                listOptions.appendChild(listOpt);
-            }
-        });
-
-        // TO DO: ADD EVENT LISTENER TO CREATE LIST VIA LIST DROPDOWN
-        // const createListOpt = document.createElement('option');
-        // createListOpt.setAttribute('value', 'create-new');
-        // createListOpt.innerText = 'Create New';
-        // createListOpt.addEventListener('click', showCreateList);
-        // listOptions.appendChild(createListOpt)
-
-
-        summaryTitleInp.addEventListener('blur', changeTaskName);
-        summaryDeadlineInp.addEventListener('blur', changeTaskDeadline);
-        summarySelectInp.addEventListener('change', changeList);
-        summaryDescInp.addEventListener('blur', changeDesc);
-
-        window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/#list/${task.listId}/tasks/${task.id}`);
-    }
-
-    const fetchListTasks = async (e) => {
-        e.preventDefault();
-
-        const stateId = { id: "100" };
-        const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
-        const { tasks } = await taskRes.json();
-
-
-        if (e.target.parentNode.id = 'task-list') listId = e.target.className;
-        //console.log(listId)
-
-        const taskDivs = document.querySelectorAll('.single-task')
-        //console.log(taskDivs)
-        if (taskDivs) {
-            taskDivs.forEach(child => {
-                child.remove();
-                //console.log('hey')
-            })
-        }
-
-        const taskContainer = document.getElementById("tasksContainer");
-        tasks.forEach(task => {
-            const div = document.createElement("div");
-            div.setAttribute('data-task', `${task.id}`);
-            div.classList.add('single-task')
-            div.innerHTML = createTaskHtml(task.name, task.id);
-            div.addEventListener('click', fetchTaskSummary);
-            div.addEventListener('click', finishTask);
-            div.addEventListener('click', deleteTask);
-            div.addEventListener('click', getDropMenu);
-            taskContainer.appendChild(div);
-        })
-        // TODO look into window.history.pushState
-        // Look into remove listId from closure and get from fragment URL
-        window.history.replaceState(stateId, `List ${e.target.className}`, `/dashboard/#list/${e.target.className}`);
-    };
-
     const res = await fetch('/api/lists')
     const { lists } = await res.json();
     const taskList = document.getElementById('task-lists');
@@ -145,31 +15,31 @@ const initializePage = async () => {
     // might not need this
     listId = lists[0].id;
 
-    const listMenu = document.querySelector('.list-of-lists');
     lists.forEach(list => {
-        const li = document.createElement('li');
-        // if (!maxListId || list.id > maxListId) maxListId = list.id
-        li.innerText = list.name;
-        li.className = list.id;
-        li.addEventListener('click', fetchListTasks);
-        taskList.appendChild(li);
-
-        //populates the list drop down menu
-        const div = document.createElement('div');
-        div.innerHTML = `${list.name}`;
-        div.setAttribute("class", "dropdown-row");
-        div.setAttribute("id", list.id);
-        div.setAttribute("name", list.name);
-        div.setAttribute("value", list.name);
-        div.addEventListener("click", moveTask);
-        listMenu.appendChild(div);
+        // const div = document.createElement('div');
+        // div.innerText = list.name;
+        // div.className = list.id;
+        // --------- EDITING BELOW ---------------------------
+        const div = createListDiv(list.name, list.id);
+        div.addEventListener('click', fetchListTasks);
+        taskList.appendChild(div);
+        // ------------------------------------------------
+        // adding list name to the hidden drop down menu 
+        const listOption = document.createElement('div');
+        listOption.innerHTML = `${list.name}`;
+        listOption.setAttribute("class", "dropdown-row");
+        listOption.setAttribute("id", list.id);
+        listOption.setAttribute("name", list.name);
+        listOption.setAttribute("value", list.name);
+        listOption.addEventListener("click", moveTask);
+        listMenu.appendChild(listOption);
     });
 
     // creats & fill the hidden div with date objects
     const postponeList = document.querySelector('.postpone-dates');
     const today = new Date();
-    const date = ["1 days", '2 days', '3 days', '4 days', '5 days' ]
-    for(let i=0;i<5;i++){
+    const date = ["1 days", '2 days', '3 days', '4 days', '5 days']
+    for (let i = 0; i < 5; i++) {
         today.setDate(today.getDate() + 1);
         const readable = new Date(today).toISOString().split('T')[0]
         const div = document.createElement('div');
@@ -184,7 +54,7 @@ const initializePage = async () => {
     const categoryList = document.querySelector('.list-of-tags');
     const tags = await fetch('/api/categories');
     const { categories } = await tags.json();
-    categories.forEach( tag => {
+    categories.forEach(tag => {
         const div = document.createElement('div');
         div.innerText = tag.name
         div.setAttribute("name", tag.name);
@@ -197,36 +67,58 @@ const initializePage = async () => {
 
 // Custom Event Listeners
 async function fetchTaskSummary(e) {
-    const taskSummaryContainer = document.querySelector('#summary')
+    console.log("halp")
+    const stateId = { id: "99" };
     const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
     const { task } = await summaryRes.json();
 
-    const taskSummary = document.createElement('div');
-    taskSummary.classList.add('task-summary');
-    taskSummary.innerHTML = `
-        <div class="summary-title" contenteditable="true"><h2>task name</h2></div>
-        <div class="summary-due-date">due date <span class="summary-due-date-container" contenteditable="true">due date</span></div>
-        `
+    const currentTask = task.name;
+    const currentTaskId = task.id;
+    const currentDeadline = task.deadline;
+    const currentListId = task.listId;
+    const currentList = task.List.name;
+    const currentDesc = task.description;
+
+    buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc);
+    addTaskSummaryEventListeners()
+    showTaskSummary(true);
+
+    window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/#list/${task.listId}/tasks/${task.id}`);
 };
 
-async function fetchListTasks(e) {
-    e.preventDefault();
+export async function fetchListTasks(e) {
+    // console.log('click')
+    // e.preventDefault();
+    e.stopPropagation();
+    clearDOMTasks();
     const stateId = { id: "100" };
-    const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
-    const { tasks } = await taskRes.json();
-    const taskContainer = document.getElementById("tasksContainer");
 
-    tasks.forEach(task => {
-        const div = document.createElement("div");
-        div.setAttribute('data-task', `${task.id}`);
-        div.classList.add('single-task')
-        div.innerHTML = createTaskHtml(task.name, task.id);
-        div.addEventListener('click', fetchTaskSummary);
-        taskContainer.appendChild(div);
-    })
+    if (e.target.className === 'list-item') {
+        // --------------------------------------------------
+        listId = e.target.dataset.listid;
+        const taskRes = await fetch(`/api/lists/${listId}/tasks`)
+        const { tasks } = await taskRes.json();
+        // ------------------------------------------------------------
+        // TO DO make into function and move into create-dom-el file
+        const taskContainer = document.getElementById("tasksContainer");
+        tasks.forEach(task => {
+            const div = document.createElement("div");
+            div.setAttribute('data-task', `${task.id}`);
+            div.classList.add('single-task')
+            div.innerHTML = createTaskHtml(task.name, task.id);
+            div.addEventListener('click', fetchTaskSummary);
+            div.addEventListener('click', finishTask);
+            div.addEventListener('click', deleteTask);
+            div.addEventListener('click', getDropMenu);
+            taskContainer.appendChild(div);
+        })
+    }
     // TODO look into window.history.pushState
     // Look into remove listId from closure and get from fragment URL
-    window.history.replaceState(stateId, `List ${e.target.className}`, `/dashboard/#list/${e.target.className}`);
+    window.history.replaceState(
+        stateId, `List ${e.target.dataset.listid}`,
+        `/dashboard/#list/${e.target.dataset.listid}`
+    );
 };
 
 const createTask = async (e) => {
@@ -267,7 +159,7 @@ const createList = async (e) => {
     const formData = new FormData(listForm);
     const name = formData.get('addList');
     const body = { name };
-    const li = document.createElement('li');
+    // const div = document.createElement('div');
     const tasksList = document.getElementById('task-lists');
     if (listData.value.length) {
         try {
@@ -281,15 +173,44 @@ const createList = async (e) => {
             if (!res.ok) throw res
             const newList = await res.json()
             const listId = newList.list.id;
-            li.className = listId;
-            li.innerText = newList.list.name
-            li.addEventListener('click', fetchListTasks);
-            tasksList.appendChild(li);
+            const div = createListDiv(newList.list.name, listId);
+
+            // div.className = listId;
+            // div.innerText = newList.list.name
+            // div.addEventListener('click', fetchListTasks);
+            tasksList.appendChild(div);
         } catch (error) {
 
         }
     }
 };
+
+export const renameList = async (e) => {
+    e.preventDefault();
+    const listForm = document.querySelector('#rename-list-form');
+    const listData = document.querySelector('#renameList');
+    const formData = new FormData(listForm);
+    const name = formData.get('renameList');
+    const body = { name };
+    // const listId =
+
+    if (listData.value.length) {
+        try {
+            const res = await fetch(`/api/lists/${listId}`, {
+                method: 'PATCH',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(body)
+            })
+            if (!res.ok) throw res
+            else console.log('List renamed')
+
+        } catch (error) {
+
+        }
+    }
+}
 
 const hideTaskButton = (e) => {
     if (addTaskFormDiv.contains(e.target)) {
@@ -299,28 +220,37 @@ const hideTaskButton = (e) => {
     else addTaskButtonDiv.classList.remove('add-task-button-transition');
 };
 
-const hideCreateTaskDiv = (e) => {
-    // console.log(e.target.className !== 'log')
+function hideListOptions(e) {
+    const box = document.querySelector('.list-edit-dropdown')
+    if (box) box.remove();
+}
+
+const hideListNameDiv = (e) => {
+    const addListDiv = document.querySelector('#add-list');
+    const renameListDiv = document.querySelector('#rename-list')
     if (e.target.className !== 'logout') {
-        if ((!addListDiv.contains(e.target) &&
+        if (((!addListDiv.contains(e.target) &&
+            !renameListDiv.contains(e.target)) &&
             e.target.className !== 'add-list-button') ||
             e.target.className === 'submit-list' ||
             e.target.className === 'cancel-submit-list' ||
             e.target.className === 'close') {
-            //e.preventDefault()
+            // e.preventDefault()
             addListDiv.style.display = 'none';
+            renameListDiv.style.display = 'none';
             const form = document.getElementById('addList');
             form.value = '';
         }
     }
 };
 
+
 const hideDropDown = (e) => {
     if (e.target.className !== 'logout') {
         if (!listMenu.className.includes(e.target) &&
-        !e.target.className.includes('grid-square') && 
-        !e.target.className.includes('fas')){
-            e.preventDefault()
+            !e.target.className.includes('grid-square') &&
+            !e.target.className.includes('fas')) {
+            //e.preventDefault()
             listMenu.style.display = 'none';
             postponeMenu.style.display = 'none';
             categoryList.style.display = 'none';
@@ -329,11 +259,9 @@ const hideDropDown = (e) => {
 }
 
 async function showCreateList(e) {
-    e.preventDefault();
-    console.log(addListDiv)
+    // e.preventDefault();
     addListDiv.style.display = 'block';
     addListDiv.style.position = 'fixed';
-    console.log(addListDiv)
 }
 
 const showTaskButton = (e) => {
@@ -343,7 +271,6 @@ const showTaskButton = (e) => {
     }
     else addTaskButton.disabled = true;
 };
-
 
 // -------
 // Elements to append event listeners to
@@ -355,6 +282,7 @@ const addListButton = document.querySelector('.add-list-button');
 const addListDiv = document.querySelector('#add-list');
 const submitListButton = document.querySelector('.submit-list');
 const closeListSubmission = document.querySelector('.close');
+const renameListButton = document.querySelector('.rename-list');
 
 // have to refactor where can get all the dropdown menu
 const listMenu = document.querySelector(".list-of-lists");
@@ -366,13 +294,16 @@ window.addEventListener("load", async (event) => {
     initializePage();
     addTaskButton.addEventListener('click', createTask);
     document.addEventListener('click', hideTaskButton);
-    document.addEventListener('click', hideCreateTaskDiv);
+    document.addEventListener('click', hideListNameDiv);
+    document.addEventListener('click', hideListOptions)
+    //document.addEventListener('click', hideCreateTaskDiv);
     document.addEventListener('click', hideDropDown);
     addTaskInp.addEventListener('keyup', showTaskButton);
     addListButton.addEventListener('click', showCreateList);
     submitListButton.addEventListener('click', createList);
-    submitListButton.addEventListener('click', hideCreateTaskDiv);
-    closeListSubmission.addEventListener('click', hideCreateTaskDiv)
+    submitListButton.addEventListener('click', hideListNameDiv);
+    closeListSubmission.addEventListener('click', hideListNameDiv);
+    renameListButton.addEventListener('click', renameList);
 });
 //-------
 
@@ -383,3 +314,8 @@ export function createTaskHtml(taskName, taskId) {
                 <label for="${taskName}" data-task="${taskId}">${taskName}</label>
                 <div hidden class='categories'>mwhahahah</div>`;
 };
+
+export function updateListId(e) {
+    console.log(e.target.dataset.listid)
+    listId = e.target.dataset.listid;
+}
