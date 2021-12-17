@@ -4,7 +4,6 @@ export function addTaskSummaryEventListeners() {
     const summarySelectInp = document.querySelector('#summary-list-select');
     const summaryDescInp = document.querySelector('#summary-desc-textarea');
 
-    //console.log(summaryTitleInp)
     summaryTitleInp.addEventListener('blur', changeTaskName);
     summaryDeadlineInp.addEventListener('blur', changeTaskDeadline);
     summarySelectInp.addEventListener('change', changeList);
@@ -16,8 +15,6 @@ export const changeTaskName = async (e) => {
     const taskId = window.location.href.split('/')[7];
     const newTaskName = e.target.innerText;
     const body = { name: newTaskName }
-
-    //console.log(e.target.innerText)
 
     if (newTaskName) {
         await fetch(`/api/tasks/${taskId}`, {
@@ -46,6 +43,7 @@ export const changeTaskDeadline = async (e) => {
 export const changeList = async (e) => {
     e.stopPropagation();
     const stateId = { id: "99" };
+    const listName = window.location.href.split('/')[4];
     const listId = window.location.href.split('/')[5];
     const taskId = window.location.href.split('/')[7];
     const newlistId = e.target.value;
@@ -64,25 +62,28 @@ export const changeList = async (e) => {
         });
     }
 
-    const taskContainer = document.querySelector('#tasksContainer');
-    // const movedTask = document.querySelector(`[data-task="${taskId}"]`);
-    // taskContainer.removeChild(movedTask);
+    if (listName === '#list') {
+        const taskContainer = document.querySelector('#tasksContainer');
+        const movedTask = document.querySelector(`[data-task="${taskId}"]`);
+        taskContainer.removeChild(movedTask);
+        window.history.replaceState(stateId, `List ${listId}`, `/dashboard/#list/${listId}`);
 
-    // if list id is different than the previous list
-    console.log(listId)
-    console.log(newlistId)
-    window.history.replaceState(stateId, `List ${listId}`, `/dashboard/#list/${listId}`);
-
-
-    const taskDetailsDiv = document.querySelector('#task-details');
-    taskDetailsDiv.classList.remove('task-details-display');
-    console.log('test')
+        const taskDetailsDiv = document.querySelector('#task-details');
+        taskDetailsDiv.classList.remove('task-details-display');
+    } else {
+        markSaved('#list-div');
+        window.history.replaceState(stateId, `List ${newlistId}`, `/dashboard/${listName}/${newlistId}/tasks/${taskId}`);
+    }
 };
 
 export const changeDesc = async (e) => {
     const taskId = window.location.href.split('/')[7];
     const newTaskDesc = e.target.value;
-    const body = { description: newTaskDesc }
+    const body = { description: newTaskDesc };
+
+    const res = await fetch(`/api/tasks/${taskId}`);
+    const { task } = await res.json();
+    const oldTaskDesc = task.description;
 
     if (newTaskDesc) {
         await fetch(`/api/tasks/${taskId}`, {
@@ -92,6 +93,10 @@ export const changeDesc = async (e) => {
             },
             body: JSON.stringify(body)
         });
+
+        if (newTaskDesc !== oldTaskDesc) {
+            markSaved('#summary-desc');
+        }
     };
 };
 
@@ -104,7 +109,7 @@ export function showTaskSummary(e) {
     const taskDetailsDiv = document.querySelector('#task-details');
 
     if (prevTaskSelection === nextTaskSelection) {
-        if (!taskDetailsDiv.classList.contains('task-details-display')) {
+        if (taskDetailsDiv.classList.contains('task-details-display')) {
             taskDetailsDiv.classList.remove('task-details-display');
         } else {
             taskDetailsDiv.classList.add('task-details-display');
@@ -112,8 +117,6 @@ export function showTaskSummary(e) {
     } else {
         taskDetailsDiv.classList.add('task-details-display');
     }
-
-
 }
 
 export async function expandTextarea(e) {
@@ -128,4 +131,16 @@ export async function shrinkTextarea(e) {
 
 export async function expandCheckedTask(e) {
 
+}
+
+function markSaved(parentDiv) {
+    const listDiv = document.querySelector(parentDiv);
+    const span = document.createElement('span');
+    span.classList.add('mark-saved')
+    span.innerHTML = 'Saved!';
+    listDiv.appendChild(span)
+
+    setTimeout(() => {
+        listDiv.removeChild(span)
+    }, 1000);
 }

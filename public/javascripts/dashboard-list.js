@@ -96,8 +96,10 @@ async function createList (e) {
 };
 
 // R
-async function fetchTaskSummary(e) {
+export async function fetchTaskSummary(e) {
+    highlightTask(e);
     const stateId = { id: "99" };
+    const listName = window.location.href.split('/')[4];
     const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
     const { task } = await summaryRes.json();
 
@@ -111,7 +113,12 @@ async function fetchTaskSummary(e) {
     buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc);
     addTaskSummaryEventListeners();
     showTaskSummary(e);
-    window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/#list/${task.listId}/tasks/${task.id}`);
+
+    if (listName !== '#list') {
+        window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/${listName}/${task.listId}/tasks/${task.id}`);
+    } else {
+        window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/#list/${task.listId}/tasks/${task.id}`);
+    }
 };
 
 
@@ -302,7 +309,9 @@ function highlightTask(e) {
         if (prevSelectionDiv) prevSelectionDiv.classList.remove('single-task-selected');
     }
     const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
-    nextSelectionDiv.classList.add('single-task-selected')
+    nextSelectionDiv.classList.add('single-task-selected');
+
+    // document.querySelector(`input[data-task="${nextSelection}"]`).click();
 }
 
 // TO DO: checkbox event listeners
