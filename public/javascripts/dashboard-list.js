@@ -1,32 +1,12 @@
-import { buildTaskSummary, showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
+import { showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
 import { finishTask, deleteTask, moveTask } from './dashboard-tasks.js';
 import { clearDOMTasks } from './clean-dom.js';
-import { createListDiv } from './create-dom-elements.js';
+import { createListDiv, buildTaskSummary } from './create-dom-elements.js';
 
 let listId;
 
 // Initialze Page
 const initializePage = async () => {
-    // const fetchTaskSummary = async (e) => {
-    //     console.log("halp")
-    //     const stateId = { id: "99" };
-    //     const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
-    //     const { task } = await summaryRes.json();
-
-    //     const currentTask = task.name;
-    //     const currentTaskId = task.id;
-    //     const currentDeadline = task.deadline;
-    //     const currentListId = task.listId;
-    //     const currentList = task.List.name;
-    //     const currentDesc = task.description;
-
-    //     buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc);
-    //     addTaskSummaryEventListeners()
-    //     showTaskSummary(true);
-
-    //     window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/#list/${task.listId}/tasks/${task.id}`);
-    // }
-
     const res = await fetch('/api/lists')
     const { lists } = await res.json();
     const taskList = document.getElementById('task-lists');
@@ -49,7 +29,19 @@ const initializePage = async () => {
 
 // Custom Event Listeners
 async function fetchTaskSummary(e) {
-    console.log("halp")
+
+    function highLightTask() {
+        const prevSelection = window.location.href.split('/')[7];
+        const nextSelection = e.target.dataset.task;
+        if (prevSelection) {
+            const prevSelectionDiv = document.querySelector(`[data-task="${prevSelection}"]`);
+            if (prevSelectionDiv) prevSelectionDiv.classList.remove('single-task-selected');
+        }
+        const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
+        nextSelectionDiv.classList.add('single-task-selected')
+    }
+
+    highLightTask()
     const stateId = { id: "99" };
     const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
     const { task } = await summaryRes.json();
@@ -61,7 +53,13 @@ async function fetchTaskSummary(e) {
     const currentList = task.List.name;
     const currentDesc = task.description;
 
-    buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc);
+    buildTaskSummary(
+        currentTask,
+        currentDeadline,
+        currentTaskId,
+        currentListId,
+        currentList,
+        currentDesc);
     addTaskSummaryEventListeners()
     showTaskSummary(true);
 
@@ -74,7 +72,7 @@ export async function fetchListTasks(e) {
     clearDOMTasks();
     const stateId = { id: "100" };
 
-    if (e.target.className = 'list-item') {
+    if (e.target.className === 'list-item') {
         // --------------------------------------------------
         listId = e.target.dataset.listid;
         const taskRes = await fetch(`/api/lists/${listId}/tasks`)
@@ -119,9 +117,14 @@ const createTask = async (e) => {
                 body: JSON.stringify(body),
                 headers: { "Content-Type": "application/json" }
             })
+
+
             if (!res.ok) throw res // May need to change this
             else {
+                const { task } = await res.json();
                 div.innerHTML = createTaskHtml(name);
+                div.setAttribute('data-task', `${task.id}`);
+                div.addEventListener('click', fetchTaskSummary);
                 taskContainer.appendChild(div);
                 input.value = "";
             }
