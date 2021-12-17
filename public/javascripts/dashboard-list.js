@@ -30,18 +30,7 @@ const initializePage = async () => {
 // Custom Event Listeners
 async function fetchTaskSummary(e) {
 
-    function highLightTask() {
-        const prevSelection = window.location.href.split('/')[7];
-        const nextSelection = e.target.dataset.task;
-        if (prevSelection) {
-            const prevSelectionDiv = document.querySelector(`[data-task="${prevSelection}"]`);
-            if (prevSelectionDiv) prevSelectionDiv.classList.remove('single-task-selected');
-        }
-        const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
-        nextSelectionDiv.classList.add('single-task-selected')
-    }
-
-    highLightTask()
+    highlightTask(e);
     const stateId = { id: "99" };
     const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
     const { task } = await summaryRes.json();
@@ -60,11 +49,20 @@ async function fetchTaskSummary(e) {
         currentListId,
         currentList,
         currentDesc);
-    addTaskSummaryEventListeners()
-    showTaskSummary(true);
+    addTaskSummaryEventListeners();
+
+    showTaskSummary(e);
 
     window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/#list/${task.listId}/tasks/${task.id}`);
 };
+
+async function checkedTaskActions(e) {
+    if (e.target.checked) {
+        console.log('hi')
+    } else {
+        console.log('bye')
+    }
+}
 
 export async function fetchListTasks(e) {
     e.preventDefault();
@@ -84,12 +82,16 @@ export async function fetchListTasks(e) {
             const div = document.createElement("div");
             div.setAttribute('data-task', `${task.id}`);
             div.classList.add('single-task')
-            div.innerHTML = createTaskHtml(task.name, task.id);
+            div.innerHTML = createTaskHtml(task.name, task.id)
+
             div.addEventListener('click', fetchTaskSummary);
             div.addEventListener('click', finishTask);
             div.addEventListener('click', deleteTask);
             div.addEventListener('click', moveTask);
-            taskContainer.appendChild(div);
+            taskContainer.append(div);
+
+            const divCheck = div.childNodes[1];
+            divCheck.addEventListener('change', checkedTaskActions);
         })
     }
     // TODO look into window.history.pushState
@@ -235,7 +237,18 @@ window.addEventListener("load", async (event) => {
 
 // Helper Functions
 export function createTaskHtml(taskName, taskId) {
-    return ` <input type="checkbox" data-task="${taskId}" name="${taskName}" value="${taskName}">
+    return ` <input type="checkbox" data-task="${taskId}" name="${taskName}" value="${taskName}" style="task-checkbox">
                 <label for="${taskName}" data-task="${taskId}">${taskName}</label>
                 <div hidden class='categories'>mwhahahah</div>`;
 };
+
+function highlightTask(e) {
+    const prevSelection = window.location.href.split('/')[7];
+    const nextSelection = e.target.dataset.task;
+    if (prevSelection) {
+        const prevSelectionDiv = document.querySelector(`[data-task="${prevSelection}"]`);
+        if (prevSelectionDiv) prevSelectionDiv.classList.remove('single-task-selected');
+    }
+    const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
+    nextSelectionDiv.classList.add('single-task-selected')
+}

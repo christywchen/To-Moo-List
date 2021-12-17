@@ -145,6 +145,7 @@ function buildDeadlineDiv(currentDeadline) {
     deadlineDiv.innerHTML = `
             <div id="summary-deadline">Due Date</div>
             <input type="date" min="${today}" id="summary-due-date-inp" class="summary-inp"></input>
+            <span>text</span>
             `;
     return deadlineDiv;
 }

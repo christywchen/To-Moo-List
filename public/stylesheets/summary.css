@@ -12,6 +12,7 @@
     height: 100%;
     padding: 30px;
     border-radius: 5px 5px 0 0;
+    transition: all 0.4s;
 }
 
 .task-details-display {
@@ -38,7 +39,7 @@
 }
 
 .summary-inp {
-    border: 1px solid white;
+    border: 1px solid rgba(255, 255, 255, 0);
     outline: none;
     padding: 0px 3px;
     border-radius: 3px;

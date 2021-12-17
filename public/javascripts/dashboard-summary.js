@@ -71,7 +71,7 @@ export const changeList = async (e) => {
     const taskContainer = document.querySelector('#tasksContainer');
     const movedTask = document.querySelector(`[data-task="${taskId}"]`);
     taskContainer.removeChild(movedTask);
-    showTaskSummary(false)
+    showTaskSummary()
 
     window.history.replaceState(stateId, `List ${listId}`, `/dashboard/#list/${listId}`);
 };
@@ -92,12 +92,22 @@ export const changeDesc = async (e) => {
     };
 };
 
-export function showTaskSummary(visible) {
+export function showTaskSummary(e) {
+    // UPDATE FUNCTIONALITY TO ACCOMMODATE FOR WHEN LIST SELECTION CHANGES
+    // const prevListSelection = window.location.href.split('/')[5];
+    // const nextListSelection = e.target.dataset.listId;
+    const prevTaskSelection = window.location.href.split('/')[7];
+    const nextTaskSelection = e.target.dataset.task;
     const taskDetailsDiv = document.querySelector('#task-details');
-    if (visible === true) {
-        taskDetailsDiv.classList.add('task-details-display');
+
+    if (prevTaskSelection === nextTaskSelection) {
+        if (taskDetailsDiv.classList.contains('task-details-display')) {
+            taskDetailsDiv.classList.remove('task-details-display');
+        } else {
+            taskDetailsDiv.classList.add('task-details-display');
+        }
     } else {
-        taskDetailsDiv.classList.remove('task-details-display');
+        taskDetailsDiv.classList.add('task-details-display');
     }
 }
 
@@ -109,4 +119,8 @@ export async function expandTextarea(e) {
 export async function shrinkTextarea(e) {
     const summaryDescInp = document.querySelector('#summary-desc-textarea');
     summaryDescInp.classList.remove('summary-inp-focus');
+}
+
+export async function expandCheckedTask(e) {
+
 }

@@ -11,8 +11,6 @@ window.addEventListener("load", async (e) => {
     const todayTasksRoute = `/api/tasks/today`;
     const tomorrowTasksRoute = `/api/tasks/tomorrow`;
 
-
-
     today.addEventListener('click', (e) => {
         clearDOMTasks();
         queryEvents(todayTasksRoute);
