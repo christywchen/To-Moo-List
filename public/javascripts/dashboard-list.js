@@ -1,4 +1,4 @@
-import { changeTaskName, changeTaskDeadline, changeList, changeDesc, showTaskSummary, expandTextarea, shrinkTextarea } from './dashboard-summary.js';
+import { buildTaskSummary, showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
 import { finishTask, deleteTask, moveTask } from './dashboard-tasks.js';
 
 let listId;
@@ -6,96 +6,21 @@ let listId;
 // Initialze Page
 const initializePage = async () => {
     const fetchTaskSummary = async (e) => {
+        console.log("halp")
         const stateId = { id: "99" };
         const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
         const { task } = await summaryRes.json();
-        const taskSummaryContainer = document.querySelector('.task-summary');
-
-        if (taskSummaryContainer.innerText.length) taskSummaryContainer.innerText = "";
-        showTaskSummary(true);
 
         const currentTask = task.name;
         const currentTaskId = task.id;
+        const currentDeadline = task.deadline;
         const currentListId = task.listId;
         const currentList = task.List.name;
+        const currentDesc = task.description;
 
-        const titleDiv = document.createElement('div');
-        titleDiv.setAttribute('id', 'title-div');
-        titleDiv.innerHTML = `
-            <div id="summary-title" contenteditable="true" class="summary-inp">${currentTask}</div>`;
-
-        // TO DO: decide how to populate the deadline input box: dropdown with dates or manual input
-        const deadlineDiv = document.createElement('div');
-        deadlineDiv.setAttribute('id', 'deadline-div');
-        deadlineDiv.innerHTML = `
-            <div id="summary-deadline">Due Date</div>
-            <input type="date" id="summary-due-date-inp" class="summary-inp"></input>
-            `;
-
-        const listDiv = document.createElement('div');
-        listDiv.setAttribute('id', 'list-div');
-        listDiv.innerHTML = `
-            <div id="summary-list">List</div>
-            <select id="summary-list-select" class="summary-inp">
-                <option value="${currentListId}">${currentList}</option>
-            </select>
-            `;
-
-        const descDiv = document.createElement('div');
-        descDiv.setAttribute('id', 'desc-div');
-        let descText = '';
-        if (task.description) {
-            descText = task.description;
-        }
-
-        descDiv.innerHTML = `
-            <div id="summary-desc">Task Details</div>
-            <textarea id="summary-desc-textarea" class="summary-inp" placeholder="Add a description...">${descText}</textarea>
-            `;
-
-        const isCompleteDiv = document.createElement('div');
-        isCompleteDiv.classList.add('iscomplete-div');
-        isCompleteDiv.innerHTML = `
-            <div class="summary-is-complete">
-                <button class="summary-mark-complete">Mark Complete</button>
-            </div>
-            `;
-
-        taskSummaryContainer.appendChild(titleDiv);
-        taskSummaryContainer.appendChild(deadlineDiv);
-        taskSummaryContainer.appendChild(listDiv);
-        taskSummaryContainer.appendChild(descDiv);
-
-        const summaryTitleInp = document.querySelector('#summary-title');
-        const summaryDeadlineInp = document.querySelector('#summary-due-date-inp');
-        const summarySelectInp = document.querySelector('#summary-list-select');
-        const summaryDescInp = document.querySelector('#summary-desc-textarea');
-
-        const listsRes = await fetch(`/api/lists`);
-        const { lists } = await listsRes.json();
-        const listOptions = document.querySelector('#summary-list-select');
-
-        lists.forEach(list => {
-            if (list.name !== currentList) {
-                const listOpt = document.createElement('option');
-                listOpt.setAttribute('value', list.id);
-                listOpt.innerText = list.name;
-                listOptions.appendChild(listOpt);
-            }
-        });
-
-        const createListOpt = document.createElement('option');
-        createListOpt.setAttribute('value', 'create-new');
-        createListOpt.innerText = 'Create New';
-        listOptions.appendChild(createListOpt)
-
-
-        summaryTitleInp.addEventListener('blur', changeTaskName);
-        summaryDeadlineInp.addEventListener('blur', changeTaskDeadline);
-        summarySelectInp.addEventListener('change', changeList);
-        summaryDescInp.addEventListener('focus', expandTextarea);
-        summaryDescInp.addEventListener('blur', changeDesc);
-        summaryDescInp.addEventListener('blur', shrinkTextArea);
+        buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc);
+        addTaskSummaryEventListeners()
+        showTaskSummary(true);
 
         window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/#list/${task.listId}/tasks/${task.id}`);
     }
@@ -112,7 +37,7 @@ const initializePage = async () => {
         console.log(listId)
 
         const taskDivs = document.querySelectorAll('.single-task')
-        console.log(taskDivs)
+        // console.log(taskDivs)
         if (taskDivs) {
             taskDivs.forEach(child => {
                 child.remove();
@@ -267,7 +192,7 @@ const hideCreateTaskDiv = (e) => {
             e.target.className === 'submit-list' ||
             e.target.className === 'cancel-submit-list' ||
             e.target.className === 'close') {
-            e.preventDefault()
+            // e.preventDefault()
             addListDiv.style.display = 'none';
             const form = document.getElementById('addList');
             form.value = '';
@@ -275,12 +200,9 @@ const hideCreateTaskDiv = (e) => {
     }
 };
 
-async function showCreateList(e) {
-    e.preventDefault();
-    console.log(addListDiv)
+export async function showCreateList(e) {
     addListDiv.style.display = 'block';
     addListDiv.style.position = 'fixed';
-    console.log(addListDiv)
 }
 
 const showTaskButton = (e) => {
