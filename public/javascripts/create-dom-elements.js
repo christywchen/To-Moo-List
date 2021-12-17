@@ -29,7 +29,6 @@ export function createListDiv(name, listId) {
     });
     editIcon.addEventListener('click', updateListId);
     container.addEventListener('click', fetchListTasks);
-    // container.appendChild(listEditDropDown());
     return container
 }
 
@@ -48,7 +47,6 @@ export function listEditDropDown() {
 
     container.className = 'list-edit-dropdown'
     container.style.position = 'absolute';
-    container.style.border = '1px red solid';
 
     [renameListOp, deleteListOp].forEach(option => {
         option.className = 'list-edit-option';
