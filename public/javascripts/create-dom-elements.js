@@ -16,7 +16,10 @@ export function createListDiv(name, listId) {
     const iconsBox = document.createElement('div');
     iconsBox.className = 'list-icons';
     const editIcon = document.createElement('div');
-    editIcon.innerText = 'v'
+    // editIcon.innerText = 'v'
+    // editIcon.className = '<i class="far fa-caret-square-down"></i>'
+    editIcon.classList.add('far', 'fa-caret-square-down', 'hide-option')
+
     editIcon.setAttribute('data-listId', `${listId}`);
 
 
@@ -50,7 +53,14 @@ export function listEditDropDown() {
         option.className = 'list-edit-option';
         container.appendChild(option);
     })
-    renameListOp.addEventListener('click', showRenameList)
+    renameListOp.addEventListener('click', (e) => {
+        // const listEditDropdown = document.querySelector('.list-edit-option');
+        // if(listEditDropdown) listEditDropdown.remove();
+
+        const listEditDropdown = document.querySelector('.list-edit-dropdown');
+        if(listEditDropdown) listEditDropdown.remove();
+        showRenameList()
+    })
     deleteListOp.addEventListener('click', deleteList);
 
     return container;

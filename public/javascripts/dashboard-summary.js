@@ -51,9 +51,6 @@ export const changeList = async (e) => {
 
     const newlistId = e.target.value;
 
-
-    console.log(newlistId)
-
     if (newlistId === "create-new") {
         addListDiv.style.display = 'block';
         addListDiv.style.position = 'fixed';

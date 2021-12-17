@@ -93,7 +93,7 @@ export const changeCategory = async (e) => {
     // }
 }
 
-export const deleteTask = (e) => {
+export function deleteTask(e) {
 
     // const delteOccupied = querySelector.(DELETETASK)
 
@@ -101,7 +101,7 @@ export const deleteTask = (e) => {
 
     // if (!delete Occupied )
         // add class of DELETETASK
-        // univeral selectors 
+        // univeral selectors
         // do the following
 
 

@@ -36,33 +36,29 @@ export async function showCreateList(e) {
 export function hideListOptions(e) {
     const box = document.querySelector('.list-edit-dropdown')
     if (box) {
-        // const currentBox = e.target.dataset.listid;
-        console.log('C: ', e.target)
-
         box.remove();
     }
 }
 
 export async function hideDuplicateBox(className) {
-    console.log('out')
     const box = document.querySelector(`.${className}`);
     if (box) {
-        console.log('in: ', box)
         box.remove();
     }
 }
 
 export function hideListNameDiv (e) {
     const addListDiv = document.querySelector('#add-list');
-    const renameListDiv = document.querySelector('#rename-list')
+    const renameListDiv = document.querySelector('#rename-list');
+
     if (e.target.className !== 'logout') {
         if (((!addListDiv.contains(e.target) &&
             !renameListDiv.contains(e.target)) &&
-            e.target.className !== 'add-list-button') ||
+            !e.target.classList.contains('far')) ||
             e.target.className === 'submit-list' ||
             e.target.className === 'cancel-submit-list' ||
-            e.target.className === 'close') {
-            // e.preventDefault()
+            e.target.className === 'close' ||
+            e.target.className === 'rename-list') {
             addListDiv.style.display = 'none';
             renameListDiv.style.display = 'none';
             const form = document.getElementById('addList');
