@@ -1,4 +1,4 @@
-import { fetchListTasks } from './dashboard-list.js';
+import { fetchListTasks, showCreateList, updateListId } from './dashboard-list.js';
 import { clearDOMTasks } from './clean-dom.js';
 
 
@@ -16,6 +16,7 @@ export function createListDiv(name, listId) {
     iconsBox.className = 'list-icons';
     const editIcon = document.createElement('div');
     editIcon.innerText = 'v'
+    editIcon.setAttribute('data-listId', `${listId}`);
     // TO DO add image to icon box
     // make invisible edit icon
 
@@ -26,6 +27,7 @@ export function createListDiv(name, listId) {
     editIcon.addEventListener('click', (e) => {
         container.appendChild(listEditDropDown())
     });
+    editIcon.addEventListener('click', updateListId);
     container.addEventListener('click', fetchListTasks);
     // container.appendChild(listEditDropDown());
     return container
@@ -49,6 +51,7 @@ export function listEditDropDown() {
         option.className = 'list-edit-option';
         container.appendChild(option);
     })
+    renameListOp.addEventListener('click', showRenameList)
     deleteListOp.addEventListener('click', deleteList);
 
     return container;
@@ -57,6 +60,7 @@ export function listEditDropDown() {
 
 
 async function deleteList (e) {
+    console.log(e.target.parentNode.parentNode)
     e.stopPropagation()
     const list = e.target
         .parentNode.parentNode
@@ -77,9 +81,8 @@ async function deleteList (e) {
         list.remove();
         clearDOMTasks();
     }
-
-
 }
+
 
 async function updateList (e) {
     const list = e.target
@@ -93,8 +96,18 @@ async function updateList (e) {
             "Content-Type": "application/json"
         },
     })
-
 }
+
+
+const renameListDiv = document.querySelector('#rename-list');
+
+export async function showRenameList(e) {
+    // e.preventDefault();
+    renameListDiv.style.display = 'block';
+    renameListDiv.style.position = 'fixed';
+}
+
+
 
 
 // div.setAttribute('data-task', `${task.id}`);

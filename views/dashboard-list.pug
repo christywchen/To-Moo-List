@@ -35,9 +35,19 @@ block content
                 div.close
                 p Add a List
                 form(id='add-list-form')
-                    +field('Please enter a new list name:', 'addList', '')
+                    +field('Please enter a new list name', 'addList', '')
                     div.add-list-buttons
                         button.submit-list(type="submit") Add
+                        button.cancel-submit-list(type="submit") Cancel
+
+        div#rename-list(style='display: none')
+            div.add-task-box
+                div.close
+                p Rename list
+                form(id='rename-list-form')
+                    +field('List name', 'renameList', '')
+                    div.add-list-buttons
+                        button.rename-list(type="submit") Save
                         button.cancel-submit-list(type="submit") Cancel
         div#spacer
         div#summary

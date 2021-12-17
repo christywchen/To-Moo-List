@@ -69,13 +69,13 @@ async function fetchTaskSummary(e) {
 };
 
 export async function fetchListTasks(e) {
+    // console.log('click')
     // e.preventDefault();
     e.stopPropagation();
     clearDOMTasks();
     const stateId = { id: "100" };
-    console.log(e.target);
 
-    if (e.target.className = 'list-item') {
+    if (e.target.className === 'list-item') {
         // --------------------------------------------------
         listId = e.target.dataset.listid;
         const taskRes = await fetch(`/api/lists/${listId}/tasks`)
@@ -167,6 +167,33 @@ const createList = async (e) => {
     }
 };
 
+export const renameList = async (e) => {
+    e.preventDefault();
+    const listForm = document.querySelector('#rename-list-form');
+    const listData = document.querySelector('#renameList');
+    const formData = new FormData(listForm);
+    const name = formData.get('renameList');
+    const body = { name };
+    // const listId =
+
+    if (listData.value.length) {
+        try {
+            const res = await fetch(`/api/lists/${listId}`, {
+                method: 'PATCH',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(body)
+            })
+            if (!res.ok) throw res
+            else console.log('List renamed')
+
+        } catch (error) {
+
+        }
+    }
+}
+
 const hideTaskButton = (e) => {
     if (addTaskFormDiv.contains(e.target)) {
         e.preventDefault()
@@ -175,24 +202,34 @@ const hideTaskButton = (e) => {
     else addTaskButtonDiv.classList.remove('add-task-button-transition');
 };
 
-const hideCreateTaskDiv = (e) => {
+function hideListOptions(e) {
+    const box = document.querySelector('.list-edit-dropdown')
+    if (box) box.remove();
+}
+
+const hideListNameDiv = (e) => {
+    const addListDiv = document.querySelector('#add-list');
+    const renameListDiv = document.querySelector('#rename-list')
     if (e.target.className !== 'logout') {
-        if ((!addListDiv.contains(e.target) &&
+        if (((!addListDiv.contains(e.target) &&
+            !renameListDiv.contains(e.target)) &&
             e.target.className !== 'add-list-button') ||
             e.target.className === 'submit-list' ||
             e.target.className === 'cancel-submit-list' ||
             e.target.className === 'close') {
             // e.preventDefault()
             addListDiv.style.display = 'none';
+            renameListDiv.style.display = 'none';
             const form = document.getElementById('addList');
             form.value = '';
         }
     }
 };
 
-async function showCreateList(e) {
+
+
+export async function showCreateList(e) {
     // e.preventDefault();
-    console.log(addListDiv)
     addListDiv.style.display = 'block';
     addListDiv.style.position = 'fixed';
 }
@@ -215,18 +252,21 @@ const addListButton = document.querySelector('.add-list-button');
 const addListDiv = document.querySelector('#add-list');
 const submitListButton = document.querySelector('.submit-list');
 const closeListSubmission = document.querySelector('.close');
+const renameListButton = document.querySelector('.rename-list');
 
 // Load events
 window.addEventListener("load", async (event) => {
     initializePage();
     addTaskButton.addEventListener('click', createTask);
     document.addEventListener('click', hideTaskButton);
-    document.addEventListener('click', hideCreateTaskDiv);
+    document.addEventListener('click', hideListNameDiv);
+    document.addEventListener('click', hideListOptions)
     addTaskInp.addEventListener('keyup', showTaskButton);
     addListButton.addEventListener('click', showCreateList);
     submitListButton.addEventListener('click', createList);
-    submitListButton.addEventListener('click', hideCreateTaskDiv);
-    closeListSubmission.addEventListener('click', hideCreateTaskDiv)
+    submitListButton.addEventListener('click', hideListNameDiv);
+    closeListSubmission.addEventListener('click', hideListNameDiv);
+    renameListButton.addEventListener('click', renameList);
 });
 //-------
 
@@ -237,3 +277,8 @@ export function createTaskHtml(taskName, taskId) {
                 <label for="${taskName}" data-task="${taskId}">${taskName}</label>
                 <div hidden class='categories'>mwhahahah</div>`;
 };
+
+export function updateListId(e) {
+    console.log(e.target.dataset.listid)
+    listId = e.target.dataset.listid;
+}

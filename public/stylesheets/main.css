@@ -69,7 +69,8 @@
 }
 
 /* add-task css needs lovin */
-#add-list {
+#add-list,
+#rename-list {
     display: flex;
     border: 1px solid #d1d1d1;
     border-radius: 5px;
