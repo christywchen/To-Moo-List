@@ -1,6 +1,5 @@
 import { finishTask, postPoneTask, changeCategory, moveTask, getDropMenu, createDropDownMenu } from './dashboard-tasks.js';
 import { showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
-//import { finishTask, deleteTask, moveTask } from './dashboard-tasks.js';
 import { clearDOMTasks } from './clean-dom.js';
 import { createListDiv, buildTaskSummary, createTaskHtml } from './create-dom-elements.js';
 import { showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown } from './display.js';
@@ -97,8 +96,10 @@ async function createList (e) {
 };
 
 // R
-async function fetchTaskSummary(e) {
+export async function fetchTaskSummary(e) {
+    highlightTask(e);
     const stateId = { id: "99" };
+    const listName = window.location.href.split('/')[4];
     const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
     const { task } = await summaryRes.json();
 
@@ -110,9 +111,14 @@ async function fetchTaskSummary(e) {
     const currentDesc = task.description;
 
     buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc);
-    addTaskSummaryEventListeners()
-    showTaskSummary(true);
-    window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/#list/${task.listId}/tasks/${task.id}`);
+    addTaskSummaryEventListeners();
+    showTaskSummary(e);
+
+    if (listName !== '#list') {
+        window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/${listName}/${task.listId}/tasks/${task.id}`);
+    } else {
+        window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/#list/${task.listId}/tasks/${task.id}`);
+    }
 };
 
 
@@ -202,7 +208,6 @@ export async function deleteList(e) {
         .parentNode.parentNode
         .querySelector('.list-item')
     const listId = list.dataset.listid;
-    console.log('1')
 
     const res = await fetch(`/api/lists/${listId}`, {
         method: 'DELETE',
@@ -214,10 +219,9 @@ export async function deleteList(e) {
     if (!res.ok) {
         console.log('Something went wrong')
     } else {
-
         // -- DOM removal isn't working
         console.log('List deleted')
-        list.remove();
+        list.parentNode.remove();
         clearDOMTasks();
     }
 };
@@ -284,3 +288,35 @@ window.addEventListener("load", async (event) => {
     renameListButton.addEventListener('click', renameList);
 });
 //-------
+
+
+// Helper Functions
+function highlightTask(e) {
+    const prevSelection = window.location.href.split('/')[7];
+    const nextSelection = e.target.dataset.task;
+
+    // const checkbox = document.querySelector(`.boxId-${e.target.dataset.task}`).checked = true;
+    // if (checkbox.checked) {
+    //     console.log("hello")
+    // }
+    // console.log(checkbox.checked);
+
+
+    if (prevSelection) {
+        const prevSelectionDiv = document.querySelector(`[data-task="${prevSelection}"]`);
+        if (prevSelectionDiv) prevSelectionDiv.classList.remove('single-task-selected');
+    }
+    const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
+    nextSelectionDiv.classList.add('single-task-selected');
+
+    // document.querySelector(`input[data-task="${nextSelection}"]`).click();
+}
+
+// TO DO: checkbox event listeners
+async function checkedTaskActions(e) {
+    if (e.target.checked) {
+        console.log('hi')
+    } else {
+        console.log('bye')
+    }
+}

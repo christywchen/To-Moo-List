@@ -64,20 +64,10 @@ router.delete('/:id', asyncHandler(async (req, res, next) => {
     const listId = parseInt(req.params.id, 10);
     console.log('listId: ', listId);
     const list = await db.List.findByPk(listId)
-    // console.log(list);
-
-    // if (res.locals.user.id !== db.List.userId) {
-    //     const err = new Error("Unauthorized");
-    //     err.status = 401;
-    //     err.message = "You are not authorized to edit this list.";
-    //     err.title = "Unauthorized";
-    //     throw err;
-    //   }
 
     if (list) {
         await list.destroy();
         res.status(204).end();
-
         console.log('WORKED')
     } else {
         console.log('FAILED')

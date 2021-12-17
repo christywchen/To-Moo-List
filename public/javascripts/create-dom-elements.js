@@ -1,7 +1,7 @@
 import { fetchListTasks, updateListId } from './dashboard-list.js';
 import { clearDOMTasks } from './clean-dom.js';
-import {  updateList, deleteList } from './dashboard-list.js';
-import { showRenameList, showContainer, hideContainer } from './display.js';
+import { updateList, deleteList } from './dashboard-list.js';
+import { showRenameList, showCreateList, hideContainer, showContainer } from './display.js';
 
 export function createListDiv(name, listId) {
     const container = document.createElement('div');
@@ -84,7 +84,6 @@ export async function buildTaskSummary(currentTask, currentDeadline, currentTask
     taskSummaryContainer.appendChild(buildListDiv(currentListId, currentList));
     taskSummaryContainer.appendChild(buildDescDiv(currentDesc));
 
-    console.log(taskSummaryContainer)
     taskSummaryParent.appendChild(taskSummaryContainer);
 
     const listsRes = await fetch(`/api/lists`);
@@ -107,14 +106,14 @@ export async function buildTaskSummary(currentTask, currentDeadline, currentTask
 }
 
 // TASK SUMMARY CONTAINER HELPER FUNCTIONS
-function getDate() {
-    let today = new Date();
+function getDate(day) {
+    let getDay;
+    if (day) getDay = new Date(day);
+    else getDay = new Date()
 
-    console.log(today)
-
-    let month = today.getMonth() + 1;
-    let date = today.getDate();
-    let year = today.getFullYear();
+    let month = getDay.getMonth() + 1;
+    let date = getDay.getDate();
+    let year = getDay.getFullYear();
 
     if (month < 10) month = "0" + month;
     if (date < 10) date = "0" + date;
@@ -131,15 +130,18 @@ function buildTitleDiv(currentTask) {
     return titleDiv;
 }
 
+//buildDeadlineDiv()
+
 function buildDeadlineDiv(currentDeadline) {
-    // TO DO: decide how to populate the deadline input box: dropdown with dates or manual input
+    const deadline = getDate(currentDeadline)
+    const today = getDate();
+
     const deadlineDiv = document.createElement('div');
     deadlineDiv.setAttribute('id', 'deadline-div');
-    const today = getDate();
-    console.log(today)
+
     deadlineDiv.innerHTML = `
             <div id="summary-deadline">Due Date</div>
-            <input type="date" min="${today}" id="summary-due-date-inp" class="summary-inp"></input>
+            <input type="date" min="${today}" value="${deadline}" id="summary-due-date-inp" class="summary-inp"></input>
             `;
     return deadlineDiv;
 }
@@ -177,3 +179,7 @@ export function createTaskHtml(taskName, taskId) {
                 <label for="${taskName}" data-task="${taskId}">${taskName}</label>
                 <div hidden class='categories'>mwhahahah</div>`;
 };
+
+async function createTaskRecap() {
+
+}

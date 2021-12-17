@@ -1,9 +1,9 @@
 body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 #loginBtCon {
-    display:flex;
+    display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
@@ -12,27 +12,26 @@ body {
 }
 
 #loginBtCon > button > a {
-    color:white;
+    color: white;
 }
 
-#signup_main{
-    display:flex;
-    flex-direction:column;
-    justify-content:space-around;
+#signup_main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
     align-items: flex-start;
 }
 
-#img_container{
-    align-self:center;
+#img_container {
+    align-self: center;
     padding-left: 40px;
-
 }
 
-#signup_container{
+#signup_container {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    position:absolute;
+    position: absolute;
     width: 80%;
     height: 80%;
 }
@@ -42,8 +41,8 @@ body {
     width: 400px;
 }
 
-#form_container{
-    display:flex;
+#form_container {
+    display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: flex-start;
@@ -51,38 +50,33 @@ body {
 }
 
 #signupForm {
-    display:flex;
-    flex-direction:column;
+    display: flex;
+    flex-direction: column;
     justify-content: space-around;
-    align-self:flex-start;
-    justify-self:flex-start;
+    align-self: flex-start;
+    justify-self: flex-start;
     line-height: 1em;
-    width:100%;
+    width: 100%;
 }
-
 
 #error_emb > input {
     border: solid 1px red;
 }
 
-
-
-#username_box, #firstname_box, #lastname_box,
-#email_box, #password_box, #confirm_box {
-    display:flex;
-    flex-direction:row;
-    justify-content:space-between ;
+#username_box,
+#firstname_box,
+#lastname_box,
+#email_box,
+#password_box,
+#confirm_box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
-    width: 500px;;
-
+    width: 500px;
 }
 
-
-.errmsg{
-    color:red;
-    margin-left:15px;
-}
-
-.inp-field{
-   max-width:400px;
+.errmsg {
+    color: red;
+    margin-left: 15px;
 }
