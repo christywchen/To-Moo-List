@@ -1,5 +1,6 @@
 import { createTaskHtml } from './create-dom-elements.js';
 import { clearDOMTasks } from './clean-dom.js';
+import { fetchTaskSummary } from './dashboard-list.js';
 
 window.addEventListener("load", async (e) => {
 
@@ -12,18 +13,24 @@ window.addEventListener("load", async (e) => {
     const tomorrowTasksRoute = `/api/tasks/tomorrow`;
 
     today.addEventListener('click', (e) => {
+        const stateId = { id: "99" };
         clearDOMTasks();
         queryEvents(todayTasksRoute);
+        window.history.replaceState(stateId, `Today`, `/dashboard/#today`);
     });
 
     tomorrow.addEventListener('click', (e) => {
+        const stateId = { id: "99" };
         clearDOMTasks();
         queryEvents(tomorrowTasksRoute);
+        window.history.replaceState(stateId, `Tomorrow`, `/dashboard/#tomorrow`);
     });
 
     allTasks.addEventListener("click", (e) => {
+        const stateId = { id: "99" };
         clearDOMTasks();
         queryEvents(allTasksRoute);
+        window.history.replaceState(stateId, `All`, `/dashboard/#all`);
     });
 })
 

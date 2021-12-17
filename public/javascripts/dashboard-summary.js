@@ -4,7 +4,6 @@ export function addTaskSummaryEventListeners() {
     const summarySelectInp = document.querySelector('#summary-list-select');
     const summaryDescInp = document.querySelector('#summary-desc-textarea');
 
-    console.log(summaryTitleInp)
     summaryTitleInp.addEventListener('blur', changeTaskName);
     summaryDeadlineInp.addEventListener('blur', changeTaskDeadline);
     summarySelectInp.addEventListener('change', changeList);
@@ -16,8 +15,6 @@ export const changeTaskName = async (e) => {
     const taskId = window.location.href.split('/')[7];
     const newTaskName = e.target.innerText;
     const body = { name: newTaskName }
-
-    console.log(e.target.innerText)
 
     if (newTaskName) {
         await fetch(`/api/tasks/${taskId}`, {
@@ -46,6 +43,7 @@ export const changeTaskDeadline = async (e) => {
 export const changeList = async (e) => {
     e.stopPropagation();
     const stateId = { id: "99" };
+    const listName = window.location.href.split('/')[4];
     const listId = window.location.href.split('/')[5];
     const taskId = window.location.href.split('/')[7];
     const newlistId = e.target.value;
@@ -64,19 +62,17 @@ export const changeList = async (e) => {
         });
     }
 
-    const taskContainer = document.querySelector('#tasksContainer');
-    // const movedTask = document.querySelector(`[data-task="${taskId}"]`);
-    // taskContainer.removeChild(movedTask);
+    if (listName === '#list') {
+        const taskContainer = document.querySelector('#tasksContainer');
+        const movedTask = document.querySelector(`[data-task="${taskId}"]`);
+        taskContainer.removeChild(movedTask);
+        window.history.replaceState(stateId, `List ${listId}`, `/dashboard/#list/${listId}`);
 
-    // if list id is different than the previous list
-    console.log(listId)
-    console.log(newlistId)
-    window.history.replaceState(stateId, `List ${listId}`, `/dashboard/#list/${listId}`);
-
-
-    const taskDetailsDiv = document.querySelector('#task-details');
-    taskDetailsDiv.classList.remove('task-details-display');
-    console.log('test')
+        const taskDetailsDiv = document.querySelector('#task-details');
+        taskDetailsDiv.classList.remove('task-details-display');
+    } else {
+        window.history.replaceState(stateId, `List ${newlistId}`, `/dashboard/${listName}/${newlistId}/tasks/${taskId}`);
+    }
 };
 
 export const changeDesc = async (e) => {
@@ -103,7 +99,6 @@ export function showTaskSummary(e) {
     const nextTaskSelection = e.target.dataset.task;
     const taskDetailsDiv = document.querySelector('#task-details');
 
-    // console.log(prevTaskSelection, nextTaskSelection)
     if (prevTaskSelection === nextTaskSelection) {
         if (taskDetailsDiv.classList.contains('task-details-display')) {
             taskDetailsDiv.classList.remove('task-details-display');

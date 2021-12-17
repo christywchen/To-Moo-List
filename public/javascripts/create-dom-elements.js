@@ -1,6 +1,6 @@
 import { fetchListTasks, updateListId } from './dashboard-list.js';
 import { clearDOMTasks } from './clean-dom.js';
-import {  updateList } from './dashboard-list.js';
+import { updateList } from './dashboard-list.js';
 import { showRenameList, showCreateList } from './display.js';
 
 export function createListDiv(name, listId) {
@@ -181,3 +181,7 @@ export function createTaskHtml(taskName, taskId) {
                 <label for="${taskName}" data-task="${taskId}">${taskName}</label>
                 <div hidden class='categories'>mwhahahah</div>`;
 };
+
+async function createTaskRecap() {
+
+}
