@@ -85,9 +85,6 @@ export const changeDesc = async (e) => {
     const { task } = await res.json();
     const oldTaskDesc = task.description;
 
-    console.log(oldTaskDesc)
-    console.log(newTaskDesc)
-
     if (newTaskDesc) {
         await fetch(`/api/tasks/${taskId}`, {
             method: "PATCH",
