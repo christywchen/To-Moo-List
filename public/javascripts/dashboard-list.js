@@ -1,6 +1,7 @@
 import { changeTaskName, changeTaskDeadline, changeList, changeDesc } from './dashboard-summary.js';
 import { finishTask, deleteTask, moveTask } from './dashboard-tasks.js';
 import { clearDOMTasks } from './clean-dom.js';
+import { createListDiv } from './create-dom-elements.js';
 
 let listId;
 
@@ -103,8 +104,10 @@ const initializePage = async () => {
 
     const fetchListTasks = async (e) => {
         e.preventDefault();
+        e.stopPropagation();
         clearDOMTasks();
         const stateId = { id: "100" };
+
         const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
         const { tasks } = await taskRes.json();
         if (e.target.parentNode.id = 'task-list') listId = e.target.className;
@@ -134,15 +137,20 @@ const initializePage = async () => {
     listId = lists[0].id;
 
     lists.forEach(list => {
-        const li = document.createElement('li');
-        // if (!maxListId || list.id > maxListId) maxListId = list.id
-        li.innerText = list.name;
-        li.className = list.id;
-        li.addEventListener('click', fetchListTasks);
-        taskList.appendChild(li);
+        // const div = document.createElement('div');
+        // div.innerText = list.name;
+        // div.className = list.id;
+        // --------- EDITING BELOW ------------
+        const div = createListDiv(list.name, list.id);
+        div.addEventListener('click', fetchListTasks);
+        taskList.appendChild(div);
+        // -------------------------------------
     });
 };
 
+// div.setAttribute('data-task', `${task.id}`);
+/// data-listId // e.target.dataset.listId
+// document.querySelector(`[data-task="${taskId}"]`);
 
 // Custom Event Listeners
 async function fetchTaskSummary(e) {
@@ -158,25 +166,60 @@ async function fetchTaskSummary(e) {
         `
 };
 
-async function fetchListTasks(e) {
+export async function fetchListTasks(e)  {
     e.preventDefault();
+    e.stopPropagation();
+    clearDOMTasks();
     const stateId = { id: "100" };
-    const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
-    const { tasks } = await taskRes.json();
-    const taskContainer = document.getElementById("tasksContainer");
 
-    tasks.forEach(task => {
-        const div = document.createElement("div");
-        div.setAttribute('data-task', `${task.id}`);
-        div.classList.add('single-task')
-        div.innerHTML = createTaskHtml(task.name, task.id);
-        div.addEventListener('click', fetchTaskSummary);
-        taskContainer.appendChild(div);
-    })
+    // TO DO fix className to not just be a number so you can add a better
+    // if statement bellow
+
+    if (e.target.parentNode.id = 'task-list') {
+        const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
+        const { tasks } = await taskRes.json();
+        listId = e.target.className;
+
+        // TO DO make into function and move into create-dom-el file
+        const taskContainer = document.getElementById("tasksContainer");
+        tasks.forEach(task => {
+            const div = document.createElement("div");
+            div.setAttribute('data-task', `${task.id}`);
+            div.classList.add('single-task')
+            div.innerHTML = createTaskHtml(task.name, task.id);
+            div.addEventListener('click', fetchTaskSummary);
+            div.addEventListener('click', finishTask);
+            div.addEventListener('click', deleteTask);
+            div.addEventListener('click', moveTask);
+            taskContainer.appendChild(div);
+        })
+    }
+    // if (e.target.parentNode.id = 'task-list')
+
     // TODO look into window.history.pushState
     // Look into remove listId from closure and get from fragment URL
     window.history.replaceState(stateId, `List ${e.target.className}`, `/dashboard/#list/${e.target.className}`);
 };
+
+// export async function fetchListTasks(e) {
+//     e.preventDefault();
+//     const stateId = { id: "100" };
+//     const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
+//     const { tasks } = await taskRes.json();
+//     const taskContainer = document.getElementById("tasksContainer");
+
+//     tasks.forEach(task => {
+//         const div = document.createElement("div");
+//         div.setAttribute('data-task', `${task.id}`);
+//         div.classList.add('single-task')
+//         div.innerHTML = createTaskHtml(task.name, task.id);
+//         div.addEventListener('click', fetchTaskSummary);
+//         taskContainer.appendChild(div);
+//     })
+//     // TODO look into window.history.pushState
+//     // Look into remove listId from closure and get from fragment URL
+//     window.history.replaceState(stateId, `List ${e.target.className}`, `/dashboard/#list/${e.target.className}`);
+// };
 
 const createTask = async (e) => {
     e.preventDefault();
@@ -216,7 +259,7 @@ const createList = async (e) => {
     const formData = new FormData(listForm);
     const name = formData.get('addList');
     const body = { name };
-    const li = document.createElement('li');
+    // const div = document.createElement('div');
     const tasksList = document.getElementById('task-lists');
     if (listData.value.length) {
         try {
@@ -230,10 +273,14 @@ const createList = async (e) => {
             if (!res.ok) throw res
             const newList = await res.json()
             const listId = newList.list.id;
-            li.className = listId;
-            li.innerText = newList.list.name
-            li.addEventListener('click', fetchListTasks);
-            tasksList.appendChild(li);
+
+            const div = createListDiv(newList.list.name, listId);
+
+
+            // div.className = listId;
+            // div.innerText = newList.list.name
+            // div.addEventListener('click', fetchListTasks);
+            tasksList.appendChild(div);
         } catch (error) {
 
         }
@@ -256,7 +303,7 @@ const hideCreateTaskDiv = (e) => {
             e.target.className === 'submit-list' ||
             e.target.className === 'cancel-submit-list' ||
             e.target.className === 'close') {
-            e.preventDefault()
+            // e.preventDefault()
             addListDiv.style.display = 'none';
             const form = document.getElementById('addList');
             form.value = '';
@@ -265,7 +312,7 @@ const hideCreateTaskDiv = (e) => {
 };
 
 async function showCreateList(e) {
-    e.preventDefault();
+    // e.preventDefault();
     console.log(addListDiv)
     addListDiv.style.display = 'block';
     addListDiv.style.position = 'fixed';
