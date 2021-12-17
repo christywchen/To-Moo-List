@@ -30,12 +30,13 @@ window.addEventListener("load", async (event) => {
     if (userElConfirm && (userElConfirm.className = 'redBox')) {
         userElConfirm.className = '';
     }
-    
+    console.log(errors)
     if (errors) {
     errors.childNodes.forEach(error => {
         if (findText(error, 'username')) {
             userElUser.className = 'redBox';
             const usernameErr = document.querySelector(".username-error");
+            console.log(usernameErr)
             usernameErr.hidden = false;
             usernameErr.innerText = error.innerText;
 
@@ -51,7 +52,7 @@ window.addEventListener("load", async (event) => {
         
         if (findText(error, 'First Name')) {
             userElFirst.className = 'redBox';
-            const firstnameErr = document.querySelector('.firstname-error');
+            const firstnameErr = document.querySelector('.firstName-error');
             firstnameErr.hidden = false;
             firstnameErr.innerText = error.innerText;
 
@@ -59,7 +60,7 @@ window.addEventListener("load", async (event) => {
 
         if (findText(error, 'Last Name')) {
             userElLast.className = 'redBox';
-            const lastnameErr = document.querySelector('.lastname-error');
+            const lastnameErr = document.querySelector('.lastName-error');
             lastnameErr.hidden = false;
             lastnameErr.innerText = error.innerText;
         }
@@ -73,7 +74,7 @@ window.addEventListener("load", async (event) => {
 
         if (findText(error, 'Confirm Password')) {
             userElConfirm.className = 'redBox';
-            const confirmErr = document.querySelector('.confirm-error');
+            const confirmErr = document.querySelector('.confirmPassword-error');
             confirmErr.hidden = false;
             confirmErr.innerText = error.innerText;
 
