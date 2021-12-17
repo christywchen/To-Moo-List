@@ -1,5 +1,5 @@
 import { changeTaskName, changeTaskDeadline, changeList, changeDesc } from './dashboard-summary.js';
-import { finishTask, deleteTask, postPoneTask, moveTask, getDropMenu } from './dashboard-tasks.js';
+import { finishTask, deleteTask, postPoneTask, changeCategory, moveTask, getDropMenu } from './dashboard-tasks.js';
 
 let listId;
 
@@ -165,9 +165,8 @@ const initializePage = async () => {
         listMenu.appendChild(div);
     });
 
-    //.toISOString()
+    // creats & fill the hidden div with date objects
     const postponeList = document.querySelector('.postpone-dates');
-    //date.toISOString().split('T')[0]
     const today = new Date();
     const date = ["1 days", '2 days', '3 days', '4 days', '5 days' ]
     for(let i=0;i<5;i++){
@@ -180,6 +179,19 @@ const initializePage = async () => {
         div.addEventListener("click", postPoneTask);
         postponeList.appendChild(div);
     }
+
+    // creats & fills the hidden div with category/tags
+    const categoryList = document.querySelector('.list-of-tags');
+    const tags = await fetch('/api/categories');
+    const { categories } = await tags.json();
+    categories.forEach( tag => {
+        const div = document.createElement('div');
+        div.innerText = tag.name
+        div.setAttribute("name", tag.name);
+        div.setAttribute("value", tag.name);
+        div.addEventListener("click", changeCategory);
+        categoryList.appendChild(div);
+    });
 };
 
 
@@ -311,6 +323,7 @@ const hideDropDown = (e) => {
             e.preventDefault()
             listMenu.style.display = 'none';
             postponeMenu.style.display = 'none';
+            categoryList.style.display = 'none';
         }
     }
 }
@@ -346,6 +359,7 @@ const closeListSubmission = document.querySelector('.close');
 // have to refactor where can get all the dropdown menu
 const listMenu = document.querySelector(".list-of-lists");
 const postponeMenu = document.querySelector(".postpone-dates");
+const categoryList = document.querySelector('.list-of-tags');
 
 // Load events
 window.addEventListener("load", async (event) => {

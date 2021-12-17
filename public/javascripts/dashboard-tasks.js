@@ -70,7 +70,7 @@ export const moveTask = async (e) => {
     // })
 }
 
-const changeCategory = async(e) => {
+export const changeCategory = async(e) => {
     const tag = document.querySelector(".category");
 }
 
