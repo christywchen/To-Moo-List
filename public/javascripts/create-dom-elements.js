@@ -58,7 +58,7 @@ function deleteList(e) {
     const list = e.target
         .parentNode.parentNode
         .querySelector('.list-item')
-    console.log(list.dataset.listid)
+    //console.log(list.dataset.listid)
     const listId = list.dataset.listid;
 
     // try {
@@ -87,7 +87,7 @@ export async function buildTaskSummary(currentTask, currentDeadline, currentTask
     taskSummaryContainer.appendChild(buildListDiv(currentListId, currentList));
     taskSummaryContainer.appendChild(buildDescDiv(currentDesc));
 
-    console.log(taskSummaryContainer)
+    //console.log(taskSummaryContainer)
     taskSummaryParent.appendChild(taskSummaryContainer);
 
     const listsRes = await fetch(`/api/lists`);
@@ -113,7 +113,7 @@ export async function buildTaskSummary(currentTask, currentDeadline, currentTask
 function getDate() {
     let today = new Date();
 
-    console.log(today)
+    //console.log(today)
 
     let month = today.getMonth() + 1;
     let date = today.getDate();
@@ -139,7 +139,7 @@ function buildDeadlineDiv(currentDeadline) {
     const deadlineDiv = document.createElement('div');
     deadlineDiv.setAttribute('id', 'deadline-div');
     const today = getDate();
-    console.log(today)
+    //console.log(today)
     deadlineDiv.innerHTML = `
             <div id="summary-deadline">Due Date</div>
             <input type="date" min="${today}" id="summary-due-date-inp" class="summary-inp"></input>

@@ -93,7 +93,7 @@ async function createList (e) {
 
 // R
 async function fetchTaskSummary(e) {
-    console.log("halp")
+    //console.log("halp")
     const stateId = { id: "99" };
     const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
     const { task } = await summaryRes.json();
@@ -145,7 +145,7 @@ export async function fetchListTasks(e) {
 
 // U
 export function updateListId(e) {
-    console.log(e.target.dataset.listid)
+    //console.log(e.target.dataset.listid)
     listId = e.target.dataset.listid;
 };
 
@@ -191,12 +191,12 @@ export async function updateList(e) {
 
 // D
 export async function deleteList(e) {
-    console.log(e.target.parentNode.parentNode)
+    //console.log(e.target.parentNode.parentNode)
     e.stopPropagation()
     const list = e.target
         .parentNode.parentNode
         .querySelector('.list-item')
-    console.log(list.dataset.listid)
+    //console.log(list.dataset.listid)
     const listId = list.dataset.listid;
 
     const res = await fetch(`/api/lists/${listId}`, {

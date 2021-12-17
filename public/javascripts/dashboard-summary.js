@@ -4,7 +4,7 @@ export function addTaskSummaryEventListeners() {
     const summarySelectInp = document.querySelector('#summary-list-select');
     const summaryDescInp = document.querySelector('#summary-desc-textarea');
 
-    console.log(summaryTitleInp)
+    //console.log(summaryTitleInp)
     summaryTitleInp.addEventListener('blur', changeTaskName);
     summaryDeadlineInp.addEventListener('blur', changeTaskDeadline);
     summarySelectInp.addEventListener('change', changeList);
@@ -17,7 +17,7 @@ export const changeTaskName = async (e) => {
     const newTaskName = e.target.innerText;
     const body = { name: newTaskName }
 
-    console.log(e.target.innerText)
+    //console.log(e.target.innerText)
 
     if (newTaskName) {
         await fetch(`/api/tasks/${taskId}`, {
@@ -52,7 +52,7 @@ export const changeList = async (e) => {
     const newlistId = e.target.value;
 
 
-    console.log(newlistId)
+    //console.log(newlistId)
 
     if (newlistId === "create-new") {
         addListDiv.style.display = 'block';

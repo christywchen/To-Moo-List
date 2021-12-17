@@ -93,16 +93,19 @@ export const changeCategory = async (e) => {
     // }
 }
 
-export const deleteTask = (e) => {
+export const deleteTask = async (e) => {
     const trashTask = document.querySelector(".delete");
     const taskId = e.target.dataset.task;
 
     trashTask.addEventListener('click', async (e) => {
+        // console.log('-------------------------------');
+        // console.log(taskId);
         const res = await fetch(`/api/tasks/${taskId}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"
             },
+            body: null
         })
         if (!res.ok) {
             console.log("Something went wrong")
@@ -116,7 +119,7 @@ export const deleteTask = (e) => {
 
 export const getDropMenu = (e) => {
 
-    console.log('click')
+    //console.log('click')
     const listMenu = document.querySelector('.list-of-lists');
     const moveCal = document.querySelector('.moveTo');
     moveCal.addEventListener('click', (e) => {
@@ -189,4 +192,3 @@ export const createDropDownMenu = () => {
     createPostPoneList();
     createTagList();
 }
-
