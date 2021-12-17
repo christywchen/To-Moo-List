@@ -62,7 +62,7 @@ async function createTask(e) {
     }
 };
 
-async function createList (e) {
+async function createList(e) {
     e.preventDefault();
     const listForm = document.querySelector('#add-list-form');
     const listData = document.querySelector('#addList');
@@ -94,6 +94,7 @@ async function createList (e) {
 // R
 async function fetchTaskSummary(e) {
     //console.log("halp")
+    highlightTask(e);
     const stateId = { id: "99" };
     const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
     const { task } = await summaryRes.json();
@@ -106,8 +107,8 @@ async function fetchTaskSummary(e) {
     const currentDesc = task.description;
 
     buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc);
-    addTaskSummaryEventListeners()
-    showTaskSummary(true);
+    addTaskSummaryEventListeners();
+    showTaskSummary(e);
     window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/#list/${task.listId}/tasks/${task.id}`);
 };
 
@@ -245,3 +246,25 @@ window.addEventListener("load", async (event) => {
     renameListButton.addEventListener('click', renameList);
 });
 //-------
+
+
+// Helper Functions
+function highlightTask(e) {
+    const prevSelection = window.location.href.split('/')[7];
+    const nextSelection = e.target.dataset.task;
+    if (prevSelection) {
+        const prevSelectionDiv = document.querySelector(`[data-task="${prevSelection}"]`);
+        if (prevSelectionDiv) prevSelectionDiv.classList.remove('single-task-selected');
+    }
+    const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
+    nextSelectionDiv.classList.add('single-task-selected')
+}
+
+// TO DO: checkbox event listeners
+async function checkedTaskActions(e) {
+    if (e.target.checked) {
+        console.log('hi')
+    } else {
+        console.log('bye')
+    }
+}

@@ -11,8 +11,6 @@ window.addEventListener("load", async (e) => {
     const todayTasksRoute = `/api/tasks/today`;
     const tomorrowTasksRoute = `/api/tasks/tomorrow`;
 
-
-
     today.addEventListener('click', (e) => {
         clearDOMTasks();
         queryEvents(todayTasksRoute);
@@ -37,6 +35,8 @@ async function queryEvents(fetchPath) {
         const div = document.createElement("div");
         div.className = 'single-task';
         div.innerHTML = createTaskHtml(task.name);
+        div.setAttribute('data-task', `${task.id}`);
+        div.addEventListener('click', fetchTaskSummary);
         taskContainer.appendChild(div);
     })
 }

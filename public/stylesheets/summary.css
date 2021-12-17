@@ -12,13 +12,14 @@
     height: 100%;
     padding: 30px;
     border-radius: 5px 5px 0 0;
+    transition: all 0.5s;
 }
 
 .task-details-display {
     /* left: 300px;
     display: inline;
     position: absolute;*/
-    transition: all 0.4s;
+    transition: all 0.5s;
     z-index: auto;
     transform: translateX(100%);
     background-color: white;
@@ -38,7 +39,7 @@
 }
 
 .summary-inp {
-    border: 1px solid white;
+    border: 1px solid rgba(255, 255, 255, 0);
     outline: none;
     padding: 0px 3px;
     border-radius: 3px;
@@ -71,6 +72,7 @@ textarea.summary-inp {
 textarea.summary-inp {
     width: 100%;
     resize: none;
+    background-color: none;
 }
 
 .summary-inp-focus {
