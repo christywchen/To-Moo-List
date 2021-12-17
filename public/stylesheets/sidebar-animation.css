@@ -1,0 +1,9 @@
+
+
+#task-lists {
+    display: none;
+}
+
+.list-header-container:hover + #task-lists {
+    display: block;
+}

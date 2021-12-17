@@ -1,3 +1,8 @@
+window.addEventListener("load", async (event) => {
+    
+
+})
+
 
 export async function showRenameList(e) {
     // e.preventDefault();

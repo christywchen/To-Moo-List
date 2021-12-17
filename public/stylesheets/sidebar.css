@@ -44,11 +44,30 @@ ol li {
     line-height: 2em;
 }
 
+
+.list-header-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+
+
 .list-box {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     height: 22px;
+}
+
+.list-icons {
+    display: none;
+    color: rgb(117, 165, 228)
+}
+
+.list-box:hover > .list-icons {
+    display: block;
+    /* color: red; */
 }
 
 .list-edit-dropdown {
@@ -75,12 +94,6 @@ ol li {
     z-index: 10;
 }
 
-.list-header-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
 .fa-plus-square {
     color: #1575c1;
 }
@@ -90,18 +103,7 @@ ol li {
     background-color: #1575c1;
 }
 
-.list-icons {
-    display: none;
-    color: rgb(117, 165, 228)
-}
-
-
 .fa-caret-square-down:hover {
     color: #a5c9e7;
     background-color: #1575c1;
-}
-
-.list-box:hover > .list-icons {
-    display: block;
-    /* color: red; */
 }

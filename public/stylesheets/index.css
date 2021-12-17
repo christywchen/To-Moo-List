@@ -5,6 +5,7 @@
 @import url("/stylesheets/signup.css");
 @import url("/stylesheets/login.css");
 @import url("/stylesheets/errors.css");
+@import url("/stylesheets/sidebar-animation.css");
 
 :root {
     --main-color: #0055b2;
