@@ -1,8 +1,9 @@
+import { finishTask, deleteTask, postPoneTask, changeCategory, moveTask, getDropMenu, createDropDownMenu } from './dashboard-tasks.js';
 import { showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
-import { finishTask, deleteTask, moveTask } from './dashboard-tasks.js';
+//import { finishTask, deleteTask, moveTask } from './dashboard-tasks.js';
 import { clearDOMTasks } from './clean-dom.js';
 import { createListDiv, buildTaskSummary, createTaskHtml } from './create-dom-elements.js';
-import { showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv } from './display.js';
+import { showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown } from './display.js';
 
 let listId;
 
@@ -17,6 +18,9 @@ const initializePage = async () => {
         div.addEventListener('click', fetchListTasks);
         taskList.appendChild(div);
     });
+
+    //Creates the hidden drop down menu
+    createDropDownMenu()
 };
 
 
@@ -89,19 +93,7 @@ async function createList (e) {
 
 // R
 async function fetchTaskSummary(e) {
-
-    function highLightTask() {
-        const prevSelection = window.location.href.split('/')[7];
-        const nextSelection = e.target.dataset.task;
-        if (prevSelection) {
-            const prevSelectionDiv = document.querySelector(`[data-task="${prevSelection}"]`);
-            if (prevSelectionDiv) prevSelectionDiv.classList.remove('single-task-selected');
-        }
-        const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
-        nextSelectionDiv.classList.add('single-task-selected')
-    }
-
-    highLightTask()
+    console.log("halp")
     const stateId = { id: "99" };
     const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
     const { task } = await summaryRes.json();
@@ -113,13 +105,7 @@ async function fetchTaskSummary(e) {
     const currentList = task.List.name;
     const currentDesc = task.description;
 
-    buildTaskSummary(
-        currentTask,
-        currentDeadline,
-        currentTaskId,
-        currentListId,
-        currentList,
-        currentDesc);
+    buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc);
     addTaskSummaryEventListeners()
     showTaskSummary(true);
     window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/#list/${task.listId}/tasks/${task.id}`);
@@ -147,7 +133,7 @@ export async function fetchListTasks(e) {
             div.addEventListener('click', fetchTaskSummary);
             div.addEventListener('click', finishTask);
             div.addEventListener('click', deleteTask);
-            div.addEventListener('click', moveTask);
+            div.addEventListener('click', getDropMenu);
             taskContainer.appendChild(div);
         })
     }
@@ -249,6 +235,8 @@ window.addEventListener("load", async (event) => {
     document.addEventListener('click', hideTaskButton);
     document.addEventListener('click', hideListNameDiv);
     document.addEventListener('click', hideListOptions)
+    //document.addEventListener('click', hideCreateTaskDiv);
+    document.addEventListener('click', hideDropDown);
     addTaskInp.addEventListener('keyup', showTaskButton);
     addListButton.addEventListener('click', showCreateList);
     submitListButton.addEventListener('click', createList);

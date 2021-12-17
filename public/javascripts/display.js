@@ -56,3 +56,19 @@ export function hideListNameDiv (e) {
         }
     }
 };
+
+export function hideDropDown(e) {
+    const listMenu = document.querySelector(".list-of-lists");
+    const postponeMenu = document.querySelector(".postpone-dates");
+    const categoryList = document.querySelector('.list-of-tags');
+    if (e.target.className !== 'logout') {
+        if (!listMenu.className.includes(e.target) &&
+            !e.target.className.includes('grid-square') &&
+            !e.target.className.includes('fas')) {
+            //e.preventDefault()
+            listMenu.style.display = 'none';
+            postponeMenu.style.display = 'none';
+            categoryList.style.display = 'none';
+        }
+    }
+}

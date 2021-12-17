@@ -140,9 +140,17 @@
 
 .checkbox-container {
     display: grid;
-    grid-template-columns: repeat(8, auto);
-    justify-items: center;
+    grid-template-columns: repeat(4, auto);
+    justify-items: space-around;
     align-items: center;
+}
+
+.split-3{
+    display:flex;
+}
+
+.split-2{
+    display:flex;
 }
 
 .grid-square {
@@ -156,4 +164,29 @@
 
 .grid-square:hover {
     background-color: #ffffc9;
+}
+
+.dropdown{
+    width: 180px;
+    height: auto;
+    position: absolute;
+    z-index: 2;
+    top: 5.6%;
+    border: 1px solid lightgray;
+    box-shadow: 10px 5px 5px lightgray;
+    margin-left: 128px;
+
+}
+
+
+.dropdown div{
+    background-color: white;
+    margin: 0;
+    font-size: 14px;
+    padding: 5px;
+    border: 1px solid lightgray;
+}
+
+.dropdown div:hover{
+    background-color: var(--lightest-div-bg);
 }

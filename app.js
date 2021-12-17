@@ -10,6 +10,7 @@ const dashboardRouter = require('./routes/dashhboard');
 const usersRouter = require('./routes/users');
 const tasksRouter = require('./backend-api/tasks');
 const listsRouter = require('./backend-api/lists')
+const categoriesRouter = require('./backend-api/categories');
 const frontListsRouter = require('./routes/lists')
 const { restoreUser } = require('./auth');
 
@@ -45,6 +46,7 @@ app.use(usersRouter);
 app.use('/api/lists', listsRouter);
 app.use('/api', tasksRouter);
 app.use('/lists', frontListsRouter)
+app.use('/api/categories', categoriesRouter);
 
 // Gets the splash page
 app.get('/', (req,res) => {
