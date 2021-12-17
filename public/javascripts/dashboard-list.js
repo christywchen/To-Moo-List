@@ -1,8 +1,8 @@
-import { buildTaskSummary, showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
+import { showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
 import { finishTask, deleteTask, moveTask } from './dashboard-tasks.js';
 import { clearDOMTasks } from './clean-dom.js';
-import { createListDiv, createTaskHtml } from './create-dom-elements.js';
-import { hideListNameDiv, showTaskButton, hideTaskButton, showCreateList, hideListOptions } from './display.js';
+import { createListDiv, buildTaskSummary, createTaskHtml } from './create-dom-elements.js';
+import { showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv } from './display.js';
 
 let listId;
 
@@ -22,7 +22,8 @@ const initializePage = async () => {
 
 // C-R-U-D Functions
 // C
-async function createTask (e) {
+
+async function createTask(e) {
     e.preventDefault();
     const taskData = document.querySelector('#add-task-input');
     const taskContainer = document.getElementById("tasksContainer");
@@ -39,9 +40,13 @@ async function createTask (e) {
                 body: JSON.stringify(body),
                 headers: { "Content-Type": "application/json" }
             })
+
             if (!res.ok) throw res // May need to change this
             else {
+                const { task } = await res.json();
                 div.innerHTML = createTaskHtml(name);
+                div.setAttribute('data-task', `${task.id}`);
+                div.addEventListener('click', fetchTaskSummary);
                 taskContainer.appendChild(div);
                 input.value = "";
             }
@@ -84,7 +89,19 @@ async function createList (e) {
 
 // R
 async function fetchTaskSummary(e) {
-    console.log("halp")
+
+    function highLightTask() {
+        const prevSelection = window.location.href.split('/')[7];
+        const nextSelection = e.target.dataset.task;
+        if (prevSelection) {
+            const prevSelectionDiv = document.querySelector(`[data-task="${prevSelection}"]`);
+            if (prevSelectionDiv) prevSelectionDiv.classList.remove('single-task-selected');
+        }
+        const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
+        nextSelectionDiv.classList.add('single-task-selected')
+    }
+
+    highLightTask()
     const stateId = { id: "99" };
     const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
     const { task } = await summaryRes.json();
@@ -96,7 +113,13 @@ async function fetchTaskSummary(e) {
     const currentList = task.List.name;
     const currentDesc = task.description;
 
-    buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc);
+    buildTaskSummary(
+        currentTask,
+        currentDeadline,
+        currentTaskId,
+        currentListId,
+        currentList,
+        currentDesc);
     addTaskSummaryEventListeners()
     showTaskSummary(true);
     window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/#list/${task.listId}/tasks/${task.id}`);

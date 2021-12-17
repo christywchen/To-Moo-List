@@ -3,18 +3,6 @@ extends layout.pug
 include utils.pug
 
 block content
-<<<<<<< HEAD
-    +errorSummary(errors)
-    form(action='/signup' method='post')
-        input(type='hidden' name='_csrf' value=csrfToken)
-        +field('Username', 'username', username )
-        +field('First Name', 'firstName', firstName)
-        +field('Last Name', 'lastName', lastName)
-        +field('Email Address', 'email', email, 'email')
-        +field('Password', 'password', password, 'password')
-        +field('Confirm Password', 'confirmPassword', confirmPassword, 'password')
-        button(type='submit') Sign Up
-=======
     div#signup_main
         div.errMsg(hidden)
                     +errorSummary(errors)
@@ -39,8 +27,7 @@ block content
                 div#loginBtCon
                     button(type='submit') Sign Up
                         if !errors
-                            a(href='/dashboard')   
+                            a(href='/dashboard')
                     button(type='submit')
-                        a(href="/login") Already Has a Account? Log in         
+                        a(href="/login") Already Has a Account? Log in
         script(src="/javascripts/errors.js" type="module")
->>>>>>> splash-signup
