@@ -1,4 +1,4 @@
-import { finishTask, deleteTask, postPoneTask, changeCategory, moveTask, getDropMenu } from './dashboard-tasks.js';
+import { finishTask, deleteTask, postPoneTask, changeCategory, moveTask, getDropMenu, createDropDownMenu } from './dashboard-tasks.js';
 import { showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
 //import { finishTask, deleteTask, moveTask } from './dashboard-tasks.js';
 import { clearDOMTasks } from './clean-dom.js';
@@ -24,44 +24,10 @@ const initializePage = async () => {
         div.addEventListener('click', fetchListTasks);
         taskList.appendChild(div);
         // ------------------------------------------------
-        // adding list name to the hidden drop down menu 
-        const listOption = document.createElement('div');
-        listOption.innerHTML = `${list.name}`;
-        listOption.setAttribute("class", "dropdown-row");
-        listOption.setAttribute("id", list.id);
-        listOption.setAttribute("name", list.name);
-        listOption.setAttribute("value", list.name);
-        listOption.addEventListener("click", moveTask);
-        listMenu.appendChild(listOption);
     });
 
-    // creats & fill the hidden div with date objects
-    const postponeList = document.querySelector('.postpone-dates');
-    const today = new Date();
-    const date = ["1 days", '2 days', '3 days', '4 days', '5 days']
-    for (let i = 0; i < 5; i++) {
-        today.setDate(today.getDate() + 1);
-        const readable = new Date(today).toISOString().split('T')[0]
-        const div = document.createElement('div');
-        div.innerText = date[i] + " (" + readable + ")";
-        div.setAttribute("name", "date");
-        div.setAttribute("value", today);
-        div.addEventListener("click", postPoneTask);
-        postponeList.appendChild(div);
-    }
-
-    // creats & fills the hidden div with category/tags
-    const categoryList = document.querySelector('.list-of-tags');
-    const tags = await fetch('/api/categories');
-    const { categories } = await tags.json();
-    categories.forEach(tag => {
-        const div = document.createElement('div');
-        div.innerText = tag.name
-        div.setAttribute("name", tag.name);
-        div.setAttribute("value", tag.name);
-        div.addEventListener("click", changeCategory);
-        categoryList.appendChild(div);
-    });
+    //Creates the hidden drop down menu 
+    createDropDownMenu()
 };
 
 
