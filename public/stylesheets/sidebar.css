@@ -28,20 +28,46 @@ ol#default-lists {
 }
 
 .lists .list-header:hover,
-.lists li:hover {
+.lists li:hover,
+.list-header-container:hover,
+.list-box:hover {
     background-color: var(--divider-color);
-    padding-left: 5px;
 }
+
+.list-edit-option:hover {
+    background-color: var(--divider-color);
+    margin-left: 0;
+}
+
 
 ol li {
     line-height: 2em;
 }
+
+
+.list-header-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+
 
 .list-box {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     height: 22px;
+}
+
+.list-icons {
+    display: none;
+    color: rgb(117, 165, 228)
+}
+
+.list-box:hover > .list-icons {
+    display: block;
+    /* color: red; */
 }
 
 .list-edit-dropdown {
@@ -54,6 +80,8 @@ ol li {
     top: 15px;
     background-color: white;
     z-index: 3;
+    box-shadow: 0 1px 4px 1px rgb(0 0 0 / 20%);
+    border-radius: 3px;
 }
 
 .list-edit-option {
@@ -62,7 +90,20 @@ ol li {
     margin-left: 5px;
 }
 
-.list-edit-option:hover {
-    background-color: var(--divider-color);
-    padding-left: 5px;
+.add-list-button {
+    z-index: 10;
+}
+
+.fa-plus-square {
+    color: #1575c1;
+}
+
+.fa-plus-square:hover {
+    color: #a5c9e7;
+    background-color: #1575c1;
+}
+
+.fa-caret-square-down:hover {
+    color: #a5c9e7;
+    background-color: #1575c1;
 }

@@ -102,7 +102,8 @@ export const changeCategory = async (e) => {
 
 }
 
-export const deleteTask = async (e) => {
+export function deleteTask(e) {
+    
     const trashTask = document.querySelector(".delete");
 
     trashTask.addEventListener('click', async (e) => {

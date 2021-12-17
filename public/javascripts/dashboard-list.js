@@ -1,4 +1,4 @@
-import { finishTask, deleteTask, postPoneTask, changeCategory, moveTask, getDropMenu, createDropDownMenu } from './dashboard-tasks.js';
+import { finishTask, postPoneTask, changeCategory, moveTask, getDropMenu, createDropDownMenu } from './dashboard-tasks.js';
 import { showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
 import { clearDOMTasks } from './clean-dom.js';
 import { createListDiv, buildTaskSummary, createTaskHtml } from './create-dom-elements.js';
@@ -11,21 +11,23 @@ const initializePage = async () => {
     const { lists } = await res.json();
     const taskList = document.getElementById('task-lists');
 
-    // listId = lists[0].id;
     lists.forEach(list => {
         const div = createListDiv(list.name, list.id);
         div.addEventListener('click', fetchListTasks);
         taskList.appendChild(div);
     });
 
-    //Creates the hidden drop down menu
+    const buttons = document.querySelectorAll('button')
+    buttons.forEach(button => {
+        button.addEventListener('click', e => e.preventDefault())
+    })
+
     createDropDownMenu()
 };
 
 
 // C-R-U-D Functions
 // C
-
 async function createTask(e) {
     e.preventDefault();
     const taskData = document.querySelector('#add-task-input');
@@ -47,8 +49,11 @@ async function createTask(e) {
             if (!res.ok) throw res // May need to change this
             else {
                 const { task } = await res.json();
-                div.innerHTML = createTaskHtml(name,task.id);
+                div.innerHTML = createTaskHtml(name, task.id);
                 div.setAttribute('data-task', `${task.id}`);
+
+                console.log(task.id)
+
                 div.addEventListener('click', fetchTaskSummary);
                 taskContainer.appendChild(div);
                 input.value = "";
@@ -61,8 +66,8 @@ async function createTask(e) {
     }
 };
 
-async function createList(e) {
-    e.preventDefault();
+async function createList (e) {
+    // e.preventDefault();
     const listForm = document.querySelector('#add-list-form');
     const listData = document.querySelector('#addList');
     const formData = new FormData(listForm);
@@ -92,8 +97,6 @@ async function createList(e) {
 
 // R
 async function fetchTaskSummary(e) {
-    //console.log("halp")
-    highlightTask(e);
     const stateId = { id: "99" };
     const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
     const { task } = await summaryRes.json();
@@ -145,7 +148,6 @@ export async function fetchListTasks(e) {
 
 // U
 export function updateListId(e) {
-    //console.log(e.target.dataset.listid)
     listId = e.target.dataset.listid;
 };
 
@@ -169,8 +171,11 @@ export const renameList = async (e) => {
             if (!res.ok) throw res
             else console.log('List renamed')
 
+            console.log(listId)
+            const list = document.querySelector(`[data-listid="${listId}"]`)
+            list.innerText = name;
+
         } catch (error) {
-            // TO DO
         }
     }
 };
@@ -191,13 +196,12 @@ export async function updateList(e) {
 
 // D
 export async function deleteList(e) {
-    //console.log(e.target.parentNode.parentNode)
     e.stopPropagation()
     const list = e.target
         .parentNode.parentNode
         .querySelector('.list-item')
-    //console.log(list.dataset.listid)
     const listId = list.dataset.listid;
+    console.log('1')
 
     const res = await fetch(`/api/lists/${listId}`, {
         method: 'DELETE',
@@ -205,15 +209,49 @@ export async function deleteList(e) {
             "Content-Type": "application/json"
         },
     })
+
     if (!res.ok) {
         console.log('Something went wrong')
     } else {
+
         // -- DOM removal isn't working
         console.log('List deleted')
         list.remove();
         clearDOMTasks();
     }
 };
+
+export function deleteTask(e) {
+
+    // const delteOccupied = querySelector.(DELETETASK)
+
+
+
+    // if (!delete Occupied )
+    // add class of DELETETASK
+    // univeral selectors
+    // do the following
+
+
+    const trashTask = document.querySelector(".delete");
+    const taskId = e.target.dataset.task;
+
+    trashTask.addEventListener('click', async (e) => {
+        const res = await fetch(`/api/tasks/${taskId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        })
+        if (!res.ok) {
+            console.log("Something went wrong")
+        } else {
+            console.log("Task deleted")
+            const deleteDiv = document.querySelector(`[data-task="${taskId}"]`);
+            deleteDiv.remove();
+        }
+    })
+}
 
 
 // -------

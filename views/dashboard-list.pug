@@ -19,9 +19,12 @@ block content
                     li#tomorrow Tomorrow's Tasks
                     li#all All Tasks
             div.lists
-                div.list-header Lists
-                div.add-list-button(role='button') +
-                ol#task-lists
+                div.list-header-container
+                    div.list-header Lists
+                    div.add-list-button(role='button')
+                        i.far.fa-plus-square
+                        
+                div#task-lists
             div.lists
                 div.list-header Categories
 

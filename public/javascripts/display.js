@@ -1,3 +1,8 @@
+window.addEventListener("load", async (event) => {
+    
+
+})
+
 
 export async function showRenameList(e) {
     // e.preventDefault();
@@ -36,26 +41,38 @@ export async function showCreateList(e) {
 
 export function hideListOptions(e) {
     const box = document.querySelector('.list-edit-dropdown')
-    if (box) box.remove();
+    if (box) {
+        box.remove();
+    }
+}
+
+export async function hideDuplicateBox(className) {
+    const box = document.querySelector(`.${className}`);
+    if (box) {
+        box.remove();
+    }
 }
 
 export function hideListNameDiv (e) {
     const addListDiv = document.querySelector('#add-list');
-    const renameListDiv = document.querySelector('#rename-list')
+    const renameListDiv = document.querySelector('#rename-list');
+
     if (e.target.className !== 'logout') {
         if (((!addListDiv.contains(e.target) &&
             !renameListDiv.contains(e.target)) &&
-            e.target.className !== 'add-list-button') ||
+            !e.target.classList.contains('far')) ||
             e.target.className === 'submit-list' ||
             e.target.className === 'cancel-submit-list' ||
-            e.target.className === 'close') {
-            // e.preventDefault()
+            e.target.className === 'close' ||
+            e.target.className === 'rename-list') {
             addListDiv.style.display = 'none';
             renameListDiv.style.display = 'none';
             const form = document.getElementById('addList');
             form.value = '';
         }
     }
+
+    // find all select box classes and remove them.
 };
 
 export function hideDropDown(e) {
@@ -72,4 +89,21 @@ export function hideDropDown(e) {
             categoryList.style.display = 'none';
         }
     }
-}
+};
+
+// Promises
+
+export function showContainer(container, showFn) {
+    return new Promise(function (res, rej) {
+        const newContainer = showFn()
+        container.appendChild(newContainer)
+        res()
+    })
+};
+
+export function hideContainer(className) {
+    return new Promise(function (res, rej) {
+        hideDuplicateBox(className);
+        res()
+    })
+};
