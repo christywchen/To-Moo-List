@@ -51,7 +51,7 @@
     border-bottom: 1px dotted lightgray;
 }
 
-#tasksContainer div:hover {
+.single-task-selected {
     background-color: #ffffc9;
 }
 
@@ -69,7 +69,8 @@
 }
 
 /* add-task css needs lovin */
-#add-list {
+#add-list,
+#rename-list {
     display: flex;
     border: 1px solid #d1d1d1;
     border-radius: 5px;
@@ -83,12 +84,12 @@
     width: 390px;
     height: 211px;
     margin-top: 30px;
+    z-index: 100;
 }
 
 .add-task-box {
     /* border: 1px red solid; */
     margin-top: 5px;
-
 }
 
 #add-list-form {
@@ -96,13 +97,11 @@
     flex-wrap: wrap;
 }
 
-#add-list-form label{
-    /* border: 1px red solid; */
+#add-list-form label {
     top: 30px;
 }
 
-#add-list-form input{
-
+#add-list-form input {
     align-self: center;
     justify-self: center;
     top: 70px;
@@ -122,14 +121,14 @@
 }
 
 .cancel-submit-list {
-    background-color: #FBFBFA;
+    background-color: #fbfbfa;
     color: #444444;
     /* box-shadow: 0 2px 6px rgb(0 0 0 / 10%); */
     border: 1px solid #d1d1d1;
 }
 
 .close {
-    background-image: url('../images/close-x.png');
+    background-image: url("../images/close-x.png");
     background-repeat: no-repeat;
     position: absolute;
     right: 10px;
@@ -139,14 +138,22 @@
     background-color: white;
 }
 
-.checkbox-container{
-    display:grid;
-    grid-template-columns: repeat(7, auto);
-    justify-items: center;
+.checkbox-container {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    justify-items: space-around;
     align-items: center;
 }
 
-.grid-square{
+.split-3{
+    display:flex;
+}
+
+.split-2{
+    display:flex;
+}
+
+.grid-square {
     display: grid;
     border: 1px solid lightgray;
     width: 50px;
@@ -155,6 +162,31 @@
     align-items: center;
 }
 
-.grid-square:hover{
+.grid-square:hover {
     background-color: #ffffc9;
+}
+
+.dropdown{
+    width: 180px;
+    height: auto;
+    position: absolute;
+    z-index: 2;
+    top: 5.6%;
+    border: 1px solid lightgray;
+    box-shadow: 10px 5px 5px lightgray;
+    margin-left: 128px;
+
+}
+
+
+.dropdown div{
+    background-color: white;
+    margin: 0;
+    font-size: 14px;
+    padding: 5px;
+    border: 1px solid lightgray;
+}
+
+.dropdown div:hover{
+    background-color: var(--lightest-div-bg);
 }

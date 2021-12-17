@@ -1,4 +1,7 @@
 'use strict';
+const today = new Date()
+const yesterday = new Date(today)
+yesterday.setDate(yesterday.getDate() - 1)
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -6,32 +9,26 @@ module.exports = {
       {
         name: 'Groceries',
         userId: 1,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        name: 'Laundry',
-        userId: 2,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: yesterday,
+        updatedAt: yesterday
       },
       {
         name: 'Work',
-        userId: 3,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        userId: 1,
+        createdAt: yesterday,
+        updatedAt: yesterday
       },
       {
-        name: 'To-dos',
-        userId: 2,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        name: 'Misc.',
+        userId: 1,
+        createdAt: yesterday,
+        updatedAt: yesterday
       },
       {
         name: 'Fun Stuff',
         userId: 1,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: yesterday,
+        updatedAt: yesterday
       },
 
     ]);

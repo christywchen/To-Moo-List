@@ -1,3 +1,80 @@
+/* summary child containers */
+#task-recap {
+    position: absolute;
+    height: 100%;
+    padding: 20px;
+}
+
+#task-details {
+    position: absolute;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    padding: 30px;
+    border-radius: 5px 5px 0 0;
+}
+
+.task-details-display {
+    /* left: 300px;
+    display: inline;
+    position: absolute;*/
+    transition: all 0.4s;
+    z-index: auto;
+    transform: translateX(100%);
+    background-color: white;
+}
+
+/* summary details elements */
+#summary-title {
+    grid-area: edit-name;
+    font-size: 1.5em;
+    margin: 10px 0;
+}
+
+#deadline-div,
+#list-div {
+    display: flex;
+    align-items: center;
+}
+
 .summary-inp {
-    border: 1px solid black;
+    border: 1px solid white;
+    outline: none;
+    padding: 0px 3px;
+    border-radius: 3px;
+    font-size: 1.1em;
+}
+
+textarea.summary-inp {
+    border: 1px solid var(--inp-border);
+}
+
+.summary-inp:hover,
+.summary-inp:active {
+    border: 1px solid var(--inp-border);
+    outline: none;
+}
+
+#summary-deadline,
+#summary-list,
+#summary-desc {
+    padding: 10px 3px;
+    flex-basis: 20%;
+    text-align: left;
+}
+
+#summary-list-select {
+    padding: 0px;
+    width: 150px;
+}
+
+textarea.summary-inp {
+    width: 100%;
+    resize: none;
+}
+
+.summary-inp-focus {
+    height: 100px;
+    resize: none;
+    transition: all 0.4s;
 }
