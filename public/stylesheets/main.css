@@ -51,6 +51,11 @@
     border-bottom: 1px dotted lightgray;
 }
 
+.single-task {
+    height: 34px;
+    overflow: hidden;
+}
+
 .single-task-selected {
     background-color: #ffffc9;
 }
