@@ -103,8 +103,9 @@ export function showTaskSummary(e) {
     const nextTaskSelection = e.target.dataset.task;
     const taskDetailsDiv = document.querySelector('#task-details');
 
+    // console.log(prevTaskSelection, nextTaskSelection)
     if (prevTaskSelection === nextTaskSelection) {
-        if (!taskDetailsDiv.classList.contains('task-details-display')) {
+        if (taskDetailsDiv.classList.contains('task-details-display')) {
             taskDetailsDiv.classList.remove('task-details-display');
         } else {
             taskDetailsDiv.classList.add('task-details-display');
