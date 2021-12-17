@@ -6,28 +6,30 @@ block content
     div#signup_main
         div.errMsg(hidden)
                     +errorSummary(errors)
-    div#signup_container
-        div#img_container
-            img(src='images/office.png')
-        div#form_container
-            form(action='/signup' method='post' class="form")
-                input(type='hidden' name='_csrf' value=csrfToken)
-                div#username_box
-                    +field('Username', 'username', username)
-                div#firstname_box
-                    +field('First Name', 'firstName', firstName)
-                div#lastname_box
-                    +field('Last Name', 'lastName', lastName)
-                div#email_box
-                    +field('Email Address', 'email', email, 'email')
-                div#password_box
-                    +field('Password', 'password', password, 'password')
-                div#confirm_box
-                    +field('Confirm Password', 'confirmPassword', confirmPassword, 'password')
-                div#loginBtCon
-                    button(type='submit') Sign Up
-                        if !errors
-                            a(href='/dashboard')   
-                    button(type='submit')
-                        a(href="/login") Already Has a Account? Log in         
-        script(src="/javascripts/errors.js" type="module")
+    div#signuppage_container
+        img(src="images/logo.png" class="signup_logo")
+        div#signup_container
+            div#img_container
+                img(src='images/office.png')
+            div#form_container
+                form(action='/signup' method='post' class="form")
+                    input(type='hidden' name='_csrf' value=csrfToken)
+                    div#username_box
+                        +field('Username', 'username', username)
+                    div#firstname_box
+                        +field('First Name', 'firstName', firstName)
+                    div#lastname_box
+                        +field('Last Name', 'lastName', lastName)
+                    div#email_box
+                        +field('Email Address', 'email', email, 'email')
+                    div#password_box
+                        +field('Password', 'password', password, 'password')
+                    div#confirm_box
+                        +field('Confirm Password', 'confirmPassword', confirmPassword, 'password')
+                    div#signupBtCon
+                        button(type='submit') Sign Up
+                            if !errors
+                                a(href='/dashboard')   
+                        button(type='submit')
+                            a(href="/login") Already Has an Account? Log in         
+            script(src="/javascripts/errors.js" type="module")

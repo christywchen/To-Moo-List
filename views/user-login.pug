@@ -3,22 +3,28 @@ extends layout.pug
 include utils.pug
 
 block content
-    div#signupBt
-       button(type='submit')
-            a(href="/signup") Sign Up
     div#login_main
         div.errMsg(hidden)
             +errorSummary(errors)
-        form(action='/login' method='post')
-            div#login_form
-                input(type='hidden' name='_csrf' value=csrfToken)
-                div#user_form
-                    +field('Username', 'username', username)
-                    div.username-error(hidden="true")
-                div#password_form
-                    +field('Password', 'password', password, 'password')
-                    div.password-error(hidden="true")
-                button(type='submit') Log In
-                    if !errors
-                        a(href='/dashboard')
-    script(src="/javascripts/errors.js" type="module")
+    div#loginpage_container
+        img(src="images/logo.png" class="login_logo")
+        div#login_container 
+            div#login_img_container
+                img(src="images/steak.png")
+            div#login_form_container
+                form(action='/login' method='post' class="logo_form")
+                    input(type='hidden' name='_csrf' value=csrfToken)
+                    div#user_form
+                        +field('Username', 'username', username)
+                        div.username-error(hidden="true")
+                    div#password_form
+                        +field('Password', 'password', password, 'password')
+                        div.password-error(hidden="true")
+                    div#loginBtCon
+                        button(type='submit') Log In
+                            if !errors
+                                a(href='/dashboard')
+                        button(type='submit')  
+                            a(href="/signup") Not Has An Account? Sign Up                
+            script(src="/javascripts/errors.js" type="module")
+        
