@@ -1,8 +1,4 @@
 body {
-<<<<<<< HEAD
-=======
-  /* padding: 50px; */
->>>>>>> dashboard-list
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -23,7 +19,7 @@ body {
     display:flex;
     flex-direction:column;
     justify-content:space-around;
-    align-items: flex-start;   
+    align-items: flex-start;
 }
 
 #img_container{
@@ -32,13 +28,13 @@ body {
 
 }
 
-#signup_container{ 
+#signup_container{
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     position:absolute;
     width: 80%;
-    height: 80%; 
+    height: 80%;
 }
 
 .form {
