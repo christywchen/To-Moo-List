@@ -1,5 +1,5 @@
 import { changeTaskName, changeTaskDeadline, changeList, changeDesc } from './dashboard-summary.js';
-import { finishTask, deleteTask, moveTask } from './dashboard-tasks.js';
+import { finishTask, deleteTask, postPoneTask, moveTask, getDropMenu } from './dashboard-tasks.js';
 
 let listId;
 
@@ -75,6 +75,7 @@ const initializePage = async () => {
         const { lists } = await listsRes.json();
         const listOptions = document.querySelector('#summary-list-select');
 
+        
         lists.forEach(list => {
             if (list.name !== currentList) {
                 const listOpt = document.createElement('option');
@@ -109,14 +110,14 @@ const initializePage = async () => {
 
 
         if (e.target.parentNode.id = 'task-list') listId = e.target.className;
-        console.log(listId)
+        //console.log(listId)
 
         const taskDivs = document.querySelectorAll('.single-task')
-        console.log(taskDivs)
+        //console.log(taskDivs)
         if (taskDivs) {
             taskDivs.forEach(child => {
                 child.remove();
-                console.log('hey')
+                //console.log('hey')
             })
         }
 
@@ -129,7 +130,7 @@ const initializePage = async () => {
             div.addEventListener('click', fetchTaskSummary);
             div.addEventListener('click', finishTask);
             div.addEventListener('click', deleteTask);
-            div.addEventListener('click', moveTask);
+            div.addEventListener('click', getDropMenu);
             taskContainer.appendChild(div);
         })
         // TODO look into window.history.pushState
@@ -144,6 +145,7 @@ const initializePage = async () => {
     // might not need this
     listId = lists[0].id;
 
+    const listMenu = document.querySelector('.list-of-lists');
     lists.forEach(list => {
         const li = document.createElement('li');
         // if (!maxListId || list.id > maxListId) maxListId = list.id
@@ -151,7 +153,33 @@ const initializePage = async () => {
         li.className = list.id;
         li.addEventListener('click', fetchListTasks);
         taskList.appendChild(li);
+
+        //populates the list drop down menu
+        const div = document.createElement('div');
+        div.innerHTML = `${list.name}`;
+        div.setAttribute("class", "dropdown-row");
+        div.setAttribute("id", list.id);
+        div.setAttribute("name", list.name);
+        div.setAttribute("value", list.name);
+        div.addEventListener("click", moveTask);
+        listMenu.appendChild(div);
     });
+
+    //.toISOString()
+    const postponeList = document.querySelector('.postpone-dates');
+    //date.toISOString().split('T')[0]
+    const today = new Date();
+    const date = ["1 days", '2 days', '3 days', '4 days', '5 days' ]
+    for(let i=0;i<5;i++){
+        today.setDate(today.getDate() + 1);
+        const readable = new Date(today).toISOString().split('T')[0]
+        const div = document.createElement('div');
+        div.innerText = date[i] + " (" + readable + ")";
+        div.setAttribute("name", "date");
+        div.setAttribute("value", today);
+        div.addEventListener("click", postPoneTask);
+        postponeList.appendChild(div);
+    }
 };
 
 
@@ -267,13 +295,25 @@ const hideCreateTaskDiv = (e) => {
             e.target.className === 'submit-list' ||
             e.target.className === 'cancel-submit-list' ||
             e.target.className === 'close') {
-            e.preventDefault()
+            //e.preventDefault()
             addListDiv.style.display = 'none';
             const form = document.getElementById('addList');
             form.value = '';
         }
     }
 };
+
+const hideDropDown = (e) => {
+    if (e.target.className !== 'logout') {
+        if (!listMenu.className.includes(e.target) &&
+        !e.target.className.includes('grid-square') && 
+        !e.target.className.includes('fas')){
+            e.preventDefault()
+            listMenu.style.display = 'none';
+            postponeMenu.style.display = 'none';
+        }
+    }
+}
 
 async function showCreateList(e) {
     e.preventDefault();
@@ -303,12 +343,17 @@ const addListDiv = document.querySelector('#add-list');
 const submitListButton = document.querySelector('.submit-list');
 const closeListSubmission = document.querySelector('.close');
 
+// have to refactor where can get all the dropdown menu
+const listMenu = document.querySelector(".list-of-lists");
+const postponeMenu = document.querySelector(".postpone-dates");
+
 // Load events
 window.addEventListener("load", async (event) => {
     initializePage();
     addTaskButton.addEventListener('click', createTask);
     document.addEventListener('click', hideTaskButton);
     document.addEventListener('click', hideCreateTaskDiv);
+    document.addEventListener('click', hideDropDown);
     addTaskInp.addEventListener('keyup', showTaskButton);
     addListButton.addEventListener('click', showCreateList);
     submitListButton.addEventListener('click', createList);
