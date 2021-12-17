@@ -48,11 +48,7 @@ export const changeList = async (e) => {
     const stateId = { id: "99" };
     const listId = window.location.href.split('/')[5];
     const taskId = window.location.href.split('/')[7];
-
     const newlistId = e.target.value;
-
-
-    console.log(newlistId)
 
     if (newlistId === "create-new") {
         addListDiv.style.display = 'block';
@@ -69,11 +65,18 @@ export const changeList = async (e) => {
     }
 
     const taskContainer = document.querySelector('#tasksContainer');
-    const movedTask = document.querySelector(`[data-task="${taskId}"]`);
-    taskContainer.removeChild(movedTask);
-    showTaskSummary()
+    // const movedTask = document.querySelector(`[data-task="${taskId}"]`);
+    // taskContainer.removeChild(movedTask);
 
+    // if list id is different than the previous list
+    console.log(listId)
+    console.log(newlistId)
     window.history.replaceState(stateId, `List ${listId}`, `/dashboard/#list/${listId}`);
+
+
+    const taskDetailsDiv = document.querySelector('#task-details');
+    taskDetailsDiv.classList.remove('task-details-display');
+    console.log('test')
 };
 
 export const changeDesc = async (e) => {
@@ -101,7 +104,7 @@ export function showTaskSummary(e) {
     const taskDetailsDiv = document.querySelector('#task-details');
 
     if (prevTaskSelection === nextTaskSelection) {
-        if (taskDetailsDiv.classList.contains('task-details-display')) {
+        if (!taskDetailsDiv.classList.contains('task-details-display')) {
             taskDetailsDiv.classList.remove('task-details-display');
         } else {
             taskDetailsDiv.classList.add('task-details-display');
@@ -109,6 +112,8 @@ export function showTaskSummary(e) {
     } else {
         taskDetailsDiv.classList.add('task-details-display');
     }
+
+
 }
 
 export async function expandTextarea(e) {

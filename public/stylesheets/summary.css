@@ -12,14 +12,14 @@
     height: 100%;
     padding: 30px;
     border-radius: 5px 5px 0 0;
-    transition: all 0.4s;
+    transition: all 0.5s;
 }
 
 .task-details-display {
     /* left: 300px;
     display: inline;
     position: absolute;*/
-    transition: all 0.4s;
+    transition: all 0.5s;
     z-index: auto;
     transform: translateX(100%);
     background-color: white;
@@ -72,6 +72,7 @@ textarea.summary-inp {
 textarea.summary-inp {
     width: 100%;
     resize: none;
+    background-color: none;
 }
 
 .summary-inp-focus {
