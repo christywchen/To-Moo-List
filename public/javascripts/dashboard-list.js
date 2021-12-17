@@ -1,50 +1,86 @@
 import { buildTaskSummary, showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
 import { finishTask, deleteTask, moveTask } from './dashboard-tasks.js';
+import { clearDOMTasks } from './clean-dom.js';
+import { createListDiv } from './create-dom-elements.js';
 
 let listId;
 
 // Initialze Page
 const initializePage = async () => {
-    const fetchTaskSummary = async (e) => {
-        console.log("halp")
-        const stateId = { id: "99" };
-        const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
-        const { task } = await summaryRes.json();
+    // const fetchTaskSummary = async (e) => {
+    //     console.log("halp")
+    //     const stateId = { id: "99" };
+    //     const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
+    //     const { task } = await summaryRes.json();
 
-        const currentTask = task.name;
-        const currentTaskId = task.id;
-        const currentDeadline = task.deadline;
-        const currentListId = task.listId;
-        const currentList = task.List.name;
-        const currentDesc = task.description;
+    //     const currentTask = task.name;
+    //     const currentTaskId = task.id;
+    //     const currentDeadline = task.deadline;
+    //     const currentListId = task.listId;
+    //     const currentList = task.List.name;
+    //     const currentDesc = task.description;
 
-        buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc);
-        addTaskSummaryEventListeners()
-        showTaskSummary(true);
+    //     buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc);
+    //     addTaskSummaryEventListeners()
+    //     showTaskSummary(true);
 
-        window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/#list/${task.listId}/tasks/${task.id}`);
-    }
+    //     window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/#list/${task.listId}/tasks/${task.id}`);
+    // }
 
-    const fetchListTasks = async (e) => {
-        e.preventDefault();
+    const res = await fetch('/api/lists')
+    const { lists } = await res.json();
+    const taskList = document.getElementById('task-lists');
 
-        const stateId = { id: "100" };
-        const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
+    // might not need this
+    listId = lists[0].id;
+
+    lists.forEach(list => {
+        // const div = document.createElement('div');
+        // div.innerText = list.name;
+        // div.className = list.id;
+        // --------- EDITING BELOW ---------------------------
+        const div = createListDiv(list.name, list.id);
+        div.addEventListener('click', fetchListTasks);
+        taskList.appendChild(div);
+        // ------------------------------------------------
+    });
+};
+
+
+// Custom Event Listeners
+async function fetchTaskSummary(e) {
+    console.log("halp")
+    const stateId = { id: "99" };
+    const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
+    const { task } = await summaryRes.json();
+
+    const currentTask = task.name;
+    const currentTaskId = task.id;
+    const currentDeadline = task.deadline;
+    const currentListId = task.listId;
+    const currentList = task.List.name;
+    const currentDesc = task.description;
+
+    buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc);
+    addTaskSummaryEventListeners()
+    showTaskSummary(true);
+
+    window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/#list/${task.listId}/tasks/${task.id}`);
+};
+
+export async function fetchListTasks(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    clearDOMTasks();
+    const stateId = { id: "100" };
+
+    if (e.target.className = 'list-item') {
+        // --------------------------------------------------
+        listId = e.target.dataset.listid;
+        const taskRes = await fetch(`/api/lists/${listId}/tasks`)
         const { tasks } = await taskRes.json();
-
-
-        if (e.target.parentNode.id = 'task-list') listId = e.target.className;
-        console.log(listId)
-
-        const taskDivs = document.querySelectorAll('.single-task')
-        // console.log(taskDivs)
-        if (taskDivs) {
-            taskDivs.forEach(child => {
-                child.remove();
-                console.log('hey')
-            })
-        }
-
+        // ------------------------------------------------------------
+        // TO DO make into function and move into create-dom-el file
         const taskContainer = document.getElementById("tasksContainer");
         tasks.forEach(task => {
             const div = document.createElement("div");
@@ -57,61 +93,13 @@ const initializePage = async () => {
             div.addEventListener('click', moveTask);
             taskContainer.appendChild(div);
         })
-        // TODO look into window.history.pushState
-        // Look into remove listId from closure and get from fragment URL
-        window.history.replaceState(stateId, `List ${e.target.className}`, `/dashboard/#list/${e.target.className}`);
-    };
-
-    const res = await fetch('/api/lists')
-    const { lists } = await res.json();
-    const taskList = document.getElementById('task-lists');
-
-    // might not need this
-    listId = lists[0].id;
-
-    lists.forEach(list => {
-        const li = document.createElement('li');
-        // if (!maxListId || list.id > maxListId) maxListId = list.id
-        li.innerText = list.name;
-        li.className = list.id;
-        li.addEventListener('click', fetchListTasks);
-        taskList.appendChild(li);
-    });
-};
-
-
-// Custom Event Listeners
-async function fetchTaskSummary(e) {
-    const taskSummaryContainer = document.querySelector('#summary')
-    const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
-    const { task } = await summaryRes.json();
-
-    const taskSummary = document.createElement('div');
-    taskSummary.classList.add('task-summary');
-    taskSummary.innerHTML = `
-        <div class="summary-title" contenteditable="true"><h2>task name</h2></div>
-        <div class="summary-due-date">due date <span class="summary-due-date-container" contenteditable="true">due date</span></div>
-        `
-};
-
-async function fetchListTasks(e) {
-    e.preventDefault();
-    const stateId = { id: "100" };
-    const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
-    const { tasks } = await taskRes.json();
-    const taskContainer = document.getElementById("tasksContainer");
-
-    tasks.forEach(task => {
-        const div = document.createElement("div");
-        div.setAttribute('data-task', `${task.id}`);
-        div.classList.add('single-task')
-        div.innerHTML = createTaskHtml(task.name, task.id);
-        div.addEventListener('click', fetchTaskSummary);
-        taskContainer.appendChild(div);
-    })
+    }
     // TODO look into window.history.pushState
     // Look into remove listId from closure and get from fragment URL
-    window.history.replaceState(stateId, `List ${e.target.className}`, `/dashboard/#list/${e.target.className}`);
+    window.history.replaceState(
+        stateId, `List ${e.target.dataset.listid}`,
+        `/dashboard/#list/${e.target.dataset.listid}`
+    );
 };
 
 const createTask = async (e) => {
@@ -123,7 +111,7 @@ const createTask = async (e) => {
     const body = { name, listId };
     const div = document.createElement('div');
     const input = document.getElementById('name');
-    div.classList.add('task')
+    div.classList.add('single-task')
     if (input.value.length) {
         try {
             const res = await fetch(`/api/lists/${listId}`, {
@@ -152,7 +140,7 @@ const createList = async (e) => {
     const formData = new FormData(listForm);
     const name = formData.get('addList');
     const body = { name };
-    const li = document.createElement('li');
+    // const div = document.createElement('div');
     const tasksList = document.getElementById('task-lists');
     if (listData.value.length) {
         try {
@@ -166,10 +154,12 @@ const createList = async (e) => {
             if (!res.ok) throw res
             const newList = await res.json()
             const listId = newList.list.id;
-            li.className = listId;
-            li.innerText = newList.list.name
-            li.addEventListener('click', fetchListTasks);
-            tasksList.appendChild(li);
+            const div = createListDiv(newList.list.name, listId);
+
+            // div.className = listId;
+            // div.innerText = newList.list.name
+            // div.addEventListener('click', fetchListTasks);
+            tasksList.appendChild(div);
         } catch (error) {
 
         }
@@ -185,7 +175,6 @@ const hideTaskButton = (e) => {
 };
 
 const hideCreateTaskDiv = (e) => {
-    // console.log(e.target.className !== 'log')
     if (e.target.className !== 'logout') {
         if ((!addListDiv.contains(e.target) &&
             e.target.className !== 'add-list-button') ||
@@ -200,7 +189,9 @@ const hideCreateTaskDiv = (e) => {
     }
 };
 
-export async function showCreateList(e) {
+async function showCreateList(e) {
+    // e.preventDefault();
+    console.log(addListDiv)
     addListDiv.style.display = 'block';
     addListDiv.style.position = 'fixed';
 }
@@ -212,7 +203,6 @@ const showTaskButton = (e) => {
     }
     else addTaskButton.disabled = true;
 };
-
 
 // -------
 // Elements to append event listeners to
