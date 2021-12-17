@@ -208,7 +208,6 @@ export async function deleteList(e) {
         .parentNode.parentNode
         .querySelector('.list-item')
     const listId = list.dataset.listid;
-    console.log('1')
 
     const res = await fetch(`/api/lists/${listId}`, {
         method: 'DELETE',
@@ -220,10 +219,9 @@ export async function deleteList(e) {
     if (!res.ok) {
         console.log('Something went wrong')
     } else {
-
         // -- DOM removal isn't working
         console.log('List deleted')
-        list.remove();
+        list.parentNode.remove();
         clearDOMTasks();
     }
 };
@@ -302,8 +300,8 @@ function highlightTask(e) {
     //     console.log("hello")
     // }
     // console.log(checkbox.checked);
-    
-    
+
+
     if (prevSelection) {
         const prevSelectionDiv = document.querySelector(`[data-task="${prevSelection}"]`);
         if (prevSelectionDiv) prevSelectionDiv.classList.remove('single-task-selected');

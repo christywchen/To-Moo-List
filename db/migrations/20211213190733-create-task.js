@@ -24,7 +24,6 @@ module.exports = {
         type: Sequelize.BOOLEAN
       },
       categoryId: {
-        allowNull: false,
         references: { model: 'Categories' },
         type: Sequelize.INTEGER
       },
