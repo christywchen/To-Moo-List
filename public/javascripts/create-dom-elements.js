@@ -1,6 +1,7 @@
-import { fetchListTasks, showCreateList, updateListId } from './dashboard-list.js';
+import { fetchListTasks, updateListId } from './dashboard-list.js';
 import { clearDOMTasks } from './clean-dom.js';
-
+import { deleteList, updateList } from './dashboard-list.js';
+import { showRenameList, showCreateList } from './display.js';
 
 export function createListDiv(name, listId) {
     const container = document.createElement('div');
@@ -20,7 +21,6 @@ export function createListDiv(name, listId) {
     // TO DO add image to icon box
     // make invisible edit icon
 
-
     container.appendChild(listDiv);
     container.appendChild(iconsBox);
     iconsBox.appendChild(editIcon);
@@ -33,8 +33,11 @@ export function createListDiv(name, listId) {
     return container
 }
 
-// TO DO move all custom event listener funcitons into separate file
-
+export function createTaskHtml(taskName, taskId) {
+    return ` <input type="checkbox" data-task="${taskId}" name="${taskName}" value="${taskName}">
+                <label for="${taskName}" data-task="${taskId}">${taskName}</label>
+                <div hidden class='categories'>mwhahahah</div>`;
+};
 
 export function listEditDropDown() {
     const container = document.createElement('div');
@@ -55,61 +58,4 @@ export function listEditDropDown() {
     deleteListOp.addEventListener('click', deleteList);
 
     return container;
-    // e.target.appendChild(container);
 }
-
-
-async function deleteList (e) {
-    console.log(e.target.parentNode.parentNode)
-    e.stopPropagation()
-    const list = e.target
-        .parentNode.parentNode
-        .querySelector('.list-item')
-    console.log(list.dataset.listid)
-    const listId = list.dataset.listid;
-
-    const res = await fetch(`/api/lists/${listId}`, {
-        method: 'DELETE',
-        headers: {
-            "Content-Type": "application/json"
-        },
-    })
-    if (!res.ok) {
-        console.log('Something went wrong')
-    } else {
-        console.log('List deleted')
-        list.remove();
-        clearDOMTasks();
-    }
-}
-
-
-async function updateList (e) {
-    const list = e.target
-        .parentNode.parentNode
-        .querySelector('.list-item')
-    const listId = list.dataset.listid;
-
-    const res = await fetch(`/api/lists/${listId}`, {
-        method: 'PATCH',
-        headers: {
-            "Content-Type": "application/json"
-        },
-    })
-}
-
-
-const renameListDiv = document.querySelector('#rename-list');
-
-export async function showRenameList(e) {
-    // e.preventDefault();
-    renameListDiv.style.display = 'block';
-    renameListDiv.style.position = 'fixed';
-}
-
-
-
-
-// div.setAttribute('data-task', `${task.id}`);
-/// data-listId // e.target.dataset.listId
-// document.querySelector(`[data-task="${taskId}"]`);
