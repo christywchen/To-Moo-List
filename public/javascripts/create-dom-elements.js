@@ -113,8 +113,6 @@ export async function buildTaskSummary(currentTask, currentDeadline, currentTask
 function getDate() {
     let today = new Date();
 
-    console.log(today)
-
     let month = today.getMonth() + 1;
     let date = today.getDate();
     let year = today.getFullYear();
@@ -138,12 +136,12 @@ function buildDeadlineDiv(currentDeadline) {
     // TO DO: decide how to populate the deadline input box: dropdown with dates or manual input
     const deadlineDiv = document.createElement('div');
     deadlineDiv.setAttribute('id', 'deadline-div');
+
     const today = getDate();
     console.log(today)
     deadlineDiv.innerHTML = `
             <div id="summary-deadline">Due Date</div>
             <input type="date" min="${today}" id="summary-due-date-inp" class="summary-inp"></input>
-            <span>text</span>
             `;
     return deadlineDiv;
 }

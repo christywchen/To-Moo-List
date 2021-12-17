@@ -80,3 +80,9 @@ textarea.summary-inp {
     resize: none;
     transition: all 0.4s;
 }
+
+.mark-saved {
+    padding-left: 10px;
+    color: var(--secondary-color);
+    font-style: italic;
+}

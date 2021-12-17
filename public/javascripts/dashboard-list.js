@@ -48,7 +48,7 @@ async function createTask(e) {
             if (!res.ok) throw res // May need to change this
             else {
                 const { task } = await res.json();
-                div.innerHTML = createTaskHtml(name);
+                div.innerHTML = createTaskHtml(name, task.id);
                 div.setAttribute('data-task', `${task.id}`);
                 div.addEventListener('click', fetchTaskSummary);
                 taskContainer.appendChild(div);
@@ -262,7 +262,9 @@ function highlightTask(e) {
         if (prevSelectionDiv) prevSelectionDiv.classList.remove('single-task-selected');
     }
     const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
-    nextSelectionDiv.classList.add('single-task-selected')
+    nextSelectionDiv.classList.add('single-task-selected');
+
+    // document.querySelector(`input[data-task="${nextSelection}"]`).click();
 }
 
 // TO DO: checkbox event listeners

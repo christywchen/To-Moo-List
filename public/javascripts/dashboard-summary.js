@@ -71,6 +71,7 @@ export const changeList = async (e) => {
         const taskDetailsDiv = document.querySelector('#task-details');
         taskDetailsDiv.classList.remove('task-details-display');
     } else {
+        markSaved('#list-div');
         window.history.replaceState(stateId, `List ${newlistId}`, `/dashboard/${listName}/${newlistId}/tasks/${taskId}`);
     }
 };
@@ -78,7 +79,14 @@ export const changeList = async (e) => {
 export const changeDesc = async (e) => {
     const taskId = window.location.href.split('/')[7];
     const newTaskDesc = e.target.value;
-    const body = { description: newTaskDesc }
+    const body = { description: newTaskDesc };
+
+    const res = await fetch(`/api/tasks/${taskId}`);
+    const { task } = await res.json();
+    const oldTaskDesc = task.description;
+
+    console.log(oldTaskDesc)
+    console.log(newTaskDesc)
 
     if (newTaskDesc) {
         await fetch(`/api/tasks/${taskId}`, {
@@ -88,6 +96,10 @@ export const changeDesc = async (e) => {
             },
             body: JSON.stringify(body)
         });
+
+        if (newTaskDesc !== oldTaskDesc) {
+            markSaved('#summary-desc');
+        }
     };
 };
 
@@ -108,8 +120,6 @@ export function showTaskSummary(e) {
     } else {
         taskDetailsDiv.classList.add('task-details-display');
     }
-
-
 }
 
 export async function expandTextarea(e) {
@@ -124,4 +134,16 @@ export async function shrinkTextarea(e) {
 
 export async function expandCheckedTask(e) {
 
+}
+
+function markSaved(parentDiv) {
+    const listDiv = document.querySelector(parentDiv);
+    const span = document.createElement('span');
+    span.classList.add('mark-saved')
+    span.innerHTML = 'Saved!';
+    listDiv.appendChild(span)
+
+    setTimeout(() => {
+        listDiv.removeChild(span)
+    }, 1000);
 }
