@@ -2,12 +2,15 @@ import { fetchListTasks } from './dashboard-list.js';
 // import { deleteTask } from './dashboard-tasks.js';
 
 
-export function createListDiv(name, className) {
+export function createListDiv(name, listId) {
     const container = document.createElement('div');
     const listDiv = document.createElement('div');
     container.className = 'list-box';
     listDiv.innerText = name;
-    listDiv.className = className;
+
+    listDiv.setAttribute('data-listId', `${listId}`);
+
+    listDiv.className = 'list-item';
     const iconsBox = document.createElement('div');
     iconsBox.className = 'list-icons';
     const editIcon = document.createElement('div');
@@ -46,13 +49,29 @@ export function listEditDropDown() {
         option.className = 'list-edit-option';
         container.appendChild(option);
     })
-    // deleteListOp.addEventListener('click', deleteTask);
+    deleteListOp.addEventListener('click', deleteList);
 
     return container;
     // e.target.appendChild(container);
 }
 
 
-async function deleteList(e) {
-    const test = e.target.closest('')
+function deleteList(e) {
+    const list = e.target
+    .parentNode.parentNode
+    .querySelector('.list-item')
+    console.log(list.dataset.listid)
+    const listId = list.dataset.listid;
+
+    // try {
+    //     const res = await fetch(`/api/lists/${listId}`)
+    // } catch (error) {
+
+    // }
+
 }
+
+
+// div.setAttribute('data-task', `${task.id}`);
+/// data-listId // e.target.dataset.listId
+// document.querySelector(`[data-task="${taskId}"]`);

@@ -102,33 +102,6 @@ const initializePage = async () => {
         window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/#list/${task.listId}/tasks/${task.id}`);
     }
 
-    const fetchListTasks = async (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        clearDOMTasks();
-        const stateId = { id: "100" };
-
-        const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
-        const { tasks } = await taskRes.json();
-        if (e.target.parentNode.id = 'task-list') listId = e.target.className;
-
-        const taskContainer = document.getElementById("tasksContainer");
-        tasks.forEach(task => {
-            const div = document.createElement("div");
-            div.setAttribute('data-task', `${task.id}`);
-            div.classList.add('single-task')
-            div.innerHTML = createTaskHtml(task.name, task.id);
-            div.addEventListener('click', fetchTaskSummary);
-            div.addEventListener('click', finishTask);
-            div.addEventListener('click', deleteTask);
-            div.addEventListener('click', moveTask);
-            taskContainer.appendChild(div);
-        })
-        // TODO look into window.history.pushState
-        // Look into remove listId from closure and get from fragment URL
-        window.history.replaceState(stateId, `List ${e.target.className}`, `/dashboard/#list/${e.target.className}`);
-    };
-
     const res = await fetch('/api/lists')
     const { lists } = await res.json();
     const taskList = document.getElementById('task-lists');
@@ -140,17 +113,14 @@ const initializePage = async () => {
         // const div = document.createElement('div');
         // div.innerText = list.name;
         // div.className = list.id;
-        // --------- EDITING BELOW ------------
+        // --------- EDITING BELOW ---------------------------
         const div = createListDiv(list.name, list.id);
         div.addEventListener('click', fetchListTasks);
         taskList.appendChild(div);
-        // -------------------------------------
+        // ------------------------------------------------
     });
 };
 
-// div.setAttribute('data-task', `${task.id}`);
-/// data-listId // e.target.dataset.listId
-// document.querySelector(`[data-task="${taskId}"]`);
 
 // Custom Event Listeners
 async function fetchTaskSummary(e) {
@@ -172,14 +142,12 @@ export async function fetchListTasks(e)  {
     clearDOMTasks();
     const stateId = { id: "100" };
 
-    // TO DO fix className to not just be a number so you can add a better
-    // if statement bellow
-
-    if (e.target.parentNode.id = 'task-list') {
-        const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
+    if (e.target.className = 'list-item') {
+// --------------------------------------------------
+        listId = e.target.dataset.listid;
+        const taskRes = await fetch(`/api/lists/${listId}/tasks`)
         const { tasks } = await taskRes.json();
-        listId = e.target.className;
-
+ // ------------------------------------------------------------
         // TO DO make into function and move into create-dom-el file
         const taskContainer = document.getElementById("tasksContainer");
         tasks.forEach(task => {
@@ -194,32 +162,13 @@ export async function fetchListTasks(e)  {
             taskContainer.appendChild(div);
         })
     }
-    // if (e.target.parentNode.id = 'task-list')
-
     // TODO look into window.history.pushState
     // Look into remove listId from closure and get from fragment URL
-    window.history.replaceState(stateId, `List ${e.target.className}`, `/dashboard/#list/${e.target.className}`);
+    window.history.replaceState(
+        stateId, `List ${e.target.dataset.listid}`,
+        `/dashboard/#list/${e.target.dataset.listid}`
+    );
 };
-
-// export async function fetchListTasks(e) {
-//     e.preventDefault();
-//     const stateId = { id: "100" };
-//     const taskRes = await fetch(`/api/lists/${e.target.className}/tasks`)
-//     const { tasks } = await taskRes.json();
-//     const taskContainer = document.getElementById("tasksContainer");
-
-//     tasks.forEach(task => {
-//         const div = document.createElement("div");
-//         div.setAttribute('data-task', `${task.id}`);
-//         div.classList.add('single-task')
-//         div.innerHTML = createTaskHtml(task.name, task.id);
-//         div.addEventListener('click', fetchTaskSummary);
-//         taskContainer.appendChild(div);
-//     })
-//     // TODO look into window.history.pushState
-//     // Look into remove listId from closure and get from fragment URL
-//     window.history.replaceState(stateId, `List ${e.target.className}`, `/dashboard/#list/${e.target.className}`);
-// };
 
 const createTask = async (e) => {
     e.preventDefault();
@@ -273,9 +222,7 @@ const createList = async (e) => {
             if (!res.ok) throw res
             const newList = await res.json()
             const listId = newList.list.id;
-
             const div = createListDiv(newList.list.name, listId);
-
 
             // div.className = listId;
             // div.innerText = newList.list.name
@@ -296,7 +243,6 @@ const hideTaskButton = (e) => {
 };
 
 const hideCreateTaskDiv = (e) => {
-    // console.log(e.target.className !== 'log')
     if (e.target.className !== 'logout') {
         if ((!addListDiv.contains(e.target) &&
             e.target.className !== 'add-list-button') ||
@@ -326,7 +272,6 @@ const showTaskButton = (e) => {
     }
     else addTaskButton.disabled = true;
 };
-
 
 // -------
 // Elements to append event listeners to
