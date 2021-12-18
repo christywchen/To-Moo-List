@@ -46,12 +46,7 @@ export function hideListOptions(e) {
     }
 }
 
-export async function hideDuplicateBox(className) {
-    const box = document.querySelector(`.${className}`);
-    if (box) {
-        box.remove();
-    }
-}
+
 
 export function hideListNameDiv (e) {
     const addListDiv = document.querySelector('#add-list');
@@ -108,11 +103,17 @@ export function hideContainer(className) {
     })
 };
 
-
+export async function hideDuplicateBox(className) {
+    const box = document.querySelector(`.${className}`);
+    if (box) {
+        box.remove();
+    }
+}
 
 // Creating functions to show and hide lists
 const listContainer = document.querySelector('.list-header-container');
 
 export function showLists(e) {
-    
+    const lists = document.querySelector('.task-lists');
+
 }
