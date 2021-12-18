@@ -1,6 +1,6 @@
-import { fetchListTasks, updateListId } from './dashboard-list.js';
+import { fetchListTasks, updateListId } from './dashboard.js';
 import { clearDOMTasks } from './clean-dom.js';
-import { updateList, deleteList } from './dashboard-list.js';
+import { updateList, deleteList } from './dashboard.js';
 import { showRenameList, showCreateList, hideContainer, showContainer } from './display.js';
 
 export function createListDiv(name, listId) {

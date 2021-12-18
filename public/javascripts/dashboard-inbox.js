@@ -1,6 +1,6 @@
 import { createTaskHtml } from './create-dom-elements.js';
 import { clearDOMTasks } from './clean-dom.js';
-import { fetchTaskSummary } from './dashboard-list.js';
+import { fetchTaskSummary } from './dashboard.js';
 
 window.addEventListener("load", async (e) => {
 
