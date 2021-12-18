@@ -1,7 +1,7 @@
 import { finishTask, postPoneTask, changeCategory, moveTask, getDropMenu, createDropDownMenu } from './dashboard-tasks.js';
 import { showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
 import { clearDOMTasks } from './clean-dom.js';
-import { createSidebarContainer, buildTaskSummary, createTaskHtml } from './create-dom-elements.js';
+import { createSidebarContainer, buildTaskSummary, createTaskHtml, populateTasks } from './create-dom-elements.js';
 import { showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown } from './display.js';
 import { updateTaskStatus } from './dashboard-recap.js';
 
@@ -11,24 +11,21 @@ const initializePage = async () => {
     const listRes = await fetch('/api/lists')
     const { lists } = await listRes.json();
     const taskList = document.getElementById('task-lists');
+    const categoryRes = await fetch('/api/categories');
+    const { categories } = await categoryRes.json();
+    const categoryList = document.getElementById('task-categories');
+    // TO DO: Error handling
 
     lists.forEach(list => {
-        // const div = createListDiv(list.name, list.id);
         const div = createSidebarContainer(list.name, 'list', list.id);
         div.addEventListener('click', fetchListTasks);
         taskList.appendChild(div);
     });
-
-    const categoryRes = await fetch('/api/categories');
-    const { categories } = await categoryRes.json();
-    const categoryList = document.getElementById('task-categories');
-    console.log(categories[0]);
-
     categories.forEach(category => {
         const div = createSidebarContainer(category.name, 'category', category.id);
+        div.addEventListener('click', fetchCategoryTasks)
         categoryList.appendChild(div);
     })
-
 
     const buttons = document.querySelectorAll('button')
     buttons.forEach(button => {
@@ -36,7 +33,6 @@ const initializePage = async () => {
             button.addEventListener('click', e => e.preventDefault())
         }
     })
-
     createDropDownMenu();
     updateTaskStatus();
 };
@@ -47,7 +43,7 @@ const initializePage = async () => {
 async function createTask(e) {
     e.preventDefault();
     const taskData = document.querySelector('#add-task-input');
-    const taskContainer = document.getElementById("tasksContainer");
+    // const taskContainer = document.getElementById("tasksContainer");
     const formData = new FormData(taskData);
     const name = formData.get('name');
     const body = { name, listId };
@@ -65,13 +61,16 @@ async function createTask(e) {
             if (!res.ok) throw res // May need to change this
             else {
                 const { task } = await res.json();
+
                 div.innerHTML = createTaskHtml(name, task.id);
                 div.setAttribute('data-task', `${task.id}`);
                 div.addEventListener('click', fetchTaskSummary);
                 taskContainer.appendChild(div);
-                input.value = "";
+
+                
                 const addTaskButton = document.querySelector('.add-task-button > button');
                 addTaskButton.disabled = true;
+                input.value = "";
             }
         } catch (err) {
             // TODO finish error handling
@@ -82,13 +81,11 @@ async function createTask(e) {
 };
 
 async function createList(e) {
-    // e.preventDefault();
     const listForm = document.querySelector('#add-list-form');
     const listData = document.querySelector('#addList');
     const formData = new FormData(listForm);
     const name = formData.get('addList');
     const body = { name };
-    // const div = document.createElement('div');
     const tasksList = document.getElementById('task-lists');
     if (listData.value.length) {
         try {
@@ -110,9 +107,7 @@ async function createList(e) {
     }
 };
 
-async function createCategory(e) {
-
-}
+// Create Categroy Function?
 
 // R
 export async function fetchTaskSummary(e) {
@@ -151,25 +146,35 @@ export async function fetchListTasks(e) {
         listId = e.target.dataset.listid;
         const taskRes = await fetch(`/api/lists/${listId}/tasks`)
         const { tasks } = await taskRes.json();
-        // ------------------------------------------------------------
-        // TO DO make into function and move into create-dom-el file
-        const taskContainer = document.getElementById("tasksContainer");
-        tasks.forEach(task => {
-            const div = document.createElement("div");
-            div.setAttribute('data-task', `${task.id}`);
-            div.classList.add('single-task')
-            div.innerHTML = createTaskHtml(task.name, task.id, task.deadline, task.Category.name);
-            div.addEventListener('click', fetchTaskSummary);
-            div.addEventListener('click', finishTask);
-            div.addEventListener('click', deleteTask);
-            div.addEventListener('click', getDropMenu);
-            taskContainer.appendChild(div);
-        })
+        populateTasks(tasks);
     }
     window.history.replaceState(
         stateId, `List ${e.target.dataset.listid}`,
         `/dashboard/#list/${e.target.dataset.listid}`
     );
+};
+
+export async function fetchInboxTasks(fetchPath) {
+    const taskRes = await fetch(fetchPath);
+    const { tasks } = await taskRes.json();
+    // TO DO: Needs Error Handling
+
+    populateTasks(tasks);
+};
+
+
+export async function fetchCategoryTasks(e) {
+    e.stopPropagation();
+    clearDOMTasks();
+    // const stateId = { id: "101" };
+    const categoryId = e.target.dataset.categoryid
+
+    if (categoryId) {
+        const res = await fetch(`/api/categories/${categoryId}`);
+        const { tasks } = await res.json();
+        // TO DO: Error Handling
+        populateTasks(tasks);
+    }
 };
 
 // U
@@ -246,17 +251,6 @@ export async function deleteList(e) {
 };
 
 export function deleteTask(e) {
-
-    // const delteOccupied = querySelector.(DELETETASK)
-
-
-
-    // if (!delete Occupied )
-    // add class of DELETETASK
-    // univeral selectors
-    // do the following
-
-
     const trashTask = document.querySelector(".delete");
     const taskId = e.target.dataset.task;
 

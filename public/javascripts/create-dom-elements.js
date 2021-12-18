@@ -1,7 +1,8 @@
 import { fetchListTasks, updateListId } from './dashboard.js';
 import { clearDOMTasks } from './clean-dom.js';
-import { updateList, deleteList } from './dashboard.js';
-import { showRenameList, showCreateList, hideContainer, showContainer } from './display.js';
+import { fetchTaskSummary, deleteList, deleteTask } from './dashboard.js';
+import { showRenameList, hideContainer, showContainer } from './display.js';
+import { finishTask, getDropMenu } from './dashboard-tasks.js'
 
 
 
@@ -67,10 +68,21 @@ export function listEditDropDown() {
     return container;
 }
 
+export function populateTasks(tasks) {
+    const tasksContainer = document.getElementById("tasksContainer");
+    tasks.forEach(task => {
+        const div = document.createElement("div");
+        div.setAttribute('data-task', `${task.id}`);
+        div.classList.add('single-task')
+        div.innerHTML = createTaskHtml(task.name, task.id, task.deadline, task.Category.name);
+        div.addEventListener('click', fetchTaskSummary);
+        div.addEventListener('click', finishTask);
+        div.addEventListener('click', deleteTask);
+        div.addEventListener('click', getDropMenu);
 
-// div.setAttribute('data-task', `${task.id}`);
-/// data-listId // e.target.dataset.listId
-// document.querySelector(`[data-task="${taskId}"]`);
+        tasksContainer.appendChild(div);
+    })
+};
 
 // CREATING TASK SUMMARY CONTAINER ELEMENTS
 export async function buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc) {

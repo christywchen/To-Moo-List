@@ -16,8 +16,8 @@ const taskNotFound = taskId => {
 router.get('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     const taskId = parseInt(req.params.id, 10);
 
-    // const { userId } = req.session.auth;
-    const { userId } = res.locals.user.id;
+    // Does this need destruturing??
+    const userId = res.locals.user.id;
 
     const task = await db.Task.findByPk(taskId, {
         where: userId,
@@ -159,6 +159,21 @@ router.get('/lists/:listId/tasks', asyncHandler(async (req, res) => {
     const tasks = await db.Task.findAll({
         where: {
             listId: req.params.listId
+        },
+        include: [db.List, db.Category]
+    })
+    res.json({ tasks })
+}))
+
+// Getting tasks by categoryId
+router.get('/categories/:categoryId', asyncHandler(async (req, res) => {
+    const userId = res.locals.user.id;
+    const categoryId = req.params.categoryId
+
+    const tasks = await db.Task.findAll({
+        where: {
+            categoryId,
+            userId
         },
         include: [db.List, db.Category]
     })
