@@ -1,4 +1,5 @@
-import { showCreateList } from './display.js'
+import { updateList } from './dashboard.js';
+import { showCreateList, hideDivContainer, showDivContainer  } from './display.js'
 
 export const finishTask = (e) => {
     const completeTask = document.querySelector(".completed");
@@ -164,6 +165,21 @@ const createListDropDown = async () => {
         listOption.addEventListener("click", moveTask);
         listMenu.appendChild(listOption);
     })
+
+    document.querySelectorAll('.grid-square').forEach( e => {
+        e.addEventListener('click', async (e) => {
+            //console.log(e.target.children[1])
+            const container = e.target.children[1];
+            // console.log('e: ', container);
+            await showDivContainer(container);
+            await hideDivContainer();
+        })
+    })
+    // listMenu.addEventListener('click', async (e) => {
+    //     console.log(e.target.children)
+    //     //await hideDivContainer(e.target);
+    //     //await showDivContainer();
+    // })
     // const hr = document.createElement('hr');
     // listMenu.appendChild(hr);
     // const div = document.createElement('div');
@@ -209,7 +225,6 @@ const createTagList = async () => {
     // div.addEventListener("click", stuff);
     // categoryList.appendChild(div);
 }
-
 
 export const createDropDownMenu = () => {
     createListDropDown();

@@ -91,6 +91,27 @@ export function hideDropDown(e) {
     }
 };
 
+export function showDivContainer(container) {
+    // console.log('p:', container);
+    return new Promise((res,rej) => {
+        container.style.display = 'block';
+        container.classList.add('visible');
+        // console.log(container)
+        res();
+    });
+};
+
+export function hideDivContainer(className) {
+    return new Promise((res, rej) => {
+        const visibleDiv = document.querySelector('.visible');
+        console.log(visibleDiv);
+        if (visibleDiv) {
+            visibleDiv.style.display = 'none';
+            visibleDiv.classList.remove('visible');
+        };
+    });
+};
+
 // Promises
 
 export function showContainer(container, showFn) {
