@@ -102,13 +102,17 @@ async function createList(e) {
             if (!res.ok) throw res
             const newList = await res.json()
             const listId = newList.list.id;
-            const div = createListDiv(newList.list.name, listId);
+            const div = createSidebarContainer(newList.list.name, 'list', listId);
             tasksList.appendChild(div);
         } catch (error) {
 
         }
     }
 };
+
+async function createCategory(e) {
+
+}
 
 // R
 export async function fetchTaskSummary(e) {
@@ -281,7 +285,7 @@ const addTaskButtonDiv = document.querySelector('.add-task-button');
 const addListDiv = document.querySelector('#add-list');
 const addTaskInp = document.querySelector('input#name.inp-field');
 const addTaskButton = document.querySelector('.add-task-button button');
-const addListButton = document.querySelector('.add-list-button');
+const addListButtonL = document.querySelector('.add-list-button-l');
 const submitListButton = document.querySelector('.submit-list');
 const closeListSubmission = document.querySelector('.close');
 const renameListButton = document.querySelector('.rename-list');
@@ -296,7 +300,7 @@ window.addEventListener("load", async (event) => {
     //document.addEventListener('click', hideCreateTaskDiv);
     document.addEventListener('click', hideDropDown);
     addTaskInp.addEventListener('keyup', showTaskButton);
-    addListButton.addEventListener('click', showCreateList);
+    addListButtonL.addEventListener('click', showCreateList);
     submitListButton.addEventListener('click', createList);
     submitListButton.addEventListener('click', hideListNameDiv);
     closeListSubmission.addEventListener('click', hideListNameDiv);

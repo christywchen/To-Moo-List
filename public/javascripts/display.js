@@ -34,7 +34,6 @@ export const hideTaskButton = (e) => {
 export async function showCreateList(e) {
     const addListDiv = document.querySelector('#add-list');
     // e.preventDefault();
-    console.log("does it work")
     addListDiv.style.display = 'block';
     addListDiv.style.position = 'fixed';
 }
@@ -45,8 +44,6 @@ export function hideListOptions(e) {
         box.remove();
     }
 }
-
-
 
 export function hideListNameDiv(e) {
     const addListDiv = document.querySelector('#add-list');
