@@ -78,7 +78,7 @@ export const moveTask = async (e) => {
 
 export const changeCategory = async (e) => {
     const selectedTasks = document.querySelectorAll(".single-task > input");
-    const tag = document.querySelector(".category");
+    const tag = document.querySelector(".list-of-tags");
     const tagId = e.target.id;
 
     selectedTasks.forEach(async (e) => {
@@ -98,8 +98,6 @@ export const changeCategory = async (e) => {
             tag.style.display = 'none';
         }
     })
-
-
 }
 
 export function deleteTask(e) {
