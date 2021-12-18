@@ -19,7 +19,9 @@ const initializePage = async () => {
 
     const buttons = document.querySelectorAll('button')
     buttons.forEach(button => {
-        button.addEventListener('click', e => e.preventDefault())
+        if (button.className !== 'logout') {
+            button.addEventListener('click', e => e.preventDefault())
+        }
     })
 
     createDropDownMenu()
