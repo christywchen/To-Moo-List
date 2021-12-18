@@ -1,7 +1,7 @@
-import { fetchListTasks, updateListId } from './dashboard-list.js';
+import { fetchListTasks, updateListId } from './dashboard.js';
 import { clearDOMTasks } from './clean-dom.js';
-import {  updateList } from './dashboard-list.js';
-import { showRenameList, showCreateList } from './display.js';
+import { updateList, deleteList } from './dashboard.js';
+import { showRenameList, showCreateList, hideContainer, showContainer } from './display.js';
 
 export function createListDiv(name, listId) {
     const container = document.createElement('div');
@@ -16,21 +16,27 @@ export function createListDiv(name, listId) {
     const iconsBox = document.createElement('div');
     iconsBox.className = 'list-icons';
     const editIcon = document.createElement('div');
-    editIcon.innerText = 'v'
+    // editIcon.innerText = 'v'
+    // editIcon.className = '<i class="far fa-caret-square-down"></i>'
+    editIcon.classList.add('far', 'fa-caret-square-down', 'hide-option')
+
     editIcon.setAttribute('data-listId', `${listId}`);
-    // TO DO add image to icon box
-    // make invisible edit icon
+
 
     container.appendChild(listDiv);
     container.appendChild(iconsBox);
     iconsBox.appendChild(editIcon);
-    editIcon.addEventListener('click', (e) => {
-        container.appendChild(listEditDropDown())
-    });
+
     editIcon.addEventListener('click', updateListId);
     container.addEventListener('click', fetchListTasks);
+    editIcon.addEventListener('click', async (e) => {
+        await hideContainer('list-edit-dropdown');
+        await showContainer(container, listEditDropDown);
+    });
     return container
 }
+
+// FIND OPTION DROPDOWN
 
 
 export function listEditDropDown() {
@@ -47,26 +53,17 @@ export function listEditDropDown() {
         option.className = 'list-edit-option';
         container.appendChild(option);
     })
-    renameListOp.addEventListener('click', showRenameList)
+    renameListOp.addEventListener('click', (e) => {
+        // const listEditDropdown = document.querySelector('.list-edit-option');
+        // if(listEditDropdown) listEditDropdown.remove();
+
+        const listEditDropdown = document.querySelector('.list-edit-dropdown');
+        if(listEditDropdown) listEditDropdown.remove();
+        showRenameList()
+    })
     deleteListOp.addEventListener('click', deleteList);
 
     return container;
-}
-
-
-function deleteList(e) {
-    const list = e.target
-        .parentNode.parentNode
-        .querySelector('.list-item')
-    console.log(list.dataset.listid)
-    const listId = list.dataset.listid;
-
-    // try {
-    //     const res = await fetch(`/api/lists/${listId}`)
-    // } catch (error) {
-
-    // }
-
 }
 
 
@@ -87,7 +84,6 @@ export async function buildTaskSummary(currentTask, currentDeadline, currentTask
     taskSummaryContainer.appendChild(buildListDiv(currentListId, currentList));
     taskSummaryContainer.appendChild(buildDescDiv(currentDesc));
 
-    console.log(taskSummaryContainer)
     taskSummaryParent.appendChild(taskSummaryContainer);
 
     const listsRes = await fetch(`/api/lists`);
@@ -110,14 +106,14 @@ export async function buildTaskSummary(currentTask, currentDeadline, currentTask
 }
 
 // TASK SUMMARY CONTAINER HELPER FUNCTIONS
-function getDate() {
-    let today = new Date();
+function getDate(day) {
+    let getDay;
+    if (day) getDay = new Date(day);
+    else getDay = new Date()
 
-    console.log(today)
-
-    let month = today.getMonth() + 1;
-    let date = today.getDate();
-    let year = today.getFullYear();
+    let month = getDay.getMonth() + 1;
+    let date = getDay.getDate();
+    let year = getDay.getFullYear();
 
     if (month < 10) month = "0" + month;
     if (date < 10) date = "0" + date;
@@ -134,15 +130,18 @@ function buildTitleDiv(currentTask) {
     return titleDiv;
 }
 
+//buildDeadlineDiv()
+
 function buildDeadlineDiv(currentDeadline) {
-    // TO DO: decide how to populate the deadline input box: dropdown with dates or manual input
+    const deadline = getDate(currentDeadline)
+    const today = getDate();
+
     const deadlineDiv = document.createElement('div');
     deadlineDiv.setAttribute('id', 'deadline-div');
-    const today = getDate();
-    console.log(today)
+
     deadlineDiv.innerHTML = `
             <div id="summary-deadline">Due Date</div>
-            <input type="date" min="${today}" id="summary-due-date-inp" class="summary-inp"></input>
+            <input type="date" min="${today}" value="${deadline}" id="summary-due-date-inp" class="summary-inp"></input>
             `;
     return deadlineDiv;
 }
@@ -180,3 +179,7 @@ export function createTaskHtml(taskName, taskId) {
                 <label for="${taskName}" data-task="${taskId}">${taskName}</label>
                 <div hidden class='categories'>mwhahahah</div>`;
 };
+
+async function createTaskRecap() {
+
+}

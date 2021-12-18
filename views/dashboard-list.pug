@@ -19,9 +19,12 @@ block content
                     li#tomorrow Tomorrow's Tasks
                     li#all All Tasks
             div.lists
-                div.list-header Lists
-                div.add-list-button(role='button') +
-                ol#task-lists
+                div.list-header-container
+                    div.list-header Lists
+                    div.add-list-button(role='button')
+                        i.far.fa-plus-square
+                        
+                div#task-lists
             div.lists
                 div.list-header Categories
 
@@ -52,7 +55,7 @@ block content
         div#spacer
         div#summary
             include dashboard-summary.pug
-        script(src="/javascripts/dashboard-list.js" type="module")
+        script(src="/javascripts/dashboard.js" type="module")
         script(src="/javascripts/dashboard-inbox.js" type="module")
         script(src="/javascripts/dashboard-tasks.js" type="module")
         //- script(src="/javascripts/dashboard-summary.js" type="module")

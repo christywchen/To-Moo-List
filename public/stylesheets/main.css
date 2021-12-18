@@ -51,6 +51,11 @@
     border-bottom: 1px dotted lightgray;
 }
 
+.single-task {
+    height: 34px;
+    overflow: hidden;
+}
+
 .single-task-selected {
     background-color: #ffffc9;
 }
@@ -145,12 +150,12 @@
     align-items: center;
 }
 
-.split-3{
-    display:flex;
+.split-3 {
+    display: flex;
 }
 
-.split-2{
-    display:flex;
+.split-2 {
+    display: flex;
 }
 
 .grid-square {
@@ -166,7 +171,7 @@
     background-color: #ffffc9;
 }
 
-.dropdown{
+.dropdown {
     width: 180px;
     height: auto;
     position: absolute;
@@ -175,11 +180,9 @@
     border: 1px solid lightgray;
     box-shadow: 10px 5px 5px lightgray;
     margin-left: 128px;
-
 }
 
-
-.dropdown div{
+.dropdown div {
     background-color: white;
     margin: 0;
     font-size: 14px;
@@ -187,6 +190,6 @@
     border: 1px solid lightgray;
 }
 
-.dropdown div:hover{
+.dropdown div:hover {
     background-color: var(--lightest-div-bg);
 }
