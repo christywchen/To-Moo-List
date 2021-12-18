@@ -1,7 +1,7 @@
 import { finishTask, postPoneTask, changeCategory, moveTask, getDropMenu, createDropDownMenu } from './dashboard-tasks.js';
 import { showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
 import { clearDOMTasks } from './clean-dom.js';
-import { createListDiv, buildTaskSummary, createTaskHtml } from './create-dom-elements.js';
+import { createSidebarContainer, buildTaskSummary, createTaskHtml } from './create-dom-elements.js';
 import { showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown } from './display.js';
 
 let listId;
@@ -12,7 +12,8 @@ const initializePage = async () => {
     const taskList = document.getElementById('task-lists');
 
     lists.forEach(list => {
-        const div = createListDiv(list.name, list.id);
+        // const div = createListDiv(list.name, list.id);
+        const div = createSidebarContainer(list.name, 'list', list.id);
         div.addEventListener('click', fetchListTasks);
         taskList.appendChild(div);
     });
