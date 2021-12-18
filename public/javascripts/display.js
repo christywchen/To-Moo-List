@@ -1,5 +1,5 @@
 window.addEventListener("load", async (event) => {
-    
+
 
 })
 
@@ -107,3 +107,12 @@ export function hideContainer(className) {
         res()
     })
 };
+
+
+
+// Creating functions to show and hide lists
+const listContainer = document.querySelector('.list-header-container');
+
+export function showLists(e) {
+    
+}
