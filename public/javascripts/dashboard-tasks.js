@@ -78,7 +78,7 @@ export const moveTask = async (e) => {
 
 export const changeCategory = async (e) => {
     const selectedTasks = document.querySelectorAll(".single-task > input");
-    const tag = document.querySelector(".category");
+    const tag = document.querySelector(".list-of-tags");
     const tagId = e.target.id;
 
     selectedTasks.forEach(async (e) => {
@@ -98,8 +98,6 @@ export const changeCategory = async (e) => {
             tag.style.display = 'none';
         }
     })
-
-
 }
 
 export function deleteTask(e) {
@@ -166,12 +164,12 @@ const createListDropDown = async () => {
         listOption.addEventListener("click", moveTask);
         listMenu.appendChild(listOption);
     })
-    const hr = document.createElement('hr');
-    listMenu.appendChild(hr);
-    const div = document.createElement('div');
-    div.innerText = "Create new list";
-    div.addEventListener("click", showCreateList);
-    listMenu.appendChild(div);
+    // const hr = document.createElement('hr');
+    // listMenu.appendChild(hr);
+    // const div = document.createElement('div');
+    // div.innerText = "Create new list";
+    // div.addEventListener("click", showCreateList);
+    // listMenu.appendChild(div);
 }
 
 const createPostPoneList = async () => {
@@ -204,12 +202,12 @@ const createTagList = async () => {
         categoryList.appendChild(div);
     });
 
-    const hr = document.createElement('hr');
-    categoryList.appendChild(hr);
-    const div = document.createElement('div');
-    div.innerText = "Create new tag";
-    //div.addEventListener("click", stuff);
-    categoryList.appendChild(div);
+    // const hr = document.createElement('hr');
+    // categoryList.appendChild(hr);
+    // const div = document.createElement('div');
+    // div.innerText = "Create new category";
+    // div.addEventListener("click", stuff);
+    // categoryList.appendChild(div);
 }
 
 
