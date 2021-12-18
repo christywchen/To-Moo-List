@@ -58,7 +58,7 @@ export function listEditDropDown() {
         // if(listEditDropdown) listEditDropdown.remove();
 
         const listEditDropdown = document.querySelector('.list-edit-dropdown');
-        if(listEditDropdown) listEditDropdown.remove();
+        if (listEditDropdown) listEditDropdown.remove();
         showRenameList()
     })
     deleteListOp.addEventListener('click', deleteList);
@@ -130,8 +130,6 @@ function buildTitleDiv(currentTask) {
     return titleDiv;
 }
 
-//buildDeadlineDiv()
-
 function buildDeadlineDiv(currentDeadline) {
     const deadline = getDate(currentDeadline)
     const today = getDate();
@@ -140,7 +138,7 @@ function buildDeadlineDiv(currentDeadline) {
     deadlineDiv.setAttribute('id', 'deadline-div');
 
     deadlineDiv.innerHTML = `
-            <div id="summary-deadline">Due Date</div>
+            <div id="summary-deadline">Deadline</div>
             <input type="date" min="${today}" value="${deadline}" id="summary-due-date-inp" class="summary-inp"></input>
             `;
     return deadlineDiv;
@@ -174,10 +172,59 @@ function buildDescDiv(currentDesc) {
 }
 
 
-export function createTaskHtml(taskName, taskId) {
+export function createTaskHtml(taskName, taskId, taskDeadline = '', categoryId = '') {
+    // setting information regarding task deadline
+    const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+    let deadline = getDate(taskDeadline);
+    let today = getDate();
+    let deadlineStr = '';
+    let deadlineStatus = 'soon'
+
+    const [
+        todayYear,
+        todayMonth,
+        todayDate
+    ] = today.split('-').map(el => parseInt(el, 10));
+
+    const [
+        deadlineYear,
+        deadlineMonth,
+        deadlineDate
+    ] = deadline.split('-').map(el => parseInt(el, 10));
+
+    console.log(taskName, typeof todayDate, typeof deadlineDate)
+
+    if (taskDeadline) {
+        let deadline = new Date(taskDeadline);
+        deadlineStr = new Intl.DateTimeFormat('en-US', options).format(deadline).split(', ')[1];
+
+        // check if task is due today or tomorrow
+        // if so, show deadline as 'today' or 'tomorrow'
+        if (deadlineMonth === todayMonth) {
+            if (deadlineDate === todayDate) { // mark task if deadline is due today
+                deadlineStr = 'Today';
+                deadlineStatus = 'today';
+                console.log('today')
+            } else if (deadlineDate === todayDate + 1) { // mark task if deadline is due tomorrow
+                deadlineStr = 'Tomorrow';
+            }
+        }
+
+        if (deadlineYear <= todayYear &&
+            deadlineMonth <= todayMonth &&
+            deadlineDate < todayDate) {
+            deadlineStatus = 'overdue';
+        }
+    } else {
+        deadlineStatus = 'none';
+    }
+
+    // return value for task item element
     return ` <input type="checkbox" data-task="${taskId}" name="${taskName}" value="${taskName}">
-                <label for="${taskName}" data-task="${taskId}">${taskName}</label>
-                <div hidden class='categories'>mwhahahah</div>`;
+        <label for="${taskName}" data-task="${taskId}">${taskName}</label>
+        <span data-task="${taskId}" class="category category-${categoryId}">${categoryId}</span>
+        <span data-task="${taskId}" class="deadline deadline-${deadlineStatus}">${deadlineStr}</span>
+`;
 };
 
 async function createTaskRecap() {

@@ -143,7 +143,7 @@ export async function fetchListTasks(e) {
             const div = document.createElement("div");
             div.setAttribute('data-task', `${task.id}`);
             div.classList.add('single-task')
-            div.innerHTML = createTaskHtml(task.name, task.id);
+            div.innerHTML = createTaskHtml(task.name, task.id, task.deadline, task.Category.name);
             div.addEventListener('click', fetchTaskSummary);
             div.addEventListener('click', finishTask);
             div.addEventListener('click', deleteTask);

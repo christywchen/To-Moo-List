@@ -17,6 +17,7 @@
     --medium-div-bg: #7fadcd;
     --inp-border: lightgrey;
     --task-recaps-bg: #d5e6f3;
+    --tasks-due-today: #0d783d;
 }
 
 * {

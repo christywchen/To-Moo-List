@@ -125,7 +125,7 @@ textarea.summary-inp {
 }
 
 #recap-due-today {
-    color: #bb0000;
+    color: var(--tasks-due-today);
 }
 
 .bad-joke {
