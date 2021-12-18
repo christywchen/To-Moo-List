@@ -12,9 +12,11 @@
     --secondary-color: #a5c9e7;
     --tertiary-color: #cfe3f2;
     --divider-color: #b3d4ed;
-    --lightest-div-bg: #bdd7ea;
+    --lighter-div-bg: #bdd8eb;
     --button-color-light: #1575c1;
+    --medium-div-bg: #7fadcd;
     --inp-border: lightgrey;
+    --task-recaps-bg: #d5e6f3;
 }
 
 * {
@@ -73,6 +75,6 @@ body {
 #summary {
     position: relative;
     width: 100%;
-    background-color: var(--lightest-div-bg);
+    background-color: var(--lighter-div-bg);
     border-radius: 5px 5px 0 0;
 }

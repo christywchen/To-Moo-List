@@ -65,7 +65,7 @@
     align-items: center;
 }
 
-.task:hover {
+.single-task:hover {
     background-color: #ffffc9;
 }
 

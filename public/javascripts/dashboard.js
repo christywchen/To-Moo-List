@@ -3,6 +3,7 @@ import { showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summa
 import { clearDOMTasks } from './clean-dom.js';
 import { createListDiv, buildTaskSummary, createTaskHtml } from './create-dom-elements.js';
 import { showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown } from './display.js';
+import { updateTaskStatus } from './dashboard-recap.js';
 
 let listId;
 
@@ -24,7 +25,8 @@ const initializePage = async () => {
         }
     })
 
-    createDropDownMenu()
+    createDropDownMenu();
+    updateTaskStatus();
 };
 
 
@@ -68,7 +70,7 @@ async function createTask(e) {
     }
 };
 
-async function createList (e) {
+async function createList(e) {
     // e.preventDefault();
     const listForm = document.querySelector('#add-list-form');
     const listData = document.querySelector('#addList');
