@@ -13,7 +13,7 @@ export async function showRenameList(e) {
 
 export function showTaskButton(e) {
     const addTaskInp = document.querySelector('input#name.inp-field');
-    const addTaskButton = document.querySelector('.add-task-button button');
+    const addTaskButton = document.querySelector('.add-task-button > button');
     e.preventDefault()
     if (addTaskInp.value) {
         addTaskButton.disabled = false;
@@ -48,7 +48,7 @@ export function hideListOptions(e) {
 
 
 
-export function hideListNameDiv (e) {
+export function hideListNameDiv(e) {
     const addListDiv = document.querySelector('#add-list');
     const renameListDiv = document.querySelector('#rename-list');
 

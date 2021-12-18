@@ -3,12 +3,13 @@ import { showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summa
 import { clearDOMTasks } from './clean-dom.js';
 import { createSidebarContainer, buildTaskSummary, createTaskHtml } from './create-dom-elements.js';
 import { showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown } from './display.js';
+import { updateTaskStatus } from './dashboard-recap.js';
 
 let listId;
 
 const initializePage = async () => {
-    const res = await fetch('/api/lists')
-    const { lists } = await res.json();
+    const listRes = await fetch('/api/lists')
+    const { lists } = await listRes.json();
     const taskList = document.getElementById('task-lists');
 
     lists.forEach(list => {
@@ -18,6 +19,17 @@ const initializePage = async () => {
         taskList.appendChild(div);
     });
 
+    const categoryRes = await fetch('/api/categories');
+    const { categories } = await categoryRes.json();
+    const categoryList = document.getElementById('task-categories');
+    console.log(categories[0]);
+
+    categories.forEach(category => {
+        const div = createSidebarContainer(category.name, 'category', category.id);
+        categoryList.appendChild(div);
+    })
+
+
     const buttons = document.querySelectorAll('button')
     buttons.forEach(button => {
         if (button.className !== 'logout') {
@@ -25,7 +37,8 @@ const initializePage = async () => {
         }
     })
 
-    createDropDownMenu()
+    createDropDownMenu();
+    updateTaskStatus();
 };
 
 
@@ -54,12 +67,11 @@ async function createTask(e) {
                 const { task } = await res.json();
                 div.innerHTML = createTaskHtml(name, task.id);
                 div.setAttribute('data-task', `${task.id}`);
-
-                console.log(task.id)
-
                 div.addEventListener('click', fetchTaskSummary);
                 taskContainer.appendChild(div);
                 input.value = "";
+                const addTaskButton = document.querySelector('.add-task-button > button');
+                addTaskButton.disabled = true;
             }
         } catch (err) {
             // TODO finish error handling
@@ -69,7 +81,7 @@ async function createTask(e) {
     }
 };
 
-async function createList (e) {
+async function createList(e) {
     // e.preventDefault();
     const listForm = document.querySelector('#add-list-form');
     const listData = document.querySelector('#addList');
@@ -142,7 +154,7 @@ export async function fetchListTasks(e) {
             const div = document.createElement("div");
             div.setAttribute('data-task', `${task.id}`);
             div.classList.add('single-task')
-            div.innerHTML = createTaskHtml(task.name, task.id);
+            div.innerHTML = createTaskHtml(task.name, task.id, task.deadline, task.Category.name);
             div.addEventListener('click', fetchTaskSummary);
             div.addEventListener('click', finishTask);
             div.addEventListener('click', deleteTask);

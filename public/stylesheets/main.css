@@ -52,6 +52,8 @@
 }
 
 .single-task {
+    display: flex;
+    align-items: center;
     height: 34px;
     overflow: hidden;
 }
@@ -65,7 +67,7 @@
     align-items: center;
 }
 
-.task:hover {
+.single-task:hover {
     background-color: #ffffc9;
 }
 
@@ -192,4 +194,24 @@
 
 .dropdown div:hover {
     background-color: var(--lightest-div-bg);
+}
+
+/* date and category tags for task items */
+.deadline {
+    justify-self: flex-end;
+}
+.deadline-today {
+    color: var(--tasks-due-today);
+    font-weight: 600;
+}
+.deadline-overdue {
+    color: #bb0000;
+}
+
+.deadline-none {
+    display: none;
+}
+
+.deadline-soon {
+    color: gray;
 }

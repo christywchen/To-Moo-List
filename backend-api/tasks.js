@@ -21,7 +21,7 @@ router.get('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
 
     const task = await db.Task.findByPk(taskId, {
         where: userId,
-        include: db.List
+        include: [db.List, db.Category]
     });
 
     if (task) {
@@ -104,7 +104,8 @@ router.delete('/tasks/:id(\\d+)', asyncHandler(async (req, res) => {
 // getting all tasks by userId
 router.get('/tasks', asyncHandler(async (req, res) => {
     const tasks = await db.Task.findAll({
-        where: { userId: res.locals.user.id }
+        where: { userId: res.locals.user.id },
+        include: [db.List, db.Category]
     })
     res.json({ tasks });
 }));
@@ -124,7 +125,8 @@ router.get('/tasks/today', asyncHandler(async (req, res) => {
                 [Op.lt]: today,
                 [Op.gt]: yesterday
             }
-        }
+        },
+        include: [db.List, db.Category]
     })
 
     res.json({ tasks });
@@ -145,7 +147,8 @@ router.get('/tasks/tomorrow', asyncHandler(async (req, res) => {
                 [Op.lt]: twoDaysAhead,
                 [Op.gt]: yesterday
             }
-        }
+        },
+        include: [db.List, db.Category]
     })
 
     res.json({ tasks });
@@ -156,7 +159,8 @@ router.get('/lists/:listId/tasks', asyncHandler(async (req, res) => {
     const tasks = await db.Task.findAll({
         where: {
             listId: req.params.listId
-        }
+        },
+        include: [db.List, db.Category]
     })
     res.json({ tasks })
 }))

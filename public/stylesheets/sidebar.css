@@ -1,6 +1,6 @@
 /* sidebar elements */
 .sidebar-logo {
-    background-image: url("../images/logo-o.png");
+    background-image: url("../images/logo-o-dark.png");
     background-repeat: no-repeat;
     background-size: 150px auto;
     height: 100px;
@@ -30,7 +30,7 @@ ol#default-lists {
 .lists .list-header:hover,
 .lists li:hover,
 .list-header-container:hover,
-.list-box:hover {
+.sidebar-box:hover {
     background-color: var(--divider-color);
 }
 
@@ -39,11 +39,9 @@ ol#default-lists {
     margin-left: 0;
 }
 
-
 ol li {
     line-height: 2em;
 }
-
 
 .list-header-container {
     display: flex;
@@ -51,21 +49,19 @@ ol li {
     justify-content: space-between;
 }
 
-
-
-.list-box {
+.sidebar-box {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     height: 22px;
 }
 
-.list-icons {
+.sidebar-icons {
     display: none;
-    color: rgb(117, 165, 228)
+    color: rgb(117, 165, 228);
 }
 
-.list-box:hover > .list-icons {
+.sidebar-box:hover > .sidebar-icons {
     display: block;
     /* color: red; */
 }

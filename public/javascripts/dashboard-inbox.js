@@ -39,9 +39,10 @@ async function queryEvents(fetchPath) {
     const { tasks } = await taskRes.json();
     const taskContainer = document.getElementById("tasksContainer");
     tasks.forEach(task => {
+        console.log(task.Category)
         const div = document.createElement("div");
         div.className = 'single-task';
-        div.innerHTML = createTaskHtml(task.name, task.id);
+        div.innerHTML = createTaskHtml(task.name, task.id, task.deadline, task.Category.name);
         div.setAttribute('data-task', `${task.id}`);
         div.addEventListener('click', fetchTaskSummary);
         taskContainer.appendChild(div);
