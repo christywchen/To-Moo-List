@@ -207,7 +207,7 @@ const createTagList = async () => {
     const hr = document.createElement('hr');
     categoryList.appendChild(hr);
     const div = document.createElement('div');
-    div.innerText = "Create new tag";
+    div.innerText = "Create new category";
     //div.addEventListener("click", stuff);
     categoryList.appendChild(div);
 }
