@@ -55,12 +55,11 @@ async function createTask(e) {
                 const { task } = await res.json();
                 div.innerHTML = createTaskHtml(name, task.id);
                 div.setAttribute('data-task', `${task.id}`);
-
-                console.log(task.id)
-
                 div.addEventListener('click', fetchTaskSummary);
                 taskContainer.appendChild(div);
                 input.value = "";
+                const addTaskButton = document.querySelector('.add-task-button > button');
+                addTaskButton.disabled = true;
             }
         } catch (err) {
             // TODO finish error handling
