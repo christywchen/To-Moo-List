@@ -238,9 +238,5 @@ export function createTaskHtml(taskName, taskId, taskDeadline = '', categoryId =
         <label for="${taskName}" data-task="${taskId}">${taskName}</label>
         <span data-task="${taskId}" class="category category-${categoryId}">${categoryId}</span>
         <span data-task="${taskId}" class="deadline deadline-${deadlineStatus}">${deadlineStr}</span>
-`;
+    `;
 };
-
-async function createTaskRecap() {
-
-}

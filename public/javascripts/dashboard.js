@@ -305,7 +305,9 @@ window.addEventListener("load", async (event) => {
 // Helper Functions
 function highlightTask(e) {
     const prevSelection = window.location.href.split('/')[7];
+    const prevSelectionDiv = document.querySelector(`[data-task="${prevSelection}"]`);
     const nextSelection = e.target.dataset.task;
+    const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
 
     // const checkbox = document.querySelector(`.boxId-${e.target.dataset.task}`).checked = true;
     // if (checkbox.checked) {
@@ -313,14 +315,20 @@ function highlightTask(e) {
     // }
     // console.log(checkbox.checked);
 
-
+    console.log(prevSelection, nextSelection)
     if (prevSelection) {
-        const prevSelectionDiv = document.querySelector(`[data-task="${prevSelection}"]`);
-        if (prevSelectionDiv || prevSelection === nextSelection) prevSelectionDiv.classList.remove('single-task-selected');
-    } else {
-        const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
+        if (prevSelection === nextSelection) {
+            console.log(nextSelectionDiv)
+            nextSelectionDiv.classList.remove('single-task-selected');
+        } else {
+            nextSelectionDiv.classList.add('single-task-selected');
+        }
+        // if (prevSelectionDiv) prevSelectionDiv.classList.remove('single-task-selected');
+    }
+    else {
         nextSelectionDiv.classList.add('single-task-selected');
     }
+
 
     // document.querySelector(`input[data-task="${nextSelection}"]`).click();
 }
