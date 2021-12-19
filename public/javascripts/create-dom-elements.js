@@ -98,7 +98,7 @@ async function decorateTaskWithCategory(div, taskObj) {
     div.appendChild(span);
 }
 
-async function decorateTaskWithDeadline(div, task) {
+export async function decorateTaskWithDeadline(div, task) {
     const [deadlineStatus, deadlineStr] = setTaskDeadline(task.deadline);
     const span = document.createElement('span');
 
@@ -144,7 +144,7 @@ export async function buildTaskSummary(currentTask, currentDeadline, currentTask
 }
 
 // TASK SUMMARY CONTAINER HELPER FUNCTIONS
-function getDate(day) {
+export function getDate(day) {
     let getDay;
     if (day) getDay = new Date(day);
     else getDay = new Date()
@@ -169,8 +169,12 @@ function buildTitleDiv(currentTask) {
 }
 
 function buildDeadlineDiv(currentDeadline) {
-    const deadline = getDate(currentDeadline);
     const today = getDate();
+    let deadline = '';
+
+    if (currentDeadline) {
+        deadline = getDate(currentDeadline);
+    }
 
     const deadlineDiv = document.createElement('div');
     deadlineDiv.setAttribute('id', 'deadline-div');
@@ -179,6 +183,7 @@ function buildDeadlineDiv(currentDeadline) {
             <div id="summary-deadline">Deadline</div>
             <input type="date" min="${today}" value="${deadline}" id="summary-due-date-inp" class="summary-inp"></input>
             `;
+
     return deadlineDiv;
 }
 
@@ -216,7 +221,7 @@ export function createTaskHtml(taskName, taskId) {
     `;
 };
 
-function setTaskDeadline(taskDeadline) {
+export function setTaskDeadline(taskDeadline) {
     const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
     let deadline = getDate(taskDeadline);
     let today = getDate();
