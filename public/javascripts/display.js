@@ -1,5 +1,5 @@
 window.addEventListener("load", async (event) => {
-    
+
 
 })
 
@@ -34,7 +34,6 @@ export const hideTaskButton = (e) => {
 export async function showCreateList(e) {
     const addListDiv = document.querySelector('#add-list');
     // e.preventDefault();
-    console.log("does it work")
     addListDiv.style.display = 'block';
     addListDiv.style.position = 'fixed';
 }
@@ -53,7 +52,7 @@ export async function hideDuplicateBox(className) {
     }
 }
 
-export function hideListNameDiv (e) {
+export function hideListNameDiv(e) {
     const addListDiv = document.querySelector('#add-list');
     const renameListDiv = document.querySelector('#rename-list');
 
@@ -82,7 +81,8 @@ export function hideDropDown(e) {
     if (e.target.className !== 'logout') {
         if (!listMenu.className.includes(e.target) &&
             !e.target.className.includes('grid-square') &&
-            !e.target.className.includes('fas')) {
+            !e.target.className.includes('fas') &&
+            !e.target.className.includes('add-tag-input')) {
             //e.preventDefault()
             listMenu.style.display = 'none';
             postponeMenu.style.display = 'none';
@@ -91,25 +91,15 @@ export function hideDropDown(e) {
     }
 };
 
-export function showDivContainer(container) {
-    // console.log('p:', container);
-    return new Promise((res,rej) => {
-        container.style.display = 'block';
-        container.classList.add('visible');
-        // console.log(container)
-        res();
-    });
-};
+export function hideDivContainer() {
 
-export function hideDivContainer(className) {
-    return new Promise((res, rej) => {
-        const visibleDiv = document.querySelector('.visible');
-        console.log(visibleDiv);
-        if (visibleDiv) {
-            visibleDiv.style.display = 'none';
-            visibleDiv.classList.remove('visible');
-        };
-    });
+    const visibleDiv = document.querySelector('.visible');
+    //console.log(visibleDiv);
+    if (visibleDiv) {
+        visibleDiv.style.display = 'none';
+        visibleDiv.classList.remove('visible');
+    };
+
 };
 
 // Promises
