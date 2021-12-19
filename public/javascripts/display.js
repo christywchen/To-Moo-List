@@ -87,11 +87,24 @@ export function hideDropDown(e) {
 };
 
 export function toggleListDisplay(container) {
-    console.log(container)
-    container.style.display =
-        container.style.display === 'block'
-        ? 'none'
-        : 'block';
+    const carret = document.querySelector('.fa-caret-right');
+
+    console.log(container.parentNode.querySelector('.fas'))
+    const icon = container.parentNode.querySelector('.fas');
+
+    const isSelected = container.style.display === 'block';
+
+    if (isSelected) {
+        container.style.display = 'none';
+        icon.classList.remove('fa-caret-down');
+        icon.classList.add('fa-caret-right');
+
+    } else {
+        container.style.display = 'block';
+        icon.classList.remove('fa-caret-right');
+        icon.classList.add('fa-caret-down');
+    }
+
 }
 
 // Promises

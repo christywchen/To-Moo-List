@@ -34,7 +34,7 @@ li {
 }
 
 
-/* .list-container div:hover, */
+.inbox-list:hover,
 .list-edit-option:hover,
 .list-header-container:hover,
 .sidebar-box:hover {
