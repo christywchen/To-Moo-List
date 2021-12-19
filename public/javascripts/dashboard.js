@@ -309,28 +309,24 @@ function highlightTask(e) {
     const nextSelection = e.target.dataset.task;
     const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
 
+    const highlightClass = 'single-task-selected';
+
     // const checkbox = document.querySelector(`.boxId-${e.target.dataset.task}`).checked = true;
     // if (checkbox.checked) {
     //     console.log("hello")
     // }
     // console.log(checkbox.checked);
 
-    console.log(prevSelection, nextSelection)
     if (prevSelection) {
         if (prevSelection === nextSelection) {
-            console.log(nextSelectionDiv)
-            nextSelectionDiv.classList.remove('single-task-selected');
+            if (nextSelectionDiv.classList.contains(highlightClass)) {
+                prevSelectionDiv.classList.remove(highlightClass);
+            }
         } else {
-            nextSelectionDiv.classList.add('single-task-selected');
+            prevSelectionDiv.classList.remove(highlightClass);
         }
-        // if (prevSelectionDiv) prevSelectionDiv.classList.remove('single-task-selected');
     }
-    else {
-        nextSelectionDiv.classList.add('single-task-selected');
-    }
-
-
-    // document.querySelector(`input[data-task="${nextSelection}"]`).click();
+    nextSelectionDiv.classList.add(highlightClass);
 }
 
 // TO DO: checkbox event listeners

@@ -47,6 +47,7 @@ router.post('/lists/:id(\\d+)', asyncHandler(async (req, res) => {
     })
     console.log('333')
     res.status(201);
+    console.log(task)
     res.json({ task });
 }))
 

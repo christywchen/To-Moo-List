@@ -1,4 +1,5 @@
 export function addTaskSummaryEventListeners() {
+
     const summaryTitleInp = document.querySelector('#summary-title');
     const summaryDeadlineInp = document.querySelector('#summary-due-date-inp');
     const summarySelectInp = document.querySelector('#summary-list-select');

@@ -63,7 +63,6 @@ export function listEditDropDown() {
     return container;
 }
 
-
 export function populateTasks(tasks) {
     if (!Array.isArray(tasks)) tasks = [tasks];
     const tasksContainer = document.getElementById("tasksContainer");
@@ -75,7 +74,7 @@ export function populateTasks(tasks) {
     });
 };
 
-function decorateTaskDiv(div, task) {
+async function decorateTaskDiv(div, task) {
     div.setAttribute('data-task', `${task.id}`);
     div.classList.add('single-task')
     div.innerHTML = createTaskHtml(task.name, task.id);
@@ -83,7 +82,31 @@ function decorateTaskDiv(div, task) {
     div.addEventListener('click', finishTask);
     div.addEventListener('click', deleteTask);
     div.addEventListener('click', getDropMenu);
+
+    if (task.categoryId) await decorateTaskWithCategory(div, task);
+    if (task.deadline) await decorateTaskWithDeadline(div, task);
 };
+
+async function decorateTaskWithCategory(div, taskObj) {
+    const res = await fetch(`/api/tasks/${taskObj.id}`);
+    const { task } = await res.json();
+
+    const span = document.createElement('span');
+    span.setAttribute('data-task', `${task.id}`);
+    span.classList = `category category-${task.Category.name}`;
+    span.innerText = `${task.Category.name}`;
+    div.appendChild(span);
+}
+
+async function decorateTaskWithDeadline(div, task) {
+    const [deadlineStatus, deadlineStr] = setTaskDeadline(task.deadline);
+    const span = document.createElement('span');
+
+    span.setAttribute('data-task', `${task.id}`);
+    span.classList = `deadline deadline-${deadlineStatus}`;
+    span.innerText = `${deadlineStr}`;
+    div.appendChild(span);
+}
 
 
 // CREATING TASK SUMMARY CONTAINER ELEMENTS
@@ -146,7 +169,7 @@ function buildTitleDiv(currentTask) {
 }
 
 function buildDeadlineDiv(currentDeadline) {
-    const deadline = getDate(currentDeadline)
+    const deadline = getDate(currentDeadline);
     const today = getDate();
 
     const deadlineDiv = document.createElement('div');
@@ -187,8 +210,13 @@ function buildDescDiv(currentDesc) {
 }
 
 
-export function createTaskHtml(taskName, taskId, taskDeadline = '', categoryId = '') {
-    // setting information regarding task deadline
+export function createTaskHtml(taskName, taskId) {
+    return `<input type="checkbox" data-task="${taskId}" name="${taskName}" value="${taskName}">
+        <label for="${taskName}" data-task="${taskId}">${taskName}</label>
+    `;
+};
+
+function setTaskDeadline(taskDeadline) {
     const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
     let deadline = getDate(taskDeadline);
     let today = getDate();
@@ -205,8 +233,6 @@ export function createTaskHtml(taskName, taskId, taskDeadline = '', categoryId =
         deadlineMonth,
         deadlineDate
     ] = deadline.split('-').map(el => parseInt(el, 10));
-
-    console.log(taskName, typeof todayDate, typeof deadlineDate)
 
     if (taskDeadline) {
         let deadline = new Date(taskDeadline);
@@ -233,10 +259,5 @@ export function createTaskHtml(taskName, taskId, taskDeadline = '', categoryId =
         deadlineStatus = 'none';
     }
 
-    // return value for task item element
-    return ` <input type="checkbox" data-task="${taskId}" name="${taskName}" value="${taskName}">
-        <label for="${taskName}" data-task="${taskId}">${taskName}</label>
-        <span data-task="${taskId}" class="category category-${categoryId}">${categoryId}</span>
-        <span data-task="${taskId}" class="deadline deadline-${deadlineStatus}">${deadlineStr}</span>
-    `;
-};
+    return [deadlineStatus, deadlineStr];
+}
