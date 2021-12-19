@@ -11,9 +11,7 @@ li {
     list-style-type: none;
 }
 
-#task-lists,
-#default-lists,
-#task-categories {
+.lists {
     margin-bottom: 10px;
     padding: 0 0 10px 0;
     border-bottom: 1px solid var(--divider-color);
@@ -28,15 +26,11 @@ li {
     line-height: 2em;
 }
 
-.list-header {
-    font-weight: bold;
-}
 
-.list-header,
 .list-item,
 .category-item,
 .inbox-list {
-    padding-left: 5px;
+    padding-left: 12px;
 }
 
 
@@ -55,9 +49,16 @@ ol li {
 }
 
 .list-header-container {
-    display: flex;
+    display: grid;
+    grid-template-columns: 12px 1fr 12px;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+}
+
+.list-header {
+    /* padding-left: 4px; */
+    justify-self: start;
 }
 
 .sidebar-box {
@@ -101,16 +102,20 @@ ol li {
     z-index: 10;
 }
 
+.fa-caret-right {
+    width: 17px;
+}
+
 .fa-plus-square {
-    color: #1575c1;
+    color: #478fca;
 }
 
 .fa-plus-square:hover {
-    color: #a5c9e7;
-    background-color: #1575c1;
+    color: #478fca;
+    background-color: #a5c9e7;
 }
 
 .fa-caret-square-down:hover {
-    color: #a5c9e7;
-    background-color: #1575c1;
+    color: #478fca;
+    background-color: #a5c9e7;
 }

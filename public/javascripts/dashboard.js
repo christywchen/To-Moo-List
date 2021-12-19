@@ -2,7 +2,7 @@ import { finishTask, postPoneTask, changeCategory, moveTask, getDropMenu, create
 import { showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
 import { clearDOMTasks } from './clean-dom.js';
 import { createSidebarContainer, buildTaskSummary, createTaskHtml, populateTasks } from './create-dom-elements.js';
-import { showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown } from './display.js';
+import { toggleListDisplay, showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown } from './display.js';
 import { updateTaskStatus } from './dashboard-recap.js';
 
 let listId;
@@ -21,7 +21,8 @@ const initializePage = async () => {
     headers.forEach(header => {
         header.addEventListener('click', (e) => {
             const lists = header.nextElementSibling;
-            lists.style.display = 'block';
+            toggleListDisplay(lists)
+
         });
     });
 

@@ -86,6 +86,14 @@ export function hideDropDown(e) {
     }
 };
 
+export function toggleListDisplay(container) {
+    console.log(container)
+    container.style.display =
+        container.style.display === 'block'
+        ? 'none'
+        : 'block';
+}
+
 // Promises
 
 export function showContainer(container, showFn) {

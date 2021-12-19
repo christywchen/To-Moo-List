@@ -14,13 +14,16 @@ block content
             div.sidebar-logo
             div.lists
                 div.list-header-container
+                    i.fas.fa-caret-right
                     div.list-header Inbox
+                    div
                 div#default-lists.list-container
                     div#today.inbox-list Today's Tasks
                     div#tomorrow.inbox-list Tomorrow's Tasks
                     div#all.inbox-list All Tasks
             div.lists
                 div.list-header-container
+                    i.fas.fa-caret-right
                     div.list-header Lists
                     div.add-list-button.add-list-button-l(role='button')
                         i.far.fa-plus-square
@@ -28,9 +31,10 @@ block content
 
             div.lists
                 div.list-header-container
+                    i.fas.fa-caret-right
                     div.list-header Categories
-                    div.add-list-button(role='button')
-                        i.far.fa-plus-square
+                    //- div.add-list-button(role='button')
+                    //-     i.far.fa-plus-square
                 div#task-categories.list-container
 
         div#main
