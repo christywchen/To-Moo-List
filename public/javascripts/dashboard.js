@@ -187,6 +187,24 @@ export async function fetchCategoryTasks(e) {
     }
 };
 
+async function searchTask(e) {
+    const searchForm = document.getElementById('search-form');
+    const searchData = new FormData(searchForm);
+    const name = searchData.get('search');
+
+    if (name.length) {
+        const res = await fetch(`/api/search/tasks/${name}`);
+        const { tasks } = await res.json();
+        // TO DO: Error handling
+        if (!res.ok) throw res
+        else {
+            console.log(tasks)
+            clearDOMTasks()
+            populateTasks(tasks);
+        }
+    }
+}
+
 // U
 export function updateListId(e) {
     listId = e.target.dataset.listid;
@@ -292,6 +310,7 @@ const addListButtonL = document.querySelector('.add-list-button-l');
 const submitListButton = document.querySelector('.submit-list');
 const closeListSubmission = document.querySelector('.close');
 const renameListButton = document.querySelector('.rename-list');
+const searchButton = document.querySelector('.search-button');
 
 // Load events
 window.addEventListener("load", async (event) => {
@@ -309,29 +328,6 @@ window.addEventListener("load", async (event) => {
     submitListButton.addEventListener('click', hideListNameDiv);
     closeListSubmission.addEventListener('click', hideListNameDiv);
     renameListButton.addEventListener('click', renameList);
-
-
-    const searchButton = document.querySelector('.search-button')
-    async function searchTask(e) {
-
-        const searchForm = document.getElementById('search-form');
-        const searchData = new FormData(searchForm);
-        const name = searchData.get('search');
-        const body = { name };
-
-        if (name.length) {
-            const res = await fetch(`/api/search/tasks/${name}` );
-            const { tasks } = await res.json();
-            // TO DO: Error handling
-            if (!res.ok) throw res
-            else {
-                console.log(tasks)
-                clearDOMTasks()
-                populateTasks(tasks);
-            }
-        }
-    }
-
     searchButton.addEventListener('click', searchTask)
 
 });
