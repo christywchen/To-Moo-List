@@ -152,9 +152,9 @@ export async function fetchListTasks(e) {
     e.stopPropagation();
     clearDOMTasks();
     const stateId = { id: "100" };
-
-    if (e.target.className === 'list-item') {
-        // --------------------------------------------------
+    const boxTarget = e.target.classList.contains('list-box');
+    const listTarget = e.target.classList.contains('list-item')
+    if (boxTarget || listTarget) {
         listId = e.target.dataset.listid;
         const taskRes = await fetch(`/api/lists/${listId}/tasks`)
         const { tasks } = await taskRes.json();

@@ -12,6 +12,7 @@ export function createSidebarContainer(name, containerType, data,) {
     const itemDiv = document.createElement('div');
     container.classList.add(`${containerType}-box`, 'sidebar-box');
     container.style.position = 'relative';
+    container.setAttribute(`data-${containerType}Id`, `${data}`);
 
     itemDiv.innerText = name;
     itemDiv.setAttribute(`data-${containerType}Id`, `${data}`);
