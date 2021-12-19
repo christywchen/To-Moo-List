@@ -316,10 +316,11 @@ function highlightTask(e) {
 
     if (prevSelection) {
         const prevSelectionDiv = document.querySelector(`[data-task="${prevSelection}"]`);
-        if (prevSelectionDiv) prevSelectionDiv.classList.remove('single-task-selected');
+        if (prevSelectionDiv || prevSelection === nextSelection) prevSelectionDiv.classList.remove('single-task-selected');
+    } else {
+        const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
+        nextSelectionDiv.classList.add('single-task-selected');
     }
-    const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
-    nextSelectionDiv.classList.add('single-task-selected');
 
     // document.querySelector(`input[data-task="${nextSelection}"]`).click();
 }
