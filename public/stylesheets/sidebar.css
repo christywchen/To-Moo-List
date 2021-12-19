@@ -11,34 +11,45 @@ li {
     list-style-type: none;
 }
 
-ol#task-lists,
-ol#default-lists {
+#task-lists,
+#default-lists,
+#task-categories {
     margin-bottom: 10px;
     padding: 0 0 10px 0;
-    list-style-type: none;
     border-bottom: 1px solid var(--divider-color);
+}
+
+/* here */
+.list-container {
+    display: none;
 }
 
 .lists {
     line-height: 2em;
 }
 
-.lists .list-header {
+.list-header {
     font-weight: bold;
 }
 
-.lists .list-header:hover,
-.lists li:hover,
-.list-header-container:hover,
-.sidebar-box:hover {
-    background-color: var(--divider-color);
+.list-header,
+.list-item,
+.category-item,
+.inbox-list {
+    padding-left: 5px;
 }
 
+
+.list-container div:hover,
+.list-header-container:hover,
+.sidebar-box:hover,
 .list-edit-option:hover {
     background-color: var(--divider-color);
-    margin-left: 0;
 }
 
+
+
+/* original lis turned into divs */
 ol li {
     line-height: 2em;
 }

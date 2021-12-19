@@ -13,24 +13,25 @@ block content
         div#sidebar
             div.sidebar-logo
             div.lists
-                div.list-header Inbox
-                ol#default-lists
-                    li#today Today's Tasks
-                    li#tomorrow Tomorrow's Tasks
-                    li#all All Tasks
+                div.list-header-container
+                    div.list-header Inbox
+                div#default-lists.list-container
+                    div#today.inbox-list Today's Tasks
+                    div#tomorrow.inbox-list Tomorrow's Tasks
+                    div#all.inbox-list All Tasks
             div.lists
                 div.list-header-container
                     div.list-header Lists
                     div.add-list-button.add-list-button-l(role='button')
                         i.far.fa-plus-square
-                div#task-lists
+                div#task-lists.list-container
 
             div.lists
                 div.list-header-container
                     div.list-header Categories
                     div.add-list-button(role='button')
                         i.far.fa-plus-square
-                div#task-categories
+                div#task-categories.list-container
 
         div#main
             div#add-task

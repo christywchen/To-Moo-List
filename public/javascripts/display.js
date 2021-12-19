@@ -71,9 +71,12 @@ export function hideDropDown(e) {
     const listMenu = document.querySelector(".list-of-lists");
     const postponeMenu = document.querySelector(".postpone-dates");
     const categoryList = document.querySelector('.list-of-tags');
+    const listContainers = document.querySelectorAll('.list-container');
+
     if (e.target.className !== 'logout') {
         if (!listMenu.className.includes(e.target) &&
             !e.target.className.includes('grid-square') &&
+            !e.target.className.includes('list-header') &&
             !e.target.className.includes('fas')) {
             //e.preventDefault()
             listMenu.style.display = 'none';
@@ -109,8 +112,23 @@ export async function hideDuplicateBox(className) {
 
 // Creating functions to show and hide lists
 const listContainer = document.querySelector('.list-header-container');
+const inboxContainer = document.querySelector('#default-lists');
 
-export function showLists(e) {
-    const lists = document.querySelector('.task-lists');
 
-}
+
+// export function showLists(e) {
+//     console.log('click')
+//     // const lists = document.querySelector('#task-lists');
+
+//     const listContainers = document.querySelectorAll('.list-container');
+//     listContainers.forEach(lists => {
+//         lists.style.display = 'block';
+//     })
+// };
+
+
+
+
+
+
+// listContainer.addEventListener('click', showLists);

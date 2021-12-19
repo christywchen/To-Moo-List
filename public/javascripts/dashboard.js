@@ -14,7 +14,16 @@ const initializePage = async () => {
     const categoryRes = await fetch('/api/categories');
     const { categories } = await categoryRes.json();
     const categoryList = document.getElementById('task-categories');
+    const headers = document.querySelectorAll('.list-header-container');
+
     // TO DO: Error handling
+
+    headers.forEach(header => {
+        header.addEventListener('click', (e) => {
+            const lists = header.nextElementSibling;
+            lists.style.display = 'block';
+        });
+    });
 
     lists.forEach(list => {
         const div = createSidebarContainer(list.name, 'list', list.id);
@@ -32,7 +41,8 @@ const initializePage = async () => {
         if (button.className !== 'logout') {
             button.addEventListener('click', e => e.preventDefault())
         }
-    })
+    });
+
     createDropDownMenu();
     updateTaskStatus();
 };
