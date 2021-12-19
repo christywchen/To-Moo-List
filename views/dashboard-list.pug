@@ -4,11 +4,14 @@ include utils.pug
 
 block content
     div#header
+        div.left-header
+        div.search-container
+            form#search-form(for='search')
+                +plainField('', 'search', '', null, 'Search task')
+                span.serach-button-container
+                    button.search-button Search
         div#user
             if locals.authenticated
-                form#search-form(for='search')
-                    +plainField('', 'search', '', null, 'Search task')
-                button.search-button Search
                 span.welcome Welcome #{user.username}!
                 form(action='/logout' method='post')
                     button.logout(type='submit') Logout

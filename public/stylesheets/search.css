@@ -1,0 +1,8 @@
+#search {
+    max-width: 294px;
+}
+
+.search-button {
+    display: inline-block;
+    margin: 10px;
+}
