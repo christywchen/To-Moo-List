@@ -6,6 +6,9 @@ block content
     div#header
         div#user
             if locals.authenticated
+                form#search-form(for='search')
+                    +plainField('', 'search', '', null, 'Search task')
+                button.search-button Search
                 span.welcome Welcome #{user.username}!
                 form(action='/logout' method='post')
                     button.logout(type='submit') Logout

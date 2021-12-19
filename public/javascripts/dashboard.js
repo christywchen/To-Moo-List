@@ -200,7 +200,7 @@ export const renameList = async (e) => {
     const name = formData.get('renameList');
     const body = { name };
 
-    if (listData.value.length) {
+    if (name.length) {
         try {
             const res = await fetch(`/api/lists/${listId}`, {
                 method: 'PATCH',
@@ -212,7 +212,6 @@ export const renameList = async (e) => {
             if (!res.ok) throw res
             else console.log('List renamed')
 
-            console.log(listId)
             const list = document.querySelector(`[data-listid="${listId}"]`)
             list.innerText = name;
 
@@ -297,6 +296,7 @@ const renameListButton = document.querySelector('.rename-list');
 // Load events
 window.addEventListener("load", async (event) => {
     initializePage();
+
     addTaskButton.addEventListener('click', createTask);
     document.addEventListener('click', hideTaskButton);
     document.addEventListener('click', hideListNameDiv);
@@ -309,6 +309,31 @@ window.addEventListener("load", async (event) => {
     submitListButton.addEventListener('click', hideListNameDiv);
     closeListSubmission.addEventListener('click', hideListNameDiv);
     renameListButton.addEventListener('click', renameList);
+
+
+    const searchButton = document.querySelector('.search-button')
+    async function searchTask(e) {
+
+        const searchForm = document.getElementById('search-form');
+        const searchData = new FormData(searchForm);
+        const name = searchData.get('search');
+        const body = { name };
+
+        if (name.length) {
+            const res = await fetch(`/api/search/tasks/${name}` );
+            const { tasks } = await res.json();
+            // TO DO: Error handling
+            if (!res.ok) throw res
+            else {
+                console.log(tasks)
+                clearDOMTasks()
+                populateTasks(tasks);
+            }
+        }
+    }
+
+    searchButton.addEventListener('click', searchTask)
+
 });
 //-------
 
