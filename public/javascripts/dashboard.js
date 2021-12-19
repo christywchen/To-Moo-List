@@ -43,7 +43,7 @@ const initializePage = async () => {
 async function createTask(e) {
     e.preventDefault();
     const taskData = document.querySelector('#add-task-input');
-    // const taskContainer = document.getElementById("tasksContainer");
+    const taskContainer = document.getElementById("tasksContainer");
     const formData = new FormData(taskData);
     const name = formData.get('name');
     const body = { name, listId };
@@ -58,24 +58,23 @@ async function createTask(e) {
                 headers: { "Content-Type": "application/json" }
             })
 
-            if (!res.ok) throw res // May need to change this
+            if (!res.ok) {
+                console.error('-Unable to reach database-');
+                if (!listId) alert('Please select a list for your new task')
+                else alert('Opps there was a problem with the server') // TODO
+                throw res // May need to change this
+            }
             else {
                 const { task } = await res.json();
 
-                div.innerHTML = createTaskHtml(name, task.id);
-                div.setAttribute('data-task', `${task.id}`);
-                div.addEventListener('click', fetchTaskSummary);
-                taskContainer.appendChild(div);
+                populateTasks(task);
 
-                
                 const addTaskButton = document.querySelector('.add-task-button > button');
                 addTaskButton.disabled = true;
                 input.value = "";
             }
         } catch (err) {
             // TODO finish error handling
-            console.error('-Unable to reach database-');
-            alert('Opps there was a problem with the server') // TODO
         }
     }
 };
@@ -98,7 +97,8 @@ async function createList(e) {
             })
             if (!res.ok) throw res
             const newList = await res.json()
-            const listId = newList.list.id;
+            // const listId = newList.list.id;
+            listId = newList.list.id;
             const div = createSidebarContainer(newList.list.name, 'list', listId);
             tasksList.appendChild(div);
         } catch (error) {
@@ -135,6 +135,7 @@ export async function fetchTaskSummary(e) {
     }
 };
 
+// TO DO: make update url function?
 
 export async function fetchListTasks(e) {
     e.stopPropagation();
@@ -148,9 +149,7 @@ export async function fetchListTasks(e) {
         const { tasks } = await taskRes.json();
         populateTasks(tasks);
     }
-    window.history.replaceState(
-        stateId, `List ${e.target.dataset.listid}`,
-        `/dashboard/#list/${e.target.dataset.listid}`
+    window.history.replaceState(stateId, `List ${e.target.dataset.listid}`, `/dashboard/#list/${e.target.dataset.listid}`
     );
 };
 
@@ -162,11 +161,11 @@ export async function fetchInboxTasks(fetchPath) {
     populateTasks(tasks);
 };
 
-
 export async function fetchCategoryTasks(e) {
     e.stopPropagation();
     clearDOMTasks();
     // const stateId = { id: "101" };
+    // To DO: update url?
     const categoryId = e.target.dataset.categoryid
 
     if (categoryId) {

@@ -37,9 +37,7 @@ export function createSidebarContainer(name, containerType, data,) {
     return container
 }
 
-
 // FIND OPTION DROPDOWN
-
 
 export function listEditDropDown() {
     const container = document.createElement('div');
@@ -56,9 +54,6 @@ export function listEditDropDown() {
         container.appendChild(option);
     })
     renameListOp.addEventListener('click', (e) => {
-        // const listEditDropdown = document.querySelector('.list-edit-option');
-        // if(listEditDropdown) listEditDropdown.remove();
-
         const listEditDropdown = document.querySelector('.list-edit-dropdown');
         if (listEditDropdown) listEditDropdown.remove();
         showRenameList()
@@ -68,21 +63,28 @@ export function listEditDropDown() {
     return container;
 }
 
+
 export function populateTasks(tasks) {
+    if (!Array.isArray(tasks)) tasks = [tasks];
     const tasksContainer = document.getElementById("tasksContainer");
+
     tasks.forEach(task => {
         const div = document.createElement("div");
-        div.setAttribute('data-task', `${task.id}`);
-        div.classList.add('single-task')
-        div.innerHTML = createTaskHtml(task.name, task.id, task.deadline, task.Category.name);
-        div.addEventListener('click', fetchTaskSummary);
-        div.addEventListener('click', finishTask);
-        div.addEventListener('click', deleteTask);
-        div.addEventListener('click', getDropMenu);
-
+        decorateTaskDiv(div, task);
         tasksContainer.appendChild(div);
-    })
+    });
 };
+
+function decorateTaskDiv(div, task) {
+    div.setAttribute('data-task', `${task.id}`);
+    div.classList.add('single-task')
+    div.innerHTML = createTaskHtml(task.name, task.id);
+    div.addEventListener('click', fetchTaskSummary);
+    div.addEventListener('click', finishTask);
+    div.addEventListener('click', deleteTask);
+    div.addEventListener('click', getDropMenu);
+};
+
 
 // CREATING TASK SUMMARY CONTAINER ELEMENTS
 export async function buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc) {
@@ -192,7 +194,6 @@ export function createTaskHtml(taskName, taskId, taskDeadline = '', categoryId =
     let today = getDate();
     let deadlineStr = '';
     let deadlineStatus = 'soon'
-
     const [
         todayYear,
         todayMonth,
