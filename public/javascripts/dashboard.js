@@ -319,14 +319,15 @@ function highlightTask(e) {
 
     if (prevSelection) {
         if (prevSelection === nextSelection) {
-            if (nextSelectionDiv.classList.contains(highlightClass)) {
-                prevSelectionDiv.classList.remove(highlightClass);
-            }
+            nextSelectionDiv.classList.remove('single-task-selected');
         } else {
-            prevSelectionDiv.classList.remove(highlightClass);
+            prevSelectionDiv.classList.remove('single-task-selected');
+            nextSelectionDiv.classList.add('single-task-selected');
         }
+    } else {
+        nextSelectionDiv.classList.add('single-task-selected');
     }
-    nextSelectionDiv.classList.add(highlightClass);
+    // document.querySelector(`input[data-task="${nextSelection}"]`).click();
 }
 
 // TO DO: checkbox event listeners
