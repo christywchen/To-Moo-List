@@ -24,6 +24,7 @@ li {
 
 .lists {
     line-height: 2em;
+    /* min-height: 500px; */
 }
 
 
@@ -106,7 +107,7 @@ ol li {
 }
 
 .fa-plus-square {
-    color: #478fca;
+    color: #67a3d4;
 }
 
 .fa-plus-square:hover {
