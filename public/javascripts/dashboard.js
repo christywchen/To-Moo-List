@@ -1,7 +1,7 @@
 import { finishTask, postPoneTask, changeCategory, moveTask, getDropMenu, createDropDownMenu } from './dashboard-tasks.js';
 import { showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
-import { clearDOMTasks } from './clean-dom.js';
-import { createSidebarContainer, buildTaskSummary, createTaskHtml, populateTasks } from './create-dom-elements.js';
+import { clearDOMTasks, clearSearchRecs } from './clean-dom.js';
+import { createSidebarContainer, buildTaskSummary, createTaskHtml, populateTasks, populateSearchBox } from './create-dom-elements.js';
 import { toggleListDisplay, showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown } from './display.js';
 import { updateTaskStatus } from './dashboard-recap.js';
 
@@ -187,23 +187,30 @@ export async function fetchCategoryTasks(e) {
     }
 };
 
-async function searchTask(e) {
+async function fetchSearch(e) {
     const searchForm = document.getElementById('search-form');
     const searchData = new FormData(searchForm);
     const name = searchData.get('search');
+    clearSearchRecs()
 
+    console.log(e.target.classList.contains('search-button'))
     if (name.length) {
         const res = await fetch(`/api/search/tasks/${name}`);
         const { tasks } = await res.json();
         // TO DO: Error handling
         if (!res.ok) throw res
         else {
-            console.log(tasks)
-            clearDOMTasks()
-            populateTasks(tasks);
+            if (e.target.classList.contains('search-button')) {
+                clearDOMTasks()
+                populateTasks(tasks);
+            } else {
+
+                populateSearchBox(tasks)
+                console.log(tasks);
+            }
         }
     }
-}
+};
 
 // U
 export function updateListId(e) {
@@ -311,6 +318,8 @@ const submitListButton = document.querySelector('.submit-list');
 const closeListSubmission = document.querySelector('.close');
 const renameListButton = document.querySelector('.rename-list');
 const searchButton = document.querySelector('.search-button');
+const searchField = document.querySelector('#search');
+
 
 // Load events
 window.addEventListener("load", async (event) => {
@@ -328,7 +337,8 @@ window.addEventListener("load", async (event) => {
     submitListButton.addEventListener('click', hideListNameDiv);
     closeListSubmission.addEventListener('click', hideListNameDiv);
     renameListButton.addEventListener('click', renameList);
-    searchButton.addEventListener('click', searchTask)
+    searchButton.addEventListener('click', fetchSearch)
+    searchField.addEventListener('keyup', fetchSearch);
 
 });
 //-------

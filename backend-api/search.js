@@ -9,7 +9,6 @@ const Op = Sequelize.Op;
 router.get('/tasks/:word(\\w+)', asyncHandler(async (req, res, next) => {
     const name = req.params.word;
     const userId = parseInt(res.locals.user.id, 10);
-    console.log('?????????????', name, userId)
 
     const tasks = await db.Task.findAll({
         where: {

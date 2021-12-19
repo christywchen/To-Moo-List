@@ -72,6 +72,7 @@ export function hideDropDown(e) {
     const postponeMenu = document.querySelector(".postpone-dates");
     const categoryList = document.querySelector('.list-of-tags');
     const listContainers = document.querySelectorAll('.list-container');
+    const searchRecs = document.querySelector('.search-recommendations');
 
     if (e.target.className !== 'logout') {
         if (!listMenu.className.includes(e.target) &&
@@ -82,6 +83,8 @@ export function hideDropDown(e) {
             listMenu.style.display = 'none';
             postponeMenu.style.display = 'none';
             categoryList.style.display = 'none';
+            console.log(searchRecs)
+            searchRecs.style.display = 'none';
         }
     }
 };

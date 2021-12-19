@@ -1,5 +1,5 @@
 import { fetchListTasks, updateListId } from './dashboard.js';
-import { clearDOMTasks } from './clean-dom.js';
+import { clearDOMTasks, clearSearchRecs } from './clean-dom.js';
 import { fetchTaskSummary, deleteList, deleteTask } from './dashboard.js';
 import { showRenameList, hideContainer, showContainer } from './display.js';
 import { finishTask, getDropMenu } from './dashboard-tasks.js'
@@ -64,7 +64,6 @@ export function listEditDropDown() {
     return container;
 }
 
-
 export function populateTasks(tasks) {
     if (!Array.isArray(tasks)) tasks = [tasks];
     const tasksContainer = document.getElementById("tasksContainer");
@@ -85,6 +84,34 @@ function decorateTaskDiv(div, task) {
     div.addEventListener('click', deleteTask);
     div.addEventListener('click', getDropMenu);
 };
+
+
+export function populateSearchBox(tasks) {
+    const recContainer = document.querySelector('.search-recommendations');
+    recContainer.style.display = 'block';
+    console.log(tasks)
+
+    tasks.forEach(task => {
+        console.log(task)
+        const div = document.createElement('div');
+        const span = document.createElement('span');
+        div.className = 'search-rec';
+        span.innerText = task.name;
+        div.appendChild(span);
+        recContainer.appendChild(div);
+        decorateSearchItem(div, task);
+
+    })
+}
+
+
+function decorateSearchItem(div, task) {
+    div.addEventListener('click', (e) => {
+        clearSearchRecs()
+        clearDOMTasks()
+        populateTasks(task);
+    });
+}
 
 
 // CREATING TASK SUMMARY CONTAINER ELEMENTS

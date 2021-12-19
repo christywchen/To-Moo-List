@@ -38,7 +38,8 @@ li {
 .inbox-list:hover,
 .list-edit-option:hover,
 .list-header-container:hover,
-.sidebar-box:hover {
+.sidebar-box:hover,
+.search-rec:hover {
     background-color: var(--divider-color);
 }
 
