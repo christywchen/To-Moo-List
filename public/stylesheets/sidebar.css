@@ -34,10 +34,10 @@ li {
 }
 
 
-.list-container div:hover,
+/* .list-container div:hover, */
+.list-edit-option:hover,
 .list-header-container:hover,
-.sidebar-box:hover,
-.list-edit-option:hover {
+.sidebar-box:hover {
     background-color: var(--divider-color);
 }
 
@@ -94,8 +94,7 @@ ol li {
 
 .list-edit-option {
     width: 100%;
-    padding: 2px;
-    margin-left: 5px;
+    padding-left: 4px;
 }
 
 .add-list-button {
