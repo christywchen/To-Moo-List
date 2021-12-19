@@ -309,8 +309,6 @@ function highlightTask(e) {
     const nextSelection = e.target.dataset.task;
     const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
 
-    const highlightClass = 'single-task-selected';
-
     // const checkbox = document.querySelector(`.boxId-${e.target.dataset.task}`).checked = true;
     // if (checkbox.checked) {
     //     console.log("hello")

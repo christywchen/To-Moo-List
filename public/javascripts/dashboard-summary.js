@@ -9,6 +9,7 @@ export function addTaskSummaryEventListeners() {
     summaryDeadlineInp.addEventListener('blur', changeTaskDeadline);
     summarySelectInp.addEventListener('change', changeList);
     summaryDescInp.addEventListener('focus', expandTextarea);
+    summaryDescInp.addEventListener('blur', shrinkTextarea);
     summaryDescInp.addEventListener('blur', changeDesc);
 }
 
