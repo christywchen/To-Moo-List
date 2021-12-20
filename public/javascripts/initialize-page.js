@@ -35,6 +35,7 @@ export const initializePage = async () => {
     categories.forEach(category => {
         const div = createSidebarContainer(category.name, 'category', category.id);
         decorateList(div);
+        div.addEventListener('click', fetchCategoryTasks);
         categoryList.appendChild(div);
     })
 

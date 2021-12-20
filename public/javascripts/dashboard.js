@@ -4,7 +4,7 @@ import { clearDOMTasks, clearSearchRecs } from './clean-dom.js';
 import { createSidebarContainer, buildTaskSummary, createTaskHtml, populateTasks, populateSearchBox, decorateList } from './create-dom-elements.js';
 import { toggleListDisplay, showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown } from './display.js';
 import { updateTaskStatus } from './dashboard-recap.js';
-import { initializePage } from './initialize-events.js';
+import { initializePage } from './initialize-page.js';
 
 window.addEventListener("load", async (event) => {
     initializePage();
@@ -123,9 +123,8 @@ export async function fetchListTasks(e) {
         const taskRes = await fetch(`/api/lists/${listId}/tasks`)
         const { tasks } = await taskRes.json();
         populateTasks(tasks);
+        window.history.replaceState(stateId, `List ${e.target.dataset.listid}`, `/dashboard/#list/${e.target.dataset.listid}`);
     }
-    window.history.replaceState(stateId, `List ${e.target.dataset.listid}`, `/dashboard/#list/${e.target.dataset.listid}`
-    );
 };
 
 export async function fetchInboxTasks(fetchPath) {
@@ -140,6 +139,7 @@ export async function fetchInboxTasks(fetchPath) {
 export async function fetchCategoryTasks(e) {
     e.stopPropagation();
     clearDOMTasks();
+    const stateId = { id: "101" };
     listId = null;
     // const stateId = { id: "101" };
     // To DO: update url?
@@ -150,6 +150,7 @@ export async function fetchCategoryTasks(e) {
         const { tasks } = await res.json();
         // TO DO: Error Handling
         populateTasks(tasks);
+        // window.history.replaceState(stateId, `Category ${categoryId}`, `/dashboard/#categories/$/${categoryId}`);
     }
 };
 
