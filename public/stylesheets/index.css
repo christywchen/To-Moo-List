@@ -7,6 +7,7 @@
 @import url("/stylesheets/errors.css");
 @import url("/stylesheets/sidebar-animation.css");
 @import url("/stylesheets/search.css");
+@import url("/stylesheets/task-animation.css");
 
 :root {
     --main-color: #0055b2;

@@ -114,6 +114,7 @@ export function hideDropDown(e) {
         if (!listMenu.className.includes(e.target) &&
             !e.target.className.includes('grid-square') &&
             !e.target.className.includes('list-header') &&
+            !e.target.className.includes('add-tag-input') &&
             !e.target.className.includes('fas')) {
             //e.preventDefault()
             listMenu.style.display = 'none';
@@ -194,4 +195,15 @@ export async function hideDuplicateBox(className) {
     if (box) {
         box.remove();
     }
+};
+
+export function hideDivContainer() {
+
+    const visibleDiv = document.querySelector('.visible');
+    //console.log(visibleDiv);
+    if (visibleDiv) {
+        visibleDiv.style.display = 'none';
+        visibleDiv.classList.remove('visible');
+    };
+
 };
