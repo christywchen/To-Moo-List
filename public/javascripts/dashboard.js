@@ -129,6 +129,7 @@ export async function fetchListTasks(e) {
 };
 
 export async function fetchInboxTasks(fetchPath) {
+    listId = null;
     const taskRes = await fetch(fetchPath);
     const { tasks } = await taskRes.json();
     // TO DO: Needs Error Handling
@@ -139,6 +140,7 @@ export async function fetchInboxTasks(fetchPath) {
 export async function fetchCategoryTasks(e) {
     e.stopPropagation();
     clearDOMTasks();
+    listId = null;
     // const stateId = { id: "101" };
     // To DO: update url?
     const categoryId = e.target.dataset.categoryid
