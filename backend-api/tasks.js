@@ -1,27 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db/models');
-const { asyncHandler } = require('../utils');
+const { asyncHandler, taskNotFound } = require('../utils');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
-const taskNotFound = taskId => {
-    const err = new Error(`Task with id ${taskId} could not be found.`)
-    err.title = "Task not found";
-    err.status = 404;
-    return err;
-}
 
 // get
 router.get('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     const taskId = parseInt(req.params.id, 10);
 
-    // const { userId } = req.session.auth;
-    const { userId } = res.locals.user.id;
+    // Does this need destruturing??
+    const userId = res.locals.user.id;
 
     const task = await db.Task.findByPk(taskId, {
         where: userId,
-        include: db.List
+        include: [db.List, db.Category]
     });
 
     if (task) {
@@ -31,16 +25,23 @@ router.get('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     }
 }))
 
+
+
 // post
 router.post('/lists/:id(\\d+)', asyncHandler(async (req, res) => {
-    const { name, listId } = req.body;
+    let { name, listId } = req.body;
+    listId = parseInt(listId, 10)
+    const userId = res.locals.user.id;
+
     const task = await db.Task.create({
         name,
-        userId: res.locals.user.id,
+        userId,
         listId,
         categoryId: 1,
     })
+    console.log('333')
     res.status(201);
+    console.log(task)
     res.json({ task });
 }))
 
@@ -91,6 +92,7 @@ router.patch('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
 
 // delete
 router.delete('/tasks/:id(\\d+)', asyncHandler(async (req, res) => {
+    console.log(req.params)
     const taskId = parseInt(req.params.id, 10);
     const task = await db.Task.findByPk(taskId);
     if (task) {
@@ -104,7 +106,8 @@ router.delete('/tasks/:id(\\d+)', asyncHandler(async (req, res) => {
 // getting all tasks by userId
 router.get('/tasks', asyncHandler(async (req, res) => {
     const tasks = await db.Task.findAll({
-        where: { userId: res.locals.user.id }
+        where: { userId: res.locals.user.id },
+        include: [db.List, db.Category]
     })
     res.json({ tasks });
 }));
@@ -124,7 +127,8 @@ router.get('/tasks/today', asyncHandler(async (req, res) => {
                 [Op.lt]: today,
                 [Op.gt]: yesterday
             }
-        }
+        },
+        include: [db.List, db.Category]
     })
 
     res.json({ tasks });
@@ -145,7 +149,8 @@ router.get('/tasks/tomorrow', asyncHandler(async (req, res) => {
                 [Op.lt]: twoDaysAhead,
                 [Op.gt]: yesterday
             }
-        }
+        },
+        include: [db.List, db.Category]
     })
 
     res.json({ tasks });
@@ -156,7 +161,23 @@ router.get('/lists/:listId/tasks', asyncHandler(async (req, res) => {
     const tasks = await db.Task.findAll({
         where: {
             listId: req.params.listId
-        }
+        },
+        include: [db.List, db.Category]
+    })
+    res.json({ tasks })
+}))
+
+// Getting tasks by categoryId
+router.get('/categories/:categoryId', asyncHandler(async (req, res) => {
+    const userId = res.locals.user.id;
+    const categoryId = req.params.categoryId
+
+    const tasks = await db.Task.findAll({
+        where: {
+            categoryId,
+            userId
+        },
+        include: [db.List, db.Category]
     })
     res.json({ tasks })
 }))

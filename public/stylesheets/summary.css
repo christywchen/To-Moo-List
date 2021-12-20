@@ -25,11 +25,14 @@
     background-color: white;
 }
 
-/* summary details elements */
+#title-div {
+    margin: 10px 0;
+    font-size: 1.5em;
+}
+
+/* summary details styling */
 #summary-title {
     grid-area: edit-name;
-    font-size: 1.5em;
-    margin: 10px 0;
 }
 
 #deadline-div,
@@ -72,11 +75,12 @@ textarea.summary-inp {
 textarea.summary-inp {
     width: 100%;
     resize: none;
-    background-color: none;
+    height: 75px;
+    transition: all 0.4s;
 }
 
 .summary-inp-focus {
-    height: 100px;
+    height: 120px !important;
     resize: none;
     transition: all 0.4s;
 }
@@ -84,5 +88,49 @@ textarea.summary-inp {
 .mark-saved {
     padding-left: 10px;
     color: var(--secondary-color);
+    font-style: italic;
+}
+
+/* recap details styling */
+
+#task-recap {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: 30px;
+}
+
+.recap-containers {
+    display: flex;
+}
+.recap-details {
+    /* height: 50px; */
+    margin: 10px 20px 0 0;
+    border-radius: 3px;
+    padding: 10px;
+    background-color: var(--task-recaps-bg);
+}
+
+.recap-counter {
+    font-size: 2em;
+    padding-bottom: 5px;
+    font-weight: 600;
+}
+
+#recap-completed {
+    color: gray;
+}
+
+#recap-in-progress {
+    color: var(--main-color);
+}
+
+#recap-due-today {
+    color: var(--tasks-due-today);
+}
+
+.bad-joke {
+    padding-top: 20px;
+    color: #343232;
     font-style: italic;
 }

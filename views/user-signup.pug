@@ -7,8 +7,8 @@ block content
         div.errMsg(hidden)
                     +errorSummary(errors)
     div#signuppage_container
-        a(href='/')
-            img(src="images/logo-o.png" class="signup_logo")
+        a.home-link(href='/')
+            img(src="images/logo-o-dark.png" class="signup_logo")
         div#signup_container
             div#img_container
                 img(src='images/office-o.png')
@@ -30,7 +30,7 @@ block content
                     div#signupBtCon
                         button(type='submit') Sign Up
                             if !errors
-                                a(href='/dashboard')   
+                                a(href='/dashboard')
                         button(type='submit')
-                            a(href="/login") Already Has an Account? Log in         
+                            a(href="/login") Already Has an Account? Log in
             script(src="/javascripts/errors.js" type="module")

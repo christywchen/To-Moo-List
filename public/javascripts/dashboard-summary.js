@@ -1,4 +1,7 @@
+import { getDate, setTaskDeadline, decorateTaskWithDeadline } from './create-dom-elements.js';
+
 export function addTaskSummaryEventListeners() {
+
     const summaryTitleInp = document.querySelector('#summary-title');
     const summaryDeadlineInp = document.querySelector('#summary-due-date-inp');
     const summarySelectInp = document.querySelector('#summary-list-select');
@@ -8,6 +11,7 @@ export function addTaskSummaryEventListeners() {
     summaryDeadlineInp.addEventListener('blur', changeTaskDeadline);
     summarySelectInp.addEventListener('change', changeList);
     summaryDescInp.addEventListener('focus', expandTextarea);
+    summaryDescInp.addEventListener('blur', shrinkTextarea);
     summaryDescInp.addEventListener('blur', changeDesc);
 }
 
@@ -37,7 +41,43 @@ export const changeTaskName = async (e) => {
 };
 
 export const changeTaskDeadline = async (e) => {
-    // TO DO: patch request to update task deadline
+    const taskId = window.location.href.split('/')[7];
+    let newDeadline = e.target.value;
+    let body;
+
+    // get info about original deadline
+    const res = await fetch(`/api/tasks/${taskId}`);
+    const { task } = await res.json();
+    const origDeadline = task.deadline;
+
+    // create body with new deadline
+    if (newDeadline === '') {
+        body = { deadline: null };
+    } else {
+        newDeadline = new Date(newDeadline).toISOString();
+        body = { deadline: newDeadline };
+    }
+
+    const updatedRes = await fetch(`/api/tasks/${taskId}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+    });
+    const { task: updatedTask } = await updatedRes.json();
+
+    // compare old deadline with new
+    // show a confirmation of save if the deadline has changed
+    // update the due date displayed in the main container
+    if (getDate(newDeadline) !== getDate(origDeadline)) {
+        markSaved('#deadline-div');
+        const taskDiv = document.querySelector(`div[data-task="${taskId}"]`);
+        console.log(taskDiv)
+        const deadlineSpan = taskDiv.children[3];
+        if (deadlineSpan) taskDiv.removeChild(deadlineSpan);
+        decorateTaskWithDeadline(taskDiv, updatedTask)
+    }
 };
 
 export const changeList = async (e) => {

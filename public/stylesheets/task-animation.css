@@ -1,0 +1,96 @@
+.checkbox-container {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    justify-items: space-around;
+    align-items: center;
+}
+
+.split-3 {
+    display: flex;
+}
+
+.split-2 {
+    display: flex;
+}
+
+.grid-square {
+    display: grid;
+    border: 1px solid lightgray;
+    width: 50px;
+    height: 30px;
+    justify-items: center;
+    align-items: center;
+}
+
+.grid-square:hover {
+    background-color: #ffffc9;
+}
+
+.dropdown {
+    display: none;
+    width: 180px;
+    height: auto;
+    position: absolute;
+    z-index: 2;
+    top: 5.6%;
+    border: 1px solid lightgray;
+    box-shadow: 10px 5px 5px lightgray;
+    margin-left: 128px;
+}
+
+.alert:active {
+    background-color: red;
+}
+
+
+.dropdown div {
+    background-color: white;
+    margin: 0;
+    font-size: 14px;
+    padding: 5px;
+    border: 1px solid lightgray;
+    text-align: center;
+    align-content: center;
+}
+
+.dropdown div:hover {
+    background-color: var(--lightest-div-bg);
+}
+
+.dropdown input{
+    padding: 0 auto;
+}
+
+.dropdown input::placeholder{
+    font-size: 12px;
+}
+
+@keyframes growDown {
+    0% {
+      transform: scaleY(0)
+    }
+    80% {
+      transform: scaleY(1.1)
+    }
+    100% {
+      transform: scaleY(1)
+    }
+}
+
+@keyframes fetchSuccess {
+    0% {
+        background: lime;
+    }
+    100% {
+        background: white;
+    }
+}
+
+@keyframes fetchFail {
+    0% {
+        background: red;
+    }
+    100% {
+        background: white;
+    }
+}
