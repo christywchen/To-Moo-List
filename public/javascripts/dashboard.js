@@ -120,7 +120,9 @@ export async function fetchListTasks(e) {
     const listTarget = e.target.classList.contains('list-item')
     if (boxTarget || listTarget) {
         listId = e.target.dataset.listid;
-        const taskRes = await fetch(`/api/lists/${listId}/tasks`)
+        const taskRes = await fetch(`/api/lists/${listId}/tasks`);
+        // TO DO: filter by completed.
+        // api/tasks/compelted --
         const { tasks } = await taskRes.json();
         populateTasks(tasks);
         window.history.replaceState(stateId, `List ${e.target.dataset.listid}`, `/dashboard/#list/${e.target.dataset.listid}`);
@@ -278,15 +280,14 @@ function highlightTask(e) {
     const nextSelection = e.target.dataset.task;
     const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
 
-    // const checkbox = document.querySelector(`.boxId-${e.target.dataset.task}`).checked = true;
-    // if (checkbox.checked) {
-    //     console.log("hello")
-    // }
-    // console.log(checkbox.checked);
 
-    if (prevSelection) {
+    if (prevSelection && prevSelectionDiv) {
         if (prevSelection === nextSelection) {
-            nextSelectionDiv.classList.remove('single-task-selected');
+            if (prevSelectionDiv.classList.contains('single-task-selected')) {
+                prevSelectionDiv.classList.remove('single-task-selected');
+            } else {
+                prevSelectionDiv.classList.add('single-task-selected');
+            }
         } else {
             prevSelectionDiv.classList.remove('single-task-selected');
             nextSelectionDiv.classList.add('single-task-selected');
@@ -294,8 +295,9 @@ function highlightTask(e) {
     } else {
         nextSelectionDiv.classList.add('single-task-selected');
     }
-    // document.querySelector(`input[data-task="${nextSelection}"]`).click();
 }
+
+
 
 // TO DO: checkbox event listeners
 async function checkedTaskActions(e) {
