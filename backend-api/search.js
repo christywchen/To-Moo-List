@@ -30,7 +30,6 @@ router.get('/tasks/:word(\\w+)', asyncHandler(async (req, res, next) => {
     //     return acc;
     // }, [])
 
-
     // const tasks = await db.Task.findAll({
     //     where: {
     //         userId,

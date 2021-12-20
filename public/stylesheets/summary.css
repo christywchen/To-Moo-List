@@ -75,11 +75,12 @@ textarea.summary-inp {
 textarea.summary-inp {
     width: 100%;
     resize: none;
-    background-color: none;
+    height: 75px;
+    transition: all 0.4s;
 }
 
 .summary-inp-focus {
-    height: 100px;
+    height: 120px !important;
     resize: none;
     transition: all 0.4s;
 }
