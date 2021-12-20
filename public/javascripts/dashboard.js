@@ -4,54 +4,17 @@ import { clearDOMTasks, clearSearchRecs } from './clean-dom.js';
 import { createSidebarContainer, buildTaskSummary, createTaskHtml, populateTasks, populateSearchBox } from './create-dom-elements.js';
 import { toggleListDisplay, showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown } from './display.js';
 import { updateTaskStatus } from './dashboard-recap.js';
+import { initializePage } from './initialize-events.js';
+
+window.addEventListener("load", async (event) => {
+    initializePage();
+});
 
 let listId;
 
-const initializePage = async () => {
-    const listRes = await fetch('/api/lists')
-    const { lists } = await listRes.json();
-    const taskList = document.getElementById('task-lists');
-    const categoryRes = await fetch('/api/categories');
-    const { categories } = await categoryRes.json();
-    const categoryList = document.getElementById('task-categories');
-    const headers = document.querySelectorAll('.list-header-container');
-
-    // TO DO: Error handling
-
-    headers.forEach(header => {
-        header.addEventListener('click', (e) => {
-            const lists = header.nextElementSibling;
-            toggleListDisplay(lists)
-
-        });
-    });
-
-    lists.forEach(list => {
-        const div = createSidebarContainer(list.name, 'list', list.id);
-        div.addEventListener('click', fetchListTasks);
-        taskList.appendChild(div);
-    });
-    categories.forEach(category => {
-        const div = createSidebarContainer(category.name, 'category', category.id);
-        div.addEventListener('click', fetchCategoryTasks)
-        categoryList.appendChild(div);
-    })
-
-    const buttons = document.querySelectorAll('button')
-    buttons.forEach(button => {
-        if (button.className !== 'logout') {
-            button.addEventListener('click', e => e.preventDefault())
-        }
-    });
-
-    createDropDownMenu();
-    updateTaskStatus();
-};
-
-
 // C-R-U-D Functions
 // C
-async function createTask(e) {
+export async function createTask(e) {
     e.preventDefault();
     const taskData = document.querySelector('#add-task-input');
     const taskContainer = document.getElementById("tasksContainer");
@@ -90,7 +53,7 @@ async function createTask(e) {
     }
 };
 
-async function createList(e) {
+export async function createList(e) {
     const listForm = document.querySelector('#add-list-form');
     const listData = document.querySelector('#addList');
     const formData = new FormData(listForm);
@@ -187,7 +150,7 @@ export async function fetchCategoryTasks(e) {
     }
 };
 
-async function fetchSearch(e) {
+export async function fetchSearch(e) {
     const searchForm = document.getElementById('search-form');
     const searchData = new FormData(searchForm);
     const name = searchData.get('search');
@@ -304,44 +267,6 @@ export function deleteTask(e) {
         }
     })
 }
-
-
-// -------
-// Elements to append event listeners to
-const addTaskFormDiv = document.querySelector('#add-task-form');
-const addTaskButtonDiv = document.querySelector('.add-task-button');
-const addListDiv = document.querySelector('#add-list');
-const addTaskInp = document.querySelector('input#name.inp-field');
-const addTaskButton = document.querySelector('.add-task-button button');
-const addListButtonL = document.querySelector('.add-list-button-l');
-const submitListButton = document.querySelector('.submit-list');
-const closeListSubmission = document.querySelector('.close');
-const renameListButton = document.querySelector('.rename-list');
-const searchButton = document.querySelector('.search-button');
-const searchField = document.querySelector('#search');
-
-
-// Load events
-window.addEventListener("load", async (event) => {
-    initializePage();
-
-    addTaskButton.addEventListener('click', createTask);
-    document.addEventListener('click', hideTaskButton);
-    document.addEventListener('click', hideListNameDiv);
-    document.addEventListener('click', hideListOptions)
-    //document.addEventListener('click', hideCreateTaskDiv);
-    document.addEventListener('click', hideDropDown);
-    addTaskInp.addEventListener('keyup', showTaskButton);
-    addListButtonL.addEventListener('click', showCreateList);
-    submitListButton.addEventListener('click', createList);
-    submitListButton.addEventListener('click', hideListNameDiv);
-    closeListSubmission.addEventListener('click', hideListNameDiv);
-    renameListButton.addEventListener('click', renameList);
-    searchButton.addEventListener('click', fetchSearch)
-    searchField.addEventListener('keyup', fetchSearch);
-
-});
-//-------
 
 
 // Helper Functions

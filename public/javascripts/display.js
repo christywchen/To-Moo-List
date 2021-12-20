@@ -1,8 +1,3 @@
-window.addEventListener("load", async (event) => {
-
-
-})
-
 
 export async function showRenameList(e) {
     // e.preventDefault();
@@ -128,25 +123,29 @@ export async function hideDuplicateBox(className) {
     }
 }
 
-// Creating functions to show and hide lists
-const listContainer = document.querySelector('.list-header-container');
-const inboxContainer = document.querySelector('#default-lists');
+export async function toggleListSelect(e) {
+    const prevSelected = document.querySelector('.selected-list');
+    const list = e.target
+    console.log(e.target)
 
+    if (prevSelected) await deselectList()
+    await selectList(list)
 
+}
 
-// export function showLists(e) {
-//     console.log('click')
-//     // const lists = document.querySelector('#task-lists');
+function selectList(list) {
+    return new Promise((res, rej) => {
+        list.classList.add('selected-list')
+        res();
+    })
+}
 
-//     const listContainers = document.querySelectorAll('.list-container');
-//     listContainers.forEach(lists => {
-//         lists.style.display = 'block';
-//     })
-// };
-
-
-
-
-
-
-// listContainer.addEventListener('click', showLists);
+function deselectList() {
+    return new Promise((res, rej) => {
+        const selected = document.querySelector('.selected-list');
+        if (selected) {
+            selected.classList.remove('selected-list');
+        }
+        res();
+    })
+}

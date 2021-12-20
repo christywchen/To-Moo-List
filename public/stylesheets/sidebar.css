@@ -27,6 +27,11 @@ li {
     /* min-height: 500px; */
 }
 
+.selected-list {
+    color: #0060bf;
+    font-weight: bold;
+}
+
 
 .list-item,
 .category-item,
