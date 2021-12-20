@@ -7,8 +7,9 @@ block content
         div.errMsg(hidden)
             +errorSummary(errors)
     div#loginpage_container
-        img(src="images/logo-o.png" class="login_logo")
-        div#login_container 
+        a.home-link(href='/')
+            img(src="images/logo-o-dark.png" class="login_logo" href='/')
+        div#login_container
             div#login_img_container
                 img(src="images/steak-o.png")
             div#login_form_container
@@ -24,7 +25,6 @@ block content
                         button(type='submit') Log In
                             if !errors
                                 a(href='/dashboard')
-                        button(type='submit')  
-                            a(href="/signup") Not Has An Account? Sign Up                
+                        button(type='submit')
+                            a(href="/signup") Don't have an account? Sign Up
             script(src="/javascripts/errors.js" type="module")
-        
