@@ -27,18 +27,19 @@ li {
     /* min-height: 500px; */
 }
 
-.selected-list {
-    color: #0060bf;
-    font-weight: bold;
-}
-
 
 .list-item,
 .category-item,
 .inbox-list {
     padding-left: 12px;
-    /* color: rgb(63, 62, 62) */
+    color: rgb(66, 64, 64)
 }
+
+.selected-list {
+    color: #0060bf;
+    font-weight: bold;
+}
+
 
 
 .inbox-list:hover,
@@ -127,11 +128,14 @@ ol li {
     background-color: #a5c9e7;
 }
 
-/* #page-cover {
+
+
+
+.page-cover {
     position: absolute;
     width: 100%;
     height: 100%;
-
-    z-index: 20;
+    /* z-index: -1; */
+    z-index: 6;
     background-color: rgba(177, 171, 171, 0.5)
-} */
+}

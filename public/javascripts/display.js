@@ -1,11 +1,65 @@
 
+// Fade background
+export function fadeBackground(e) {
+    const isFaded = document.querySelector('.page-cover')
+    if (!isFaded) {
+        const body = document.body;
+        const div = document.createElement('div');
+        div.classList.add('page-cover');
+        removeSelfOnClick(div);
+        showPageListeners();
+        body.prepend(div);
+    }
+};
+
+export function showPageListeners() {
+    const buttons = document.querySelectorAll('button');
+    const exitWindow = document.querySelector('.close');
+    exitWindow.addEventListener('click', (e) => {
+        hideContainer('page-cover');
+    })
+    buttons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            hideContainer('page-cover');
+        })
+    })
+}
+
+function removeSelfOnClick(container) {
+    const className = container.className;
+    console.log(className);
+    container.addEventListener('click', (e) => {
+        hideContainer(className)
+    })
+}
+
+
+// Create / Rename List forms
+export async function showCreateList(e) {
+    const addListDiv = document.querySelector('#add-list');
+    // e.preventDefault();
+    addListDiv.style.display = 'block';
+    addListDiv.style.position = 'fixed';
+    fadeBackground();
+}
+
 export async function showRenameList(e) {
     // e.preventDefault();
     const renameListDiv = document.querySelector('#rename-list');
     renameListDiv.style.display = 'block';
     renameListDiv.style.position = 'fixed';
+    fadeBackground()
 }
 
+// hide list options
+export function hideListOptions(e) {
+    const box = document.querySelector('.list-edit-dropdown')
+    if (box) {
+        box.remove();
+    }
+}
+
+// Show / Hide Task Button
 export function showTaskButton(e) {
     const addTaskInp = document.querySelector('input#name.inp-field');
     const addTaskButton = document.querySelector('.add-task-button > button');
@@ -26,20 +80,7 @@ export const hideTaskButton = (e) => {
     else addTaskButtonDiv.classList.remove('add-task-button-transition');
 };
 
-export async function showCreateList(e) {
-    const addListDiv = document.querySelector('#add-list');
-    // e.preventDefault();
-    addListDiv.style.display = 'block';
-    addListDiv.style.position = 'fixed';
-}
-
-export function hideListOptions(e) {
-    const box = document.querySelector('.list-edit-dropdown')
-    if (box) {
-        box.remove();
-    }
-}
-
+// Hide Add / Rename form
 export function hideListNameDiv(e) {
     const addListDiv = document.querySelector('#add-list');
     const renameListDiv = document.querySelector('#rename-list');
@@ -78,10 +119,22 @@ export function hideDropDown(e) {
             listMenu.style.display = 'none';
             postponeMenu.style.display = 'none';
             categoryList.style.display = 'none';
-            console.log(searchRecs)
             searchRecs.style.display = 'none';
         }
     }
+};
+
+// Toggles
+export async function toggleListSelect(e) {
+    const prevSelected = document.querySelector('.selected-list');
+    let list = e.target
+    // Lists and Categories have an extra div container.
+    if (list.classList.contains('sidebar-box')) {
+        list = list.children[0];
+    }
+    if (prevSelected) await deselectList()
+    await selectList(list)
+
 };
 
 export function toggleListDisplay(container) {
@@ -97,9 +150,26 @@ export function toggleListDisplay(container) {
         icon.classList.remove('fa-caret-right');
         icon.classList.add('fa-caret-down');
     }
-}
+};
 
 // Promises
+function selectList(list) {
+    return new Promise((res, rej) => {
+        list.classList.add('selected-list')
+        res();
+    })
+};
+
+export function deselectList() {
+    return new Promise((res, rej) => {
+        const selected = document.querySelector('.selected-list');
+        if (selected) {
+            selected.classList.remove('selected-list');
+        }
+        res();
+    })
+}
+
 
 export function showContainer(container, showFn) {
     return new Promise(function (res, rej) {
@@ -109,6 +179,7 @@ export function showContainer(container, showFn) {
     })
 };
 
+// hide DOM container
 export function hideContainer(className) {
     return new Promise(function (res, rej) {
         hideDuplicateBox(className);
@@ -116,36 +187,11 @@ export function hideContainer(className) {
     })
 };
 
+
+// remove container from DOM
 export async function hideDuplicateBox(className) {
     const box = document.querySelector(`.${className}`);
     if (box) {
         box.remove();
     }
-}
-
-export async function toggleListSelect(e) {
-    const prevSelected = document.querySelector('.selected-list');
-    const list = e.target
-    console.log(e.target)
-
-    if (prevSelected) await deselectList()
-    await selectList(list)
-
-}
-
-function selectList(list) {
-    return new Promise((res, rej) => {
-        list.classList.add('selected-list')
-        res();
-    })
-}
-
-function deselectList() {
-    return new Promise((res, rej) => {
-        const selected = document.querySelector('.selected-list');
-        if (selected) {
-            selected.classList.remove('selected-list');
-        }
-        res();
-    })
-}
+};

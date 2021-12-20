@@ -1,7 +1,7 @@
 import { finishTask, postPoneTask, changeCategory, moveTask, getDropMenu, createDropDownMenu } from './dashboard-tasks.js';
 import { showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
 import { clearDOMTasks, clearSearchRecs } from './clean-dom.js';
-import { createSidebarContainer, buildTaskSummary, createTaskHtml, populateTasks, populateSearchBox } from './create-dom-elements.js';
+import { createSidebarContainer, buildTaskSummary, createTaskHtml, populateTasks, populateSearchBox, decorateList } from './create-dom-elements.js';
 import { toggleListDisplay, showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown } from './display.js';
 import { updateTaskStatus } from './dashboard-recap.js';
 import { initializePage } from './initialize-events.js';
@@ -74,6 +74,7 @@ export async function createList(e) {
             // const listId = newList.list.id;
             listId = newList.list.id;
             const div = createSidebarContainer(newList.list.name, 'list', listId);
+            decorateList(div);
             tasksList.appendChild(div);
         } catch (error) {
 
@@ -169,7 +170,6 @@ export async function fetchSearch(e) {
             } else {
 
                 populateSearchBox(tasks)
-                console.log(tasks);
             }
         }
     }
@@ -201,8 +201,7 @@ export const renameList = async (e) => {
             else console.log('List renamed')
 
             const list = document.querySelector(`[data-listid="${listId}"]`)
-            list.innerText = name;
-
+            list.children[0].innerText = name;
         } catch (error) {
         }
     }

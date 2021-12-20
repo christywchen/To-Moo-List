@@ -1,7 +1,7 @@
 import { fetchListTasks, updateListId } from './dashboard.js';
 import { clearDOMTasks, clearSearchRecs } from './clean-dom.js';
 import { fetchTaskSummary, deleteList, deleteTask } from './dashboard.js';
-import { showRenameList, hideContainer, showContainer } from './display.js';
+import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect } from './display.js';
 import { finishTask, getDropMenu } from './dashboard-tasks.js'
 
 
@@ -30,7 +30,6 @@ export function createSidebarContainer(name, containerType, data,) {
     iconsBox.appendChild(editIcon);
 
     editIcon.addEventListener('click', updateListId);
-    container.addEventListener('click', fetchListTasks);
     editIcon.addEventListener('click', async (e) => {
         await hideContainer(`${containerType}-edit-dropdown`);
         await showContainer(container, listEditDropDown);
@@ -58,11 +57,20 @@ export function listEditDropDown() {
         const listEditDropdown = document.querySelector('.list-edit-dropdown');
         if (listEditDropdown) listEditDropdown.remove();
         showRenameList()
+        // fadeBackground();
     })
     deleteListOp.addEventListener('click', deleteList);
 
     return container;
 }
+
+
+export function decorateList (list) {
+    list.addEventListener('click', (e) => {
+        fetchListTasks(e);
+        toggleListSelect(e);
+    });
+};
 
 export function populateTasks(tasks) {
     if (!Array.isArray(tasks)) tasks = [tasks];
@@ -89,10 +97,8 @@ function decorateTaskDiv(div, task) {
 export function populateSearchBox(tasks) {
     const recContainer = document.querySelector('.search-recommendations');
     recContainer.style.display = 'block';
-    console.log(tasks)
 
     tasks.forEach(task => {
-        console.log(task)
         const div = document.createElement('div');
         const span = document.createElement('span');
         div.className = 'search-rec';
@@ -100,19 +106,17 @@ export function populateSearchBox(tasks) {
         div.appendChild(span);
         recContainer.appendChild(div);
         decorateSearchItem(div, task);
-
-    })
-}
-
+    });
+};
 
 function decorateSearchItem(div, task) {
     div.addEventListener('click', (e) => {
+        deselectList();
         clearSearchRecs()
         clearDOMTasks()
         populateTasks(task);
     });
-}
-
+};
 
 // CREATING TASK SUMMARY CONTAINER ELEMENTS
 export async function buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc) {
@@ -171,7 +175,7 @@ function buildTitleDiv(currentTask) {
         <div id="summary-title" contenteditable="true" class="summary-inp">${currentTask}</div>`;
 
     return titleDiv;
-}
+};
 
 function buildDeadlineDiv(currentDeadline) {
     const deadline = getDate(currentDeadline)
@@ -185,7 +189,7 @@ function buildDeadlineDiv(currentDeadline) {
             <input type="date" min="${today}" value="${deadline}" id="summary-due-date-inp" class="summary-inp"></input>
             `;
     return deadlineDiv;
-}
+};
 
 function buildListDiv(currentListId, currentList) {
     const listDiv = document.createElement('div');
@@ -197,7 +201,7 @@ function buildListDiv(currentListId, currentList) {
         </select>
         `;
     return listDiv;
-}
+};
 
 function buildDescDiv(currentDesc) {
     const descDiv = document.createElement('div');
@@ -212,7 +216,7 @@ function buildDescDiv(currentDesc) {
         <textarea id="summary-desc-textarea" class="summary-inp" placeholder="Add a description...">${descText}</textarea>
         `;
     return descDiv;
-}
+};
 
 
 export function createTaskHtml(taskName, taskId, taskDeadline = '', categoryId = '') {

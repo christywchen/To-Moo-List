@@ -1,6 +1,6 @@
 import { createTask, createList, renameList, fetchSearch, fetchListTasks, fetchCategoryTasks } from './dashboard.js'
-import { hideTaskButton, hideListNameDiv, hideListOptions, hideDropDown, showTaskButton, showCreateList, toggleListDisplay, toggleListSelect } from './display.js';
-import { createSidebarContainer } from './create-dom-elements.js';
+import { hideTaskButton, fadeBackground, hideListNameDiv, hideListOptions, hideDropDown, showTaskButton, showCreateList, toggleListDisplay, toggleListSelect, deselectList } from './display.js';
+import { createSidebarContainer, decorateList } from './create-dom-elements.js';
 import { createDropDownMenu } from './dashboard-tasks.js';
 import { updateTaskStatus } from './dashboard-recap.js';
 
@@ -13,6 +13,8 @@ export const initializePage = async () => {
     const categoryList = document.getElementById('task-categories');
     const headers = document.querySelectorAll('.list-header-container');
     const inboxLists = document.querySelectorAll('.inbox-list');
+
+    if (!lists.length) showCreateList()
 
     headers.forEach(header => {
         header.addEventListener('click', (e) => {
@@ -27,18 +29,12 @@ export const initializePage = async () => {
 
     lists.forEach(list => {
         const div = createSidebarContainer(list.name, 'list', list.id);
-        div.addEventListener('click', (e) => {
-            fetchListTasks(e);
-            toggleListSelect(e)
-        });
+        decorateList(div);
         taskList.appendChild(div);
     });
     categories.forEach(category => {
         const div = createSidebarContainer(category.name, 'category', category.id);
-        div.addEventListener('click', (e) => {
-            fetchCategoryTasks(e);
-            toggleListSelect(e);
-        })
+        decorateList(div);
         categoryList.appendChild(div);
     })
 
@@ -52,6 +48,7 @@ export const initializePage = async () => {
     const addTaskFormDiv = document.querySelector('#add-task-form');
     const addTaskButtonDiv = document.querySelector('.add-task-button');
     const addListDiv = document.querySelector('#add-list');
+    const addListButton = document.querySelector('.fa-plus-square');
     const addTaskInp = document.querySelector('input#name.inp-field');
     const addTaskButton = document.querySelector('.add-task-button button');
     const addListButtonL = document.querySelector('.add-list-button-l');
@@ -61,20 +58,29 @@ export const initializePage = async () => {
     const searchButton = document.querySelector('.search-button');
     const searchField = document.querySelector('#search');
 
+    document.addEventListener('click', (e) => {
+        hideTaskButton(e);
+        hideListNameDiv(e);
+        hideListOptions(e);
+        hideDropDown(e);
+    })
     addTaskButton.addEventListener('click', createTask);
-    document.addEventListener('click', hideTaskButton);
-    document.addEventListener('click', hideListNameDiv);
-    document.addEventListener('click', hideListOptions);
-    //document.addEventListener('click', hideCreateTaskDiv);
-    document.addEventListener('click', hideDropDown);
     addTaskInp.addEventListener('keyup', showTaskButton);
     addListButtonL.addEventListener('click', showCreateList);
-    submitListButton.addEventListener('click', createList);
-    submitListButton.addEventListener('click', hideListNameDiv);
+    submitListButton.addEventListener('click', (e) => {
+        createList(e);
+        hideListNameDiv(e);
+    })
     closeListSubmission.addEventListener('click', hideListNameDiv);
-    renameListButton.addEventListener('click', renameList);
-    searchButton.addEventListener('click', fetchSearch);
     searchField.addEventListener('keyup', fetchSearch);
+    searchButton.addEventListener('click', (e) => {
+        fetchSearch(e);
+        deselectList();
+    });
+    addListButton.addEventListener('click', fadeBackground)
+    renameListButton.addEventListener('click', (e) => {
+        renameList(e);
+    });
 
     createDropDownMenu();
     updateTaskStatus();

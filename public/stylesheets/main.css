@@ -58,6 +58,10 @@
     overflow: hidden;
 }
 
+.single-task label {
+    padding-left: 8px;
+}
+
 .single-task-selected {
     background-color: #ffffc9;
 }
@@ -91,7 +95,7 @@
     width: 390px;
     height: 211px;
     margin-top: 30px;
-    z-index: 100;
+    z-index: 10;
 }
 
 .add-task-box {
