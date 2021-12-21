@@ -162,18 +162,23 @@ export async function fetchSearch(e) {
     const name = searchData.get('search');
     const stateId = { id: "103" };
     clearSearchRecs()
+    // TO DO: make function to replace common search terms
+    const searchStr = name.replace(/'/, '%27').
+        replace(/ /, '+');
 
-    console.log(e.target.classList.contains('search-button'))
+    // console.log(e.target.classList.contains('search-button'))
     if (name.length) {
         const res = await fetch(`/api/search/tasks/${name}`);
         const { tasks } = await res.json();
+        // const searchStr = name.replace(/\'/g, '%27');
         // TO DO: Error handling
         if (!res.ok) throw res
         else {
             if (e.target.classList.contains('search-button')) {
                 clearDOMTasks()
                 populateTasks(tasks);
-                window.history.replaceState(stateId, `Search ${name}`, `/search/?q=${name}`);
+
+                window.history.replaceState(stateId, `Search ${name}`, `/dashboard/search/?q=${searchStr}`);
             } else {
 
                 populateSearchBox(tasks)
