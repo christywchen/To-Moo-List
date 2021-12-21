@@ -1,4 +1,5 @@
 
+
 // Fade background
 export function fadeBackground(e) {
     const isFaded = document.querySelector('.page-cover')
@@ -116,15 +117,35 @@ export function hideDropDown(e) {
             !e.target.className.includes('grid-square') &&
             !e.target.className.includes('list-header') &&
             !e.target.className.includes('add-tag-input') &&
-            !e.target.className.includes('fas')) {
+            !e.target.className.includes('fas') &&
+            !e.target.className.includes('search')) {
             //e.preventDefault()
             listMenu.style.display = 'none';
             postponeMenu.style.display = 'none';
             categoryList.style.display = 'none';
             searchRecs.style.display = 'none';
+
+            deselectSearchField()
         }
     }
 };
+
+// export function toggleSearchHighlight(e) {
+//     if (e.target.id === ('search')) selectSearchField();
+
+// }
+
+export function selectSearchField(e) {
+    const searchField = document.querySelector('.search')
+    searchField.classList.add('search-selected');
+    searchField.placeholder = 'Search task';
+}
+
+export function deselectSearchField(e) {
+    const searchField = document.querySelector('.search');
+    searchField.classList.remove('search-selected');
+    searchField.placeholder = '';
+}
 
 // Toggles
 export async function toggleListSelect(e) {

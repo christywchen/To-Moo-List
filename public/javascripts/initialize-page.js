@@ -1,5 +1,5 @@
 import { createTask, createList, renameList, fetchSearch, fetchListTasks, fetchCategoryTasks } from './dashboard.js'
-import { hideTaskButton, fadeBackground, hideListNameDiv, hideListOptions, hideDropDown, showTaskButton, showCreateList, toggleListDisplay, toggleListSelect, deselectList } from './display.js';
+import { hideTaskButton, fadeBackground, hideListNameDiv, hideListOptions, hideDropDown, showTaskButton, showCreateList, toggleListDisplay, toggleListSelect, deselectList, selectSearchField } from './display.js';
 import { createSidebarContainer, decorateList } from './create-dom-elements.js';
 import { createDropDownMenu } from './dashboard-tasks.js';
 import { updateTaskStatus } from './dashboard-recap.js';
@@ -78,6 +78,8 @@ export const initializePage = async () => {
         hideListNameDiv(e);
     })
     closeListSubmission.addEventListener('click', hideListNameDiv);
+
+    searchField.addEventListener('click', selectSearchField)
     searchField.addEventListener('keyup', fetchSearch);
     searchButton.addEventListener('click', (e) => {
         fetchSearch(e);
