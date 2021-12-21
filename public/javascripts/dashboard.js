@@ -160,6 +160,7 @@ export async function fetchSearch(e) {
     const searchForm = document.getElementById('search-form');
     const searchData = new FormData(searchForm);
     const name = searchData.get('search');
+    const stateId = { id: "103" };
     clearSearchRecs()
 
     console.log(e.target.classList.contains('search-button'))
@@ -170,8 +171,9 @@ export async function fetchSearch(e) {
         if (!res.ok) throw res
         else {
             if (e.target.classList.contains('search-button')) {
-                clearDOMTasks()
+                // clearDOMTasks()
                 populateTasks(tasks);
+                window.history.replaceState(stateId, `Search ${name}`, `/search/?q=${name}`);
             } else {
 
                 populateSearchBox(tasks)
@@ -281,7 +283,7 @@ function highlightTask(e) {
     const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
     const taskOptions = document.querySelector('.task-options');
     //taskOptions.style.visibility = 'visible';
-    
+
 
     if (prevSelection && prevSelectionDiv) {
         if (prevSelection === nextSelection) {
