@@ -130,10 +130,18 @@ export async function toggleListSelect(e) {
     const prevSelected = document.querySelector('.selected-list');
     let list = e.target
     // Lists and Categories have an extra div container.
+
     if (list.classList.contains('sidebar-box')) {
         list = list.children[0];
     }
-    if (prevSelected) await deselectList()
+    if (prevSelected) {
+        if (list.dataset.task) {
+            // hide task summary if user switches to another task
+            const taskSummaryDiv = document.querySelector('#task-details');
+            taskSummaryDiv.classList.remove('task-details-display');
+        }
+        await deselectList()
+    }
     await selectList(list)
 
 };
@@ -157,9 +165,6 @@ export function toggleListDisplay(container) {
 function selectList(list) {
     return new Promise((res, rej) => {
         list.classList.add('selected-list')
-
-        const taskSummaryDiv = document.querySelector('#task-details');
-        taskSummaryDiv.classList.remove('task-details-display');
         res();
     })
 };
