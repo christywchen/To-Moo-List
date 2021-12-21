@@ -4,8 +4,6 @@ import { fetchTaskSummary, deleteList, deleteTask } from './dashboard.js';
 import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect } from './display.js';
 import { finishTask, getDropMenu } from './dashboard-tasks.js'
 
-
-
 export function createSidebarContainer(name, containerType, data,) {
     const container = document.createElement('div');
     const itemDiv = document.createElement('div');
@@ -213,30 +211,10 @@ function buildListDiv(currentListId, currentList) {
     listDiv.innerHTML = `
         <div id="summary-list">List</div>
         <select id="summary-list-select" class="summary-inp">
+        <option value="${currentListId}">${currentList}</option>
         </select>
         `;
     return listDiv;
-}
-
-export async function buildListSelectOptions(currentListId, currentList) {
-    const listsRes = await fetch(`/api/lists`);
-    const { lists } = await listsRes.json();
-    const listOptions = document.querySelector('#summary-list-select');
-    listOptions.innerHTML = `<option value="${currentListId}">${currentList}</option>`;
-
-    lists.forEach(list => {
-        if (list.name !== currentList) {
-            const option = document.createElement('option');
-            option.setAttribute('value', list.id);
-            option.innerText = list.name;
-            listOptions.appendChild(option);
-        }
-    });
-
-    const createListOpt = document.createElement('option');
-    createListOpt.setAttribute('value', 'create-new');
-    createListOpt.innerText = 'Create New';
-    listOptions.appendChild(createListOpt);
 }
 
 function buildPriorityDiv(currentPriorityId, currentPriority) {
@@ -249,21 +227,6 @@ function buildPriorityDiv(currentPriorityId, currentPriority) {
         </select>
         `;
     return priorityDiv;
-}
-
-async function buildPrioritySelectOptions(currentPriority) {
-    const priorityRes = await fetch(`/api/categories`);
-    const { categories } = await priorityRes.json();
-    const priorityOptions = document.querySelector('#summary-priority-select');
-
-    categories.forEach(category => {
-        if (category.name !== currentPriority) {
-            const option = document.createElement('option');
-            option.setAttribute('value', category.id);
-            option.innerText = category.name;
-            priorityOptions.appendChild(option);
-        }
-    });
 }
 
 function buildDescDiv(currentDesc) {
@@ -281,6 +244,37 @@ function buildDescDiv(currentDesc) {
     return descDiv;
 };
 
+export async function buildListSelectOptions(currentListId, currentList) {
+    const listsRes = await fetch(`/api/lists`);
+    const { lists } = await listsRes.json();
+    const listOptions = document.querySelector('#summary-list-select');
+
+    populateSelectOptions(lists, currentList, listOptions);
+
+    const createListOpt = document.createElement('option');
+    createListOpt.setAttribute('value', 'create-new');
+    createListOpt.innerText = 'Create New';
+    listOptions.appendChild(createListOpt);
+}
+
+async function buildPrioritySelectOptions(currentPriority) {
+    const priorityRes = await fetch(`/api/categories`);
+    const { categories } = await priorityRes.json();
+    const priorityOptions = document.querySelector('#summary-priority-select');
+
+    populateSelectOptions(categories, currentPriority, priorityOptions);
+}
+
+function populateSelectOptions(table, currentSelectionName, selectHTMLElementName) {
+    table.forEach(element => {
+        if (element.name !== currentSelectionName) {
+            const option = document.createElement('option');
+            option.setAttribute('value', element.id);
+            option.innerText = element.name;
+            selectHTMLElementName.appendChild(option);
+        }
+    });
+}
 
 export function createTaskHtml(taskName, taskId) {
     return `<input type="checkbox" data-task="${taskId}" name="${taskName}" value="${taskName}">

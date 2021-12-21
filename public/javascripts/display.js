@@ -207,3 +207,5 @@ export function hideDivContainer() {
     };
 
 };
+
+// toggle highlight on task creation
