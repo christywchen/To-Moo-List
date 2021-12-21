@@ -16,10 +16,10 @@ footer {
     padding-bottom: 70px;
 }
 
-.navbar-container{
+.navbar-container {
     width: 100%;
-    background-color: #075CBE;
-    transition: background .5s;
+    background-color: #075cbe;
+    transition: background 0.5s;
 }
 
 .navbar {
@@ -31,16 +31,11 @@ footer {
     justify-content: space-between;
 }
 
-
-#logo{
-    height: 110px;
-}
-
 .navbar ul {
     display: grid;
     grid-template-columns: repeat(5, auto);
     list-style: none;
-	text-align: center;
+    text-align: center;
     justify-self: end;
 }
 
@@ -51,48 +46,48 @@ footer {
 
 .navbar ul a {
     justify-content: center;
-	display: inline-block;
-	padding: 5px 10px;
+    display: inline-block;
+    padding: 5px 10px;
     margin: 0 10px;
     text-decoration: none;
-    color:white;
+    color: white;
 }
 
 .navbar a:hover {
     font-weight: 900;
 }
 
-.signup{
-    border: 2px solid #FFF;
+.signup {
+    border: 2px solid #fff;
     border-radius: 5px;
 }
 
-.header-content{
-    display:flex;
+.header-content {
+    display: flex;
     flex-direction: column;
-    background: #075CBE;
+    background: #075cbe;
     justify-content: center;
     align-items: center;
-    transition: background .5s;
+    transition: background 0.5s;
 }
 
 h1 {
     margin-top: 25px;
-    color: #FFFFFF;
+    color: #ffffff;
 }
 
-.carousel{
+.carousel {
     position: relative;
-    background: #075CBE;
+    background: #075cbe;
     width: 70%;
     min-height: 500px;
     margin: 20px;
     overflow: hidden;
     border-radius: 10px;
-    transition: background .5s;
+    transition: background 0.5s;
 }
 
-.carousel .slide{
+.carousel .slide {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -102,26 +97,25 @@ h1 {
     are shown, while those outside are hidden. */
 }
 
-.carousel .slide.active{
+.carousel .slide.active {
     clip-path: circle(150% at 0 50%);
     transition: 2s;
-    
 }
 
-.carousel .slide img{
+.carousel .slide img {
     position: absolute;
     object-fit: scale-down;
     max-width: auto;
     margin: 85px auto;
-    height:80%;
+    height: 80%;
     left: 0;
     right: 0;
 }
 
-.carousel .slide .carousel-info{
+.carousel .slide .carousel-info {
     position: absolute;
     text-align: center;
-    color: #FFFFFF;
+    color: #ffffff;
     width: 75%;
     margin: 15px auto 0;
     left: 0;
@@ -129,30 +123,31 @@ h1 {
     padding: 20px;
 }
 
-.carousel .slide .carousel-info h2{
+.carousel .slide .carousel-info h2 {
     font-size: 2em;
     font-weight: 800;
 }
 
-.carousel .slide .carousel-info p{
+.carousel .slide .carousel-info p {
     font-size: 1em;
     font-weight: 400;
 }
 
-.navigation{
-  height: 500px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  opacity: 0;
-  transition: opacity 0.5s ease;
+.navigation {
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    opacity: 0;
+    transition: opacity 0.5s ease;
 }
 
-.carousel:hover .navigation{
+.carousel:hover .navigation {
     opacity: 1;
 }
 
-.prev-btn, .next-btn{
+.prev-btn,
+.next-btn {
     z-index: 999;
     font-size: 2em;
     color: #222;
@@ -161,23 +156,23 @@ h1 {
     cursor: pointer;
 }
 
-.prev-btn{
+.prev-btn {
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
 }
-  
-.next-btn{
+
+.next-btn {
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
 }
-  
-.pageIndicator{
+
+.pageIndicator {
     z-index: 999;
     display: flex;
     justify-content: center;
 }
-  
-.pageIndicator .page-icon{
+
+.pageIndicator .page-icon {
     z-index: 2;
     width: 10px;
     height: 10px;
@@ -187,63 +182,62 @@ h1 {
     border-radius: 50%;
     box-shadow: 0 5px 25px rgb(1 1 1 / 20%);
 }
-  
-.pageIndicator .page-icon.active{
-    background: #FFFFFF;
+
+.pageIndicator .page-icon.active {
+    background: #ffffff;
 }
 
-.social-container{
+.social-container {
     max-width: 1170px;
     width: 70%;
     margin: 0 auto;
 }
 
-.social-links{
+.social-links {
     display: flex;
     flex-wrap: wrap;
     text-align: center;
     padding: 5px;
 }
 
-.person{
+.person {
     margin: 0 auto;
-    
 }
 
-.person h4{
+.person h4 {
     font-size: 18px;
     color: #8b8b94;
 }
 
-.person ul{
+.person ul {
     list-style: none;
 }
 
-.person ul li{
+.person ul li {
     padding: 5px;
 }
 
-.person ul li a{
+.person ul li a {
     text-decoration: none;
     color: #8b8b94;
 }
 
-.person ul li a:hover{
+.person ul li a:hover {
     background-color: lightgray;
 }
 
-.copyright{
+.copyright {
     display: flex;
     justify-content: center;
     margin-top: 50px;
 }
 
-.copyright p{
+.copyright p {
     color: #8b8b94;
     margin-right: 10px;
 }
 
-.copyright a{
+.copyright a {
     margin: 0 5px;
     color: #8b8b94;
     text-decoration: none;

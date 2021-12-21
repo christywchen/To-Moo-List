@@ -6,3 +6,12 @@ export function clearDOMTasks() {
         })
     }
 };
+
+export function clearSearchRecs() {
+    const recContainer = document.querySelectorAll('.search-rec');
+    if (recContainer) {
+        recContainer.forEach(child => {
+            child.remove();
+        })
+    }
+}

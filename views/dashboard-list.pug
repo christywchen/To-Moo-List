@@ -3,7 +3,15 @@ extends layout.pug
 include utils.pug
 
 block content
+    div#page-cover
     div#header
+        div.left-header
+        div.search-container
+            form#search-form(for='search')
+                +plainField('', 'search', '', null, 'Search task')
+                span.serach-button-container
+                    button.search-button Search
+            div.search-recommendations
         div#user
             if locals.authenticated
                 span.welcome Welcome #{user.username}!
@@ -13,22 +21,30 @@ block content
         div#sidebar
             div.sidebar-logo
             div.lists
-                div.list-header Inbox
-                ol#default-lists
-                    li#today Today's Tasks
-                    li#tomorrow Tomorrow's Tasks
-                    li#all All Tasks
+                div.list-header-container
+                    i.fas.fa-caret-right
+                    div.list-header Inbox
+                    div
+                div#default-lists.list-container
+                    div#today.inbox-list Today's Tasks
+                    div#tomorrow.inbox-list Tomorrow's Tasks
+                    div#all.inbox-list All Tasks
             div.lists
                 div.list-header-container
+                    i.fas.fa-caret-right
                     div.list-header Lists
-                    div.add-list-button(role='button')
+                    div.add-list-button.add-list-button-l(role='button')
                         i.far.fa-plus-square
-                        
-                div#task-lists
-            div.lists
-                div.list-header Categories
+                div#task-lists.list-container
 
-                ol#task-categories
+            div.lists
+                div.list-header-container
+                    i.fas.fa-caret-right
+                    div.list-header Priorities
+                    //- div.add-list-button(role='button')
+                    //-     i.far.fa-plus-square
+                div#task-categories.list-container
+
         div#main
             div#add-task
                 include dashboard-task.pug

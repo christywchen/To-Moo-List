@@ -1,43 +1,43 @@
 import { fetchListTasks, updateListId } from './dashboard.js';
-import { clearDOMTasks } from './clean-dom.js';
-import { updateList, deleteList } from './dashboard.js';
-import { showRenameList, showCreateList, hideContainer, showContainer } from './display.js';
+import { clearDOMTasks, clearSearchRecs } from './clean-dom.js';
+import { fetchTaskSummary, deleteList, deleteTask } from './dashboard.js';
+import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect } from './display.js';
+import { finishTask, getDropMenu } from './dashboard-tasks.js'
 
-export function createListDiv(name, listId) {
+
+
+export function createSidebarContainer(name, containerType, data,) {
+
     const container = document.createElement('div');
-    const listDiv = document.createElement('div');
-    container.className = 'list-box';
+    const itemDiv = document.createElement('div');
+    container.classList.add(`${containerType}-box`, 'sidebar-box');
     container.style.position = 'relative';
+    container.setAttribute(`data-${containerType}Id`, `${data}`);
 
-    listDiv.innerText = name;
-    listDiv.setAttribute('data-listId', `${listId}`);
-    listDiv.className = 'list-item';
+    itemDiv.innerText = name;
+    itemDiv.setAttribute(`data-${containerType}Id`, `${data}`);
+    itemDiv.className = `${containerType}-item`;
 
     const iconsBox = document.createElement('div');
-    iconsBox.className = 'list-icons';
     const editIcon = document.createElement('div');
-    // editIcon.innerText = 'v'
-    // editIcon.className = '<i class="far fa-caret-square-down"></i>'
+    iconsBox.className = `sidebar-icons`;
     editIcon.classList.add('far', 'fa-caret-square-down', 'hide-option')
+    editIcon.setAttribute(`data-${containerType}Id`, `${data}`);
 
-    editIcon.setAttribute('data-listId', `${listId}`);
 
-
-    container.appendChild(listDiv);
+    container.appendChild(itemDiv);
     container.appendChild(iconsBox);
     iconsBox.appendChild(editIcon);
 
     editIcon.addEventListener('click', updateListId);
-    container.addEventListener('click', fetchListTasks);
     editIcon.addEventListener('click', async (e) => {
-        await hideContainer('list-edit-dropdown');
+        await hideContainer(`${containerType}-edit-dropdown`);
         await showContainer(container, listEditDropDown);
     });
     return container
 }
 
 // FIND OPTION DROPDOWN
-
 
 export function listEditDropDown() {
     const container = document.createElement('div');
@@ -54,12 +54,10 @@ export function listEditDropDown() {
         container.appendChild(option);
     })
     renameListOp.addEventListener('click', (e) => {
-        // const listEditDropdown = document.querySelector('.list-edit-option');
-        // if(listEditDropdown) listEditDropdown.remove();
-
         const listEditDropdown = document.querySelector('.list-edit-dropdown');
-        if(listEditDropdown) listEditDropdown.remove();
+        if (listEditDropdown) listEditDropdown.remove();
         showRenameList()
+        // fadeBackground();
     })
     deleteListOp.addEventListener('click', deleteList);
 
@@ -67,9 +65,82 @@ export function listEditDropDown() {
 }
 
 
-// div.setAttribute('data-task', `${task.id}`);
-/// data-listId // e.target.dataset.listId
-// document.querySelector(`[data-task="${taskId}"]`);
+export function decorateList(list) {
+    list.addEventListener('click', (e) => {
+        fetchListTasks(e);
+        toggleListSelect(e);
+    });
+};
+
+export function populateTasks(tasks) {
+    if (!Array.isArray(tasks)) tasks = [tasks];
+    const tasksContainer = document.getElementById("tasksContainer");
+
+    tasks.forEach(task => {
+        const div = document.createElement("div");
+        decorateTaskDiv(div, task);
+        tasksContainer.appendChild(div);
+    });
+};
+
+async function decorateTaskDiv(div, task) {
+    div.setAttribute('data-task', `${task.id}`);
+    div.classList.add('single-task')
+    div.innerHTML = createTaskHtml(task.name, task.id);
+    div.addEventListener('click', fetchTaskSummary);
+    div.addEventListener('click', finishTask);
+    div.addEventListener('click', deleteTask);
+    div.addEventListener('click', getDropMenu);
+
+    if (task.categoryId) await decorateTaskWithCategory(div, task);
+    if (task.deadline) await decorateTaskWithDeadline(div, task);
+};
+
+async function decorateTaskWithCategory(div, taskObj) {
+    const res = await fetch(`/api/tasks/${taskObj.id}`);
+    const { task } = await res.json();
+
+    const span = document.createElement('span');
+    span.setAttribute('data-task', `${task.id}`);
+    span.classList = `priority-tag priority-${task.Category.name}`;
+    span.innerText = `${task.Category.name}`;
+    div.appendChild(span);
+}
+
+export async function decorateTaskWithDeadline(div, task) {
+    const [deadlineStatus, deadlineStr] = setTaskDeadline(task.deadline);
+    const span = document.createElement('span');
+
+    span.setAttribute('data-task', `${task.id}`);
+    span.classList = `deadline-tag deadline-${deadlineStatus}`;
+    span.innerText = `${deadlineStr}`;
+    div.appendChild(span);
+}
+
+
+export function populateSearchBox(tasks) {
+    const recContainer = document.querySelector('.search-recommendations');
+    recContainer.style.display = 'block';
+
+    tasks.forEach(task => {
+        const div = document.createElement('div');
+        const span = document.createElement('span');
+        div.className = 'search-rec';
+        span.innerText = task.name;
+        div.appendChild(span);
+        recContainer.appendChild(div);
+        decorateSearchItem(div, task);
+    });
+};
+
+function decorateSearchItem(div, task) {
+    div.addEventListener('click', (e) => {
+        deselectList();
+        clearSearchRecs()
+        clearDOMTasks()
+        populateTasks(task);
+    });
+};
 
 // CREATING TASK SUMMARY CONTAINER ELEMENTS
 export async function buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc) {
@@ -106,7 +177,7 @@ export async function buildTaskSummary(currentTask, currentDeadline, currentTask
 }
 
 // TASK SUMMARY CONTAINER HELPER FUNCTIONS
-function getDate(day) {
+export function getDate(day) {
     let getDay;
     if (day) getDay = new Date(day);
     else getDay = new Date()
@@ -128,23 +199,26 @@ function buildTitleDiv(currentTask) {
         <div id="summary-title" contenteditable="true" class="summary-inp">${currentTask}</div>`;
 
     return titleDiv;
-}
-
-//buildDeadlineDiv()
+};
 
 function buildDeadlineDiv(currentDeadline) {
-    const deadline = getDate(currentDeadline)
     const today = getDate();
+    let deadline = '';
+
+    if (currentDeadline) {
+        deadline = getDate(currentDeadline);
+    }
 
     const deadlineDiv = document.createElement('div');
     deadlineDiv.setAttribute('id', 'deadline-div');
 
     deadlineDiv.innerHTML = `
-            <div id="summary-deadline">Due Date</div>
+            <div id="summary-deadline">Deadline</div>
             <input type="date" min="${today}" value="${deadline}" id="summary-due-date-inp" class="summary-inp"></input>
             `;
+
     return deadlineDiv;
-}
+};
 
 function buildListDiv(currentListId, currentList) {
     const listDiv = document.createElement('div');
@@ -156,7 +230,7 @@ function buildListDiv(currentListId, currentList) {
         </select>
         `;
     return listDiv;
-}
+};
 
 function buildDescDiv(currentDesc) {
     const descDiv = document.createElement('div');
@@ -171,15 +245,57 @@ function buildDescDiv(currentDesc) {
         <textarea id="summary-desc-textarea" class="summary-inp" placeholder="Add a description...">${descText}</textarea>
         `;
     return descDiv;
-}
+};
 
 
 export function createTaskHtml(taskName, taskId) {
-    return ` <input type="checkbox" data-task="${taskId}" name="${taskName}" value="${taskName}">
-                <label for="${taskName}" data-task="${taskId}">${taskName}</label>
-                <div hidden class='categories'>mwhahahah</div>`;
+    return `<input type="checkbox" data-task="${taskId}" name="${taskName}" value="${taskName}">
+        <label for="${taskName}" data-task="${taskId}">${taskName}</label>
+    `;
 };
 
-async function createTaskRecap() {
+export function setTaskDeadline(taskDeadline) {
+    const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+    let deadline = getDate(taskDeadline);
+    let today = getDate();
+    let deadlineStr = '';
+    let deadlineStatus = 'soon'
+    const [
+        todayYear,
+        todayMonth,
+        todayDate
+    ] = today.split('-').map(el => parseInt(el, 10));
 
+    const [
+        deadlineYear,
+        deadlineMonth,
+        deadlineDate
+    ] = deadline.split('-').map(el => parseInt(el, 10));
+
+    if (taskDeadline) {
+        let deadline = new Date(taskDeadline);
+        deadlineStr = new Intl.DateTimeFormat('en-US', options).format(deadline).split(', ')[1];
+
+        // check if task is due today or tomorrow
+        // if so, show deadline as 'today' or 'tomorrow'
+        if (deadlineMonth === todayMonth) {
+            if (deadlineDate === todayDate) { // mark task if deadline is due today
+                deadlineStr = 'Today';
+                deadlineStatus = 'today';
+                console.log('today')
+            } else if (deadlineDate === todayDate + 1) { // mark task if deadline is due tomorrow
+                deadlineStr = 'Tomorrow';
+            }
+        }
+
+        if (deadlineYear <= todayYear &&
+            deadlineMonth <= todayMonth &&
+            deadlineDate < todayDate) {
+            deadlineStatus = 'overdue';
+        }
+    } else {
+        deadlineStatus = 'none';
+    }
+
+    return [deadlineStatus, deadlineStr];
 }
