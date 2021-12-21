@@ -1,15 +1,17 @@
-import { getDate, setTaskDeadline, decorateTaskWithDeadline } from './create-dom-elements.js';
+import { getDate, setTaskDeadline, decorateTaskWithPriority, decorateTaskWithDeadline } from './create-dom-elements.js';
 // CRUD
 // C
 export function addTaskSummaryEventListeners() {
     const summaryTitleInp = document.querySelector('#summary-title');
     const summaryDeadlineInp = document.querySelector('#summary-due-date-inp');
-    const summarySelectInp = document.querySelector('#summary-list-select');
+    const summaryListSelectInp = document.querySelector('#summary-list-select');
+    const summaryPrioritySelectInp = document.querySelector('#summary-priority-select');
     const summaryDescInp = document.querySelector('#summary-desc-textarea');
 
     summaryTitleInp.addEventListener('blur', changeTaskName);
     summaryDeadlineInp.addEventListener('blur', changeTaskDeadline);
-    summarySelectInp.addEventListener('change', changeList);
+    summaryListSelectInp.addEventListener('change', changeList);
+    summaryPrioritySelectInp.addEventListener('change', changePriority);
     summaryDescInp.addEventListener('focus', expandTextarea);
     summaryDescInp.addEventListener('blur', shrinkTextarea);
     summaryDescInp.addEventListener('blur', changeDesc);
@@ -74,9 +76,9 @@ export const changeTaskDeadline = async (e) => {
     if (getDate(newDeadline) !== getDate(origDeadline)) {
         markSaved('#deadline-div');
         const taskDiv = document.querySelector(`div[data-task="${taskId}"]`);
-        const deadlineSpan = taskDiv.children[3];
-        if (deadlineSpan) taskDiv.removeChild(deadlineSpan);
-        decorateTaskWithDeadline(taskDiv, updatedTask)
+        const oldDeadlineSpan = taskDiv.children[3];
+        const newDeadlineSpan = await decorateTaskWithDeadline(taskDiv, updatedTask)
+        if (oldDeadlineSpan) oldDeadlineSpan.replaceWith(newDeadlineSpan);
     }
 };
 
@@ -86,13 +88,13 @@ export const changeList = async (e) => {
     const listName = window.location.href.split('/')[4];
     const listId = window.location.href.split('/')[5];
     const taskId = window.location.href.split('/')[7];
-    const newlistId = e.target.value;
+    const newListId = e.target.value;
 
-    if (newlistId === "create-new") {
+    if (listName === "create-new") {
         addListDiv.style.display = 'block';
         addListDiv.style.position = 'fixed';
     } else {
-        const body = { listId: parseInt(newlistId, 10) }
+        const body = { listId: parseInt(newListId, 10) }
         await fetch(`/api/tasks/${taskId}`, {
             method: "PATCH",
             headers: {
@@ -113,6 +115,36 @@ export const changeList = async (e) => {
     } else {
         markSaved('#list-div');
         window.history.replaceState(stateId, `List ${newlistId}`, `/dashboard/${listName}/${newlistId}/tasks/${taskId}`);
+    }
+};
+
+export const changePriority = async (e) => {
+    e.stopPropagation();
+    const taskId = window.location.href.split('/')[7];
+    const newPriorityId = e.target.value;
+
+    // get info about original priority level
+    const res = await fetch(`/api/tasks/${taskId}`);
+    const { task } = await res.json();
+    const origPriority = task.categoryId;
+
+    const body = { categoryId: parseInt(newPriorityId, 10) }
+    const updatedRes = await fetch(`/api/tasks/${taskId}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+    });
+    const { task: updatedTask } = await updatedRes.json();
+
+    console.log(e.target.value, origPriority)
+    if (newPriorityId !== origPriority) {
+        markSaved('#priority-div');
+        const taskDiv = document.querySelector(`div[data-task="${taskId}"]`);
+        const oldPrioritySpan = taskDiv.children[2];
+        const newPrioritySpan = await decorateTaskWithPriority(taskDiv, updatedTask)
+        if (oldPrioritySpan) oldPrioritySpan.replaceWith(newPrioritySpan);
     }
 };
 

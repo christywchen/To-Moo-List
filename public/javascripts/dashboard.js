@@ -97,9 +97,19 @@ export async function fetchTaskSummary(e) {
     const currentDeadline = task.deadline;
     const currentListId = task.listId;
     const currentList = task.List.name;
+    const currentPriorityId = task.categoryId;
+    const currentPriority = task.Category.name;
     const currentDesc = task.description;
 
-    buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc);
+    buildTaskSummary(
+        currentTask,
+        currentDeadline,
+        currentTaskId,
+        currentListId,
+        currentList,
+        currentPriorityId,
+        currentPriority,
+        currentDesc);
     addTaskSummaryEventListeners();
     showTaskSummary(e);
 

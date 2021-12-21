@@ -91,11 +91,17 @@ async function decorateTaskDiv(div, task) {
     div.addEventListener('click', deleteTask);
     div.addEventListener('click', getDropMenu);
 
-    if (task.categoryId) await decorateTaskWithCategory(div, task);
-    if (task.deadline) await decorateTaskWithDeadline(div, task);
+    if (task.categoryId) {
+        const prioritySpan = await decorateTaskWithPriority(div, task);
+        div.appendChild(prioritySpan);
+    };
+    if (task.deadline) {
+        const deadlineSpan = await decorateTaskWithDeadline(div, task);
+        div.appendChild(deadlineSpan);
+    };
 };
 
-async function decorateTaskWithCategory(div, taskObj) {
+export async function decorateTaskWithPriority(div, taskObj) {
     const res = await fetch(`/api/tasks/${taskObj.id}`);
     const { task } = await res.json();
 
@@ -103,7 +109,8 @@ async function decorateTaskWithCategory(div, taskObj) {
     span.setAttribute('data-task', `${task.id}`);
     span.classList = `priority-tag priority-${task.Category.name}`;
     span.innerText = `${task.Category.name}`;
-    div.appendChild(span);
+
+    return span;
 }
 
 export async function decorateTaskWithDeadline(div, task) {
@@ -113,7 +120,8 @@ export async function decorateTaskWithDeadline(div, task) {
     span.setAttribute('data-task', `${task.id}`);
     span.classList = `deadline-tag deadline-${deadlineStatus}`;
     span.innerText = `${deadlineStr}`;
-    div.appendChild(span);
+
+    return span;
 }
 
 
@@ -142,7 +150,15 @@ function decorateSearchItem(div, task) {
 };
 
 // create task summary
-export async function buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc) {
+export async function buildTaskSummary(
+    currentTask,
+    currentDeadline,
+    currentTaskId,
+    currentListId,
+    currentList,
+    currentPriorityId,
+    currentPriority,
+    currentDesc) {
     const taskSummaryContainer = document.createElement('div');
     const taskSummaryParent = document.querySelector('#task-details');
 
@@ -152,10 +168,12 @@ export async function buildTaskSummary(currentTask, currentDeadline, currentTask
     taskSummaryContainer.appendChild(buildTitleDiv(currentTask));
     taskSummaryContainer.appendChild(buildDeadlineDiv(currentDeadline));
     taskSummaryContainer.appendChild(buildListDiv(currentListId, currentList));
+    taskSummaryContainer.appendChild(buildPriorityDiv(currentPriorityId, currentPriority));
     taskSummaryContainer.appendChild(buildDescDiv(currentDesc));
 
     taskSummaryParent.appendChild(taskSummaryContainer);
     buildListSelectOptions(currentList);
+    buildPrioritySelectOptions(currentPriority);
 
 }
 
@@ -167,11 +185,10 @@ function buildTitleDiv(currentTask) {
         <div id="summary-title" contenteditable="true" class="summary-inp">${currentTask}</div>`;
 
     return titleDiv;
-};
+}
 
 function buildDeadlineDiv(currentDeadline) {
     const today = getDate();
-    console.log('today', today)
     let deadline = '';
 
     if (currentDeadline) {
@@ -187,7 +204,7 @@ function buildDeadlineDiv(currentDeadline) {
             `;
 
     return deadlineDiv;
-};
+}
 
 function buildListDiv(currentListId, currentList) {
     const listDiv = document.createElement('div');
@@ -199,7 +216,7 @@ function buildListDiv(currentListId, currentList) {
         </select>
         `;
     return listDiv;
-};
+}
 
 async function buildListSelectOptions(currentList) {
     const listsRes = await fetch(`/api/lists`);
@@ -208,10 +225,10 @@ async function buildListSelectOptions(currentList) {
 
     lists.forEach(list => {
         if (list.name !== currentList) {
-            const listOpt = document.createElement('option');
-            listOpt.setAttribute('value', list.id);
-            listOpt.innerText = list.name;
-            listOptions.appendChild(listOpt);
+            const option = document.createElement('option');
+            option.setAttribute('value', list.id);
+            option.innerText = list.name;
+            listOptions.appendChild(option);
         }
     });
 
@@ -219,6 +236,34 @@ async function buildListSelectOptions(currentList) {
     createListOpt.setAttribute('value', 'create-new');
     createListOpt.innerText = 'Create New';
     listOptions.appendChild(createListOpt);
+}
+
+function buildPriorityDiv(currentPriorityId, currentPriority) {
+    const priorityDiv = document.createElement('div');
+    priorityDiv.setAttribute('id', 'priority-div');
+    priorityDiv.innerHTML = `
+        <div id="summary-priority">Priority</div>
+        <select id="summary-priority-select" class="summary-inp">
+        <option value="${currentPriorityId}">${currentPriority}</option>
+        </select>
+        `;
+    return priorityDiv;
+}
+
+async function buildPrioritySelectOptions(currentPriority) {
+    const priorityRes = await fetch(`/api/categories`);
+    const { categories } = await priorityRes.json();
+    const priorityOptions = document.querySelector('#summary-priority-select');
+
+    categories.forEach(category => {
+        if (category.name !== currentPriority) {
+            console.log(category)
+            const option = document.createElement('option');
+            option.setAttribute('value', category.id);
+            option.innerText = category.name;
+            priorityOptions.appendChild(option);
+        }
+    });
 }
 
 function buildDescDiv(currentDesc) {

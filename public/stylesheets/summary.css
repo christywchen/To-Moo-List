@@ -36,7 +36,8 @@
 }
 
 #deadline-div,
-#list-div {
+#list-div,
+#priority-div {
     display: flex;
     align-items: center;
 }
@@ -66,6 +67,7 @@ textarea.summary-inp {
 
 #summary-deadline,
 #summary-list,
+#summary-priority,
 #summary-desc {
     padding: 10px 3px;
     flex-basis: 20%;
