@@ -3,6 +3,7 @@ import { hideTaskButton, fadeBackground, hideListNameDiv, hideListOptions, hideD
 import { createSidebarContainer, decorateList } from './create-dom-elements.js';
 import { createDropDownMenu } from './dashboard-tasks.js';
 import { updateTaskStatus } from './dashboard-recap.js';
+import { clearSearch } from './clean-dom.js';
 
 export const initializePage = async () => {
     const listRes = await fetch('/api/lists')
@@ -64,6 +65,7 @@ export const initializePage = async () => {
         hideListNameDiv(e);
         hideListOptions(e);
         hideDropDown(e);
+        clearSearch(e);
     })
     addTaskButton.addEventListener('click', createTask);
     addTaskInp.addEventListener('keyup', showTaskButton);

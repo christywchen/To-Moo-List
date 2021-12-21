@@ -15,3 +15,19 @@ export function clearSearchRecs() {
         })
     }
 }
+
+
+export function clearInput(formId) {
+    const form = document.getElementById(`${formId}`);
+    console.log(form);
+    console.log('form data: ', form.data)
+    form.value = '';
+};
+
+
+export function clearSearch(e) {
+    if (!e.target.classList.contains('search-container')) {
+        clearSearchRecs();
+        clearInput('search');
+    }
+}
