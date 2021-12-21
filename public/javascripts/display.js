@@ -211,21 +211,23 @@ export function hideDivContainer() {
 // toggle highlight on task creation
 export async function toggleTaskHighlight(e) {
     const prevSelected = document.querySelector('.single-task-selected');
-    let task = e.target;
+    let nextSelection = e.target;
 
-    if (prevSelected) await removeHighlight(prevSelected);
-    else await addHighlight(task);
+    if (prevSelected) await removeHighlight(prevSelected, nextSelection);
+    else await addHighlight(nextSelection);
 }
 
-function removeHighlight(task) {
+function removeHighlight(prevSelected, nextSelection) {
     return new Promise((res, rej) => {
-        task.classList.remove('single-task-selected');
+        nextSelection.classList.add('single-task-selected');
+        prevSelected.classList.remove('single-task-selected');
         res();
     });
 }
 
-function addHighlight(task) {
+function addHighlight(nextSelection) {
     return new Promise((res, rej) => {
-        task.classList.add('single-task-selected');
+        nextSelection.classList.add('single-task-selected');
+        res();
     });
 }
