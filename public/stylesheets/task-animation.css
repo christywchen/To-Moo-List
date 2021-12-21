@@ -1,16 +1,24 @@
 .checkbox-container {
-    display: grid;
-    grid-template-columns: repeat(4, auto);
-    justify-items: space-around;
+    display: flex;
+    /* grid-template-columns: repeat(4, auto);
+    justify-items: space-around; */
     align-items: center;
+}
+
+.task-options{
+    visibility: hidden;
+    display: flex;
+    margin: 0 25px;
+    width: 100%;
 }
 
 .split-3 {
     display: flex;
+    margin: 0 10px;
 }
 
-.split-2 {
-    display: flex;
+.delete{
+    margin-left: 25px;
 }
 
 .grid-square {
@@ -42,7 +50,6 @@
     background-color: red;
 }
 
-
 .dropdown div {
     background-color: white;
     margin: 0;
@@ -64,6 +71,15 @@
 .dropdown input::placeholder{
     font-size: 12px;
 }
+
+.tool-tip{
+    position: absolute;
+    visibility: hidden;
+    margin-top: 40px;
+    z-index: 4;
+    color: black;
+}
+
 
 @keyframes growDown {
     0% {
