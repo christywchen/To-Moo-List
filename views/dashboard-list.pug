@@ -9,6 +9,8 @@ block content
         div.search-container
             form#search-form(for='search')
                 +plainField('', 'search', '', null, 'Search task')
+                span.fas.fa-search.fa-lg
+
                 span.serach-button-container
                     button.search-button Search
             div.search-recommendations
@@ -34,7 +36,7 @@ block content
                     i.fas.fa-caret-right
                     div.list-header Lists
                     div.add-list-button.add-list-button-l(role='button')
-                        i.far.fa-plus-square
+                        i.far.fa-plus-square.fa-lg
                 div#task-lists.list-container
 
             div.lists

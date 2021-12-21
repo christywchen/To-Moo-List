@@ -108,7 +108,9 @@ ol li {
 
 .add-list-button {
     z-index: 10;
-    height: 13px;
+    height: 16px;
+    width: 16px;
+    bottom: 5px;
 }
 
 .fa-caret-right {
