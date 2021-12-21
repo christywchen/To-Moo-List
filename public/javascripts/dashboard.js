@@ -171,7 +171,7 @@ export async function fetchSearch(e) {
         if (!res.ok) throw res
         else {
             if (e.target.classList.contains('search-button')) {
-                // clearDOMTasks()
+                clearDOMTasks()
                 populateTasks(tasks);
                 window.history.replaceState(stateId, `Search ${name}`, `/search/?q=${name}`);
             } else {
