@@ -86,7 +86,7 @@ export async function createList(e) {
 
 // R
 export async function fetchTaskSummary(e) {
-    highlightTask(e);
+    // highlightTask(e);
     const stateId = { id: "99" };
     const listName = window.location.href.split('/')[4];
     const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
@@ -296,33 +296,33 @@ export function deleteTask(e) {
 
 
 // Helper Functions
-function highlightTask(e) {
-    const prevSelection = window.location.href.split('/')[7];
-    const prevSelectionDiv = document.querySelector(`[data-task="${prevSelection}"]`);
-    const nextSelection = e.target.dataset.task;
-    const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
+// function highlightTask(e) {
+//     const prevSelection = window.location.href.split('/')[7];
+//     const prevSelectionDiv = document.querySelector(`[data-task="${prevSelection}"]`);
+//     const nextSelection = e.target.dataset.task;
+//     const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
 
-    // const checkbox = document.querySelector(`.boxId-${e.target.dataset.task}`).checked = true;
-    // if (checkbox.checked) {
-    //     console.log("hello")
-    // }
-    // console.log(checkbox.checked);
+//     // const checkbox = document.querySelector(`.boxId-${e.target.dataset.task}`).checked = true;
+//     // if (checkbox.checked) {
+//     //     console.log("hello")
+//     // }
+//     // console.log(checkbox.checked);
 
-    if (prevSelection && prevSelectionDiv) {
-        if (prevSelection === nextSelection) {
-            if (prevSelectionDiv.classList.contains('single-task-selected')) {
-                prevSelectionDiv.classList.remove('single-task-selected');
-            } else {
-                prevSelectionDiv.classList.add('single-task-selected');
-            }
-        } else {
-            prevSelectionDiv.classList.remove('single-task-selected');
-            nextSelectionDiv.classList.add('single-task-selected');
-        }
-    } else {
-        nextSelectionDiv.classList.add('single-task-selected');
-    }
-}
+//     if (prevSelection && prevSelectionDiv) {
+//         if (prevSelection === nextSelection) {
+//             if (prevSelectionDiv.classList.contains('single-task-selected')) {
+//                 prevSelectionDiv.classList.remove('single-task-selected');
+//             } else {
+//                 prevSelectionDiv.classList.add('single-task-selected');
+//             }
+//         } else {
+//             prevSelectionDiv.classList.remove('single-task-selected');
+//             nextSelectionDiv.classList.add('single-task-selected');
+//         }
+//     } else {
+//         nextSelectionDiv.classList.add('single-task-selected');
+//     }
+// }
 
 
 

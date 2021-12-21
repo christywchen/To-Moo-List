@@ -209,3 +209,23 @@ export function hideDivContainer() {
 };
 
 // toggle highlight on task creation
+export async function toggleTaskHighlight(e) {
+    const prevSelected = document.querySelector('.single-task-selected');
+    let task = e.target;
+
+    if (prevSelected) await removeHighlight(prevSelected);
+    else await addHighlight(task);
+}
+
+function removeHighlight(task) {
+    return new Promise((res, rej) => {
+        task.classList.remove('single-task-selected');
+        res();
+    });
+}
+
+function addHighlight(task) {
+    return new Promise((res, rej) => {
+        task.classList.add('single-task-selected');
+    });
+}
