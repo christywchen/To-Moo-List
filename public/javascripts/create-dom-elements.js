@@ -65,7 +65,7 @@ export function listEditDropDown() {
 }
 
 
-export function decorateList (list) {
+export function decorateList(list) {
     list.addEventListener('click', (e) => {
         fetchListTasks(e);
         toggleListSelect(e);
@@ -102,7 +102,7 @@ async function decorateTaskWithCategory(div, taskObj) {
 
     const span = document.createElement('span');
     span.setAttribute('data-task', `${task.id}`);
-    span.classList = `category category-${task.Category.name}`;
+    span.classList = `priority-tag priority-${task.Category.name}`;
     span.innerText = `${task.Category.name}`;
     div.appendChild(span);
 }
@@ -112,7 +112,7 @@ export async function decorateTaskWithDeadline(div, task) {
     const span = document.createElement('span');
 
     span.setAttribute('data-task', `${task.id}`);
-    span.classList = `deadline deadline-${deadlineStatus}`;
+    span.classList = `deadline-tag deadline-${deadlineStatus}`;
     span.innerText = `${deadlineStr}`;
     div.appendChild(span);
 }

@@ -148,3 +148,17 @@
     width: 20px;
     background-color: white;
 }
+
+.priority-tag {
+    margin: 7px 5px 6px;
+    padding: 3px;
+    color: white;
+    font-size: 9px;
+    text-transform: uppercase;
+    border-radius: 2px;
+    background-color: #b548b5;
+}
+
+.deadline-tag {
+    margin-left: auto;
+}
