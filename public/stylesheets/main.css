@@ -185,9 +185,17 @@
 }
 
 .priority-Medium {
+<<<<<<< HEAD
     background-color: rgb(36, 206, 169);
 }
 
 .priority-Low {
     background-color: rgb(228, 182, 57);
+=======
+    background-color: rgb(228, 182, 57);
+}
+
+.priority-Low {
+    background-color: rgb(36, 206, 169);
+>>>>>>> dashboard-list-css
 }
