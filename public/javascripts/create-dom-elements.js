@@ -1,8 +1,8 @@
 import { fetchListTasks, updateListId } from './dashboard.js';
 import { clearDOMTasks, clearSearchRecs } from './clean-dom.js';
-import { fetchTaskSummary, deleteList, deleteTask } from './dashboard.js';
+import { fetchTaskSummary, deleteList } from './dashboard.js';
 import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect } from './display.js';
-import { finishTask, getDropMenu } from './dashboard-tasks.js'
+import { finishTask, getDropMenu, deleteTask } from './dashboard-tasks.js'
 
 
 

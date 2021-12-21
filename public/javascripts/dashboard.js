@@ -102,7 +102,7 @@ export async function fetchTaskSummary(e) {
     buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc);
     addTaskSummaryEventListeners();
     showTaskSummary(e);
-
+    
     if (listName !== '#list') {
         window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/${listName}/${task.listId}/tasks/${task.id}`);
     } else {
@@ -251,41 +251,17 @@ export async function deleteList(e) {
     }
 };
 
-export function deleteTask(e) {
-    const trashTask = document.querySelector(".delete");
-    const taskId = e.target.dataset.task;
-
-    trashTask.addEventListener('click', async (e) => {
-        const res = await fetch(`/api/tasks/${taskId}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            },
-        })
-        if (!res.ok) {
-            console.log("Something went wrong")
-        } else {
-            console.log("Task deleted")
-            const deleteDiv = document.querySelector(`[data-task="${taskId}"]`);
-            deleteDiv.remove();
-        }
-    })
-}
-
-
-// Helper Functions
+//Helper Functions
 function highlightTask(e) {
     const prevSelection = window.location.href.split('/')[7];
     const prevSelectionDiv = document.querySelector(`[data-task="${prevSelection}"]`);
     const nextSelection = e.target.dataset.task;
     const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
     const taskOptions = document.querySelector('.task-options');
-    //taskOptions.style.visibility = 'visible';
-    
 
     if (prevSelection && prevSelectionDiv) {
         if (prevSelection === nextSelection) {
-            if (prevSelectionDiv.classList.contains('single-task-selected')) {
+            if (prevSelectionDiv.classList.contains('single-task-selected')){
                 prevSelectionDiv.classList.remove('single-task-selected');
                 taskOptions.style.visibility = 'hidden';
             } else {
@@ -305,8 +281,6 @@ function highlightTask(e) {
         taskOptions.style.animation = "fadeIn 1s";
     }
 }
-
-
 
 // TO DO: checkbox event listeners
 async function checkedTaskActions(e) {

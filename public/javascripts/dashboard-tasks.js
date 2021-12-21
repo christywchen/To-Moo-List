@@ -103,14 +103,14 @@ export const changeCategory = async (e) => {
 }
 
 export function deleteTask(e) {
-
     const trashTask = document.querySelector(".delete");
 
     trashTask.addEventListener('click', (e) => {
         const selectedTasks = document.querySelectorAll(".single-task > input");
-        selectedTasks.forEach(async (ev) => {
-            if (ev.checked) {
-                const res = await fetch(`/api/tasks/${ev.dataset.task}`, {
+        selectedTasks.forEach(async (e) => {
+            //console.log(e.checked);
+            if (e.checked) {
+                const res = await fetch(`/api/tasks/${e.dataset.task}`, {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json"
@@ -120,15 +120,16 @@ export function deleteTask(e) {
                 if (!res.ok) {
                     console.log("Something went wrong")
                 } else {
-                    const deleteDiv = document.querySelector(`[data-task="${ev.dataset.task}"]`);
+                    const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
                     if (deleteDiv) deleteDiv.remove();
                     //setTimeout( () => window.alert("Your task was deleted"))
+                    trashTask.style.animation = "fetchSuccess 1s";
                 }
             }
         })
-        trashTask.style.animation = "fetchSuccess 1s";
     })
 }
+
 
 export const getDropMenu = (e) => {
 
@@ -187,7 +188,7 @@ const createListDropDown = async () => {
     const input = document.createElement('input');
     input.classList = 'add-tag-input'
     input.placeholder = "type new list & enter";
-    input.type="text";
+    input.type = "text";
     input.addEventListener("keypress", async (e) => {
         if (e.key === 'Enter') {
             const res = await fetch('/api/lists', {
@@ -195,7 +196,7 @@ const createListDropDown = async () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({name: `${e.target.value}`})
+                body: JSON.stringify({ name: `${e.target.value}` })
             })
             const menuDiv = document.querySelector('.moveTo')
             if (!res.ok) {
