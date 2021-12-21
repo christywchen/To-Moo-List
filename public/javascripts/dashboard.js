@@ -152,7 +152,7 @@ export async function fetchCategoryTasks(e) {
         const { tasks } = await res.json();
         // TO DO: Error Handling
         populateTasks(tasks);
-        // window.history.replaceState(stateId, `Category ${categoryId}`, `/dashboard/#categories/$/${categoryId}`);
+        window.history.replaceState(stateId, `Priority ${categoryId}`, `/dashboard/#priority/${categoryId}`);
     }
 };
 
@@ -162,11 +162,7 @@ export async function fetchSearch(e) {
     const name = searchData.get('search');
     const stateId = { id: "103" };
     clearSearchRecs()
-    // TO DO: make function to replace common search terms
-    const searchStr = name.replace(/'/, '%27').
-        replace(/ /, '+');
-
-    // console.log(e.target.classList.contains('search-button'))
+    const searchStr = encodeURIComponent(name)
     if (name.length) {
         const res = await fetch(`/api/search/tasks/${name}`);
         const { tasks } = await res.json();
@@ -177,10 +173,8 @@ export async function fetchSearch(e) {
             if (e.target.classList.contains('search-button')) {
                 clearDOMTasks()
                 populateTasks(tasks);
-
                 window.history.replaceState(stateId, `Search ${name}`, `/dashboard/search/?q=${searchStr}`);
             } else {
-
                 populateSearchBox(tasks)
             }
         }

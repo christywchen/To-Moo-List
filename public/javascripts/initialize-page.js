@@ -6,6 +6,9 @@ import { updateTaskStatus } from './dashboard-recap.js';
 import { clearSearch } from './clean-dom.js';
 
 export const initializePage = async () => {
+    const stateId = { id: "98" };
+    window.history.replaceState(stateId, `Dashboard`, `/dashboard`);
+
     const listRes = await fetch('/api/lists')
     const { lists } = await listRes.json();
     const taskList = document.getElementById('task-lists');
