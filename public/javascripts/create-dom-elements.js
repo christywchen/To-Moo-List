@@ -61,7 +61,6 @@ export function listEditDropDown() {
     return container;
 }
 
-
 export function decorateList(list) {
     list.addEventListener('click', (e) => {
         fetchListTasks(e);
@@ -122,6 +121,11 @@ export async function decorateTaskWithDeadline(div, task) {
     return span;
 }
 
+export function createTaskHtml(taskName, taskId) {
+    return `<input type="checkbox" data-task="${taskId}" name="${taskName}" value="${taskName}">
+        <label for="${taskName}" data-task="${taskId}">${taskName}</label>
+    `;
+};
 
 export function populateSearchBox(tasks) {
     const recContainer = document.querySelector('.search-recommendations');
@@ -159,8 +163,6 @@ export async function buildTaskSummary(
     currentDesc) {
     const taskSummaryContainer = document.createElement('div');
     const taskSummaryParent = document.querySelector('#task-details');
-
-    // if (taskSummaryParent.innerText.length) taskSummaryParent.innerText = "";
 
     clearTaskSummary();
 
@@ -275,12 +277,6 @@ function populateSelectOptions(table, currentSelectionName, selectHTMLElementNam
         }
     });
 }
-
-export function createTaskHtml(taskName, taskId) {
-    return `<input type="checkbox" data-task="${taskId}" name="${taskName}" value="${taskName}">
-        <label for="${taskName}" data-task="${taskId}">${taskName}</label>
-    `;
-};
 
 // date functions
 export function getDate(day) {

@@ -85,4 +85,11 @@ export const initializePage = async () => {
 
     createDropDownMenu();
     updateTaskStatus();
+
+    const header = document.querySelector('#header')
+    console.log(header.offsetHeight)
+
+    const content = document.querySelector('#content');
+    content.style.height = `${window.innerHeight} - ${header.offsetHeight}`
+    console.log(window.innerHeight - 92)
 };
