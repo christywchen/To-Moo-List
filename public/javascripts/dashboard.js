@@ -280,22 +280,29 @@ function highlightTask(e) {
     const nextSelection = e.target.dataset.task;
     const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
     const taskOptions = document.querySelector('.task-options');
-    taskOptions.style.visibility = 'visible';
+    //taskOptions.style.visibility = 'visible';
+    
 
     if (prevSelection && prevSelectionDiv) {
         if (prevSelection === nextSelection) {
             if (prevSelectionDiv.classList.contains('single-task-selected')) {
                 prevSelectionDiv.classList.remove('single-task-selected');
-                taskOptions.style.visibility = 'hidden'
+                taskOptions.style.visibility = 'hidden';
             } else {
                 prevSelectionDiv.classList.add('single-task-selected');
+                taskOptions.style.visibility = 'visible';
+                taskOptions.style.animation = "fadeIn 1s";
             }
         } else {
             prevSelectionDiv.classList.remove('single-task-selected');
             nextSelectionDiv.classList.add('single-task-selected');
+            taskOptions.style.visibility = 'visible';
+            taskOptions.style.animation = "fadeIn 1s";
         }
     } else {
         nextSelectionDiv.classList.add('single-task-selected');
+        taskOptions.style.visibility = 'visible';
+        taskOptions.style.animation = "fadeIn 1s";
     }
 }
 

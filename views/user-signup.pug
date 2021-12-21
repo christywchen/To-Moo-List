@@ -2,35 +2,104 @@ extends layout.pug
 
 include utils.pug
 
+append head
+  //- add page specific styles by appending to the head
+  link(rel="stylesheet" href="/stylesheets/team.css")
+
 block content
-    div#signup_main
-        div.errMsg(hidden)
-                    +errorSummary(errors)
-    div#signuppage_container
-        a.home-link(href='/')
-            img(src="images/logo-o-dark.png" class="signup_logo")
-        div#signup_container
-            div#img_container
-                img(src='images/office-o.png')
-            div#form_container
-                form(action='/signup' method='post' class="signup_form")
-                    input(type='hidden' name='_csrf' value=csrfToken)
-                    div#username_box
-                        +field('Username', 'username', username)
-                    div#firstname_box
-                        +field('First Name', 'firstName', firstName)
-                    div#lastname_box
-                        +field('Last Name', 'lastName', lastName)
-                    div#email_box
-                        +field('Email Address', 'email', email, 'email')
-                    div#password_box
-                        +field('Password', 'password', password, 'password')
-                    div#confirm_box
-                        +field('Confirm Password', 'confirmPassword', confirmPassword, 'password')
-                    div#signupBtCon
-                        button(type='submit') Sign Up
-                            if !errors
-                                a(href='/dashboard')
-                        button(type='submit')
-                            a(href="/login") Already Has an Account? Log in
+    header
+        div.navbar-container
+            div.navbar
+                a(href='/' class="moogo")
+                    img(src='images/logo-o-light.png', alt="cow-on-computer" id="logo")
+                ul
+                    li
+                        a(href="/") Home
+                    li
+                        a(href="/upgrade") Upgrade
+                    li
+                        a(href="/team") Meet the team
+                    li
+                        a(href="/login") Log in
+                    li(class="signup")
+                        a(href="/signup") Sign up for free
+            div.header-content
+                h1 Meets your amazing team!
+                h2 moo-chas grass-ias!
+                img(src="images/cowow-o.png", alt="cow money")
+    main
+        div#signup_main
+            div.errMsg(hidden)
+                        +errorSummary(errors)
+        div#signuppage_container
+            a.home-link(href='/')
+                img(src="images/logo-o-dark.png" class="signup_logo")
+            div#signup_container
+                div#img_container
+                    img(src='images/office-o.png')
+                div#form_container
+                    form(action='/signup' method='post' class="signup_form")
+                        input(type='hidden' name='_csrf' value=csrfToken)
+                        div#username_box
+                            +field('Username', 'username', username)
+                        div#firstname_box
+                            +field('First Name', 'firstName', firstName)
+                        div#lastname_box
+                            +field('Last Name', 'lastName', lastName)
+                        div#email_box
+                            +field('Email Address', 'email', email, 'email')
+                        div#password_box
+                            +field('Password', 'password', password, 'password')
+                        div#confirm_box
+                            +field('Confirm Password', 'confirmPassword', confirmPassword, 'password')
+                        div#signupBtCon
+                            button(type='submit') Sign Up
+                                if !errors
+                                    a(href='/dashboard')
+                            button(type='submit')
+                                a(href="/login") Already Has an Account? Log in
+    footer
+        div.social-container
+            div.social-links
+                div(class="christy person")
+                    h4 Christy
+                    ul
+                        li
+                            a(href="#") Linkedin
+                        li
+                            a(href="#") Github
+                        li
+                            a(href="#") Instagram
+                div(class="haozhen person")
+                    h4 Haozhen
+                    ul
+                        li
+                            a(href="#") Linkedin
+                        li
+                            a(href="#") Github
+                        li
+                            a(href="#") Instagram
+                div(class="justin person")
+                    h4 Justin
+                    ul
+                        li
+                            a(href="#") Linkedin
+                        li
+                            a(href="#") Github
+                        li
+                            a(href="#") Instagram
+                div(class="peter person")
+                    h4 Peter
+                    ul
+                        li
+                            a(href="#") Linkedin
+                        li
+                            a(href="#") Github
+                        li
+                            a(href="#") Instagram
+        div.copyright
+            p &copy; Copyright 2021 To Moo List
+            a(href="#") Terms
+            a(href="#") Privacy
+            a(href="#") Security
             script(src="/javascripts/errors.js" type="module")
