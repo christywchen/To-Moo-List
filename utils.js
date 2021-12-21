@@ -13,6 +13,15 @@ const listNotFoundError = (id) => {
     return err;
 };
 
+const taskNotFound = taskId => {
+    let err;
+    if (taskId) {
+        err = new Error(`Task with id ${taskId} could not be found.`)
+    } else err = new Error(`Tasks could not be found.`)
+    err.title = "Task not found";
+    err.status = 404;
+    return err;
+}
 
 const handleValidationErrors = (req, res, next) => {
     const validationErrors = validationResult(req);
@@ -113,4 +122,5 @@ module.exports = {
     listNotFoundError,
     validateList,
     handleValidationErrors,
+    taskNotFound,
 };

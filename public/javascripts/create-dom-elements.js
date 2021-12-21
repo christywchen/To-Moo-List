@@ -1,7 +1,7 @@
 import { fetchListTasks, updateListId } from './dashboard.js';
-import { clearDOMTasks } from './clean-dom.js';
+import { clearDOMTasks, clearSearchRecs } from './clean-dom.js';
 import { fetchTaskSummary, deleteList, deleteTask } from './dashboard.js';
-import { showRenameList, hideContainer, showContainer } from './display.js';
+import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect } from './display.js';
 import { finishTask, getDropMenu } from './dashboard-tasks.js'
 
 
@@ -11,6 +11,7 @@ export function createSidebarContainer(name, containerType, data,) {
     const itemDiv = document.createElement('div');
     container.classList.add(`${containerType}-box`, 'sidebar-box');
     container.style.position = 'relative';
+    container.setAttribute(`data-${containerType}Id`, `${data}`);
 
     itemDiv.innerText = name;
     itemDiv.setAttribute(`data-${containerType}Id`, `${data}`);
@@ -28,7 +29,6 @@ export function createSidebarContainer(name, containerType, data,) {
     iconsBox.appendChild(editIcon);
 
     editIcon.addEventListener('click', updateListId);
-    container.addEventListener('click', fetchListTasks);
     editIcon.addEventListener('click', async (e) => {
         await hideContainer(`${containerType}-edit-dropdown`);
         await showContainer(container, listEditDropDown);
@@ -56,11 +56,20 @@ export function listEditDropDown() {
         const listEditDropdown = document.querySelector('.list-edit-dropdown');
         if (listEditDropdown) listEditDropdown.remove();
         showRenameList()
+        // fadeBackground();
     })
     deleteListOp.addEventListener('click', deleteList);
 
     return container;
 }
+
+
+export function decorateList(list) {
+    list.addEventListener('click', (e) => {
+        fetchListTasks(e);
+        toggleListSelect(e);
+    });
+};
 
 export function populateTasks(tasks) {
     if (!Array.isArray(tasks)) tasks = [tasks];
@@ -92,7 +101,7 @@ async function decorateTaskWithCategory(div, taskObj) {
 
     const span = document.createElement('span');
     span.setAttribute('data-task', `${task.id}`);
-    span.classList = `category category-${task.Category.name}`;
+    span.classList = `priority-tag priority-${task.Category.name}`;
     span.innerText = `${task.Category.name}`;
     div.appendChild(span);
 }
@@ -102,11 +111,35 @@ export async function decorateTaskWithDeadline(div, task) {
     const span = document.createElement('span');
 
     span.setAttribute('data-task', `${task.id}`);
-    span.classList = `deadline deadline-${deadlineStatus}`;
+    span.classList = `deadline-tag deadline-${deadlineStatus}`;
     span.innerText = `${deadlineStr}`;
     div.appendChild(span);
 }
 
+
+export function populateSearchBox(tasks) {
+    const recContainer = document.querySelector('.search-recommendations');
+    recContainer.style.display = 'block';
+
+    tasks.forEach(task => {
+        const div = document.createElement('div');
+        const span = document.createElement('span');
+        div.className = 'search-rec';
+        span.innerText = task.name;
+        div.appendChild(span);
+        recContainer.appendChild(div);
+        decorateSearchItem(div, task);
+    });
+};
+
+function decorateSearchItem(div, task) {
+    div.addEventListener('click', (e) => {
+        deselectList();
+        clearSearchRecs()
+        clearDOMTasks()
+        populateTasks(task);
+    });
+};
 
 // CREATING TASK SUMMARY CONTAINER ELEMENTS
 export async function buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc) {
@@ -149,7 +182,7 @@ function buildTitleDiv(currentTask) {
         <div id="summary-title" contenteditable="true" class="summary-inp">${currentTask}</div>`;
 
     return titleDiv;
-}
+};
 
 function buildDeadlineDiv(currentDeadline) {
     const today = getDate();
@@ -168,7 +201,7 @@ function buildDeadlineDiv(currentDeadline) {
             `;
 
     return deadlineDiv;
-}
+};
 
 function buildListDiv(currentListId, currentList) {
     const listDiv = document.createElement('div');
@@ -180,7 +213,7 @@ function buildListDiv(currentListId, currentList) {
         </select>
         `;
     return listDiv;
-}
+};
 
 async function buildListSelectOptions(currentList) {
     const listsRes = await fetch(`/api/lists`);
@@ -215,7 +248,7 @@ function buildDescDiv(currentDesc) {
         <textarea id="summary-desc-textarea" class="summary-inp" placeholder="Add a description...">${descText}</textarea>
         `;
     return descDiv;
-}
+};
 
 
 export function createTaskHtml(taskName, taskId) {

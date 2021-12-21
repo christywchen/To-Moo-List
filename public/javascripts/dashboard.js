@@ -1,46 +1,20 @@
 import { finishTask, postPoneTask, changeCategory, moveTask, getDropMenu, createDropDownMenu } from './dashboard-tasks.js';
 import { showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
-import { clearDOMTasks } from './clean-dom.js';
-import { createSidebarContainer, buildTaskSummary, createTaskHtml, populateTasks } from './create-dom-elements.js';
-import { showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown } from './display.js';
+import { clearDOMTasks, clearSearchRecs } from './clean-dom.js';
+import { createSidebarContainer, buildTaskSummary, createTaskHtml, populateTasks, populateSearchBox, decorateList } from './create-dom-elements.js';
+import { toggleListDisplay, showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown } from './display.js';
 import { updateTaskStatus } from './dashboard-recap.js';
+import { initializePage } from './initialize-page.js';
+
+window.addEventListener("load", async (event) => {
+    initializePage();
+});
 
 let listId;
 
-const initializePage = async () => {
-    const listRes = await fetch('/api/lists')
-    const { lists } = await listRes.json();
-    const taskList = document.getElementById('task-lists');
-    const categoryRes = await fetch('/api/categories');
-    const { categories } = await categoryRes.json();
-    const categoryList = document.getElementById('task-categories');
-    // TO DO: Error handling
-
-    lists.forEach(list => {
-        const div = createSidebarContainer(list.name, 'list', list.id);
-        div.addEventListener('click', fetchListTasks);
-        taskList.appendChild(div);
-    });
-    categories.forEach(category => {
-        const div = createSidebarContainer(category.name, 'category', category.id);
-        div.addEventListener('click', fetchCategoryTasks)
-        categoryList.appendChild(div);
-    })
-
-    const buttons = document.querySelectorAll('button')
-    buttons.forEach(button => {
-        if (button.className !== 'logout') {
-            button.addEventListener('click', e => e.preventDefault())
-        }
-    })
-    createDropDownMenu();
-    updateTaskStatus();
-};
-
-
 // C-R-U-D Functions
 // C
-async function createTask(e) {
+export async function createTask(e) {
     e.preventDefault();
     const taskData = document.querySelector('#add-task-input');
     const taskContainer = document.getElementById("tasksContainer");
@@ -79,7 +53,7 @@ async function createTask(e) {
     }
 };
 
-async function createList(e) {
+export async function createList(e) {
     const listForm = document.querySelector('#add-list-form');
     const listData = document.querySelector('#addList');
     const formData = new FormData(listForm);
@@ -100,6 +74,7 @@ async function createList(e) {
             // const listId = newList.list.id;
             listId = newList.list.id;
             const div = createSidebarContainer(newList.list.name, 'list', listId);
+            decorateList(div);
             tasksList.appendChild(div);
         } catch (error) {
 
@@ -141,19 +116,21 @@ export async function fetchListTasks(e) {
     e.stopPropagation();
     clearDOMTasks();
     const stateId = { id: "100" };
-
-    if (e.target.className === 'list-item') {
-        // --------------------------------------------------
+    const boxTarget = e.target.classList.contains('list-box');
+    const listTarget = e.target.classList.contains('list-item')
+    if (boxTarget || listTarget) {
         listId = e.target.dataset.listid;
-        const taskRes = await fetch(`/api/lists/${listId}/tasks`)
+        const taskRes = await fetch(`/api/lists/${listId}/tasks`);
+        // TO DO: filter by completed.
+        // api/tasks/compelted --
         const { tasks } = await taskRes.json();
         populateTasks(tasks);
+        window.history.replaceState(stateId, `List ${e.target.dataset.listid}`, `/dashboard/#list/${e.target.dataset.listid}`);
     }
-    window.history.replaceState(stateId, `List ${e.target.dataset.listid}`, `/dashboard/#list/${e.target.dataset.listid}`
-    );
 };
 
 export async function fetchInboxTasks(fetchPath) {
+    listId = null;
     const taskRes = await fetch(fetchPath);
     const { tasks } = await taskRes.json();
     // TO DO: Needs Error Handling
@@ -164,6 +141,8 @@ export async function fetchInboxTasks(fetchPath) {
 export async function fetchCategoryTasks(e) {
     e.stopPropagation();
     clearDOMTasks();
+    const stateId = { id: "101" };
+    listId = null;
     // const stateId = { id: "101" };
     // To DO: update url?
     const categoryId = e.target.dataset.categoryid
@@ -173,6 +152,31 @@ export async function fetchCategoryTasks(e) {
         const { tasks } = await res.json();
         // TO DO: Error Handling
         populateTasks(tasks);
+        // window.history.replaceState(stateId, `Category ${categoryId}`, `/dashboard/#categories/$/${categoryId}`);
+    }
+};
+
+export async function fetchSearch(e) {
+    const searchForm = document.getElementById('search-form');
+    const searchData = new FormData(searchForm);
+    const name = searchData.get('search');
+    clearSearchRecs()
+
+    console.log(e.target.classList.contains('search-button'))
+    if (name.length) {
+        const res = await fetch(`/api/search/tasks/${name}`);
+        const { tasks } = await res.json();
+        // TO DO: Error handling
+        if (!res.ok) throw res
+        else {
+            if (e.target.classList.contains('search-button')) {
+                clearDOMTasks()
+                populateTasks(tasks);
+            } else {
+
+                populateSearchBox(tasks)
+            }
+        }
     }
 };
 
@@ -189,7 +193,7 @@ export const renameList = async (e) => {
     const name = formData.get('renameList');
     const body = { name };
 
-    if (listData.value.length) {
+    if (name.length) {
         try {
             const res = await fetch(`/api/lists/${listId}`, {
                 method: 'PATCH',
@@ -201,8 +205,8 @@ export const renameList = async (e) => {
             if (!res.ok) throw res
             else console.log('List renamed')
 
-            console.log(listId)
             const list = document.querySelector(`[data-listid="${listId}"]`)
+<<<<<<< HEAD
             list.innerText = name;
 
             // if task summary panel is showing
@@ -218,6 +222,9 @@ export const renameList = async (e) => {
                 const listOptions = await buildListSelectOptions(name);
                 console.log(listOptions)
             }
+=======
+            list.children[0].innerText = name;
+>>>>>>> dashboard-list-css
         } catch (error) {
         }
     }
@@ -284,37 +291,6 @@ export function deleteTask(e) {
 }
 
 
-// -------
-// Elements to append event listeners to
-const addTaskFormDiv = document.querySelector('#add-task-form');
-const addTaskButtonDiv = document.querySelector('.add-task-button');
-const addListDiv = document.querySelector('#add-list');
-const addTaskInp = document.querySelector('input#name.inp-field');
-const addTaskButton = document.querySelector('.add-task-button button');
-const addListButtonL = document.querySelector('.add-list-button-l');
-const submitListButton = document.querySelector('.submit-list');
-const closeListSubmission = document.querySelector('.close');
-const renameListButton = document.querySelector('.rename-list');
-
-// Load events
-window.addEventListener("load", async (event) => {
-    initializePage();
-    addTaskButton.addEventListener('click', createTask);
-    document.addEventListener('click', hideTaskButton);
-    document.addEventListener('click', hideListNameDiv);
-    document.addEventListener('click', hideListOptions)
-    //document.addEventListener('click', hideCreateTaskDiv);
-    document.addEventListener('click', hideDropDown);
-    addTaskInp.addEventListener('keyup', showTaskButton);
-    addListButtonL.addEventListener('click', showCreateList);
-    submitListButton.addEventListener('click', createList);
-    submitListButton.addEventListener('click', hideListNameDiv);
-    closeListSubmission.addEventListener('click', hideListNameDiv);
-    renameListButton.addEventListener('click', renameList);
-});
-//-------
-
-
 // Helper Functions
 function highlightTask(e) {
     const prevSelection = window.location.href.split('/')[7];
@@ -322,6 +298,7 @@ function highlightTask(e) {
     const nextSelection = e.target.dataset.task;
     const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
 
+<<<<<<< HEAD
 
     /// grab the task id before the list selection changes instead of using highlight task???
 
@@ -330,8 +307,10 @@ function highlightTask(e) {
     //     console.log("hello")
     // }
     // console.log(checkbox.checked);
+=======
+>>>>>>> dashboard-list-css
 
-    if (prevSelection) {
+    if (prevSelection && prevSelectionDiv) {
         if (prevSelection === nextSelection) {
             if (prevSelectionDiv.classList.contains('single-task-selected')) {
                 prevSelectionDiv.classList.remove('single-task-selected');
@@ -345,8 +324,9 @@ function highlightTask(e) {
     } else {
         nextSelectionDiv.classList.add('single-task-selected');
     }
-    // document.querySelector(`input[data-task="${nextSelection}"]`).click();
 }
+
+
 
 // TO DO: checkbox event listeners
 async function checkedTaskActions(e) {

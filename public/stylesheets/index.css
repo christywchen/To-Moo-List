@@ -6,6 +6,8 @@
 @import url("/stylesheets/login.css");
 @import url("/stylesheets/errors.css");
 @import url("/stylesheets/sidebar-animation.css");
+@import url("/stylesheets/search.css");
+@import url("/stylesheets/task-animation.css");
 
 :root {
     --main-color: #0055b2;
@@ -38,8 +40,10 @@ body {
 
 /* header block */
 #header {
-    display: flex;
-    justify-content: flex-end;
+    /* display: flex; */
+    display: grid;
+    grid-template-columns: 206px 1fr 220px;
+    justify-content: space-between;
     align-items: center;
     height: 46px;
     color: var(--tertiary-color);
@@ -50,6 +54,7 @@ body {
     display: flex;
     align-items: center;
     margin: 10px;
+    /* justify-self: flex-end; */
 }
 
 /* content block positioning */

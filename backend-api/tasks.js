@@ -1,16 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db/models');
-const { asyncHandler } = require('../utils');
+const { asyncHandler, taskNotFound } = require('../utils');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
-const taskNotFound = taskId => {
-    const err = new Error(`Task with id ${taskId} could not be found.`)
-    err.title = "Task not found";
-    err.status = 404;
-    return err;
-}
 
 // get
 router.get('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
@@ -31,14 +25,14 @@ router.get('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     }
 }))
 
+
+
 // post
 router.post('/lists/:id(\\d+)', asyncHandler(async (req, res) => {
     let { name, listId } = req.body;
     listId = parseInt(listId, 10)
-
-    console.log('locals: ', JSON.stringify(res.locals))
     const userId = res.locals.user.id;
-    console.log('?: ', name, typeof listId, typeof userId);
+
     const task = await db.Task.create({
         name,
         userId,
@@ -98,6 +92,7 @@ router.patch('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
 
 // delete
 router.delete('/tasks/:id(\\d+)', asyncHandler(async (req, res) => {
+    console.log(req.params)
     const taskId = parseInt(req.params.id, 10);
     const task = await db.Task.findByPk(taskId);
     if (task) {

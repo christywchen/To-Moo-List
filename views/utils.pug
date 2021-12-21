@@ -7,10 +7,15 @@ mixin errorSummary(errors)
           li= error
 
 mixin field(fieldText, fieldName, fieldValue, fieldType = 'text', placeholder = null, autocomplete = 'off')
-  
+
   div(class='inp-div')
     //- div(class="label_error_container")
     label(for= fieldName) #{fieldText}
-      span(class=`${fieldName}-error errmsg`) 
+      span(class=`${fieldName}-error errmsg`)
     input(class='inp-field' size=50 type=fieldType id=fieldName name=fieldName value=fieldValue placeholder=placeholder autocomplete=autocomplete)
-        
+
+mixin plainField(fieldText, fieldName, fieldValue, fieldType = 'text', placeholder = null, autocomplete = 'off')
+  label(for= fieldName) #{fieldText}
+    input(class='inp-field' size=50 type=fieldType id=fieldName name=fieldName value=fieldValue placeholder=placeholder autocomplete=autocomplete)
+
+

@@ -19,7 +19,7 @@ body {
     display:flex;
     flex-direction:column;
     justify-content:space-around;
-    align-items: flex-start;   
+    align-items: flex-start;
 }
 
 #login_img_container{
@@ -28,14 +28,14 @@ body {
 
 }
 
-#login_container{ 
+#login_container{
     display: flex;
     flex-direction: row;
     justify-content:flex-start;
     align-items: center;
     position:absolute;
     width: 90%;
-    height: 90%; 
+    height: 90%;
 }
 
 .login_form {
@@ -61,6 +61,10 @@ body {
 
 #error_emb > input {
     border: solid 1px red;
+}
+
+.home-link {
+    z-index: 10;
 }
 
 .login_logo{
