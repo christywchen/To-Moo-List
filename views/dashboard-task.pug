@@ -6,26 +6,34 @@ append head
 div.checkbox-container
     div(class="checkbox grid-square")
         input(type="checkbox")
-    div.split-3
-        div(class="completed grid-square")
-            i(class="fas fa-check")
-        div(class="postpone grid-square drop-square")
-            i(class="fas fa-calendar-plus")
-            div(class="postpone-dates dropdown" style='display: none')
-        div(class="alert grid-square")
-            i(class="fas fa-exclamation")
-    div.split-3
-        div(class="due grid-square drop-square")
-            i(class="fas fa-calendar-week drop-square")
-            div(class="hidden-cal dropdown" style='display: none')
-        div(class="moveTo grid-square drop-square")
-            i(class="fas fa-list-alt drop-square")
-            div(class="list-of-lists dropdown" style='display: none')
-        div(class="category grid-square drop-square")
-            i(class="fas fa-tag drop-square")
-            div(class="list-of-tags dropdown" style='display: none')
-    div(class="delete grid-square")
-        i(class="fas fa-trash-alt")
+    div(class="task-options")
+        div(class="split-3")
+            p(class="tool-tip") Complete Task
+            div(class="completed grid-square")
+                i(class="fas fa-check")
+            p(class="tool-tip") Postpone Task
+            div(class="postpone grid-square drop-square")
+                i(class="fas fa-calendar-plus")
+                div(class="postpone-dates dropdown" style='display: none')
+            p(class="tool-tip") ALERT
+            div(class="alert grid-square")
+                i(class="fas fa-exclamation")
+        div(class="split-3")
+            p(class="tool-tip") Change Due Date
+            div(class="due grid-square drop-square")
+                i(class="fas fa-calendar-week drop-square")
+                div(class="hidden-cal dropdown" style='display: none')
+            p(class="tool-tip") Move to list
+            div(class="moveTo grid-square drop-square")
+                i(class="fas fa-list-alt drop-square")
+                div(class="list-of-lists dropdown" style='display: none')
+            p(class="tool-tip") Change priority 
+            div(class="category grid-square drop-square")
+                i(class="fas fa-tag drop-square")
+                div(class="list-of-tags dropdown" style='display: none')
+        p(class="tool-tip") Delete
+        div(class="delete grid-square")
+            i(class="fas fa-trash-alt")
 +errorSummary(errors)
 div#add-task-form
     form(id='add-task-input')

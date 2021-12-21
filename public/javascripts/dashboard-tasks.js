@@ -241,35 +241,6 @@ const createTagList = async () => {
         div.addEventListener("click", changeCategory);
         categoryList.appendChild(div);
     });
-
-    // const hr = document.createElement('hr');
-    // categoryList.appendChild(hr);
-    // const input = document.createElement('input');
-    // input.classList = 'add-tag-input'
-    // input.placeholder = "enter new category & enter";
-    // input.type="text";
-    // input.addEventListener("keypress", async (e) => {
-    //     if (e.key === 'Enter') {
-    //         const res = await fetch('/api/categories', {
-    //             method: "POST",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //             },
-    //             body: JSON.stringify({name: `${e.target.value}`})
-    //         })
-    //         const categoryDiv = document.querySelector('.category')
-    //         if (!res.ok) {
-    //             categoryDiv.style.animation = "fetchFail 1s";
-    //             categoryList.style.animation = "fetchFail 1s";
-    //             window.alert("Could not add a new category");
-    //             throw res
-    //         }
-    //         categoryDiv.style.animation = "fetchSuccess 1s";
-    //         e.target.value = "";
-    //         hideDivContainer();
-    //     }
-    // });
-    // categoryList.appendChild(input);
 }
 
 export const createDropDownMenu = () => {
