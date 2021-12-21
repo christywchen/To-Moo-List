@@ -5,14 +5,19 @@ export function addTaskSummaryEventListeners() {
     const summaryDescInp = document.querySelector('#summary-desc-textarea');
 
     summaryTitleInp.addEventListener('blur', changeTaskName);
+    //blur:event fires when an element has lost focus.
     summaryDeadlineInp.addEventListener('blur', changeTaskDeadline);
     summarySelectInp.addEventListener('change', changeList);
     summaryDescInp.addEventListener('focus', expandTextarea);
     summaryDescInp.addEventListener('blur', changeDesc);
 }
 
+//changeTaskName is fetching the taskname and taskId, and then store
+// them in backend. After than assign the taskname to the label in 
+// tasksummary
 export const changeTaskName = async (e) => {
     const taskId = window.location.href.split('/')[7];
+    //window.location.href return a string contains the whole URL
     const newTaskName = e.target.innerText;
     const body = { name: newTaskName }
 

@@ -6,6 +6,7 @@ import { showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideLi
 
 let listId;
 
+//lists in sidebar
 const initializePage = async () => {
     const res = await fetch('/api/lists')
     const { lists } = await res.json();
@@ -35,6 +36,7 @@ async function createTask(e) {
     const taskData = document.querySelector('#add-task-input');
     const taskContainer = document.getElementById("tasksContainer");
     const formData = new FormData(taskData);
+    //create a new formdata with key/value pairs
     const name = formData.get('name');
     const body = { name, listId };
     const div = document.createElement('div');
@@ -118,6 +120,9 @@ export async function fetchTaskSummary(e) {
 
     if (listName !== '#list') {
         window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/${listName}/${task.listId}/tasks/${task.id}`);
+        //history.replaceState():modifies the current history entry, replacing it with the stateObj, title, 
+        //and URL passed in the method parameters.This method is particularly useful when you want to update 
+        //the state object or URL of the current history entry in response to some user action.
     } else {
         window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/#list/${task.listId}/tasks/${task.id}`);
     }
@@ -132,6 +137,7 @@ export async function fetchListTasks(e) {
     if (e.target.className === 'list-item') {
         // --------------------------------------------------
         listId = e.target.dataset.listid;
+        
         const taskRes = await fetch(`/api/lists/${listId}/tasks`)
         const { tasks } = await taskRes.json();
         // ------------------------------------------------------------
@@ -143,13 +149,17 @@ export async function fetchListTasks(e) {
             div.classList.add('single-task')
             div.innerHTML = createTaskHtml(task.name, task.id);
             div.addEventListener('click', fetchTaskSummary);
+            // invoke the the task summary
             div.addEventListener('click', finishTask);
+            //check if it is complete, if it is completed, remove it
             div.addEventListener('click', deleteTask);
+            //delete tasks
             div.addEventListener('click', getDropMenu);
             taskContainer.appendChild(div);
         })
     }
     window.history.replaceState(
+    // what is replaceState doing?
         stateId, `List ${e.target.dataset.listid}`,
         `/dashboard/#list/${e.target.dataset.listid}`
     );
