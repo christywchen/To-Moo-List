@@ -157,6 +157,9 @@ export function toggleListDisplay(container) {
 function selectList(list) {
     return new Promise((res, rej) => {
         list.classList.add('selected-list')
+
+        const taskSummaryDiv = document.querySelector('#task-details');
+        taskSummaryDiv.classList.remove('task-details-display');
         res();
     })
 };

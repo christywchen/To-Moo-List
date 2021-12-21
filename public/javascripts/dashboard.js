@@ -1,5 +1,5 @@
 import { finishTask, postPoneTask, changeCategory, moveTask, getDropMenu, createDropDownMenu } from './dashboard-tasks.js';
-import { showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
+import { addTaskSummaryEventListeners } from './dashboard-summary.js';
 import { clearDOMTasks, clearSearchRecs } from './clean-dom.js';
 import { createSidebarContainer, buildTaskSummary, createTaskHtml, populateTasks, populateSearchBox, decorateList, buildListSelectOptions } from './create-dom-elements.js';
 import { toggleListDisplay, showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown } from './display.js';
@@ -111,7 +111,6 @@ export async function fetchTaskSummary(e) {
         currentPriority,
         currentDesc);
     addTaskSummaryEventListeners();
-    showTaskSummary(e);
 
     if (listName !== '#list') {
         window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/${listName}/${task.listId}/tasks/${task.id}`);
