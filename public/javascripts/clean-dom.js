@@ -15,3 +15,12 @@ export function clearSearchRecs() {
         })
     }
 }
+
+export function clearTaskSummary() {
+    const taskSummary = document.querySelector('#task-details');
+    if (taskSummary.innerHTML) {
+        while (taskSummary.firstChild) {
+            taskSummary.removeChild(taskSummary.lastChild);
+        }
+    }
+}
