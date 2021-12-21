@@ -149,6 +149,27 @@
     background-color: white;
 }
 
+/* date and category tags for task items */
+.deadline-tag {
+    margin-left: auto;
+}
+
+.deadline-today {
+    color: var(--tasks-due-today);
+    font-weight: 600;
+}
+.deadline-overdue {
+    color: #bb0000;
+}
+
+.deadline-none {
+    display: none;
+}
+
+.deadline-soon {
+    color: gray;
+}
+
 .priority-tag {
     margin: 7px 5px 6px;
     padding: 3px;
@@ -156,9 +177,16 @@
     font-size: 9px;
     text-transform: uppercase;
     border-radius: 2px;
+}
+
+.priority-high {
     background-color: #b548b5;
 }
 
-.deadline-tag {
-    margin-left: auto;
+.priority-medium {
+    background-color: rgb(36, 206, 169);
+}
+
+.priority-low {
+    background-color: rgb(228, 182, 57);
 }
