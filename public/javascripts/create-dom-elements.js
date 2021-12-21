@@ -1,7 +1,7 @@
 import { fetchListTasks, updateListId } from './dashboard.js';
 import { clearDOMTasks, clearSearchRecs, clearTaskSummary } from './clean-dom.js';
 import { fetchTaskSummary, deleteList, deleteTask } from './dashboard.js';
-import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect, toggleTaskHighlight } from './display.js';
+import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect, toggleTaskHighlight, toggleTaskSummary } from './display.js';
 import { finishTask, getDropMenu } from './dashboard-tasks.js'
 
 export function createSidebarContainer(name, containerType, data,) {
@@ -88,6 +88,7 @@ async function decorateTaskDiv(div, task) {
     div.addEventListener('click', deleteTask);
     div.addEventListener('click', getDropMenu);
     div.addEventListener('click', toggleTaskHighlight);
+    div.addEventListener('click', toggleTaskSummary);
 
     if (task.categoryId) {
         const prioritySpan = await decorateTaskWithPriority(div, task);

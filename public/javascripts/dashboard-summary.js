@@ -150,22 +150,22 @@ export async function changeDesc(e) {
 };
 
 export function showTaskSummary(e) {
-    // UPDATE FUNCTIONALITY TO ACCOMMODATE FOR WHEN LIST SELECTION CHANGES
-    // const prevListSelection = window.location.href.split('/')[5];
-    // const nextListSelection = e.target.dataset.listId;
-    const prevTaskSelection = window.location.href.split('/')[7];
-    const nextTaskSelection = e.target.dataset.task;
-    const taskDetailsDiv = document.querySelector('#task-details');
+    //     // UPDATE FUNCTIONALITY TO ACCOMMODATE FOR WHEN LIST SELECTION CHANGES
+    //     // const prevListSelection = window.location.href.split('/')[5];
+    //     // const nextListSelection = e.target.dataset.listId;
+    //     const prevTaskSelection = window.location.href.split('/')[7];
+    //     const nextTaskSelection = e.target.dataset.task;
+    //     const taskDetailsDiv = document.querySelector('#task-details');
 
-    if (prevTaskSelection === nextTaskSelection) {
-        if (taskDetailsDiv.classList.contains('task-details-display')) {
-            taskDetailsDiv.classList.remove('task-details-display');
-        } else {
-            taskDetailsDiv.classList.add('task-details-display');
-        }
-    } else {
-        taskDetailsDiv.classList.add('task-details-display');
-    }
+    //     if (prevTaskSelection === nextTaskSelection) {
+    //         if (taskDetailsDiv.classList.contains('task-details-display')) {
+    //             taskDetailsDiv.classList.remove('task-details-display');
+    //         } else {
+    //             taskDetailsDiv.classList.add('task-details-display');
+    //         }
+    //     } else {
+    //         taskDetailsDiv.classList.add('task-details-display');
+    //     }
 }
 
 export async function expandTextarea(e) {

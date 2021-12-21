@@ -211,7 +211,7 @@ export function hideDivContainer() {
 // toggle highlight on task creation
 export async function toggleTaskHighlight(e) {
     const prevSelected = document.querySelector('.single-task-selected');
-    let nextSelection = e.target;
+    const nextSelection = e.target;
 
     if (prevSelected) await removeHighlight(prevSelected, nextSelection);
     else await addHighlight(nextSelection);
@@ -228,6 +228,30 @@ function removeHighlight(prevSelected, nextSelection) {
 function addHighlight(nextSelection) {
     return new Promise((res, rej) => {
         nextSelection.classList.add('single-task-selected');
+        res();
+    });
+}
+
+// toggle task summary panel
+export async function toggleTaskSummary(e) {
+    const prevSelected = document.querySelector('.single-task-selected');
+    const nextSelection = e.target;
+    const taskSummaryDiv = document.querySelector('#task-details');
+
+    if (prevSelected) await showTaskSummary(taskSummaryDiv, prevSelected, nextSelection);
+    else await hideTaskSummary(taskSummaryDiv, prevSelected)
+}
+
+function showTaskSummary(taskSummaryDiv, prevSelected, nextSelection) {
+    return new Promise((res, rej) => {
+        taskSummaryDiv.classList.add('task-details-display');
+        res();
+    });
+}
+
+function hideTaskSummary(taskSummaryDiv, prevSelected, nextSelection) {
+    return new Promise((res, rej) => {
+        taskSummaryDiv.classList.remove('task-details-display');
         res();
     });
 }
