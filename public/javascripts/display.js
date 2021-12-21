@@ -135,7 +135,7 @@ export async function toggleListSelect(e) {
         list = list.children[0];
     }
     if (prevSelected) {
-        if (list.dataset.task) {
+        if (list.dataset.listid) {
             // hide task summary if user switches to another task
             const taskSummaryDiv = document.querySelector('#task-details');
             taskSummaryDiv.classList.remove('task-details-display');
