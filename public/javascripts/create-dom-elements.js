@@ -7,7 +7,6 @@ import { finishTask, getDropMenu } from './dashboard-tasks.js'
 
 
 export function createSidebarContainer(name, containerType, data,) {
-
     const container = document.createElement('div');
     const itemDiv = document.createElement('div');
     container.classList.add(`${containerType}-box`, 'sidebar-box');
@@ -123,24 +122,8 @@ export async function buildTaskSummary(currentTask, currentDeadline, currentTask
     taskSummaryContainer.appendChild(buildDescDiv(currentDesc));
 
     taskSummaryParent.appendChild(taskSummaryContainer);
+    buildListSelectOptions(currentList);
 
-    const listsRes = await fetch(`/api/lists`);
-    const { lists } = await listsRes.json();
-    const listOptions = document.querySelector('#summary-list-select');
-
-    lists.forEach(list => {
-        if (list.name !== currentList) {
-            const listOpt = document.createElement('option');
-            listOpt.setAttribute('value', list.id);
-            listOpt.innerText = list.name;
-            listOptions.appendChild(listOpt);
-        }
-    });
-
-    const createListOpt = document.createElement('option');
-    createListOpt.setAttribute('value', 'create-new');
-    createListOpt.innerText = 'Create New';
-    listOptions.appendChild(createListOpt);
 }
 
 // TASK SUMMARY CONTAINER HELPER FUNCTIONS
@@ -197,6 +180,26 @@ function buildListDiv(currentListId, currentList) {
         </select>
         `;
     return listDiv;
+}
+
+async function buildListSelectOptions(currentList) {
+    const listsRes = await fetch(`/api/lists`);
+    const { lists } = await listsRes.json();
+    const listOptions = document.querySelector('#summary-list-select');
+
+    lists.forEach(list => {
+        if (list.name !== currentList) {
+            const listOpt = document.createElement('option');
+            listOpt.setAttribute('value', list.id);
+            listOpt.innerText = list.name;
+            listOptions.appendChild(listOpt);
+        }
+    });
+
+    const createListOpt = document.createElement('option');
+    createListOpt.setAttribute('value', 'create-new');
+    createListOpt.innerText = 'Create New';
+    listOptions.appendChild(createListOpt);
 }
 
 function buildDescDiv(currentDesc) {

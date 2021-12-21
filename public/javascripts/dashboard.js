@@ -205,6 +205,19 @@ export const renameList = async (e) => {
             const list = document.querySelector(`[data-listid="${listId}"]`)
             list.innerText = name;
 
+            // if task summary panel is showing
+            // update the list selection so that current list reflect the new name
+            const taskDetailsDiv = document.querySelector('#task-details');
+            if (taskDetailsDiv.classList.contains('task-details-display')) {
+                const summaryListSelect = document.querySelector('#summary-list-select');
+                while (summaryListSelect.hasChildNodes()) {
+                    summaryListSelect.removeChild(summaryListSelect.lastChild);
+                }
+
+                console.log('test')
+                const listOptions = await buildListSelectOptions(name);
+                console.log(listOptions)
+            }
         } catch (error) {
         }
     }
@@ -309,6 +322,9 @@ function highlightTask(e) {
     const nextSelection = e.target.dataset.task;
     const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
 
+
+    /// grab the task id before the list selection changes instead of using highlight task???
+
     // const checkbox = document.querySelector(`.boxId-${e.target.dataset.task}`).checked = true;
     // if (checkbox.checked) {
     //     console.log("hello")
@@ -317,7 +333,11 @@ function highlightTask(e) {
 
     if (prevSelection) {
         if (prevSelection === nextSelection) {
-            nextSelectionDiv.classList.remove('single-task-selected');
+            if (prevSelectionDiv.classList.contains('single-task-selected')) {
+                prevSelectionDiv.classList.remove('single-task-selected');
+            } else {
+                prevSelectionDiv.classList.add('single-task-selected');
+            }
         } else {
             prevSelectionDiv.classList.remove('single-task-selected');
             nextSelectionDiv.classList.add('single-task-selected');

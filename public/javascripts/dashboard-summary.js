@@ -1,7 +1,7 @@
 import { getDate, setTaskDeadline, decorateTaskWithDeadline } from './create-dom-elements.js';
-
+// CRUD
+// C
 export function addTaskSummaryEventListeners() {
-
     const summaryTitleInp = document.querySelector('#summary-title');
     const summaryDeadlineInp = document.querySelector('#summary-due-date-inp');
     const summarySelectInp = document.querySelector('#summary-list-select');
@@ -15,6 +15,7 @@ export function addTaskSummaryEventListeners() {
     summaryDescInp.addEventListener('blur', changeDesc);
 }
 
+// E
 export const changeTaskName = async (e) => {
     const taskId = window.location.href.split('/')[7];
     const newTaskName = e.target.innerText;
