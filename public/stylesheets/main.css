@@ -152,6 +152,7 @@
 /* date and category tags for task items */
 .deadline-tag {
     margin-left: auto;
+    margin-right: 5px;
 }
 
 .deadline-today {
@@ -179,14 +180,14 @@
     border-radius: 2px;
 }
 
-.priority-high {
+.priority-High {
     background-color: #b548b5;
 }
 
-.priority-medium {
-    background-color: rgb(36, 206, 169);
+.priority-Medium {
+    background-color: rgb(228, 182, 57);
 }
 
-.priority-low {
-    background-color: rgb(228, 182, 57);
+.priority-Low {
+    background-color: rgb(36, 206, 169);
 }
