@@ -141,7 +141,7 @@ function decorateSearchItem(div, task) {
     });
 };
 
-// CREATING TASK SUMMARY CONTAINER ELEMENTS
+// create task summary
 export async function buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc) {
     const taskSummaryContainer = document.createElement('div');
     const taskSummaryParent = document.querySelector('#task-details');
@@ -159,22 +159,7 @@ export async function buildTaskSummary(currentTask, currentDeadline, currentTask
 
 }
 
-// TASK SUMMARY CONTAINER HELPER FUNCTIONS
-export function getDate(day) {
-    let getDay;
-    if (day) getDay = new Date(day);
-    else getDay = new Date()
-
-    let month = getDay.getMonth() + 1;
-    let date = getDay.getDate();
-    let year = getDay.getFullYear();
-
-    if (month < 10) month = "0" + month;
-    if (date < 10) date = "0" + date;
-
-    return `${year}-${month}-${date}`;
-}
-
+// helper functions for task summary container
 function buildTitleDiv(currentTask) {
     const titleDiv = document.createElement('div');
     titleDiv.setAttribute('id', 'title-div');
@@ -186,6 +171,7 @@ function buildTitleDiv(currentTask) {
 
 function buildDeadlineDiv(currentDeadline) {
     const today = getDate();
+    console.log('today', today)
     let deadline = '';
 
     if (currentDeadline) {
@@ -257,12 +243,29 @@ export function createTaskHtml(taskName, taskId) {
     `;
 };
 
+// date functions
+export function getDate(day) {
+    let getDay;
+    if (day) getDay = new Date(day);
+    else getDay = new Date()
+
+    let month = getDay.getMonth() + 1;
+    let date = getDay.getDate();
+    let year = getDay.getFullYear();
+
+    if (month < 10) month = "0" + month;
+    if (date < 10) date = "0" + date;
+
+    return `${year}-${month}-${date}`;
+}
+
 export function setTaskDeadline(taskDeadline) {
     const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
     let deadline = getDate(taskDeadline);
     let today = getDate();
     let deadlineStr = '';
     let deadlineStatus = 'soon'
+
     const [
         todayYear,
         todayMonth,
@@ -285,7 +288,6 @@ export function setTaskDeadline(taskDeadline) {
             if (deadlineDate === todayDate) { // mark task if deadline is due today
                 deadlineStr = 'Today';
                 deadlineStatus = 'today';
-                console.log('today')
             } else if (deadlineDate === todayDate + 1) { // mark task if deadline is due tomorrow
                 deadlineStr = 'Tomorrow';
             }

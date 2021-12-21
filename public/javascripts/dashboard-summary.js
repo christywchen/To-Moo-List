@@ -55,7 +55,7 @@ export const changeTaskDeadline = async (e) => {
     if (newDeadline === '') {
         body = { deadline: null };
     } else {
-        newDeadline = new Date(newDeadline).toISOString();
+        newDeadline = new Date(newDeadline).toISOString().replace('T', ' ').replace('Z', '');
         body = { deadline: newDeadline };
     }
 
@@ -74,7 +74,6 @@ export const changeTaskDeadline = async (e) => {
     if (getDate(newDeadline) !== getDate(origDeadline)) {
         markSaved('#deadline-div');
         const taskDiv = document.querySelector(`div[data-task="${taskId}"]`);
-        console.log(taskDiv)
         const deadlineSpan = taskDiv.children[3];
         if (deadlineSpan) taskDiv.removeChild(deadlineSpan);
         decorateTaskWithDeadline(taskDiv, updatedTask)
