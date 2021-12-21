@@ -1,7 +1,7 @@
 import { finishTask, postPoneTask, changeCategory, moveTask, getDropMenu, createDropDownMenu } from './dashboard-tasks.js';
 import { showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
 import { clearDOMTasks, clearSearchRecs } from './clean-dom.js';
-import { createSidebarContainer, buildTaskSummary, createTaskHtml, populateTasks, populateSearchBox, decorateList } from './create-dom-elements.js';
+import { createSidebarContainer, buildTaskSummary, createTaskHtml, populateTasks, populateSearchBox, decorateList, buildListSelectOptions } from './create-dom-elements.js';
 import { toggleListDisplay, showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown } from './display.js';
 import { updateTaskStatus } from './dashboard-recap.js';
 import { initializePage } from './initialize-page.js';
@@ -216,7 +216,7 @@ export const renameList = async (e) => {
             else console.log('List renamed')
 
             const list = document.querySelector(`[data-listid="${listId}"]`)
-            list.innerText = name;
+            list.children[0].innerText = name;
 
             // if task summary panel is showing
             // update the list selection so that current list reflect the new name
@@ -227,11 +227,8 @@ export const renameList = async (e) => {
                     summaryListSelect.removeChild(summaryListSelect.lastChild);
                 }
 
-                console.log('test')
-                const listOptions = await buildListSelectOptions(name);
-                console.log(listOptions)
+                await buildListSelectOptions(listId, name);
             }
-            list.children[0].innerText = name;
         } catch (error) {
         }
     }

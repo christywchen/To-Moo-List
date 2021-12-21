@@ -138,7 +138,6 @@ export const changePriority = async (e) => {
     });
     const { task: updatedTask } = await updatedRes.json();
 
-    console.log(e.target.value, origPriority)
     if (newPriorityId !== origPriority) {
         markSaved('#priority-div');
         const taskDiv = document.querySelector(`div[data-task="${taskId}"]`);

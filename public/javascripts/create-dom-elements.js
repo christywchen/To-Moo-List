@@ -172,7 +172,7 @@ export async function buildTaskSummary(
     taskSummaryContainer.appendChild(buildDescDiv(currentDesc));
 
     taskSummaryParent.appendChild(taskSummaryContainer);
-    buildListSelectOptions(currentList);
+    buildListSelectOptions(currentListId, currentList);
     buildPrioritySelectOptions(currentPriority);
 
 }
@@ -212,17 +212,18 @@ function buildListDiv(currentListId, currentList) {
     listDiv.innerHTML = `
         <div id="summary-list">List</div>
         <select id="summary-list-select" class="summary-inp">
-            <option value="${currentListId}">${currentList}</option>
         </select>
         `;
     return listDiv;
 }
 
-async function buildListSelectOptions(currentList) {
+export async function buildListSelectOptions(currentListId, currentList) {
     const listsRes = await fetch(`/api/lists`);
     const { lists } = await listsRes.json();
     const listOptions = document.querySelector('#summary-list-select');
+    listOptions.innerHTML = `<option value="${currentListId}">${currentList}</option>`;
 
+    console.log(currentList)
     lists.forEach(list => {
         if (list.name !== currentList) {
             const option = document.createElement('option');
@@ -236,6 +237,8 @@ async function buildListSelectOptions(currentList) {
     createListOpt.setAttribute('value', 'create-new');
     createListOpt.innerText = 'Create New';
     listOptions.appendChild(createListOpt);
+
+    console.log('listthing', listOptions)
 }
 
 function buildPriorityDiv(currentPriorityId, currentPriority) {
@@ -257,7 +260,6 @@ async function buildPrioritySelectOptions(currentPriority) {
 
     categories.forEach(category => {
         if (category.name !== currentPriority) {
-            console.log(category)
             const option = document.createElement('option');
             option.setAttribute('value', category.id);
             option.innerText = category.name;

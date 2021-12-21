@@ -25,7 +25,7 @@ export const finishTask = (e) => {
             }
         })
     })
-}
+};
 
 export const postPoneTask = async (e) => {
     const selectedTasks = document.querySelectorAll(".single-task > input");
@@ -187,7 +187,7 @@ const createListDropDown = async () => {
     const input = document.createElement('input');
     input.classList = 'add-tag-input'
     input.placeholder = "type new list & enter";
-    input.type="text";
+    input.type = "text";
     input.addEventListener("keypress", async (e) => {
         if (e.key === 'Enter') {
             const res = await fetch('/api/lists', {
@@ -195,7 +195,7 @@ const createListDropDown = async () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({name: `${e.target.value}`})
+                body: JSON.stringify({ name: `${e.target.value}` })
             })
             const menuDiv = document.querySelector('.moveTo')
             if (!res.ok) {
