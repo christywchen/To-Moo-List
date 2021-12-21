@@ -1,5 +1,5 @@
 import { fetchListTasks, updateListId } from './dashboard.js';
-import { clearDOMTasks, clearSearchRecs } from './clean-dom.js';
+import { clearDOMTasks, clearSearchRecs, clearTaskSummary } from './clean-dom.js';
 import { fetchTaskSummary, deleteList, deleteTask } from './dashboard.js';
 import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect } from './display.js';
 import { finishTask, getDropMenu } from './dashboard-tasks.js'
@@ -162,7 +162,9 @@ export async function buildTaskSummary(
     const taskSummaryContainer = document.createElement('div');
     const taskSummaryParent = document.querySelector('#task-details');
 
-    if (taskSummaryParent.innerText.length) taskSummaryParent.innerText = "";
+    // if (taskSummaryParent.innerText.length) taskSummaryParent.innerText = "";
+
+    clearTaskSummary();
 
     taskSummaryContainer.setAttribute('id', 'task-editor');
     taskSummaryContainer.appendChild(buildTitleDiv(currentTask));
@@ -174,7 +176,6 @@ export async function buildTaskSummary(
     taskSummaryParent.appendChild(taskSummaryContainer);
     buildListSelectOptions(currentListId, currentList);
     buildPrioritySelectOptions(currentPriority);
-
 }
 
 // helper functions for task summary container
@@ -223,7 +224,6 @@ export async function buildListSelectOptions(currentListId, currentList) {
     const listOptions = document.querySelector('#summary-list-select');
     listOptions.innerHTML = `<option value="${currentListId}">${currentList}</option>`;
 
-    console.log(currentList)
     lists.forEach(list => {
         if (list.name !== currentList) {
             const option = document.createElement('option');
@@ -237,8 +237,6 @@ export async function buildListSelectOptions(currentListId, currentList) {
     createListOpt.setAttribute('value', 'create-new');
     createListOpt.innerText = 'Create New';
     listOptions.appendChild(createListOpt);
-
-    console.log('listthing', listOptions)
 }
 
 function buildPriorityDiv(currentPriorityId, currentPriority) {
