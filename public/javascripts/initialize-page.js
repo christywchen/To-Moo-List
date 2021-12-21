@@ -23,7 +23,7 @@ export const initializePage = async () => {
     headers.forEach(header => {
         header.addEventListener('click', (e) => {
             const lists = header.nextElementSibling;
-            toggleListDisplay(lists);
+            toggleListDisplay(lists, e);
         });
     });
 
@@ -56,7 +56,7 @@ export const initializePage = async () => {
     const addListButton = document.querySelector('.fa-plus-square');
     const addTaskInp = document.querySelector('input#name.inp-field');
     const addTaskButton = document.querySelector('.add-task-button button');
-    const addListButtonL = document.querySelector('.add-list-button-l');
+    const addListButtonL = document.querySelector('.fa-plus-square');
     const submitListButton = document.querySelector('.submit-list');
     const closeListSubmission = document.querySelector('.close');
     const renameListButton = document.querySelector('.rename-list');

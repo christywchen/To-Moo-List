@@ -27,7 +27,6 @@ export function showPageListeners() {
 
 function removeSelfOnClick(container) {
     const className = container.className;
-    console.log(className);
     container.addEventListener('click', (e) => {
         hideContainer(className)
     })
@@ -38,6 +37,8 @@ function removeSelfOnClick(container) {
 export async function showCreateList(e) {
     const addListDiv = document.querySelector('#add-list');
     // e.preventDefault();
+    // const targetNotIcon = !e.target.classList.contains('far');
+    // console.log(targetNotIcon)
     addListDiv.style.display = 'block';
     addListDiv.style.position = 'fixed';
     fadeBackground();
@@ -141,6 +142,7 @@ export async function toggleListSelect(e) {
 export function toggleListDisplay(container) {
     const icon = container.parentNode.querySelector('.fas');
     const isSelected = container.style.display === 'block';
+
 
     if (isSelected) {
         container.style.display = 'none';

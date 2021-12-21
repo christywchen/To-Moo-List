@@ -106,11 +106,15 @@ ol li {
     padding-left: 4px;
 }
 
-.add-list-button {
+/* .add-list-button {
     z-index: 10;
     height: 16px;
     width: 16px;
     bottom: 5px;
+} */
+
+.fa-caret-square-down {
+    z-index: 10;
 }
 
 .fa-caret-right {
