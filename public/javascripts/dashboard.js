@@ -206,7 +206,6 @@ export const renameList = async (e) => {
             else console.log('List renamed')
 
             const list = document.querySelector(`[data-listid="${listId}"]`)
-<<<<<<< HEAD
             list.innerText = name;
 
             // if task summary panel is showing
@@ -222,9 +221,7 @@ export const renameList = async (e) => {
                 const listOptions = await buildListSelectOptions(name);
                 console.log(listOptions)
             }
-=======
             list.children[0].innerText = name;
->>>>>>> dashboard-list-css
         } catch (error) {
         }
     }
@@ -298,7 +295,6 @@ function highlightTask(e) {
     const nextSelection = e.target.dataset.task;
     const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
 
-<<<<<<< HEAD
 
     /// grab the task id before the list selection changes instead of using highlight task???
 
@@ -307,8 +303,6 @@ function highlightTask(e) {
     //     console.log("hello")
     // }
     // console.log(checkbox.checked);
-=======
->>>>>>> dashboard-list-css
 
     if (prevSelection && prevSelectionDiv) {
         if (prevSelection === nextSelection) {
