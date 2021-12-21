@@ -13,6 +13,7 @@ export const initializePage = async () => {
     const categoryList = document.getElementById('task-categories');
     const headers = document.querySelectorAll('.list-header-container');
     const inboxLists = document.querySelectorAll('.inbox-list');
+    const buttons = document.querySelectorAll('button')
 
     if (!lists.length) showCreateList()
 
@@ -39,7 +40,6 @@ export const initializePage = async () => {
         categoryList.appendChild(div);
     })
 
-    const buttons = document.querySelectorAll('button')
     buttons.forEach(button => {
         if (button.className !== 'logout') {
             button.addEventListener('click', e => e.preventDefault())

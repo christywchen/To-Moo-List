@@ -173,7 +173,6 @@ export async function fetchSearch(e) {
                 clearDOMTasks()
                 populateTasks(tasks);
             } else {
-
                 populateSearchBox(tasks)
             }
         }
