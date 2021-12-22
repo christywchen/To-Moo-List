@@ -175,10 +175,7 @@ export async function toggleListSelect(e) {
 export function toggleListDisplay(container) {
     const icon = container.parentNode.querySelector('.fas');
     const isSelected = container.style.display === 'block';
-
-    console.log('cont: ', container);
-
-
+    
     if (isSelected) {
         container.style.display = 'none';
         icon.classList.remove('fa-caret-down');

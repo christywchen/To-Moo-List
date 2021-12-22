@@ -70,14 +70,22 @@ export function decorateList(list) {
     });
 };
 
-export function populateTasks(tasks) {
+export function populateTasks(tasks, getCompleted = false) {
     if (!Array.isArray(tasks)) tasks = [tasks];
     const tasksContainer = document.getElementById("tasksContainer");
 
     tasks.forEach(task => {
         const div = document.createElement("div");
         decorateTaskDiv(div, task);
-        tasksContainer.appendChild(div);
+        if (getCompleted) {
+            if (task.isCompleted) {
+                tasksContainer.appendChild(div);
+            }
+        } else {
+            if (!task.isCompleted) {
+                tasksContainer.appendChild(div);
+            }
+        }
     });
 };
 
