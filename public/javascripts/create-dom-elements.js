@@ -82,10 +82,10 @@ async function decorateTaskDiv(div, task) {
     div.setAttribute('data-task', `${task.id}`);
     div.classList.add('single-task')
     div.innerHTML = createTaskHtml(task.name, task.id);
-    div.addEventListener('click', fetchTaskSummary, {once: true});
-    div.addEventListener('click', finishTask, {once: true});
-    div.addEventListener('click', deleteTask, {once: true});
-    div.addEventListener('click', getDropMenu, {once: true});
+    div.addEventListener('click', fetchTaskSummary, { once: true });
+    div.addEventListener('click', finishTask, { once: true });
+    div.addEventListener('click', deleteTask, { once: true });
+    div.addEventListener('click', getDropMenu, { once: true });
     div.addEventListener('click', toggleTaskHighlight);
     div.addEventListener('click', toggleTaskSummary);
 
@@ -176,7 +176,7 @@ export async function buildTaskSummary(
 
     taskSummaryParent.appendChild(taskSummaryContainer);
     buildListSelectOptions(currentListId, currentList);
-    buildPrioritySelectOptions(currentPriority);
+    buildPrioritySelectOptions(currentPriority, currentPriorityId);
 }
 
 // helper functions for task summary container
@@ -226,7 +226,6 @@ function buildPriorityDiv(currentPriorityId, currentPriority) {
     priorityDiv.innerHTML = `
         <div id="summary-priority">Priority</div>
         <select id="summary-priority-select" class="summary-inp">
-        <option value="${currentPriorityId}">${currentPriority}</option>
         </select>
         `;
     return priorityDiv;
@@ -261,11 +260,11 @@ export async function buildListSelectOptions(currentListId, currentList) {
     listOptions.appendChild(createListOpt);
 }
 
-export async function buildPrioritySelectOptions(currentPriority) {
+export async function buildPrioritySelectOptions(currentPriority, currentPriorityId) {
     const priorityRes = await fetch(`/api/categories`);
     const { categories } = await priorityRes.json();
     const priorityOptions = document.querySelector('#summary-priority-select');
-
+    priorityOptions.innerHTML = `<option value="${currentPriorityId}">${currentPriority}</option>`
     populateSelectOptions(categories, currentPriority, priorityOptions);
 }
 

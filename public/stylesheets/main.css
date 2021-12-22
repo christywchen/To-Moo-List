@@ -198,3 +198,11 @@
 .priority-Low {
     background-color: rgb(36, 206, 169);
 }
+
+.logout:hover{
+    background-color: #032c61;
+}
+
+.logout:active{
+    background-color: #03162f;
+}
