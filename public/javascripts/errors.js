@@ -36,7 +36,6 @@ window.addEventListener("load", async (event) => {
         if (findText(error, 'username')) {
             userElUser.className = 'redBox';
             const usernameErr = document.querySelector(".username-error");
-            console.log(usernameErr)
             usernameErr.hidden = false;
             usernameErr.innerText = error.innerText;
 

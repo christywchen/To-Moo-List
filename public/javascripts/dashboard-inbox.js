@@ -34,9 +34,6 @@ window.addEventListener("load", async (e) => {
     });
 })
 
-
-
-
 const taskDivs = document.querySelectorAll('.single-task')
 if (taskDivs) {
     taskDivs.forEach(child => {
