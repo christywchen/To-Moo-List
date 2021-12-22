@@ -6,7 +6,8 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
 // get / search
-router.get('/tasks/:word(\\w+)', asyncHandler(async (req, res, next) => {
+router.get('/tasks/:word(*+)', asyncHandler(async (req, res, next) => {
+    // '/tasks/:word(\\w+)'
     const word = req.params.word;
     const userId = parseInt(res.locals.user.id, 10);
 

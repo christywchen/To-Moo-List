@@ -42,17 +42,12 @@ router.put('/:id', validateList, handleValidationErrors, asyncHandler(async (req
 
 router.patch('/:id', validateList, handleValidationErrors, asyncHandler(async (req, res, next) => {
     const listId = parseInt(req.params.id, 10);
-    console.log('!!!!!!')
-    console.log(listId)
     const list = await db.List.findByPk(listId);
 
     console.log(list)
-
     if (list) {
         const { name } = req.body;
-        console.log('!!!', name)
         await list.update({ name });
-        console.log('here')
         res.status(200);
         res.json({ list })
     } else {

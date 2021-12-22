@@ -1,10 +1,14 @@
 import { createTask, createList, renameList, fetchSearch, fetchListTasks, fetchCategoryTasks } from './dashboard.js'
-import { hideTaskButton, fadeBackground, hideListNameDiv, hideListOptions, hideDropDown, showTaskButton, showCreateList, toggleListDisplay, toggleListSelect, deselectList } from './display.js';
+import { hideTaskButton, fadeBackground, hideListNameDiv, hideListOptions, hideDropDown, showTaskButton, showCreateList, toggleListDisplay, toggleListSelect, deselectList, selectSearchField } from './display.js';
 import { createSidebarContainer, decorateList } from './create-dom-elements.js';
 import { createDropDownMenu } from './dashboard-tasks.js';
 import { updateTaskStatus } from './dashboard-recap.js';
+import { clearSearch } from './clean-dom.js';
 
 export const initializePage = async () => {
+    const stateId = { id: "98" };
+    window.history.replaceState(stateId, `Dashboard`, `/dashboard`);
+
     const listRes = await fetch('/api/lists')
     const { lists } = await listRes.json();
     const taskList = document.getElementById('task-lists');
@@ -20,7 +24,7 @@ export const initializePage = async () => {
     headers.forEach(header => {
         header.addEventListener('click', (e) => {
             const lists = header.nextElementSibling;
-            toggleListDisplay(lists);
+            toggleListDisplay(lists, e);
         });
     });
 
@@ -52,7 +56,7 @@ export const initializePage = async () => {
     const addListButton = document.querySelector('.fa-plus-square');
     const addTaskInp = document.querySelector('input#name.inp-field');
     const addTaskButton = document.querySelector('.add-task-button button');
-    const addListButtonL = document.querySelector('.add-list-button-l');
+    const addListButtonL = document.querySelector('.fa-plus-square');
     const submitListButton = document.querySelector('.submit-list');
     const closeListSubmission = document.querySelector('.close');
     const renameListButton = document.querySelector('.rename-list');
@@ -64,6 +68,7 @@ export const initializePage = async () => {
         hideListNameDiv(e);
         hideListOptions(e);
         hideDropDown(e);
+        clearSearch(e);
     })
     addTaskButton.addEventListener('click', createTask);
     addTaskInp.addEventListener('keyup', showTaskButton);
@@ -73,6 +78,8 @@ export const initializePage = async () => {
         hideListNameDiv(e);
     })
     closeListSubmission.addEventListener('click', hideListNameDiv);
+
+    searchField.addEventListener('click', selectSearchField)
     searchField.addEventListener('keyup', fetchSearch);
     searchButton.addEventListener('click', (e) => {
         fetchSearch(e);
@@ -85,4 +92,5 @@ export const initializePage = async () => {
 
     createDropDownMenu();
     updateTaskStatus();
+
 };

@@ -8,7 +8,6 @@ const loginUser = (req, res, user) => {
         userId: user.id
     };
 
-    // console.log(req.session)
 };
 
 const requireAuth = (req, res, next) => {
@@ -19,7 +18,6 @@ const requireAuth = (req, res, next) => {
 }
 
 const restoreUser = async (req, res, next) => {
-    // console.log(req.session);
     if (req.session.auth) {
         const { userId } = req.session.auth;
 
@@ -46,7 +44,6 @@ const restoreUser = async (req, res, next) => {
 }
 
 const logoutUser = (req, res) => {
-    console.log('click')
     delete req.session.auth;
 };
 

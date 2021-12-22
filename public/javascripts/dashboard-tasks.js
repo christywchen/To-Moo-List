@@ -1,8 +1,12 @@
 import { updateList } from './dashboard.js';
-import { showCreateList, hideDivContainer } from './display.js'
+import { updateTaskStatus } from './dashboard-recap.js'
+import { updatePriorityTag } from './dashboard-summary.js'
+import { buildDeadlineDiv, getDate, buildPrioritySelectOptions } from './create-dom-elements.js';
+import { showCreateList, hideDivContainer, hideTaskSummary } from './display.js'
 
 export const finishTask = (e) => {
     const completeTask = document.querySelector(".completed");
+    const taskSummaryDiv = document.querySelector('#task-details');
     completeTask.addEventListener("click", async (e) => {
         const selectedTasks = document.querySelectorAll(".single-task > input");
         selectedTasks.forEach(async (e) => {
@@ -18,14 +22,18 @@ export const finishTask = (e) => {
                     console.log("Something went wrong")
                 } else {
                     completeTask.style.animation = "fetchSuccess 1s";
+                    updateTaskStatus();
                     const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
-                    if (deleteDiv) deleteDiv.remove();
+                    if (deleteDiv) {
+                        deleteDiv.remove();
+                        await hideTaskSummary(taskSummaryDiv);
+                    }
                     //setTimeout(() => window.alert("Your task was completed!"));
                 }
             }
         })
     })
-}
+};
 
 export const postPoneTask = async (e) => {
     const selectedTasks = document.querySelectorAll(".single-task > input");
@@ -45,8 +53,9 @@ export const postPoneTask = async (e) => {
                 console.log("Something went wrong");
             } else {
                 console.log("it worked");
+                extendCal.style.display = 'none';
+                updateTaskStatus();
             }
-            extendCal.style.display = 'none';
         }
     })
 }
@@ -71,8 +80,9 @@ export const moveTask = async (e) => {
                 console.log("it worked");
                 const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
                 deleteDiv.remove();
+                listMenu.style.display = 'none';
+                updateTaskStatus();
             }
-            listMenu.style.display = 'none';
         }
 
     })
@@ -96,21 +106,27 @@ export const changeCategory = async (e) => {
                 console.log("Something went wrong");
             } else {
                 console.log("it worked");
+                const {task} = await res.json();
+                updatePriorityTag(e.dataset.task, task, tagId, null);
+                // const taskSummary = document.querySelector('#summary-priority-select');
+                // taskSummary.innerHTML = "";
+                // buildPrioritySelectOptions(task.Category.name);
+                tag.style.display = 'none';
+                updateTaskStatus();
             }
-            tag.style.display = 'none';
         }
     })
 }
 
 export function deleteTask(e) {
-
     const trashTask = document.querySelector(".delete");
+    const taskSummaryDiv = document.querySelector('#task-details');
 
     trashTask.addEventListener('click', (e) => {
         const selectedTasks = document.querySelectorAll(".single-task > input");
-        selectedTasks.forEach(async (ev) => {
-            if (ev.checked) {
-                const res = await fetch(`/api/tasks/${ev.dataset.task}`, {
+        selectedTasks.forEach(async (e) => {
+            if (e.checked) {
+                const res = await fetch(`/api/tasks/${e.dataset.task}`, {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json"
@@ -120,19 +136,19 @@ export function deleteTask(e) {
                 if (!res.ok) {
                     console.log("Something went wrong")
                 } else {
-                    const deleteDiv = document.querySelector(`[data-task="${ev.dataset.task}"]`);
+                    const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
+                    await hideTaskSummary(taskSummaryDiv);
                     if (deleteDiv) deleteDiv.remove();
                     //setTimeout( () => window.alert("Your task was deleted"))
+                    trashTask.style.animation = "fetchSuccess 1s";
                 }
             }
         })
-        trashTask.style.animation = "fetchSuccess 1s";
     })
 }
 
-export const getDropMenu = (e) => {
 
-    //console.log('click')
+export const getDropMenu = (e) => {
     const listMenu = document.querySelector('.list-of-lists');
     const moveCal = document.querySelector('.moveTo');
     moveCal.addEventListener('click', (e) => {
@@ -159,10 +175,19 @@ export const getDropMenu = (e) => {
     const categoryList = document.querySelector('.list-of-tags');
     const tag = document.querySelector('.category');
     tag.addEventListener('click', (e) => {
-        hideDivContainer()
+        hideDivContainer();
         categoryList.style.display = 'block';
         categoryList.style.animation = "growDown .5s ease";
         categoryList.classList.add('visible');
+    })
+
+    const calDiv = document.querySelector('.due');
+    const getCal = document.querySelector('.hidden-cal');
+    calDiv.addEventListener('click', (e) => {
+        hideDivContainer()
+        getCal.style.display = 'block';
+        getCal.style.animation = "growDown .5s ease";
+        getCal.classList.add('visible');
     })
 }
 
@@ -187,7 +212,7 @@ const createListDropDown = async () => {
     const input = document.createElement('input');
     input.classList = 'add-tag-input'
     input.placeholder = "type new list & enter";
-    input.type="text";
+    input.type = "text";
     input.addEventListener("keypress", async (e) => {
         if (e.key === 'Enter') {
             const res = await fetch('/api/lists', {
@@ -195,7 +220,7 @@ const createListDropDown = async () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({name: `${e.target.value}`})
+                body: JSON.stringify({ name: `${e.target.value}` })
             })
             const menuDiv = document.querySelector('.moveTo')
             if (!res.ok) {
@@ -241,39 +266,20 @@ const createTagList = async () => {
         div.addEventListener("click", changeCategory);
         categoryList.appendChild(div);
     });
+}
 
-    // const hr = document.createElement('hr');
-    // categoryList.appendChild(hr);
-    // const input = document.createElement('input');
-    // input.classList = 'add-tag-input'
-    // input.placeholder = "enter new category & enter";
-    // input.type="text";
-    // input.addEventListener("keypress", async (e) => {
-    //     if (e.key === 'Enter') {
-    //         const res = await fetch('/api/categories', {
-    //             method: "POST",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //             },
-    //             body: JSON.stringify({name: `${e.target.value}`})
-    //         })
-    //         const categoryDiv = document.querySelector('.category')
-    //         if (!res.ok) {
-    //             categoryDiv.style.animation = "fetchFail 1s";
-    //             categoryList.style.animation = "fetchFail 1s";
-    //             window.alert("Could not add a new category");
-    //             throw res
-    //         }
-    //         categoryDiv.style.animation = "fetchSuccess 1s";
-    //         e.target.value = "";
-    //         hideDivContainer();
-    //     }
-    // });
-    // categoryList.appendChild(input);
+const createCalendar = async (e) => {
+    const calDiv = document.querySelector('.hidden-cal');
+    calDiv.setAttribute('id', 'deadline-div');
+    const today = getDate();
+    calDiv.innerHTML = `
+            <input type="date" min="${today}" value="${today}" id="summary-due-date-inp" class="summary-inp"></input>
+            `;
 }
 
 export const createDropDownMenu = () => {
     createListDropDown();
     createPostPoneList();
     createTagList();
+    createCalendar();
 }

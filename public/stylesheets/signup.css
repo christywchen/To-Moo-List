@@ -32,10 +32,9 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    position:absolute;
-    padding-top:50px;
     width: 100%;
     height: 70%; 
+    margin: 80px;
 }
 
 .signup_form {

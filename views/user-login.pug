@@ -2,29 +2,92 @@ extends layout.pug
 
 include utils.pug
 
+append head
+  //- add page specific styles by appending to the head
+  link(rel="stylesheet" href="/stylesheets/team.css")
+
 block content
-    div#login_main
-        div.errMsg(hidden)
-            +errorSummary(errors)
-    div#loginpage_container
-        a.home-link(href='/')
-            img(src="images/logo-o-dark.png" class="login_logo" href='/')
-        div#login_container
-            div#login_img_container
-                img(src="images/steak-o.png")
-            div#login_form_container
-                form(action='/login' method='post' class="login_form")
-                    input(type='hidden' name='_csrf' value=csrfToken)
-                    div#user_form
-                        +field('Username', 'username', username)
-                        div.username-error(hidden="true")
-                    div#password_form
-                        +field('Password', 'password', password, 'password')
-                        div.password-error(hidden="true")
-                    div#loginBtCon
-                        button(type='submit') Log In
-                            if !errors
-                                a(href='/dashboard')
-                        button(type='submit')
-                            a(href="/signup") Don't have an account? Sign Up
+    header
+        div.navbar-container
+            div.navbar
+                a(href='/' class="moogo")
+                    img(src='images/logo-o-light.png', alt="cow-on-computer" id="logo")
+                ul
+                    li
+                        a(href="/") Home
+                    li
+                        a(href="/upgrade") Upgrade
+                    li
+                        a(href="/team") Meet the team
+                    li
+                        a(href="/login") Log in
+                    li(class="signup")
+                        a(href="/signup") Sign up for free
+    main
+        div#login_main
+            div.errMsg(hidden)
+                +errorSummary(errors)
+        div#loginpage_container
+            div#login_container
+                div#login_img_container
+                    img(src="images/cow-skateboard-o.png")
+                div#login_form_container
+                    form(action='/login' method='post' class="login_form")
+                        input(type='hidden' name='_csrf' value=csrfToken)
+                        div#user_form
+                            +field('Username', 'username', username)
+                            div.username-error(hidden="true")
+                        div#password_form
+                            +field('Password', 'password', password, 'password')
+                            div.password-error(hidden="true")
+                        div#loginBtCon
+                            button(type='submit') Log In
+                                if !errors
+                                    a(href='/dashboard')
+                            button(type='submit')
+                                a(href="/signup") Don't have an account? Sign Up
+    footer
+        div.social-container
+            div.social-links
+                div(class="christy person")
+                    h4 Christy
+                    ul
+                        li
+                            a(href="#") Linkedin
+                        li
+                            a(href="#") Github
+                        li
+                            a(href="#") Instagram
+                div(class="haozhen person")
+                    h4 Haozhen
+                    ul
+                        li
+                            a(href="#") Linkedin
+                        li
+                            a(href="#") Github
+                        li
+                            a(href="#") Instagram
+                div(class="justin person")
+                    h4 Justin
+                    ul
+                        li
+                            a(href="#") Linkedin
+                        li
+                            a(href="#") Github
+                        li
+                            a(href="#") Instagram
+                div(class="peter person")
+                    h4 Peter
+                    ul
+                        li
+                            a(href="#") Linkedin
+                        li
+                            a(href="#") Github
+                        li
+                            a(href="#") Instagram
+        div.copyright
+            p &copy; Copyright 2021 To Moo List
+            a(href="#") Terms
+            a(href="#") Privacy
+            a(href="#") Security
             script(src="/javascripts/errors.js" type="module")
