@@ -4,76 +4,73 @@ include utils.pug
 
 block content
     div#page-cover
-    div#header
-        div.left-header
-        div.search-container
-            form#search-form(for='search')
-                +plainField('', 'search', '', null, '')
-                span.fas.fa-search.fa-lg
+    div#container
+        div#header
+            div.left-header
+            div.search-container
+                form#search-form(for='search')
+                    +plainField('', 'search', '', null, 'Search task')
+                    span.fas.fa-search.fa-lg
+                    span.serach-button-container
+                        button.search-button Search
+                div.search-recommendations
+            div#user
+                if locals.authenticated
+                    span.welcome Welcome #{user.username}!
+                    form(action='/logout' method='post')
+                        button.logout(type='submit') Logout
+        div#content
+            div#sidebar
+                div.sidebar-logo
+                div.lists
+                    div.list-header-container
+                        i.fas.fa-caret-right
+                        div.list-header Inbox
+                        div
+                    div#default-lists.list-container
+                        div#today.inbox-list Today's Tasks
+                        div#tomorrow.inbox-list Tomorrow's Tasks
+                        div#all.inbox-list All Tasks
+                div.lists
+                    div.list-header-container
+                        i.fas.fa-caret-right
+                        div.list-header Lists
+                        div.add-list-button.add-list-button-l(role='button')
+                            i.far.fa-plus-square
+                    div#task-lists.list-container
 
-                span.serach-button-container
-                    button.search-button Search
-            div.search-recommendations
-        div#user
-            if locals.authenticated
-                span.welcome Welcome #{user.username}!
-                form(action='/logout' method='post')
-                    button.logout(type='submit') Logout
-    div#content
-        div#sidebar
-            div.sidebar-logo
-            div.lists
-                div.list-header-container
-                    i.fas.fa-caret-right
-                    div.list-header Inbox
-                    div
-                div#default-lists.list-container
-                    div#today.inbox-list Today's Tasks
-                    div#tomorrow.inbox-list Tomorrow's Tasks
-                    div#all.inbox-list All Tasks
-            div.lists
-                div.list-header-container
-                    i.fas.fa-caret-right
-                    div.list-header Lists
-                    div.add-list-button.add-list-button-l(role='button')
-                        i.far.fa-plus-square.fa-lg
-                div#task-lists.list-container
+                div.lists
+                    div.list-header-container
+                        i.fas.fa-caret-right
+                        div.list-header Priorities
+                    div#task-categories.list-container
 
-            div.lists
-                div.list-header-container
-                    i.fas.fa-caret-right
-                    div.list-header Priority
-                    //- div.add-list-button(role='button')
-                    //-     i.far.fa-plus-square
-                div#task-categories.list-container
+            div#main
+                div#add-task
+                    include dashboard-task.pug
 
-        div#main
-            div#add-task
-                include dashboard-task.pug
+            div#add-list(style='display: none')
+                div.add-task-box
+                    div.close
+                    p Add a List
+                    form(id='add-list-form')
+                        +field('Please enter a new list name', 'addList', '')
+                        div.add-list-buttons
+                            button.submit-list(type="submit") Add
+                            button.cancel-submit-list(type="submit") Cancel
 
-        div#add-list(style='display: none')
-            div.add-task-box
-                div.close
-                p Add a List
-                form(id='add-list-form')
-                    +field('Please enter a new list name', 'addList', '')
-                    div.add-list-buttons
-                        button.submit-list(type="submit") Add
-                        button.cancel-submit-list(type="submit") Cancel
-
-        div#rename-list(style='display: none')
-            div.add-task-box
-                div.close
-                p Rename list
-                form(id='rename-list-form')
-                    +field('List name', 'renameList', '')
-                    div.add-list-buttons
-                        button.rename-list(type="submit") Save
-                        button.cancel-submit-list(type="submit") Cancel
-        div#spacer
-        div#summary
-            include dashboard-summary.pug
-        script(src="/javascripts/dashboard.js" type="module")
-        script(src="/javascripts/dashboard-inbox.js" type="module")
-        script(src="/javascripts/dashboard-tasks.js" type="module")
-        //- script(src="/javascripts/dashboard-summary.js" type="module")
+            div#rename-list(style='display: none')
+                div.add-task-box
+                    div.close
+                    p Rename list
+                    form(id='rename-list-form')
+                        +field('List name', 'renameList', '')
+                        div.add-list-buttons
+                            button.rename-list(type="submit") Save
+                            button.cancel-submit-list(type="submit") Cancel
+            div#spacer
+            div#summary
+                include dashboard-summary.pug
+            script(src="/javascripts/dashboard.js" type="module")
+            script(src="/javascripts/dashboard-inbox.js" type="module")
+            script(src="/javascripts/dashboard-tasks.js" type="module")

@@ -39,7 +39,6 @@ export async function showCreateList(e) {
     const addListDiv = document.querySelector('#add-list');
     // e.preventDefault();
     // const targetNotIcon = !e.target.classList.contains('far');
-    // console.log(targetNotIcon)
     addListDiv.style.display = 'block';
     addListDiv.style.position = 'fixed';
     fadeBackground();
@@ -152,10 +151,18 @@ export async function toggleListSelect(e) {
     const prevSelected = document.querySelector('.selected-list');
     let list = e.target
     // Lists and Categories have an extra div container.
+
     if (list.classList.contains('sidebar-box')) {
         list = list.children[0];
     }
-    if (prevSelected) await deselectList()
+    if (prevSelected) {
+        if (list.dataset.listid) {
+            // hide task summary if user switches to another task
+            const taskSummaryDiv = document.querySelector('#task-details');
+            taskSummaryDiv.classList.remove('task-details-display');
+        }
+        await deselectList()
+    }
     await selectList(list)
 
 };
@@ -230,3 +237,64 @@ export function hideDivContainer() {
     };
 
 };
+
+// toggle highlight on task creation
+export async function toggleTaskHighlight(e) {
+    const prevSelected = document.querySelector('.single-task-selected');
+    const taskOptions = document.querySelector('.task-options');
+    const nextSelection = e.target;
+
+    if (prevSelected && e.target.type != 'checkbox') {
+        await removeHighlight(prevSelected, nextSelection);
+        if (prevSelected != nextSelection){
+            taskOptions.style.visibility = 'visible'
+        }else {
+            taskOptions.style.visibility = 'hidden'
+        }
+    }
+    else {
+        await addHighlight(nextSelection);
+    }
+}
+
+function removeHighlight(prevSelected, nextSelection) {
+    return new Promise((res, rej) => {
+        nextSelection.classList.add('single-task-selected');
+        prevSelected.classList.remove('single-task-selected');
+        res();
+    });
+}
+
+function addHighlight(nextSelection) {
+    const taskOptions = document.querySelector('.task-options');
+    return new Promise((res, rej) => {
+        nextSelection.classList.add('single-task-selected');
+        taskOptions.style.visibility = 'visible';
+        taskOptions.style.animation = "fadeIn 1s";
+        res();
+    });
+}
+
+// toggle task summary panel
+export async function toggleTaskSummary(e) {
+    const prevSelected = document.querySelector('.single-task-selected');
+    const nextSelection = e.target;
+    const taskSummaryDiv = document.querySelector('#task-details');
+
+    if (prevSelected) await showTaskSummary(taskSummaryDiv, prevSelected, nextSelection);
+    else await hideTaskSummary(taskSummaryDiv, prevSelected)
+}
+
+function showTaskSummary(taskSummaryDiv, prevSelected, nextSelection) {
+    return new Promise((res, rej) => {
+        taskSummaryDiv.classList.add('task-details-display');
+        res();
+    });
+}
+
+export function hideTaskSummary(taskSummaryDiv, prevSelected, nextSelection) {
+    return new Promise((res, rej) => {
+        taskSummaryDiv.classList.remove('task-details-display');
+        res();
+    });
+}

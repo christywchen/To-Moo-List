@@ -37,8 +37,8 @@ div.checkbox-container
 +errorSummary(errors)
 div#add-task-form
     form(id='add-task-input')
-        input(type='hidden' name='_csrf' value=csrfToken id='add-task-input')
-        +field('', 'name', name, '', 'Add a task...')
+        //- input(type='hidden' name='_csrf' value=csrfToken id='add-task-input')
+        +plainField('', 'name', name, '', 'Add a task...')
         div.add-task-button
             button(type='submit' disabled='true') Moo
 

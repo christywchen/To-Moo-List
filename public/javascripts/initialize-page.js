@@ -92,4 +92,5 @@ export const initializePage = async () => {
 
     createDropDownMenu();
     updateTaskStatus();
+
 };

@@ -1,21 +1,24 @@
-import { getDate, setTaskDeadline, decorateTaskWithDeadline } from './create-dom-elements.js';
-
+import { getDate, setTaskDeadline, decorateTaskWithPriority, decorateTaskWithDeadline } from './create-dom-elements.js';
+// CRUD
+// C
 export function addTaskSummaryEventListeners() {
-
     const summaryTitleInp = document.querySelector('#summary-title');
     const summaryDeadlineInp = document.querySelector('#summary-due-date-inp');
-    const summarySelectInp = document.querySelector('#summary-list-select');
+    const summaryListSelectInp = document.querySelector('#summary-list-select');
+    const summaryPrioritySelectInp = document.querySelector('#summary-priority-select');
     const summaryDescInp = document.querySelector('#summary-desc-textarea');
 
     summaryTitleInp.addEventListener('blur', changeTaskName);
     summaryDeadlineInp.addEventListener('blur', changeTaskDeadline);
-    summarySelectInp.addEventListener('change', changeList);
+    summaryListSelectInp.addEventListener('change', changeList);
+    summaryPrioritySelectInp.addEventListener('change', changePriority);
     summaryDescInp.addEventListener('focus', expandTextarea);
     summaryDescInp.addEventListener('blur', shrinkTextarea);
     summaryDescInp.addEventListener('blur', changeDesc);
 }
 
-export const changeTaskName = async (e) => {
+// E
+export async function changeTaskName(e) {
     const taskId = window.location.href.split('/')[7];
     const newTaskName = e.target.innerText;
     const body = { name: newTaskName }
@@ -40,7 +43,7 @@ export const changeTaskName = async (e) => {
     }
 };
 
-export const changeTaskDeadline = async (e) => {
+export async function changeTaskDeadline(e) {
     const taskId = window.location.href.split('/')[7];
     let newDeadline = e.target.value;
     let body;
@@ -54,7 +57,7 @@ export const changeTaskDeadline = async (e) => {
     if (newDeadline === '') {
         body = { deadline: null };
     } else {
-        newDeadline = new Date(newDeadline).toISOString();
+        newDeadline = new Date(newDeadline).toISOString().replace('T', ' ').replace('Z', '');
         body = { deadline: newDeadline };
     }
 
@@ -70,29 +73,23 @@ export const changeTaskDeadline = async (e) => {
     // compare old deadline with new
     // show a confirmation of save if the deadline has changed
     // update the due date displayed in the main container
-    if (getDate(newDeadline) !== getDate(origDeadline)) {
-        markSaved('#deadline-div');
-        const taskDiv = document.querySelector(`div[data-task="${taskId}"]`);
-        console.log(taskDiv)
-        const deadlineSpan = taskDiv.children[3];
-        if (deadlineSpan) taskDiv.removeChild(deadlineSpan);
-        decorateTaskWithDeadline(taskDiv, updatedTask)
-    }
+
+
+    updateDeadlineTag(taskId, updatedTask, newDeadline, origDeadline);
 };
 
-export const changeList = async (e) => {
+export async function changeList(e) {
     e.stopPropagation();
-    const stateId = { id: "99" };
-    const listName = window.location.href.split('/')[4];
-    const listId = window.location.href.split('/')[5];
+    const location = window.location.href.split('/')[4];
+    const oldListId = window.location.href.split('/')[5];
     const taskId = window.location.href.split('/')[7];
-    const newlistId = e.target.value;
+    const newListId = e.target.value;
 
-    if (newlistId === "create-new") {
+    if (newListId === "create-new") {
         addListDiv.style.display = 'block';
         addListDiv.style.position = 'fixed';
     } else {
-        const body = { listId: parseInt(newlistId, 10) }
+        const body = { listId: parseInt(newListId, 10) }
         await fetch(`/api/tasks/${taskId}`, {
             method: "PATCH",
             headers: {
@@ -102,21 +99,33 @@ export const changeList = async (e) => {
         });
     }
 
-    if (listName === '#list') {
-        const taskContainer = document.querySelector('#tasksContainer');
-        const movedTask = document.querySelector(`[data-task="${taskId}"]`);
-        taskContainer.removeChild(movedTask);
-        window.history.replaceState(stateId, `List ${listId}`, `/dashboard/#list/${listId}`);
-
-        const taskDetailsDiv = document.querySelector('#task-details');
-        taskDetailsDiv.classList.remove('task-details-display');
-    } else {
-        markSaved('#list-div');
-        window.history.replaceState(stateId, `List ${newlistId}`, `/dashboard/${listName}/${newlistId}/tasks/${taskId}`);
-    }
+    moveTaskFromList(location, taskId, oldListId, newListId);
 };
 
-export const changeDesc = async (e) => {
+export async function changePriority(e) {
+    e.stopPropagation();
+    const taskId = window.location.href.split('/')[7];
+    const newPriorityId = e.target.value;
+
+    // get info about original priority level
+    const res = await fetch(`/api/tasks/${taskId}`);
+    const { task } = await res.json();
+    const origPriorityId = task.categoryId;
+
+    const body = { categoryId: parseInt(newPriorityId, 10) }
+    const updatedRes = await fetch(`/api/tasks/${taskId}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+    });
+    const { task: updatedTask } = await updatedRes.json();
+
+    updatePriorityTag(taskId, updatedTask, newPriorityId, origPriorityId);
+};
+
+export async function changeDesc(e) {
     const taskId = window.location.href.split('/')[7];
     const newTaskDesc = e.target.value;
     const body = { description: newTaskDesc };
@@ -140,25 +149,6 @@ export const changeDesc = async (e) => {
     };
 };
 
-export function showTaskSummary(e) {
-    // UPDATE FUNCTIONALITY TO ACCOMMODATE FOR WHEN LIST SELECTION CHANGES
-    // const prevListSelection = window.location.href.split('/')[5];
-    // const nextListSelection = e.target.dataset.listId;
-    const prevTaskSelection = window.location.href.split('/')[7];
-    const nextTaskSelection = e.target.dataset.task;
-    const taskDetailsDiv = document.querySelector('#task-details');
-
-    if (prevTaskSelection === nextTaskSelection) {
-        if (taskDetailsDiv.classList.contains('task-details-display')) {
-            taskDetailsDiv.classList.remove('task-details-display');
-        } else {
-            taskDetailsDiv.classList.add('task-details-display');
-        }
-    } else {
-        taskDetailsDiv.classList.add('task-details-display');
-    }
-}
-
 export async function expandTextarea(e) {
     const summaryDescInp = document.querySelector('#summary-desc-textarea');
     summaryDescInp.classList.add('summary-inp-focus');
@@ -173,6 +163,7 @@ export async function expandCheckedTask(e) {
 
 }
 
+// helper functions to provide dom changes after a task is edited
 function markSaved(parentDiv) {
     const listDiv = document.querySelector(parentDiv);
     const span = document.createElement('span');
@@ -183,4 +174,42 @@ function markSaved(parentDiv) {
     setTimeout(() => {
         listDiv.removeChild(span)
     }, 1000);
+}
+
+export async function updatePriorityTag(taskId, updatedTask, newPriorityId, origPriorityId) {
+    if (newPriorityId !== origPriorityId || origPriorityId === null) {
+        markSaved('#priority-div');
+        const taskDiv = document.querySelector(`div[data-task="${taskId}"]`);
+        const oldSpan = taskDiv.children[2];
+        const newSpan = await decorateTaskWithPriority(taskDiv, updatedTask)
+        if (oldSpan) oldSpan.replaceWith(newSpan);
+        else taskDiv.appendChild(newSpan)
+    }
+}
+
+async function updateDeadlineTag(taskId, updatedTask, newDeadline, origDeadline) {
+    if (getDate(newDeadline) !== getDate(origDeadline) || origDeadline === null) {
+        markSaved('#deadline-div');
+        const taskDiv = document.querySelector(`div[data-task="${taskId}"]`);
+        const oldSpan = taskDiv.children[3];
+        const newSpan = await decorateTaskWithDeadline(taskDiv, updatedTask)
+        if (oldSpan) oldSpan.replaceWith(newSpan);
+        else taskDiv.appendChild(newSpan)
+    }
+}
+
+function moveTaskFromList(location, taskId, oldListId, newListId) {
+    const stateId = { id: "99" };
+    if (location === '#list') {
+        const taskContainer = document.querySelector('#tasksContainer');
+        const movedTask = document.querySelector(`[data-task="${taskId}"]`);
+        taskContainer.removeChild(movedTask);
+        window.history.replaceState(stateId, `List ${oldListId}`, `/dashboard/#list/${oldListId}`);
+
+        const taskDetailsDiv = document.querySelector('#task-details');
+        taskDetailsDiv.classList.remove('task-details-display');
+    } else {
+        markSaved('#list-div');
+        window.history.replaceState(stateId, `List ${newListId}`, `/dashboard/${location}/${newListId}/tasks/${taskId}`);
+    }
 }

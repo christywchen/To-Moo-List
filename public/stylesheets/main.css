@@ -17,6 +17,10 @@
     width: 100%;
 }
 
+#add-task {
+    height: inherit;
+}
+
 .add-task-button {
     align-self: flex-end;
     margin-top: -40px;
@@ -36,10 +40,9 @@
     transition: all 0.4s;
 }
 
-#tasks-container {
+#tasksContainer {
     position: relative;
-    height: 700px; /* needs revision so that it will fill the height of the parent container */
-    overflow: hidden;
+    height: 86%;
 }
 
 #tasksContainer:hover {

@@ -1,7 +1,7 @@
 import { finishTask, postPoneTask, changeCategory, moveTask, getDropMenu, createDropDownMenu } from './dashboard-tasks.js';
-import { showTaskSummary, addTaskSummaryEventListeners } from './dashboard-summary.js';
+import { addTaskSummaryEventListeners } from './dashboard-summary.js';
 import { clearDOMTasks, clearSearchRecs } from './clean-dom.js';
-import { createSidebarContainer, buildTaskSummary, createTaskHtml, populateTasks, populateSearchBox, decorateList } from './create-dom-elements.js';
+import { createSidebarContainer, buildTaskSummary, createTaskHtml, populateTasks, populateSearchBox, decorateList, buildListSelectOptions } from './create-dom-elements.js';
 import { toggleListDisplay, showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown } from './display.js';
 import { updateTaskStatus } from './dashboard-recap.js';
 import { initializePage } from './initialize-page.js';
@@ -86,7 +86,7 @@ export async function createList(e) {
 
 // R
 export async function fetchTaskSummary(e) {
-    highlightTask(e);
+    // highlightTask(e);
     const stateId = { id: "99" };
     const listName = window.location.href.split('/')[4];
     const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
@@ -97,12 +97,20 @@ export async function fetchTaskSummary(e) {
     const currentDeadline = task.deadline;
     const currentListId = task.listId;
     const currentList = task.List.name;
+    const currentPriorityId = task.categoryId;
+    const currentPriority = task.Category.name;
     const currentDesc = task.description;
 
-    buildTaskSummary(currentTask, currentDeadline, currentTaskId, currentListId, currentList, currentDesc);
+    buildTaskSummary(
+        currentTask,
+        currentDeadline,
+        currentTaskId,
+        currentListId,
+        currentList,
+        currentPriorityId,
+        currentPriority,
+        currentDesc);
     addTaskSummaryEventListeners();
-    showTaskSummary(e);
-
     if (listName !== '#list') {
         window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/${listName}/${task.listId}/tasks/${task.id}`);
     } else {
@@ -208,6 +216,18 @@ export const renameList = async (e) => {
 
             const list = document.querySelector(`[data-listid="${listId}"]`)
             list.children[0].innerText = name;
+
+            // if task summary panel is showing
+            // update the list selection so that current list reflect the new name
+            const taskDetailsDiv = document.querySelector('#task-details');
+            if (taskDetailsDiv.classList.contains('task-details-display')) {
+                const summaryListSelect = document.querySelector('#summary-list-select');
+                while (summaryListSelect.hasChildNodes()) {
+                    summaryListSelect.removeChild(summaryListSelect.lastChild);
+                }
+
+                await buildListSelectOptions(listId, name);
+            }
         } catch (error) {
         }
     }
@@ -251,69 +271,3 @@ export async function deleteList(e) {
         clearDOMTasks();
     }
 };
-
-export function deleteTask(e) {
-    const trashTask = document.querySelector(".delete");
-    const taskId = e.target.dataset.task;
-
-    trashTask.addEventListener('click', async (e) => {
-        const res = await fetch(`/api/tasks/${taskId}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            },
-        })
-        if (!res.ok) {
-            console.log("Something went wrong")
-        } else {
-            console.log("Task deleted")
-            const deleteDiv = document.querySelector(`[data-task="${taskId}"]`);
-            deleteDiv.remove();
-        }
-    })
-}
-
-
-// Helper Functions
-function highlightTask(e) {
-    const prevSelection = window.location.href.split('/')[7];
-    const prevSelectionDiv = document.querySelector(`[data-task="${prevSelection}"]`);
-    const nextSelection = e.target.dataset.task;
-    const nextSelectionDiv = document.querySelector(`[data-task="${nextSelection}"]`);
-    const taskOptions = document.querySelector('.task-options');
-    //taskOptions.style.visibility = 'visible';
-
-
-    if (prevSelection && prevSelectionDiv) {
-        if (prevSelection === nextSelection) {
-            if (prevSelectionDiv.classList.contains('single-task-selected')) {
-                prevSelectionDiv.classList.remove('single-task-selected');
-                taskOptions.style.visibility = 'hidden';
-            } else {
-                prevSelectionDiv.classList.add('single-task-selected');
-                taskOptions.style.visibility = 'visible';
-                taskOptions.style.animation = "fadeIn 1s";
-            }
-        } else {
-            prevSelectionDiv.classList.remove('single-task-selected');
-            nextSelectionDiv.classList.add('single-task-selected');
-            taskOptions.style.visibility = 'visible';
-            taskOptions.style.animation = "fadeIn 1s";
-        }
-    } else {
-        nextSelectionDiv.classList.add('single-task-selected');
-        taskOptions.style.visibility = 'visible';
-        taskOptions.style.animation = "fadeIn 1s";
-    }
-}
-
-
-
-// TO DO: checkbox event listeners
-async function checkedTaskActions(e) {
-    if (e.target.checked) {
-        console.log('hi')
-    } else {
-        console.log('bye')
-    }
-}
