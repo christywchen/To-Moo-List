@@ -1,4 +1,5 @@
 import { getDate, setTaskDeadline, decorateTaskWithPriority, decorateTaskWithDeadline } from './create-dom-elements.js';
+import { showCreateList } from './display.js';
 // CRUD
 // C
 export function addTaskSummaryEventListeners() {
@@ -10,7 +11,7 @@ export function addTaskSummaryEventListeners() {
 
     summaryTitleInp.addEventListener('blur', changeTaskName);
     summaryDeadlineInp.addEventListener('blur', changeTaskDeadline);
-    summaryListSelectInp.addEventListener('change', changeList);
+    summaryListSelectInp.addEventListener('change', showCreateList);
     summaryPrioritySelectInp.addEventListener('change', changePriority);
     summaryDescInp.addEventListener('focus', expandTextarea);
     summaryDescInp.addEventListener('blur', shrinkTextarea);
@@ -86,8 +87,9 @@ export async function changeList(e) {
     const newListId = e.target.value;
 
     if (newListId === "create-new") {
-        addListDiv.style.display = 'block';
-        addListDiv.style.position = 'fixed';
+        showCreateList();
+        // addListDiv.style.display = 'block';
+        // addListDiv.style.position = 'fixed';
     } else {
         const body = { listId: parseInt(newListId, 10) }
         await fetch(`/api/tasks/${taskId}`, {

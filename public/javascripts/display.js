@@ -89,6 +89,7 @@ export function hideListNameDiv(e) {
     if (e.target.className !== 'logout') {
         if (((!addListDiv.contains(e.target) &&
             !renameListDiv.contains(e.target)) &&
+            !e.target.id === 'summary-list-select' &&
             !e.target.classList.contains('far')) ||
             e.target.className === 'submit-list' ||
             e.target.className === 'cancel-submit-list' ||

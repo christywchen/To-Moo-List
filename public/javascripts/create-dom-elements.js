@@ -1,7 +1,6 @@
-import { fetchListTasks, updateListId } from './dashboard.js';
+import { fetchListTasks,fetchTaskSummary, updateListId, deleteList } from './dashboard.js';
 import { clearDOMTasks, clearSearchRecs, clearTaskSummary } from './clean-dom.js';
-import { fetchTaskSummary, deleteList} from './dashboard.js';
-import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect, toggleTaskHighlight, toggleTaskSummary } from './display.js';
+import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect, toggleTaskHighlight, toggleTaskSummary, showCreateList } from './display.js';
 import { finishTask, getDropMenu, deleteTask  } from './dashboard-tasks.js'
 
 export function createSidebarContainer(name, containerType, data,) {
@@ -258,6 +257,7 @@ export async function buildListSelectOptions(currentListId, currentList) {
     const createListOpt = document.createElement('option');
     createListOpt.setAttribute('value', 'create-new');
     createListOpt.innerText = 'Create New';
+    //createListOpt.addEventListener('click', showCreateList);
     listOptions.appendChild(createListOpt);
 }
 
