@@ -156,8 +156,6 @@ export async function fetchCategoryTasks(e) {
     clearDOMTasks();
     const stateId = { id: "101" };
     listId = null;
-    // const stateId = { id: "101" };
-    // To DO: update url?
     const categoryId = e.target.dataset.categoryid
 
     if (categoryId) {
