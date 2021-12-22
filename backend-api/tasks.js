@@ -23,7 +23,24 @@ router.get('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     } else {
         next(taskNotFound(taskId));
     }
-}))
+}));
+
+// completed
+router.get('/tasks/completed', asyncHandler(async (req, res, next) => {
+    const userId = res.locals.user.id
+
+    const tasks = await db.Task.findAll({
+        where: { userId },
+        include: [db.List, db.Category]
+    });
+
+    if (tasks) {
+        res.status(200);
+        res.json({ tasks });
+    } else {
+        next(taskNotFound());
+    }
+}));
 
 
 
@@ -41,7 +58,7 @@ router.post('/lists/:id(\\d+)', asyncHandler(async (req, res) => {
     })
     res.status(201);
     res.json({ task });
-}))
+}));
 
 // put
 router.put('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
@@ -63,7 +80,7 @@ router.put('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     } else {
         next(taskNotFound(taskId));
     }
-}))
+}));
 
 // patch
 router.patch('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
@@ -86,7 +103,7 @@ router.patch('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     } else {
         next(taskNotFound(taskId));
     }
-}))
+}));
 
 // delete
 router.delete('/tasks/:id(\\d+)', asyncHandler(async (req, res) => {
@@ -152,7 +169,7 @@ router.get('/tasks/tomorrow', asyncHandler(async (req, res) => {
     })
 
     res.json({ tasks });
-}))
+}));
 
 // Getting tasks by listId
 router.get('/lists/:listId/tasks', asyncHandler(async (req, res) => {
@@ -163,7 +180,7 @@ router.get('/lists/:listId/tasks', asyncHandler(async (req, res) => {
         include: [db.List, db.Category]
     })
     res.json({ tasks })
-}))
+}));
 
 // Getting tasks by categoryId
 router.get('/categories/:categoryId', asyncHandler(async (req, res) => {
@@ -178,6 +195,6 @@ router.get('/categories/:categoryId', asyncHandler(async (req, res) => {
         include: [db.List, db.Category]
     })
     res.json({ tasks })
-}))
+}));
 
 module.exports = router;

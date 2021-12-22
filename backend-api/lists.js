@@ -57,7 +57,6 @@ router.patch('/:id', validateList, handleValidationErrors, asyncHandler(async (r
 
 router.delete('/:id', asyncHandler(async (req, res, next) => {
     const listId = parseInt(req.params.id, 10);
-    console.log('listId: ', listId);
     const list = await db.List.findByPk(listId)
 
     if (list) {
