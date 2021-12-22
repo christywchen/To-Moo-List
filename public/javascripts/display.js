@@ -176,6 +176,8 @@ export function toggleListDisplay(container) {
     const icon = container.parentNode.querySelector('.fas');
     const isSelected = container.style.display === 'block';
 
+    console.log('cont: ', container);
+
 
     if (isSelected) {
         container.style.display = 'none';
@@ -189,7 +191,7 @@ export function toggleListDisplay(container) {
 };
 
 // Promises
-function selectList(list) {
+export function selectList(list) {
     return new Promise((res, rej) => {
         list.classList.add('selected-list')
         res();

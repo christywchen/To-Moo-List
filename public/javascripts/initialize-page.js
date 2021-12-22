@@ -1,9 +1,10 @@
-import { createTask, createList, renameList, fetchSearch, fetchListTasks, fetchCategoryTasks } from './dashboard.js'
-import { hideTaskButton, fadeBackground, hideListNameDiv, hideListOptions, hideDropDown, showTaskButton, showCreateList, toggleListDisplay, toggleListSelect, deselectList, selectSearchField } from './display.js';
+import { createTask, createList, renameList, fetchSearch, fetchListTasks, fetchCategoryTasks, fetchInboxTasks } from './dashboard.js'
+import { hideTaskButton, fadeBackground, hideListNameDiv, hideListOptions, hideDropDown, showTaskButton, showCreateList, toggleListDisplay, toggleListSelect, selectList, deselectList, selectSearchField } from './display.js';
 import { createSidebarContainer, decorateList } from './create-dom-elements.js';
 import { createDropDownMenu } from './dashboard-tasks.js';
 import { updateTaskStatus } from './dashboard-recap.js';
 import { clearSearch } from './clean-dom.js';
+import { todayTasksRoute } from './dashboard-inbox.js';
 
 export const initializePage = async () => {
     const stateId = { id: "98" };
@@ -17,14 +18,22 @@ export const initializePage = async () => {
     const categoryList = document.getElementById('task-categories');
     const headers = document.querySelectorAll('.list-header-container');
     const inboxLists = document.querySelectorAll('.inbox-list');
-    const buttons = document.querySelectorAll('button')
+    const buttons = document.querySelectorAll('button');
+    const todaysList = document.getElementById('today');
+    const inboxHeader = document.getElementById('default-lists');
+
 
     if (!lists.length) showCreateList()
+    else {
+        fetchInboxTasks(todayTasksRoute);
+        toggleListDisplay(inboxHeader);
+        selectList(todaysList);
+    }
 
     headers.forEach(header => {
         header.addEventListener('click', (e) => {
             const lists = header.nextElementSibling;
-            toggleListDisplay(lists, e);
+            toggleListDisplay(lists);
         });
     });
 
