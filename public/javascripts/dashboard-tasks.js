@@ -144,7 +144,7 @@ export function deleteTask(e) {
                 }
             }
         })
-    })
+    }, {once: true})
 }
 
 

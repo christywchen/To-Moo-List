@@ -21,6 +21,10 @@
     height: inherit;
 }
 
+#add-task-input input.inp-field {
+    background-color: white;
+}
+
 .add-task-button {
     align-self: flex-end;
     margin-top: -40px;
