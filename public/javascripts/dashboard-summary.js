@@ -86,8 +86,8 @@ export async function changeList(e) {
     const newListId = e.target.value;
 
     if (newListId === "create-new") {
-        addListDiv.style.display = 'block';
-        addListDiv.style.position = 'fixed';
+        // addListDiv.style.display = 'block';
+        // addListDiv.style.position = 'fixed';
     } else {
         const body = { listId: parseInt(newListId, 10) }
         await fetch(`/api/tasks/${taskId}`, {

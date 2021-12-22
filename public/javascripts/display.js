@@ -38,6 +38,7 @@ function removeSelfOnClick(container) {
 export async function showCreateList(e) {
     const addListDiv = document.querySelector('#add-list');
     // e.preventDefault();
+    console.log('click')
     // const targetNotIcon = !e.target.classList.contains('far');
     addListDiv.style.display = 'block';
     addListDiv.style.position = 'fixed';
@@ -96,8 +97,12 @@ export function hideListNameDiv(e) {
             e.target.className === 'rename-list') {
             addListDiv.style.display = 'none';
             renameListDiv.style.display = 'none';
-            const form = document.getElementById('addList');
-            form.value = '';
+            const nameForm = document.getElementById('addList');
+            const renameForm = document.getElementById('renameList');
+
+            nameForm.value = '';
+            renameForm.value = '';
+            hideContainer('page-cover');
         }
     }
 

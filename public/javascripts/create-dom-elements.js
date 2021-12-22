@@ -1,7 +1,7 @@
 import { fetchListTasks, updateListId } from './dashboard.js';
 import { clearDOMTasks, clearSearchRecs, clearTaskSummary } from './clean-dom.js';
 import { fetchTaskSummary, deleteList} from './dashboard.js';
-import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect, toggleTaskHighlight, toggleTaskSummary } from './display.js';
+import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect, toggleTaskHighlight, toggleTaskSummary, showCreateList } from './display.js';
 import { finishTask, getDropMenu, deleteTask  } from './dashboard-tasks.js'
 
 export function createSidebarContainer(name, containerType, data,) {
@@ -15,22 +15,24 @@ export function createSidebarContainer(name, containerType, data,) {
     itemDiv.setAttribute(`data-${containerType}Id`, `${data}`);
     itemDiv.className = `${containerType}-item`;
 
-    const iconsBox = document.createElement('div');
-    const editIcon = document.createElement('div');
-    iconsBox.className = `sidebar-icons`;
-    editIcon.classList.add('far', 'fa-caret-square-down', 'hide-option')
-    editIcon.setAttribute(`data-${containerType}Id`, `${data}`);
-
-
     container.appendChild(itemDiv);
-    container.appendChild(iconsBox);
-    iconsBox.appendChild(editIcon);
 
-    editIcon.addEventListener('click', updateListId);
-    editIcon.addEventListener('click', async (e) => {
-        await hideContainer(`${containerType}-edit-dropdown`);
-        await showContainer(container, listEditDropDown);
-    });
+    if (containerType === 'list') {
+        const iconsBox = document.createElement('div');
+        const editIcon = document.createElement('div');
+        iconsBox.className = `sidebar-icons`;
+        editIcon.classList.add('far', 'fa-caret-square-down', 'hide-option')
+        editIcon.setAttribute(`data-${containerType}Id`, `${data}`);
+        container.appendChild(iconsBox);
+        iconsBox.appendChild(editIcon);
+
+        editIcon.addEventListener('click', updateListId);
+        editIcon.addEventListener('click', async (e) => {
+            await hideContainer(`${containerType}-edit-dropdown`);
+            await showContainer(container, listEditDropDown);
+        });
+    }
+
     return container
 }
 
@@ -211,6 +213,7 @@ export function buildDeadlineDiv(currentDeadline) {
 
 function buildListDiv(currentListId, currentList) {
     const listDiv = document.createElement('div');
+    listDiv.addEventListener('click', showCreateList);
     listDiv.setAttribute('id', 'list-div');
     listDiv.innerHTML = `
         <div id="summary-list">List</div>
@@ -258,6 +261,9 @@ export async function buildListSelectOptions(currentListId, currentList) {
     const createListOpt = document.createElement('option');
     createListOpt.setAttribute('value', 'create-new');
     createListOpt.innerText = 'Create New';
+
+    // createListOpt.addEventListener('change', showCreateList);
+
     listOptions.appendChild(createListOpt);
 }
 
