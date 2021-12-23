@@ -43,7 +43,7 @@ block content
                 div.lists
                     div.list-header-container.priorities-header
                         i.fas.fa-caret-right
-                        div.list-header Priorities
+                        div.list-header Priority
                     div#task-categories.list-container
 
             div#main
@@ -52,17 +52,17 @@ block content
 
             div#add-list(style='display: none')
                 div.add-task-box
-                    div.close
+                    div.close.fas.fa-times.fa-lg
                     p Add a List
                     form(id='add-list-form')
-                        +field('Please enter a new list name', 'addList', '')
+                        +field('Please enter a new list name:', 'addList', '')
                         div.add-list-buttons
                             button.submit-list(type="submit") Add
                             button.cancel-submit-list(type="submit") Cancel
 
             div#rename-list(style='display: none')
                 div.add-task-box
-                    div.close
+                    div.close.fas.fa-times.fa-lg
                     p Rename list
                     form(id='rename-list-form')
                         +field('List name', 'renameList', '')

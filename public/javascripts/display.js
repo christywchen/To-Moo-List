@@ -96,7 +96,7 @@ export function hideListNameDiv(e) {
             !e.target.classList.contains('far')) ||
             e.target.className === 'submit-list' ||
             e.target.className === 'cancel-submit-list' ||
-            e.target.className === 'close' ||
+            e.target.classList.contains('close') ||
             e.target.className === 'rename-list') {
             addListDiv.style.display = 'none';
             renameListDiv.style.display = 'none';
