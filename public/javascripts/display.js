@@ -145,12 +145,16 @@ export function hideDropDown(e) {
 
 export function selectSearchField(e) {
     const searchField = document.querySelector('.search')
+    const searchIcon = document.querySelector('.fa-search');
     searchField.classList.add('search-selected');
     searchField.placeholder = 'Search task';
+    searchIcon.classList.add('search-selected');
 }
 
 export function deselectSearchField(e) {
     const searchField = document.querySelector('.search');
+    const searchIcon = document.querySelector('.fa-search');
+    searchIcon.classList.remove('search-selected');
     searchField.classList.remove('search-selected');
     searchField.placeholder = '';
 }

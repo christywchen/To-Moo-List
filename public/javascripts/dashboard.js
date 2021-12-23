@@ -180,7 +180,8 @@ export async function fetchSearch(e) {
         // TO DO: Error handling
         if (!res.ok) throw res
         else {
-            if (e.target.classList.contains('search-button')) {
+            if (e.target.classList.contains('search-button') ||
+                e.target.classList.contains('fa-search')) {
                 clearDOMTasks()
                 populateTasks(tasks);
                 window.history.replaceState(stateId, `Search ${name}`, `/dashboard/search/?q=${searchStr}`);

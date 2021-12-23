@@ -23,6 +23,7 @@ export const initializePage = async () => {
     const inboxHeader = document.getElementById('default-lists');
 
 
+
     if (!lists.length) showCreateList()
     else {
         fetchInboxTasks(todayTasksRoute);
@@ -71,6 +72,7 @@ export const initializePage = async () => {
     const renameListButton = document.querySelector('.rename-list');
     const searchButton = document.querySelector('.search-button');
     const searchField = document.querySelector('#search');
+    const searchIcon = document.querySelector('.fa-search');
 
     document.addEventListener('click', (e) => {
         hideTaskButton(e);
@@ -90,6 +92,12 @@ export const initializePage = async () => {
 
     searchField.addEventListener('click', selectSearchField)
     searchField.addEventListener('keyup', fetchSearch);
+
+    searchIcon.addEventListener('click', (e) => {
+        fetchSearch(e);
+        deselectList();
+
+    })
     searchButton.addEventListener('click', (e) => {
         fetchSearch(e);
         deselectList();
