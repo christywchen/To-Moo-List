@@ -109,7 +109,8 @@ export function hideDropDown(e) {
     const listMenu = document.querySelector(".list-of-lists");
     const postponeMenu = document.querySelector(".postpone-dates");
     const categoryList = document.querySelector('.list-of-tags');
-    const listContainers = document.querySelectorAll('.list-container');
+    const calDiv = document.querySelector('.hidden-cal')
+    //const listContainers = document.querySelectorAll('.list-container');
     const searchRecs = document.querySelector('.search-recommendations');
 
     if (e.target.className !== 'logout') {
@@ -124,6 +125,7 @@ export function hideDropDown(e) {
             postponeMenu.style.display = 'none';
             categoryList.style.display = 'none';
             searchRecs.style.display = 'none';
+            calDiv.style.display = 'none';
 
             deselectSearchField()
         }
@@ -243,18 +245,35 @@ export function hideDivContainer() {
 export async function toggleTaskHighlight(e) {
     const prevSelected = document.querySelector('.single-task-selected');
     const taskOptions = document.querySelector('.task-options');
-    const nextSelection = e.target;
-
+    let nextSelection = e.target;
+    if (nextSelection.localName =='label' || nextSelection.localName =='span') nextSelection = nextSelection.parentNode
     if (prevSelected && e.target.type != 'checkbox') {
         await removeHighlight(prevSelected, nextSelection);
         if (prevSelected != nextSelection){
             taskOptions.style.visibility = 'visible'
+            if (e.target.type != 'checkbox' && 
+            !nextSelection.children[0].hasAttribute('checked')){
+            nextSelection.children[0].setAttribute('checked', 'true');
+        }
         }else {
-            taskOptions.style.visibility = 'hidden'
+            taskOptions.style.visibility = 'hidden';
         }
     }
     else {
-        await addHighlight(nextSelection);
+        if (nextSelection.localName =='label'){
+            await addHighlight(nextSelection)
+            if (e.target.type != 'checkbox' && 
+                !nextSelection.children[0].hasAttribute('checked')){
+                nextSelection.children[0].setAttribute('checked', 'true');
+            }
+        } else {
+            if (e.target.type != 'checkbox' && 
+                !nextSelection.children[0].hasAttribute('checked')){
+                nextSelection.children[0].setAttribute('checked', 'true');
+            }
+            await addHighlight(nextSelection);
+        }
+        
     }
 }
 

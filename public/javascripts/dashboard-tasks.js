@@ -4,6 +4,19 @@ import { updatePriorityTag } from './dashboard-summary.js'
 import { buildDeadlineDiv, getDate, buildPrioritySelectOptions } from './create-dom-elements.js';
 import { showCreateList, hideDivContainer, hideTaskSummary } from './display.js'
 
+export const checkAllBoxes = (e) => {
+    const checkBox = document.querySelector('.checkbox > input');
+    checkBox.addEventListener('click', (e) => {
+        const selectedTasks = document.querySelectorAll(".single-task > input");
+        if(selectedTasks.length) {
+            selectedTasks.forEach( (e) => {
+
+            });
+        }
+        //console.log(checkBox.checked)
+    })
+}
+
 export const finishTask = (e) => {
     /* 
     This function completes the task that has check marks on the checkbox.
@@ -71,6 +84,11 @@ export const postPoneTask = async (e) => {
     })
 }
 
+// const changeDeadline = async (e) => {
+// 
+// }
+
+
 export const moveTask = async (e) => {
     /* 
     This function move the task into different list that has check marks on the checkbox.
@@ -105,7 +123,7 @@ export const moveTask = async (e) => {
     })
 }
 
-export const changeCategory = async (e) => {
+export const changeTag = async (e) => {
     /* 
     This function changes the tag on the task with check marks on the checkbox.
     It changes the tag on the task by first getting all the tasks that are checked using 
@@ -113,6 +131,9 @@ export const changeCategory = async (e) => {
     */
     const selectedTasks = document.querySelectorAll(".single-task > input"); // selects all the tasks
     const tag = document.querySelector(".list-of-tags");
+    const taskSummaryDiv = document.querySelector('#task-details');
+    const url = window.location.href.split('/'); // grabs the url of the current page
+    const taskCategoryName = ['High', 'Medium', 'Low'];
     const tagId = e.target.id;
 
     selectedTasks.forEach(async (e) => {
@@ -129,14 +150,18 @@ export const changeCategory = async (e) => {
             } else {
                 //console.log("it worked");
                 const {task} = await res.json();
-                updatePriorityTag(e.dataset.task, task, tagId, null);
+                console.log(taskCategoryName[tagId-1], taskCategoryName[task.categoryId-1] )
                 const taskSummary = document.querySelector('#summary-priority-select');
                 taskSummary.innerHTML = "";
-                const taskCategoryName = ['High', 'Medium', 'Low'];
-                console.log(taskCategoryName[task.categoryId-1])
-                buildPrioritySelectOptions(taskCategoryName[task.categoryId-1], task.categoryId);
                 tag.style.display = 'none';
+                buildPrioritySelectOptions(taskCategoryName[task.categoryId-1], task.categoryId); // updates the priority options in the task summary
+                updatePriorityTag(e.dataset.task, task, tagId, null);
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
+                if (url.includes("#priority")) {
+                    const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
+                    if (deleteDiv) deleteDiv.remove();
+                    await hideTaskSummary(taskSummaryDiv); //hides the task summary 
+                };
             }
         }
     })
@@ -166,9 +191,9 @@ export function deleteTask(e) {
                     console.log("Something went wrong")
                 } else {
                     console.log("Your task was deleted")
-                    const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
                     await hideTaskSummary(taskSummaryDiv); //hides the task summary 
-                    if (deleteDiv) deleteDiv.remove();
+                    const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
+                    if (deleteDiv) deleteDiv.remove(); // delets the task item from the DOM
                     //setTimeout( () => window.alert("Your task was deleted"))
                     trashTask.style.animation = "fetchSuccess 1s";
                 }
@@ -293,7 +318,7 @@ const createTagList = async () => {
         div.setAttribute("name", tag.name);
         div.setAttribute("value", tag.name);
         div.setAttribute("id", tag.id);
-        div.addEventListener("click", changeCategory);
+        div.addEventListener("click", changeTag);
         categoryList.appendChild(div);
     });
 }
@@ -306,6 +331,27 @@ const createCalendar = async (e) => {
             <input type="date" min="${today}" value="${today}" id="summary-due-date-inp" class="summary-inp"></input>
             `;
     // Look at dashboard-summary.js on LINE 47-79
+    const hiddenCal = document.querySelector('.hidden-cal input');
+    hiddenCal.addEventListener('change', (e) => {
+        const selectedTasks = document.querySelectorAll(".single-task > input"); // selects all the tasks
+        selectedTasks.forEach(async (e) => {
+            if (e.checked) {
+                console.log(e.dataset.task);
+                const res = await fetch(`/api/tasks/${e.dataset.task}`, {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ deadline: `${hiddenCal.value}` })
+                })
+                if (!res.ok) {
+                    console.log("Something went wrong");
+                } else {
+                    console.log("it worked");
+                }
+            }
+        })
+    });
 }
 
 export const createDropDownMenu = () => {

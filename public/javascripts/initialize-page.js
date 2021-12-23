@@ -17,7 +17,7 @@ export const initializePage = async () => {
     const categoryList = document.getElementById('task-categories');
     const headers = document.querySelectorAll('.list-header-container');
     const inboxLists = document.querySelectorAll('.inbox-list');
-
+    //div.addEventListener('click', checkAllBoxes, {once:true});
     if (!lists.length) showCreateList()
 
     headers.forEach(header => {
