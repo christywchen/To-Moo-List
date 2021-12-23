@@ -192,7 +192,7 @@ export function toggleListDisplay(container, e) {
         icon.classList.add('fa-caret-right');
     } else {
         container.style.display = 'block';
-        icon.classList.remove('fa-caret-right');
+        // icon.classList.remove('fa-caret-right');
         icon.classList.add('fa-caret-down');
     }
 };
