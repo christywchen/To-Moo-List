@@ -23,6 +23,13 @@ router.get('/login', csrfProtection, asyncHandler(async (req, res) => {
   });
 }));
 
+router.get('/demo/login', asyncHandler(async (req, res) => {
+  const user = await db.User.findByPk(1);
+
+  loginUser(req, res, user);
+  res.redirect('/dashboard');
+}))
+
 // post /signup
 
 router.post('/signup', csrfProtection, userValidators, asyncHandler(async (req, res) => {

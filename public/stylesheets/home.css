@@ -239,3 +239,18 @@ h1 {
     color: #8b8b94;
     text-decoration: none;
 }
+
+#demo-user {
+    position: fixed;
+    right: 25px;
+    top: 25px;
+}
+
+#demo-user a{
+    color: white;
+    text-decoration: none;
+}
+
+#demo-user a:hover{
+    font-weight: bold;
+}
