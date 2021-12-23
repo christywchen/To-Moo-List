@@ -14,7 +14,6 @@ router.get('/signup', csrfProtection, asyncHandler(async (req, res) => {
     csrfToken: req.csrfToken(),
   });
 
-  console.log(res.locals.error)
 }));
 
 router.get('/login', csrfProtection, asyncHandler(async (req, res) => {
@@ -36,7 +35,7 @@ router.post('/signup', csrfProtection, userValidators, asyncHandler(async (req, 
   });
 
   const validatorErrors = validationResult(req);
-  
+
 
   if (validatorErrors.isEmpty()) {
     const hashPass = await bcrypt.hash(password, 10);
@@ -85,7 +84,6 @@ router.post('/login', csrfProtection, loginValidator, asyncHandler(async (req, r
   } else {
     errors = [...errors, ...validatorErrors.array().map(err => err.msg)];
   }
-  console.log(errors);
   res.render("user-login", {
     title: "Login",
     username,

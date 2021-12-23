@@ -133,6 +133,7 @@ ol li {
 .fa-caret-square-down:hover {
     color: #478fca;
     background-color: #a5c9e7;
+    z-index: 10;
 }
 
 

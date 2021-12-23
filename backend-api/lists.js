@@ -44,7 +44,6 @@ router.patch('/:id', validateList, handleValidationErrors, asyncHandler(async (r
     const listId = parseInt(req.params.id, 10);
     const list = await db.List.findByPk(listId);
 
-    console.log(list)
     if (list) {
         const { name } = req.body;
         await list.update({ name });

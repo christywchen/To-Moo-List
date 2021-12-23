@@ -142,7 +142,6 @@ export async function fetchInboxTasks(fetchPath) {
     const taskRes = await fetch(fetchPath);
     const { tasks } = await taskRes.json();
     // TO DO: Needs Error Handling
-    console.log(fetchPath.split('/')[3])
 
     if (fetchPath.split('/')[3] === 'completed') {
         populateTasks(tasks, 'getCompleted')

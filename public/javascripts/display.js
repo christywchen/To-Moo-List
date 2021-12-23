@@ -38,7 +38,6 @@ function removeSelfOnClick(container) {
 export async function showCreateList(e) {
     const addListDiv = document.querySelector('#add-list');
     // e.preventDefault();
-    console.log('click')
     // const targetNotIcon = !e.target.classList.contains('far');
     addListDiv.style.display = 'block';
     addListDiv.style.position = 'fixed';
@@ -55,9 +54,11 @@ export async function showRenameList(e) {
 
 // hide list options
 export function hideListOptions(e) {
-    const box = document.querySelector('.list-edit-dropdown')
-    if (box) {
-        box.remove();
+    if (!e.target.classList.contains('far')) {
+        const box = document.querySelector('.list-edit-dropdown')
+        if (box) {
+            box.remove();
+        }
     }
 }
 
@@ -86,10 +87,12 @@ export const hideTaskButton = (e) => {
 export function hideListNameDiv(e) {
     const addListDiv = document.querySelector('#add-list');
     const renameListDiv = document.querySelector('#rename-list');
+    console.log(e.target.classList)
 
     if (e.target.className !== 'logout') {
         if (((!addListDiv.contains(e.target) &&
             !renameListDiv.contains(e.target)) &&
+            !e.target.classList.contains('list-edit-option') &&
             !e.target.classList.contains('far')) ||
             e.target.className === 'submit-list' ||
             e.target.className === 'cancel-submit-list' ||
@@ -99,6 +102,7 @@ export function hideListNameDiv(e) {
             renameListDiv.style.display = 'none';
             const nameForm = document.getElementById('addList');
             const renameForm = document.getElementById('renameList');
+            console.log('here')
 
             nameForm.value = '';
             renameForm.value = '';
@@ -175,7 +179,7 @@ export async function toggleListSelect(e) {
 export function toggleListDisplay(container) {
     const icon = container.parentNode.querySelector('.fas');
     const isSelected = container.style.display === 'block';
-    
+
     if (isSelected) {
         container.style.display = 'none';
         icon.classList.remove('fa-caret-down');

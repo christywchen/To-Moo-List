@@ -107,7 +107,6 @@ router.patch('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
 
 // delete
 router.delete('/tasks/:id(\\d+)', asyncHandler(async (req, res) => {
-    console.log(req.params)
     const taskId = parseInt(req.params.id, 10);
     const task = await db.Task.findByPk(taskId);
     if (task) {

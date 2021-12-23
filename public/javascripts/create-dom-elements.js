@@ -33,7 +33,7 @@ export function createSidebarContainer(name, containerType, data,) {
         });
     }
 
-    return container
+    return container;
 }
 
 // FIND OPTION DROPDOWN
@@ -55,7 +55,9 @@ export function listEditDropDown() {
     renameListOp.addEventListener('click', (e) => {
         const listEditDropdown = document.querySelector('.list-edit-dropdown');
         if (listEditDropdown) listEditDropdown.remove();
+        console.log(1)
         showRenameList()
+        console.log(2)
         // fadeBackground();
     })
     deleteListOp.addEventListener('click', deleteList);
@@ -65,8 +67,13 @@ export function listEditDropDown() {
 
 export function decorateList(list) {
     list.addEventListener('click', (e) => {
-        fetchListTasks(e);
-        toggleListSelect(e);
+        const iconTarget = e.target.classList.contains('far');
+        const listOptionTarget = e.target.classList.contains('list-edit-option');
+        if (!iconTarget && !listOptionTarget) {
+            fetchListTasks(e);
+            toggleListSelect(e);
+
+        }
     });
 };
 
