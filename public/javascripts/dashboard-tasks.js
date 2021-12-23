@@ -29,6 +29,11 @@ export const checkAllBoxes = (e) => {
     }
 }
 
+const uncheckCheckBox = (e) => {
+    const checkBox = document.querySelector('.checkbox-all > input');
+    checkBox.checked = false;
+}
+
 export const finishTask = (e) => {
     /* 
     This function completes the task that has check marks on the checkbox.
@@ -58,6 +63,7 @@ export const finishTask = (e) => {
                     deleteDiv.remove();
                     await hideTaskSummary(taskSummaryDiv); //hides the task summary 
                 }
+                uncheckCheckBox();
             }
         }
     })
@@ -88,6 +94,7 @@ export const postPoneTask = async (e) => {
                 console.log("it worked");
                 extendCal.style.display = 'none';
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
+                uncheckCheckBox();
             }
         }
     })
@@ -127,6 +134,7 @@ export const moveTask = async (e) => {
                 await hideTaskSummary(taskSummaryDiv);
                 listMenu.style.display = 'none';
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
+                uncheckCheckBox();
             }
         }
     })
@@ -172,6 +180,7 @@ export const changeTag = async (e) => {
                     if (deleteDiv) deleteDiv.remove();
                     await hideTaskSummary(taskSummaryDiv); //hides the task summary 
                 };
+                uncheckCheckBox();
             }
         }
     })
@@ -206,6 +215,7 @@ export const deleteTask = (e) => {
                     deleteDiv.remove();// delets the task item from the DOM
                     await hideTaskSummary(taskSummaryDiv); //hides the task summary 
                 }
+                uncheckCheckBox();
             }
         }
     })
