@@ -61,9 +61,7 @@ router.delete('/:id', asyncHandler(async (req, res, next) => {
     if (list) {
         await list.destroy();
         res.status(204).end();
-        console.log('WORKED')
     } else {
-        console.log('FAILED')
         next(listNotFoundError(listId));
     }
 }))

@@ -80,6 +80,7 @@ ol li {
 .sidebar-icons {
     display: none;
     color: rgb(117, 165, 228);
+    padding-right: 1px;
 }
 
 .sidebar-box:hover > .sidebar-icons {

@@ -55,9 +55,7 @@ export function listEditDropDown() {
     renameListOp.addEventListener('click', (e) => {
         const listEditDropdown = document.querySelector('.list-edit-dropdown');
         if (listEditDropdown) listEditDropdown.remove();
-        console.log(1)
         showRenameList()
-        console.log(2)
         // fadeBackground();
     })
     deleteListOp.addEventListener('click', deleteList);

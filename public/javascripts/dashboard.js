@@ -193,7 +193,7 @@ export async function fetchSearch(e) {
                 populateTasks(tasks);
                 window.history.replaceState(stateId, `Search ${name}`, `/dashboard/search/?q=${searchStr}`);
             } else {
-                populateSearchBox(tasks)
+                populateSearchBox(tasks/*.slice(0, 5)*/)
             }
         }
     }

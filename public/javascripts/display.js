@@ -87,7 +87,6 @@ export const hideTaskButton = (e) => {
 export function hideListNameDiv(e) {
     const addListDiv = document.querySelector('#add-list');
     const renameListDiv = document.querySelector('#rename-list');
-    console.log(e.target.classList)
 
     if (e.target.className !== 'logout') {
         if (((!addListDiv.contains(e.target) &&
@@ -163,7 +162,6 @@ export async function toggleListSelect(e, listDiv) {
     const prevSelected = document.querySelector('.selected-list');
     let list = e.target
     if (listDiv) list = listDiv;
-    console.log('list: ', list)
     // Lists and Categories have an extra div container.
 
     if (list.classList.contains('sidebar-box')) {
@@ -244,7 +242,6 @@ export async function hideDuplicateBox(className) {
 export function hideDivContainer() {
 
     const visibleDiv = document.querySelector('.visible');
-    //console.log(visibleDiv);
     if (visibleDiv) {
         visibleDiv.style.display = 'none';
         visibleDiv.classList.remove('visible');
@@ -319,7 +316,7 @@ export function selectNewList(div) {
     const icon = listHeader.children[0];
     const listContainer = document.getElementById('task-lists');
 
-    if (icon.classList.contains('fa-caret-right')) {
+    if (!icon.classList.contains('fa-caret-down')) {
         toggleListDisplay(listContainer)
     }
 }
