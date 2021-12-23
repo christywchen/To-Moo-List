@@ -6,20 +6,26 @@ import { hideDivContainer, hideTaskSummary } from './display.js'
 export const checkAllBoxes = (e) => {
     const checkBox = document.querySelector('.checkbox-all > input');
     const taskOptions = document.querySelector('.task-options');
-    if(checkBox.checked) {
-        const allCheckBox = document.querySelectorAll(".single-task > input");
-        allCheckBox.forEach((e) => {
-            e.checked = e.checked ? false : true;
-        })
-        taskOptions.style.visibility = 'visible';
-        taskOptions.style.animation = "fadeIn 1s";
-    } else{
-        const allCheckBox = document.querySelectorAll(".single-task > input");
-        allCheckBox.forEach((e) => {
-            e.checked = e.checked ? false : true;
-        })
-        taskOptions.style.animation = "fadeOut 1s";
-        taskOptions.style.visibility = 'hidden';
+    if(!e.target.classList.contains("checkbox-all")){
+        if(checkBox.checked) {
+            const allCheckBox = document.querySelectorAll(".single-task > input");
+            allCheckBox.forEach((e) => {
+                if (!e.checked) {
+                    e.checked = true;
+                }
+            })
+            taskOptions.style.visibility = 'visible';
+            taskOptions.style.animation = "fadeIn 1s";
+        } else{
+            const allCheckBox = document.querySelectorAll(".single-task > input");
+            allCheckBox.forEach((e) => {
+                if (e.checked) {
+                    e.checked = false;
+                }
+            })
+            taskOptions.style.animation = "fadeOut 1s";
+            taskOptions.style.visibility = 'hidden';
+        }
     }
 }
 
@@ -154,10 +160,12 @@ export const changeTag = async (e) => {
                 //console.log("it worked");
                 const { task } = await res.json();
                 const taskSummary = document.querySelector('#summary-priority-select');
-                taskSummary.innerHTML = "";
-                tag.style.display = 'none';
-                buildPrioritySelectOptions(taskCategoryName[task.categoryId - 1], task.categoryId); // updates the priority options in the task summary
-                updatePriorityTag(e.dataset.task, task, tagId, null);
+                if (taskSummary) {
+                    taskSummary.innerHTML = "";
+                    tag.style.display = 'none';
+                    buildPrioritySelectOptions(taskCategoryName[task.categoryId - 1], task.categoryId); // updates the priority options in the task summary
+                    updatePriorityTag(e.dataset.task, task, tagId, null);
+                }
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
                 if (url.includes("#priority")) {
                     const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
@@ -205,6 +213,11 @@ export const deleteTask = (e) => {
 
 
 export const getDropMenu = (e) => {
+    const dropDown = document.querySelectorAll('.drop-square');
+    dropDown.forEach( d => {
+        d.addEventListener("click", getDropMenu);
+    })
+
     const listMenu = document.querySelector('.list-of-lists');
     const moveCal = document.querySelector('.moveTo');
     moveCal.addEventListener('click', (e) => {

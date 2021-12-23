@@ -65,6 +65,7 @@ export const initializePage = async () => {
     const checkBox = document.querySelector('.checkbox-all');
     const completeTask = document.querySelector('.completed');
     const trashTask = document.querySelector('.delete');
+    
 
     document.addEventListener('click', (e) => {
         hideTaskButton(e);
@@ -95,7 +96,7 @@ export const initializePage = async () => {
     checkBox.addEventListener("click", checkAllBoxes);
     completeTask.addEventListener("click", finishTask);
     trashTask.addEventListener("click", deleteTask);
-
+    
     createDropDownMenu();
     updateTaskStatus();
 

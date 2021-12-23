@@ -82,7 +82,7 @@ async function decorateTaskDiv(div, task) {
     div.setAttribute('data-task', `${task.id}`);
     div.classList.add('single-task');
     div.innerHTML = createTaskHtml(task.name, task.id);
-    div.addEventListener('click', fetchTaskSummary, { once: true });
+    div.addEventListener('click', fetchTaskSummary);
     div.addEventListener('click', getDropMenu);
     div.addEventListener('click', toggleTaskHighlight);
     div.addEventListener('click', toggleTaskSummary);
