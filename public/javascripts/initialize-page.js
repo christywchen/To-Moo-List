@@ -1,7 +1,7 @@
 import { createTask, createList, renameList, fetchSearch, fetchListTasks, fetchCategoryTasks } from './dashboard.js'
 import { hideTaskButton, fadeBackground, hideListNameDiv, hideListOptions, hideDropDown, showTaskButton, showCreateList, toggleListDisplay, toggleListSelect, deselectList, selectSearchField } from './display.js';
 import { createSidebarContainer, decorateList } from './create-dom-elements.js';
-import { createDropDownMenu } from './dashboard-tasks.js';
+import { createDropDownMenu, checkAllBoxes, finishTask, deleteTask, getDropMenu } from './dashboard-tasks.js';
 import { updateTaskStatus } from './dashboard-recap.js';
 import { clearSearch } from './clean-dom.js';
 
@@ -62,6 +62,9 @@ export const initializePage = async () => {
     const renameListButton = document.querySelector('.rename-list');
     const searchButton = document.querySelector('.search-button');
     const searchField = document.querySelector('#search');
+    const checkBox = document.querySelector('.checkbox-all');
+    const completeTask = document.querySelector('.completed');
+    const trashTask = document.querySelector('.delete');
 
     document.addEventListener('click', (e) => {
         hideTaskButton(e);
@@ -89,6 +92,9 @@ export const initializePage = async () => {
     renameListButton.addEventListener('click', (e) => {
         renameList(e);
     });
+    checkBox.addEventListener("click", checkAllBoxes);
+    completeTask.addEventListener("click", finishTask);
+    trashTask.addEventListener("click", deleteTask);
 
     createDropDownMenu();
     updateTaskStatus();

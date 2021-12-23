@@ -1,5 +1,4 @@
 
-
 // Fade background
 export function fadeBackground(e) {
     const isFaded = document.querySelector('.page-cover')
@@ -32,7 +31,6 @@ function removeSelfOnClick(container) {
         hideContainer(className)
     })
 }
-
 
 // Create / Rename List forms
 export async function showCreateList(e) {
@@ -132,11 +130,6 @@ export function hideDropDown(e) {
     }
 };
 
-// export function toggleSearchHighlight(e) {
-//     if (e.target.id === ('search')) selectSearchField();
-
-// }
-
 export function selectSearchField(e) {
     const searchField = document.querySelector('.search')
     searchField.classList.add('search-selected');
@@ -221,7 +214,6 @@ export function hideContainer(className) {
     })
 };
 
-
 // remove container from DOM
 export async function hideDuplicateBox(className) {
     const box = document.querySelector(`.${className}`);
@@ -246,34 +238,24 @@ export async function toggleTaskHighlight(e) {
     const prevSelected = document.querySelector('.single-task-selected');
     const taskOptions = document.querySelector('.task-options');
     let nextSelection = e.target;
-    if (nextSelection.localName =='label' || nextSelection.localName =='span') nextSelection = nextSelection.parentNode
+
+    if (nextSelection.localName == 'label' ||
+        nextSelection.localName == 'span') {
+            nextSelection = nextSelection.parentNode;
+        }
+
     if (prevSelected && e.target.type != 'checkbox') {
         await removeHighlight(prevSelected, nextSelection);
-        if (prevSelected != nextSelection){
-            taskOptions.style.visibility = 'visible'
-            if (e.target.type != 'checkbox' && 
-            !nextSelection.children[0].hasAttribute('checked')){
-            nextSelection.children[0].setAttribute('checked', 'true');
-        }
-        }else {
+        if (prevSelected != nextSelection) {
+            taskOptions.style.visibility = 'visible';
+        } else {
             taskOptions.style.visibility = 'hidden';
         }
-    }
-    else {
-        if (nextSelection.localName =='label'){
-            await addHighlight(nextSelection)
-            if (e.target.type != 'checkbox' && 
-                !nextSelection.children[0].hasAttribute('checked')){
-                nextSelection.children[0].setAttribute('checked', 'true');
-            }
-        } else {
-            if (e.target.type != 'checkbox' && 
-                !nextSelection.children[0].hasAttribute('checked')){
-                nextSelection.children[0].setAttribute('checked', 'true');
-            }
-            await addHighlight(nextSelection);
+    } else {
+        await addHighlight(nextSelection);
+        if (e.target.type != 'checkbox'){
+            nextSelection.children[0].checked = nextSelection.children[0].checked ? false : true;
         }
-        
     }
 }
 
@@ -281,6 +263,7 @@ function removeHighlight(prevSelected, nextSelection) {
     return new Promise((res, rej) => {
         nextSelection.classList.add('single-task-selected');
         prevSelected.classList.remove('single-task-selected');
+        nextSelection.children[0].checked = nextSelection.children[0].checked ? false : true;
         res();
     });
 }

@@ -1,7 +1,7 @@
 import { fetchListTasks,fetchTaskSummary, updateListId, deleteList } from './dashboard.js';
 import { clearDOMTasks, clearSearchRecs, clearTaskSummary } from './clean-dom.js';
 import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect, toggleTaskHighlight, toggleTaskSummary, showCreateList } from './display.js';
-import { finishTask, getDropMenu, deleteTask, checkAllBoxes  } from './dashboard-tasks.js'
+import { finishTask, getDropMenu, deleteTask } from './dashboard-tasks.js'
 
 export function createSidebarContainer(name, containerType, data,) {
     const container = document.createElement('div');
@@ -80,12 +80,10 @@ export function populateTasks(tasks) {
 
 async function decorateTaskDiv(div, task) {
     div.setAttribute('data-task', `${task.id}`);
-    div.classList.add('single-task')
+    div.classList.add('single-task');
     div.innerHTML = createTaskHtml(task.name, task.id);
     div.addEventListener('click', fetchTaskSummary, { once: true });
-    div.addEventListener('click', finishTask, { once: true });
-    div.addEventListener('click', deleteTask, { once: true });
-    div.addEventListener('click', getDropMenu, { once: true });
+    div.addEventListener('click', getDropMenu);
     div.addEventListener('click', toggleTaskHighlight);
     div.addEventListener('click', toggleTaskSummary);
 

@@ -1,56 +1,59 @@
-import { updateList } from './dashboard.js';
 import { updateTaskStatus } from './dashboard-recap.js'
 import { updatePriorityTag } from './dashboard-summary.js'
-import { buildDeadlineDiv, getDate, buildPrioritySelectOptions } from './create-dom-elements.js';
-import { showCreateList, hideDivContainer, hideTaskSummary } from './display.js'
+import { getDate, buildPrioritySelectOptions } from './create-dom-elements.js';
+import { hideDivContainer, hideTaskSummary } from './display.js'
 
 export const checkAllBoxes = (e) => {
-    const checkBox = document.querySelector('.checkbox > input');
-    checkBox.addEventListener('click', (e) => {
-        const selectedTasks = document.querySelectorAll(".single-task > input");
-        if(selectedTasks.length) {
-            selectedTasks.forEach( (e) => {
-
-            });
-        }
-        //console.log(checkBox.checked)
-    })
+    const checkBox = document.querySelector('.checkbox-all > input');
+    const taskOptions = document.querySelector('.task-options');
+    if(checkBox.checked) {
+        const allCheckBox = document.querySelectorAll(".single-task > input");
+        allCheckBox.forEach((e) => {
+            e.checked = e.checked ? false : true;
+        })
+        taskOptions.style.visibility = 'visible';
+        taskOptions.style.animation = "fadeIn 1s";
+    } else{
+        const allCheckBox = document.querySelectorAll(".single-task > input");
+        allCheckBox.forEach((e) => {
+            e.checked = e.checked ? false : true;
+        })
+        taskOptions.style.animation = "fadeOut 1s";
+        taskOptions.style.visibility = 'hidden';
+    }
 }
 
 export const finishTask = (e) => {
     /* 
     This function completes the task that has check marks on the checkbox.
     It finishes the task by first getting all the tasks that are checked using 
-    querySelectAll and iterates them and marks the each task in the database as complete
-    
+    querySelectAll and iterates them and marks the each task in the database as complete 
     */
     const completeTask = document.querySelector(".completed");
     const taskSummaryDiv = document.querySelector('#task-details');
-    completeTask.addEventListener("click", async (e) => {
-        const selectedTasks = document.querySelectorAll(".single-task > input"); // selects all the tasks
-        selectedTasks.forEach(async (e) => {
-            if (e.checked) { // checks the to see if the checkbox is checked or not 
-                const res = await fetch(`/api/tasks/${e.dataset.task}`, { // 20-25 updates the task in database to complete
-                    method: "PATCH",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ isCompleted: true })
-                });
-                if (!res.ok) {
-                    console.log("Something went wrong")
-                } else {
-                    completeTask.style.animation = "fetchSuccess 1s"; // lights the checkmark div green if its successful
-                    updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
-                    const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
-                    if (deleteDiv) {
-                        deleteDiv.remove();
-                        await hideTaskSummary(taskSummaryDiv); //hides the task summary 
-                    }
-                    //setTimeout(() => window.alert("Your task was completed!"));
+
+    const selectedTasks = document.querySelectorAll(".single-task > input"); // selects all the tasks
+    selectedTasks.forEach(async (e) => {
+        if (e.checked) { // checks the to see if the checkbox is checked or not 
+            const res = await fetch(`/api/tasks/${e.dataset.task}`, { // 20-25 updates the task in database to complete
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ isCompleted: true })
+            });
+            if (!res.ok) {
+                console.log("Something went wrong");
+            } else {
+                completeTask.style.animation = "fetchSuccess 1s"; // lights the checkmark div green if its successful
+                updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
+                const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
+                if (deleteDiv) {
+                    deleteDiv.remove();
+                    await hideTaskSummary(taskSummaryDiv); //hides the task summary 
                 }
             }
-        })
+        }
     })
 };
 
@@ -149,12 +152,11 @@ export const changeTag = async (e) => {
                 console.log("Something went wrong");
             } else {
                 //console.log("it worked");
-                const {task} = await res.json();
-                console.log(taskCategoryName[tagId-1], taskCategoryName[task.categoryId-1] )
+                const { task } = await res.json();
                 const taskSummary = document.querySelector('#summary-priority-select');
                 taskSummary.innerHTML = "";
                 tag.style.display = 'none';
-                buildPrioritySelectOptions(taskCategoryName[task.categoryId-1], task.categoryId); // updates the priority options in the task summary
+                buildPrioritySelectOptions(taskCategoryName[task.categoryId - 1], task.categoryId); // updates the priority options in the task summary
                 updatePriorityTag(e.dataset.task, task, tagId, null);
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
                 if (url.includes("#priority")) {
@@ -167,7 +169,7 @@ export const changeTag = async (e) => {
     })
 }
 
-export function deleteTask(e) {
+export const deleteTask = (e) => {
     /* 
     This function deletes the task with check marks on the checkbox.
     It deletes the task by first getting all the tasks that are checked using 
@@ -176,30 +178,29 @@ export function deleteTask(e) {
     const trashTask = document.querySelector(".delete");
     const taskSummaryDiv = document.querySelector('#task-details');
 
-    trashTask.addEventListener('click', (e) => {
-        const selectedTasks = document.querySelectorAll(".single-task > input"); // selects all the tasks
-        selectedTasks.forEach(async (e) => {
-            if (e.checked) { // only updates in database for task with checkmarks
-                const res = await fetch(`/api/tasks/${e.dataset.task}`, {
-                    method: "DELETE",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: null
-                })
-                if (!res.ok) {
-                    console.log("Something went wrong")
-                } else {
-                    console.log("Your task was deleted")
+    const selectedTasks = document.querySelectorAll(".single-task > input"); // selects all the tasks
+    selectedTasks.forEach(async (e) => {
+        if (e.checked) { // only updates in database for task with checkmarks
+            const res = await fetch(`/api/tasks/${e.dataset.task}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            if (!res.ok) {
+                console.log("Something went wrong");
+            } else {
+                //console.log("Your task was deleted")
+                trashTask.style.animation = "fetchSuccess 1s";
+                updateTaskStatus();
+                const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
+                if (deleteDiv) {
+                    deleteDiv.remove();// delets the task item from the DOM
                     await hideTaskSummary(taskSummaryDiv); //hides the task summary 
-                    const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
-                    if (deleteDiv) deleteDiv.remove(); // delets the task item from the DOM
-                    //setTimeout( () => window.alert("Your task was deleted"))
-                    trashTask.style.animation = "fetchSuccess 1s";
                 }
             }
-        })
-    }, { once:true });
+        }
+    })
 }
 
 

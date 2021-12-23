@@ -4,7 +4,7 @@ append head
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css")
 
 div.checkbox-container
-    div(class="checkbox grid-square")
+    div(class="checkbox-all grid-square")
         input(type="checkbox")
     div(class="task-options")
         div(class="split-3")
@@ -17,7 +17,7 @@ div.checkbox-container
                 div(class="postpone-dates dropdown" style='display: none')
             p(class="tool-tip") ALERT
             div(class="alert grid-square")
-                i(class="fas fa-exclamation")
+                i(class="fas fa-tag drop-square")
         div(class="split-3")
             p(class="tool-tip") Change Due Date
             div(class="due grid-square drop-square")
@@ -29,7 +29,7 @@ div.checkbox-container
                 div(class="list-of-lists dropdown" style='display: none')
             p(class="tool-tip") Change priority 
             div(class="category grid-square drop-square")
-                i(class="fas fa-tag drop-square")
+                i(class="fas fa-exclamation")
                 div(class="list-of-tags dropdown" style='display: none')
         p(class="tool-tip") Delete
         div(class="delete grid-square")
