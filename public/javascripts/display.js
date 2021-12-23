@@ -1,5 +1,4 @@
 
-
 // Fade background
 export function fadeBackground(e) {
     const isFaded = document.querySelector('.page-cover')
@@ -32,7 +31,6 @@ function removeSelfOnClick(container) {
         hideContainer(className)
     })
 }
-
 
 // Create / Rename List forms
 export async function showCreateList(e) {
@@ -89,6 +87,7 @@ export function hideListNameDiv(e) {
     if (e.target.className !== 'logout') {
         if (((!addListDiv.contains(e.target) &&
             !renameListDiv.contains(e.target)) &&
+            !e.target.id === 'summary-list-select' &&
             !e.target.classList.contains('far')) ||
             e.target.className === 'submit-list' ||
             e.target.className === 'cancel-submit-list' ||
@@ -108,7 +107,8 @@ export function hideDropDown(e) {
     const listMenu = document.querySelector(".list-of-lists");
     const postponeMenu = document.querySelector(".postpone-dates");
     const categoryList = document.querySelector('.list-of-tags');
-    const listContainers = document.querySelectorAll('.list-container');
+    const calDiv = document.querySelector('.hidden-cal')
+    //const listContainers = document.querySelectorAll('.list-container');
     const searchRecs = document.querySelector('.search-recommendations');
 
     if (e.target.className !== 'logout') {
@@ -123,16 +123,12 @@ export function hideDropDown(e) {
             postponeMenu.style.display = 'none';
             categoryList.style.display = 'none';
             searchRecs.style.display = 'none';
+            calDiv.style.display = 'none';
 
             deselectSearchField()
         }
     }
 };
-
-// export function toggleSearchHighlight(e) {
-//     if (e.target.id === ('search')) selectSearchField();
-
-// }
 
 export function selectSearchField(e) {
     const searchField = document.querySelector('.search')
@@ -218,7 +214,6 @@ export function hideContainer(className) {
     })
 };
 
-
 // remove container from DOM
 export async function hideDuplicateBox(className) {
     const box = document.querySelector(`.${className}`);
@@ -242,18 +237,25 @@ export function hideDivContainer() {
 export async function toggleTaskHighlight(e) {
     const prevSelected = document.querySelector('.single-task-selected');
     const taskOptions = document.querySelector('.task-options');
-    const nextSelection = e.target;
+    let nextSelection = e.target;
+
+    if (nextSelection.localName == 'label' ||
+        nextSelection.localName == 'span') {
+            nextSelection = nextSelection.parentNode;
+        }
 
     if (prevSelected && e.target.type != 'checkbox') {
         await removeHighlight(prevSelected, nextSelection);
-        if (prevSelected != nextSelection){
-            taskOptions.style.visibility = 'visible'
-        }else {
-            taskOptions.style.visibility = 'hidden'
+        if (prevSelected != nextSelection) {
+            taskOptions.style.visibility = 'visible';
+        } else {
+            taskOptions.style.visibility = 'hidden';
         }
-    }
-    else {
+    } else {
         await addHighlight(nextSelection);
+        if (e.target.type != 'checkbox'){
+            nextSelection.children[0].checked = nextSelection.children[0].checked ? false : true;
+        }
     }
 }
 
@@ -261,6 +263,7 @@ function removeHighlight(prevSelected, nextSelection) {
     return new Promise((res, rej) => {
         nextSelection.classList.add('single-task-selected');
         prevSelected.classList.remove('single-task-selected');
+        nextSelection.children[0].checked = nextSelection.children[0].checked ? false : true;
         res();
     });
 }

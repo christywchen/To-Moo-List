@@ -21,14 +21,12 @@
     height: inherit;
 }
 
-#add-task-input input.inp-field {
-    background-color: white;
-}
 
 .add-task-button {
     align-self: flex-end;
     margin-top: -40px;
     transition: all 0.4s;
+    z-index: -1;
 }
 
 .add-task-button button {
@@ -197,4 +195,12 @@
 
 .priority-Low {
     background-color: rgb(36, 206, 169);
+}
+
+.logout:hover{
+    background-color: #032c61;
+}
+
+.logout:active{
+    background-color: #03162f;
 }

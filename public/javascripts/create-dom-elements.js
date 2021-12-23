@@ -1,8 +1,7 @@
-import { fetchListTasks, updateListId } from './dashboard.js';
+import { fetchListTasks,fetchTaskSummary, updateListId, deleteList } from './dashboard.js';
 import { clearDOMTasks, clearSearchRecs, clearTaskSummary } from './clean-dom.js';
-import { fetchTaskSummary, deleteList} from './dashboard.js';
-import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect, toggleTaskHighlight, toggleTaskSummary } from './display.js';
-import { finishTask, getDropMenu, deleteTask  } from './dashboard-tasks.js'
+import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect, toggleTaskHighlight, toggleTaskSummary, showCreateList } from './display.js';
+import { finishTask, getDropMenu, deleteTask } from './dashboard-tasks.js'
 
 export function createSidebarContainer(name, containerType, data,) {
     const container = document.createElement('div');
@@ -81,12 +80,10 @@ export function populateTasks(tasks) {
 
 async function decorateTaskDiv(div, task) {
     div.setAttribute('data-task', `${task.id}`);
-    div.classList.add('single-task')
+    div.classList.add('single-task');
     div.innerHTML = createTaskHtml(task.name, task.id);
-    div.addEventListener('click', fetchTaskSummary, {once: true});
-    div.addEventListener('click', finishTask, {once: true});
-    div.addEventListener('click', deleteTask, {once: true});
-    div.addEventListener('click', getDropMenu, {once: true});
+    div.addEventListener('click', fetchTaskSummary);
+    div.addEventListener('click', getDropMenu);
     div.addEventListener('click', toggleTaskHighlight);
     div.addEventListener('click', toggleTaskSummary);
 
@@ -177,7 +174,7 @@ export async function buildTaskSummary(
 
     taskSummaryParent.appendChild(taskSummaryContainer);
     buildListSelectOptions(currentListId, currentList);
-    buildPrioritySelectOptions(currentPriority);
+    buildPrioritySelectOptions(currentPriority, currentPriorityId);
 }
 
 // helper functions for task summary container
@@ -227,7 +224,6 @@ function buildPriorityDiv(currentPriorityId, currentPriority) {
     priorityDiv.innerHTML = `
         <div id="summary-priority">Priority</div>
         <select id="summary-priority-select" class="summary-inp">
-        <option value="${currentPriorityId}">${currentPriority}</option>
         </select>
         `;
     return priorityDiv;
@@ -258,14 +254,15 @@ export async function buildListSelectOptions(currentListId, currentList) {
     const createListOpt = document.createElement('option');
     createListOpt.setAttribute('value', 'create-new');
     createListOpt.innerText = 'Create New';
+    //createListOpt.addEventListener('click', showCreateList);
     listOptions.appendChild(createListOpt);
 }
 
-export async function buildPrioritySelectOptions(currentPriority) {
+export async function buildPrioritySelectOptions(currentPriority, currentPriorityId) {
     const priorityRes = await fetch(`/api/categories`);
     const { categories } = await priorityRes.json();
     const priorityOptions = document.querySelector('#summary-priority-select');
-
+    priorityOptions.innerHTML = `<option value="${currentPriorityId}">${currentPriority}</option>`
     populateSelectOptions(categories, currentPriority, priorityOptions);
 }
 

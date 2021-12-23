@@ -1,0 +1,56 @@
+extends layout.pug
+
+append head
+  //- add page specific styles by appending to the head
+  link(rel="stylesheet" href="/stylesheets/home.css")
+  link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css")
+
+block content
+    header
+        div.navbar-container
+            div.navbar
+                a(href='/' class="moogo")
+                    img(src='images/logo-o-light.png', alt="cow-on-computer" id="logo")
+                ul
+                    li
+                        a(href="/") Home
+                    li
+                        a(href="/upgrade") Upgrade
+                    li
+                        a(href="/team") Meet the team
+                    li
+                        a(href="/login") Log in
+                    li(class="signup")
+                        a(href="/signup") Sign up for free
+        div.header-content
+            h1 Just Moo it.
+            div.carousel
+                div(class="slide active")
+                    img(src="images/office-o.png", alt="" class="")
+                    div.carousel-info
+                        h2 Tired of Deja-moo? We can help!
+                        p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                div.slide
+                    img(src="images/wavingCow-o.png", alt="" class="")
+                    div.carousel-info
+                        h2 Got Milk?
+                        p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                div.slide
+                    img(src="images/moosic-o.png", alt="" class="")
+                    div.carousel-info
+                        h2 Cow-ABUNGA!
+                        p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                div.slide
+                    img(src="images/cowblep-o.png", alt="" class="")
+                    div.carousel-info
+                        h2 This app is udderly amazing!
+                        p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                div.navigation
+                    i(class="fas fa-chevron-left prev-btn")
+                    i(class="fas fa-chevron-right next-btn")
+                div.pageIndicator
+                    div(class="page-icon active")
+                    div.page-icon
+                    div.page-icon
+                    div.page-icon
+    include splash-footer.pug

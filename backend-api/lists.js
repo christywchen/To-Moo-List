@@ -44,7 +44,7 @@ router.patch('/:id', validateList, handleValidationErrors, asyncHandler(async (r
     const listId = parseInt(req.params.id, 10);
     const list = await db.List.findByPk(listId);
 
-    console.log(list)
+    //console.log(list)
     if (list) {
         const { name } = req.body;
         await list.update({ name });
@@ -57,15 +57,15 @@ router.patch('/:id', validateList, handleValidationErrors, asyncHandler(async (r
 
 router.delete('/:id', asyncHandler(async (req, res, next) => {
     const listId = parseInt(req.params.id, 10);
-    console.log('listId: ', listId);
+    //console.log('listId: ', listId);
     const list = await db.List.findByPk(listId)
 
     if (list) {
         await list.destroy();
         res.status(204).end();
-        console.log('WORKED')
+        //console.log('WORKED')
     } else {
-        console.log('FAILED')
+        //console.log('FAILED')
         next(listNotFoundError(listId));
     }
 }))
