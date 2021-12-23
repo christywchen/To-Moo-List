@@ -75,50 +75,6 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: 'Jen\'s bday party!',
-        description: 'don\'t forget gift',
-        deadline: tomorrow,
-        isCompleted: false,
-        categoryId: 2,
-        listId: 4,
-        userId: 1,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        name: 'Plan Vacation',
-        description: 'Off for 2 weeks!',
-        deadline: null,
-        isCompleted: false,
-        categoryId: 1,
-        listId: 4,
-        userId: 1,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        name: 'Buy snowboard',
-        description: null,
-        deadline: tomorrow,
-        isCompleted: false,
-        categoryId: 1,
-        listId: 4,
-        userId: 1,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        name: 'Plan knitting tournament',
-        description: 'from stitches to riches',
-        deadline: tomorrow,
-        isCompleted: false,
-        categoryId: 1,
-        listId: 4,
-        userId: 1,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
         name: 'Plan meeting with Ali',
         description: '',
         deadline: tomorrow,
@@ -132,7 +88,7 @@ module.exports = {
       {
         name: 'Bring in new plant',
         description: '',
-        deadline: yesterday,
+        deadline: null,
         isCompleted: false,
         categoryId: 1,
         listId: 2,
@@ -166,7 +122,7 @@ module.exports = {
         name: 'Start Garden',
         description: '',
         deadline: yesterday,
-        isCompleted: false,
+        isCompleted: true,
         categoryId: 2,
         listId: 3,
         userId: 1,
@@ -176,7 +132,7 @@ module.exports = {
       {
         name: 'Organize computer files',
         description: '',
-        deadline: yesterday,
+        deadline: null,
         isCompleted: false,
         categoryId: 3,
         listId: 3,
@@ -202,6 +158,50 @@ module.exports = {
         isCompleted: false,
         categoryId: 3,
         listId: 3,
+        userId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Jen\'s bday party!',
+        description: 'don\'t forget gift',
+        deadline: tomorrow,
+        isCompleted: false,
+        categoryId: 2,
+        listId: 4,
+        userId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Plan Vacation',
+        description: 'Off for 2 weeks!',
+        deadline: null,
+        isCompleted: false,
+        categoryId: 1,
+        listId: 4,
+        userId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Buy snowboard',
+        description: null,
+        deadline: null,
+        isCompleted: false,
+        categoryId: 1,
+        listId: 4,
+        userId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Plan knitting tournament',
+        description: 'from stitches to riches',
+        deadline: null,
+        isCompleted: false,
+        categoryId: 1,
+        listId: 4,
         userId: 1,
         createdAt: new Date(),
         updatedAt: new Date()

@@ -242,15 +242,16 @@ h1 {
 
 #demo-user {
     position: fixed;
-    right: 25px;
-    top: 25px;
+    right: 20px;
+    top: 20px;
 }
 
 #demo-user a{
-    color: white;
+    color: rgb(219, 219, 219);
     text-decoration: none;
 }
 
 #demo-user a:hover{
-    font-weight: bold;
+    /* font-weight: bold; */
+    color: white;
 }
