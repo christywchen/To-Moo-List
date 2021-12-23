@@ -24,7 +24,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser('superSecret'));
-app.use(express.static(path.join(__dirname,'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // set up session middleware
 const store = new SequelizeStore({ db: sequelize });
@@ -51,20 +51,20 @@ app.use('/api/categories', categoriesRouter);
 app.use('/api/search', searchRouter);
 
 // Gets the splash page
-app.get('/', (req,res) => {
-  res.render('home', {
+app.get('/', (req, res) => {
+  res.render('splash-home', {
     title: "To Moo List"
   })
 })
 
-app.get('/team', (req,res) => {
-  res.render('team', {
+app.get('/team', (req, res) => {
+  res.render('splash-team', {
     title: "Dream Team"
   })
 })
 
-app.get('/upgrade', (req,res) => {
-  res.render('upgrade', {
+app.get('/upgrade', (req, res) => {
+  res.render('splash-upgrade', {
     title: "Upgrade"
   })
 })

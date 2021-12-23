@@ -7,22 +7,7 @@ append head
   link(rel="stylesheet" href="/stylesheets/team.css")
 
 block content
-    header
-        div.navbar-container
-            div.navbar
-                a(href='/' class="moogo")
-                    img(src='images/logo-o-light.png', alt="cow-on-computer" id="logo")
-                ul
-                    li
-                        a(href="/") Home
-                    li
-                        a(href="/upgrade") Upgrade
-                    li
-                        a(href="/team") Meet the team
-                    li
-                        a(href="/login") Log in
-                    li(class="signup")
-                        a(href="/signup") Sign up for free
+    include splash-navbar.pug
     main
         div#signup_main
             div.errMsg(hidden)
@@ -50,50 +35,6 @@ block content
                             button(type='submit') Sign Up
                                 if !errors
                                     a(href='/dashboard')
-                            button(type='submit')
-                                a(href="/login") Already Has an Account? Log in
-    footer
-        div.social-container
-            div.social-links
-                div(class="christy person")
-                    h4 Christy
-                    ul
-                        li
-                            a(href="#") Linkedin
-                        li
-                            a(href="#") Github
-                        li
-                            a(href="#") Instagram
-                div(class="haozhen person")
-                    h4 Haozhen
-                    ul
-                        li
-                            a(href="#") Linkedin
-                        li
-                            a(href="#") Github
-                        li
-                            a(href="#") Instagram
-                div(class="justin person")
-                    h4 Justin
-                    ul
-                        li
-                            a(href="#") Linkedin
-                        li
-                            a(href="#") Github
-                        li
-                            a(href="#") Instagram
-                div(class="peter person")
-                    h4 Peter
-                    ul
-                        li
-                            a(href="#") Linkedin
-                        li
-                            a(href="#") Github
-                        li
-                            a(href="#") Instagram
-        div.copyright
-            p &copy; Copyright 2021 To Moo List
-            a(href="#") Terms
-            a(href="#") Privacy
-            a(href="#") Security
-            script(src="/javascripts/errors.js" type="module")
+                    p.login-cta
+                        a(href="/login") Already have an account? Log in
+    include splash-footer.pug

@@ -6,26 +6,11 @@ append head
   link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css")
 
 block content
-    header
-        div.navbar-container
-            div.navbar
-                a(href='/' class="moogo")
-                    img(src='images/logo-o-light.png', alt="cow-on-computer" id="logo")
-                ul
-                    li
-                        a(href="/") Home
-                    li
-                        a(href="/upgrade") Upgrade
-                    li
-                        a(href="/team") Meet the team
-                    li
-                        a(href="/login") Log in
-                    li(class="signup")
-                        a(href="/signup") Sign up for free
-            div.header-content
-                h1 Meets your amazing team!
-                h2 moo-chas grass-ias!
-                img(src="images/cowow-o.png", alt="cow money")
+    include splash-navbar.pug
+    div.header-content
+        h1 Meet your amazing team!
+        h2 moo-chas grass-ias!
+        img(src="images/cowow-o.png", alt="cow money")
     main
         div(class="c-cow cow")
             img(src="images/ccow-o.png", alt="cow in yellow shirt")
@@ -47,47 +32,4 @@ block content
                 h2 Peter
                 p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
             img(src="images/pcow-o.png", alt="nerd cow")
-    footer
-        div.social-container
-            div.social-links
-                div(class="christy person")
-                    h4 Christy
-                    ul
-                        li
-                            a(href="#") Linkedin
-                        li
-                            a(href="#") Github
-                        li
-                            a(href="#") Instagram
-                div(class="haozhen person")
-                    h4 Haozhen
-                    ul
-                        li
-                            a(href="#") Linkedin
-                        li
-                            a(href="#") Github
-                        li
-                            a(href="#") Instagram
-                div(class="justin person")
-                    h4 Justin
-                    ul
-                        li
-                            a(href="#") Linkedin
-                        li
-                            a(href="#") Github
-                        li
-                            a(href="#") Instagram
-                div(class="peter person")
-                    h4 Peter
-                    ul
-                        li
-                            a(href="#") Linkedin
-                        li
-                            a(href="#") Github
-                        li
-                            a(href="#") Instagram
-        div.copyright
-            p &copy; Copyright 2021 To Moo List
-            a(href="#") Terms
-            a(href="#") Privacy
-            a(href="#") Security
+    include splash-footer.pug

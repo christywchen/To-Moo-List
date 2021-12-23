@@ -7,6 +7,7 @@
 body {
     font-family: Helvetica, Arial, sans-serif;
     font-size: 15px;
+    line-height: 1.75em;
     overflow-y: auto;
 }
 
@@ -37,6 +38,7 @@ footer {
     list-style: none;
     text-align: center;
     justify-self: end;
+    align-items: center;
 }
 
 .navbar li {
@@ -50,16 +52,26 @@ footer {
     padding: 5px 10px;
     margin: 0 10px;
     text-decoration: none;
-    color: white;
+    color: rgba(255, 255, 255, 0.603);
 }
 
 .navbar a:hover {
-    font-weight: 900;
+    color: white;
 }
 
+.signup a {
+    color: white !important;
+}
 .signup {
     border: 2px solid #fff;
     border-radius: 5px;
+    margin: 5px;
+}
+.signup:hover {
+    background-color: rgba(255, 255, 255, 0.288);
+    border: 2px solid #fff;
+    border-radius: 5px;
+    margin: 5px;
 }
 
 .header-content {
@@ -69,6 +81,7 @@ footer {
     justify-content: center;
     align-items: center;
     transition: background 0.5s;
+    height: 600px;
 }
 
 h1 {
@@ -121,7 +134,7 @@ h1 {
 }
 
 .carousel .slide .carousel-info h2 {
-    font-size: 2em;
+    font-size: 1.5em;
     font-weight: 800;
 }
 
@@ -220,7 +233,7 @@ h1 {
 }
 
 .person ul li a:hover {
-    background-color: lightgray;
+    color: rgb(68, 68, 68);
 }
 
 .copyright {
