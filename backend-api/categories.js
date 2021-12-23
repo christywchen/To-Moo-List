@@ -8,7 +8,6 @@ router.get('/', asyncHandler(async(req,res) =>{
     res.json({ categories });
 }));
 
-// Getting tasks by categoryId
 router.get('/:categoryId', asyncHandler(async (req, res, next) => {
     const userId = res.locals.user.id;
     const categoryId = req.params.categoryId

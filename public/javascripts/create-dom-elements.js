@@ -36,8 +36,6 @@ export function createSidebarContainer(name, containerType, data,) {
     return container;
 }
 
-// FIND OPTION DROPDOWN
-
 export function listEditDropDown() {
     const container = document.createElement('div');
     const renameListOp = document.createElement('div');

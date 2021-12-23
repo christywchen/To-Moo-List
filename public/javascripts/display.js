@@ -136,11 +136,6 @@ export function hideDropDown(e) {
     }
 };
 
-// export function toggleSearchHighlight(e) {
-//     if (e.target.id === ('search')) selectSearchField();
-
-// }
-
 export function selectSearchField(e) {
     const searchField = document.querySelector('.search')
     const searchIcon = document.querySelector('.fa-search');
@@ -192,6 +187,16 @@ export function toggleListDisplay(container, e) {
         container.style.display = 'block';
         // icon.classList.remove('fa-caret-right');
         icon.classList.add('fa-caret-down');
+    }
+};
+
+export function selectNewList() {
+    const listHeader = document.querySelector('.lists-header');
+    const icon = listHeader.children[0];
+    const listContainer = document.getElementById('task-lists');
+
+    if (!icon.classList.contains('fa-caret-down')) {
+        toggleListDisplay(listContainer)
     }
 };
 
@@ -294,29 +299,18 @@ export async function toggleTaskSummary(e) {
 
     if (prevSelected) await showTaskSummary(taskSummaryDiv, prevSelected, nextSelection);
     else await hideTaskSummary(taskSummaryDiv, prevSelected)
-}
+};
 
 function showTaskSummary(taskSummaryDiv, prevSelected, nextSelection) {
     return new Promise((res, rej) => {
         taskSummaryDiv.classList.add('task-details-display');
         res();
     });
-}
+};
 
 export function hideTaskSummary(taskSummaryDiv, prevSelected, nextSelection) {
     return new Promise((res, rej) => {
         taskSummaryDiv.classList.remove('task-details-display');
         res();
     });
-}
-
-
-export function selectNewList(div) {
-    const listHeader = document.querySelector('.lists-header');
-    const icon = listHeader.children[0];
-    const listContainer = document.getElementById('task-lists');
-
-    if (!icon.classList.contains('fa-caret-down')) {
-        toggleListDisplay(listContainer)
-    }
-}
+};

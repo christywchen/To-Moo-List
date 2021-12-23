@@ -17,14 +17,14 @@ window.addEventListener("load", async (e) => {
     decorateInboxList(tomorrow, tomorrowTasksRoute, 'tomorrow');
     decorateInboxList(allTasks, allTasksRoute, 'all');
     decorateInboxList(completed, completedTasksRoute, 'completed');
-})
+});
 
 const taskDivs = document.querySelectorAll('.single-task')
 if (taskDivs) {
     taskDivs.forEach(child => {
         child.remove();
     })
-}
+};
 
 function decorateInboxList(list, route, urlName){
     list.addEventListener('click', (e) => {
@@ -33,4 +33,4 @@ function decorateInboxList(list, route, urlName){
         fetchInboxTasks(route);
         window.history.replaceState(stateId, `Today`, `/dashboard/#${urlName}`);
     })
-}
+};
