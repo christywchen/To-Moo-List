@@ -2,7 +2,7 @@ import { finishTask, postPoneTask, changeCategory, moveTask, getDropMenu, create
 import { addTaskSummaryEventListeners } from './dashboard-summary.js';
 import { clearDOMTasks, clearSearchRecs } from './clean-dom.js';
 import { createSidebarContainer, buildTaskSummary, createTaskHtml, populateTasks, populateSearchBox, decorateList, buildListSelectOptions } from './create-dom-elements.js';
-import { toggleListDisplay, showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown } from './display.js';
+import { selectList, toggleListDisplay, showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown, toggleListSelect, selectNewList } from './display.js';
 import { updateTaskStatus } from './dashboard-recap.js';
 import { initializePage } from './initialize-page.js';
 
@@ -70,12 +70,19 @@ export async function createList(e) {
                 },
             })
             if (!res.ok) throw res
-            const newList = await res.json()
-            // const listId = newList.list.id;
-            listId = newList.list.id;
-            const div = createSidebarContainer(newList.list.name, 'list', listId);
-            decorateList(div);
-            tasksList.appendChild(div);
+            else {
+                const newList = await res.json()
+                // const listId = newList.list.id;
+                listId = newList.list.id;
+                const div = createSidebarContainer(newList.list.name, 'list', listId);
+                decorateList(div);
+                clearDOMTasks();
+                tasksList.appendChild(div);
+                toggleListSelect(e, div);
+
+
+                selectNewList()
+            }
         } catch (error) {
 
         }

@@ -34,7 +34,7 @@ export const initializePage = async () => {
     headers.forEach(header => {
         header.addEventListener('click', (e) => {
             const lists = header.nextElementSibling;
-            toggleListDisplay(lists);
+            toggleListDisplay(lists, e);
         });
     });
 

@@ -102,7 +102,6 @@ export function hideListNameDiv(e) {
             renameListDiv.style.display = 'none';
             const nameForm = document.getElementById('addList');
             const renameForm = document.getElementById('renameList');
-            console.log('here')
 
             nameForm.value = '';
             renameForm.value = '';
@@ -160,9 +159,11 @@ export function deselectSearchField(e) {
 }
 
 // Toggles
-export async function toggleListSelect(e) {
+export async function toggleListSelect(e, listDiv) {
     const prevSelected = document.querySelector('.selected-list');
     let list = e.target
+    if (listDiv) list = listDiv;
+    console.log('list: ', list)
     // Lists and Categories have an extra div container.
 
     if (list.classList.contains('sidebar-box')) {
@@ -180,9 +181,10 @@ export async function toggleListSelect(e) {
 
 };
 
-export function toggleListDisplay(container) {
+export function toggleListDisplay(container, e) {
     const icon = container.parentNode.querySelector('.fas');
     const isSelected = container.style.display === 'block';
+    if (e && e.target.classList.contains('fa-plus-square')) return
 
     if (isSelected) {
         container.style.display = 'none';
@@ -309,4 +311,15 @@ export function hideTaskSummary(taskSummaryDiv, prevSelected, nextSelection) {
         taskSummaryDiv.classList.remove('task-details-display');
         res();
     });
+}
+
+
+export function selectNewList(div) {
+    const listHeader = document.querySelector('.lists-header');
+    const icon = listHeader.children[0];
+    const listContainer = document.getElementById('task-lists');
+
+    if (icon.classList.contains('fa-caret-right')) {
+        toggleListDisplay(listContainer)
+    }
 }
