@@ -8,15 +8,15 @@ const { asyncHandler, csrfProtection, listNotFoundError, validateList, handleVal
 
 router.use(requireAuth);
 
-router.get('/', asyncHandler(async (req, res) => {
-    // const lists = await db.List.findAll({
-    //     where: {userId: res.locals.user.id}
-    // })
+router.get('/', asyncHandler(async (req, res, next) => {
     const lists = await db.List.findAll({
         where: { userId: res.locals.user.id }
     })
-    res.json({ lists });
-    // res.render("list");
+
+    if (lists) {
+        res.json({ lists });
+        res.status(200);
+    } else next(listNotFoundError());
 }));
 
 router.post('/', validateList, handleValidationErrors, asyncHandler(async (req, res) => {
@@ -25,6 +25,8 @@ router.post('/', validateList, handleValidationErrors, asyncHandler(async (req, 
         name,
         userId: res.locals.user.id
     })
+
+    res.status(201);
     res.json({ list });
 }));
 
@@ -34,6 +36,7 @@ router.put('/:id', validateList, handleValidationErrors, asyncHandler(async (req
 
     if (list) {
         await list.update({ name: req.body.name });
+        res.status(200);
         res.json({ list })
     } else {
         next(listNotFoundError(req.params.id));

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db/models');
-const { asyncHandler, taskNotFound } = require('../utils');
+const { asyncHandler, taskNotFound, validateCategory, validateTask } = require('../utils');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
@@ -19,6 +19,7 @@ router.get('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     });
 
     if (task) {
+        res.status(200);
         res.json({ task });
     } else {
         next(taskNotFound(taskId));
@@ -45,7 +46,7 @@ router.get('/tasks/completed', asyncHandler(async (req, res, next) => {
 
 
 // post
-router.post('/lists/:id(\\d+)', asyncHandler(async (req, res) => {
+router.post('/lists/:id(\\d+)', validateTask, asyncHandler(async (req, res) => {
     let { name, listId } = req.body;
     listId = parseInt(listId, 10)
     const userId = res.locals.user.id;
@@ -60,7 +61,7 @@ router.post('/lists/:id(\\d+)', asyncHandler(async (req, res) => {
 }));
 
 // put
-router.put('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
+router.put('/tasks/:id(\\d+)', validateTask, asyncHandler(async (req, res, next) => {
     const taskId = parseInt(req.params.id, 10);
     const task = await db.Task.findByPk(taskId);
     if (task) {
@@ -122,11 +123,12 @@ router.get('/tasks', asyncHandler(async (req, res) => {
         where: { userId: res.locals.user.id },
         include: [db.List, db.Category]
     })
+
     res.json({ tasks });
 }));
 
 // getting tasks by date
-router.get('/tasks/today', asyncHandler(async (req, res) => {
+router.get('/tasks/today', asyncHandler(async (req, res, next) => {
     const today = new Date();
     let tomorrow = new Date();
     tomorrow.setDate(today.getDate() + 1);
@@ -144,10 +146,13 @@ router.get('/tasks/today', asyncHandler(async (req, res) => {
         include: [db.List, db.Category]
     })
 
-    res.json({ tasks });
+    if (tasks) {
+        res.status(200);
+        res.json({ tasks });
+    } else next(taskNotFound())
 }))
 
-router.get('/tasks/tomorrow', asyncHandler(async (req, res) => {
+router.get('/tasks/tomorrow', asyncHandler(async (req, res, next) => {
 
     const today = new Date();
     let twoDaysAhead = new Date();
@@ -166,33 +171,25 @@ router.get('/tasks/tomorrow', asyncHandler(async (req, res) => {
         include: [db.List, db.Category]
     })
 
-    res.json({ tasks });
+    if (tasks) {
+        res.status(200);
+        res.json({ tasks });
+    } else next(taskNotFound())
 }));
 
 // Getting tasks by listId
-router.get('/lists/:listId/tasks', asyncHandler(async (req, res) => {
+router.get('/lists/:listId/tasks', asyncHandler(async (req, res, next) => {
     const tasks = await db.Task.findAll({
         where: {
             listId: req.params.listId
         },
         include: [db.List, db.Category]
     })
-    res.json({ tasks })
+    if (tasks) {
+        res.status(200);
+        res.json({ tasks });
+    } else next(taskNotFound())
 }));
 
-// Getting tasks by categoryId
-router.get('/categories/:categoryId', asyncHandler(async (req, res) => {
-    const userId = res.locals.user.id;
-    const categoryId = req.params.categoryId
-
-    const tasks = await db.Task.findAll({
-        where: {
-            categoryId,
-            userId
-        },
-        include: [db.List, db.Category]
-    })
-    res.json({ tasks })
-}));
 
 module.exports = router;
