@@ -217,7 +217,7 @@ export function deselectList() {
 
 
 export function showContainer(container, showFn) {
-    return new Promise(function (res, rej) {
+    return new Promise((res, rej) => {
         const newContainer = showFn()
         container.appendChild(newContainer)
         res()
@@ -226,7 +226,7 @@ export function showContainer(container, showFn) {
 
 // hide DOM container
 export function hideContainer(className) {
-    return new Promise(function (res, rej) {
+    return new Promise((res, rej) => {
         hideDuplicateBox(className);
         res()
     })
