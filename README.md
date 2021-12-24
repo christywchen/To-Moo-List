@@ -105,6 +105,13 @@ From there, a new account can be created and used to sign in.
 # Technical implementation details
 Anything you had to stop and think about before building
 Descriptions of particular challenges
-Snippets or links to see code for these
+Snippets or links to see code for these.
+
+With tasks being populted to the main dashboard in many different ways throughout the code, each task still needed to be populated with the same structure and functionality. This was approached via boilerplate functions to populate and decorate the task divs. < insert code images >.
+
+Selecting/deselecting list and task via vanilla javascript was handled in various ways. Deselecting by clicking away from an item was handled via a global click event listener on the document object. This worked well, however provided a separation of concerns issue while debugging at times. Toggling a selection was often handled using async functions and promises to await the appropriate selecting and deselecting sqeuence. < insert promise and toggle functions >
+
+Due to specific database associations between items, each item's particular data needed to be tracked as different parts of the application interacted with that element. We used the data attribute to store particular identifies on individual items when possible, and organized our CRUD functions to utilize closure to keep track of data needing to be shared with by mulitple functions, such as the current listId when a list was created/selected. < insert maybe a function that defines a data attribute >. 
+
 
 
