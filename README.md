@@ -81,12 +81,16 @@ Then, run the following in the root directory in order to install the necessary 
 
 ```
 npm install 
-npm start
 ```
 Migrate and run the seeder files for the database using:
 ```
+npx dotenv sequelize db:create
 npx dotenv sequelize db:migrate
 npx dotenv sequelize db:seed:all
+```
+
+```
+npm start
 ```
 Note that the seeder files are necessary for populating the default priorities available to tasks: High, Medium, and Low.
 
