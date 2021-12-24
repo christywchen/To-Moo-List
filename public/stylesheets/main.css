@@ -21,7 +21,6 @@
     height: inherit;
 }
 
-
 .add-task-button {
     align-self: flex-end;
     margin-top: -40px;
@@ -197,10 +196,10 @@
     background-color: rgb(36, 206, 169);
 }
 
-.logout:hover{
+.logout:hover {
     background-color: #032c61;
 }
 
-.logout:active{
+.logout:active {
     background-color: #03162f;
 }

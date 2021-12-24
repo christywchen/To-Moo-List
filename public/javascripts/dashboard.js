@@ -10,7 +10,7 @@ window.addEventListener("load", async (event) => {
     initializePage();
 });
 
-let listId;
+export let listId;
 
 // C-R-U-D Functions
 // C
@@ -76,6 +76,12 @@ export async function createList(e) {
             const div = createSidebarContainer(newList.list.name, 'list', listId);
             decorateList(div);
             tasksList.appendChild(div);
+
+            // const select = document.querySelector('#summary-list-select');
+            // select.innerHTML = '';
+
+            // buildListSelectOptions(listId, list.name)
+
         } catch (error) {
 
         }
@@ -97,19 +103,11 @@ export async function fetchTaskSummary(e) {
     const currentDeadline = task.deadline;
     const currentListId = task.listId;
     const currentList = task.List.name;
+    const currentDesc = task.description;
     const currentPriorityId = task.categoryId;
     const currentPriority = task.Category.name;
-    const currentDesc = task.description;
 
-    buildTaskSummary(
-        currentTask,
-        currentDeadline,
-        currentTaskId,
-        currentListId,
-        currentList,
-        currentPriorityId,
-        currentPriority,
-        currentDesc);
+    buildTaskSummary(task);
     addTaskSummaryEventListeners();
     if (listName !== '#list') {
         window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/${listName}/${task.listId}/tasks/${task.id}`);

@@ -1,5 +1,7 @@
-import { getDate, setTaskDeadline, decorateTaskWithPriority, decorateTaskWithDeadline } from './create-dom-elements.js';
+import { getDate, setTaskDeadline, decorateTaskWithPriority, decorateTaskWithDeadline, buildListSelectOptions } from './create-dom-elements.js';
 import { showCreateList } from './display.js';
+import { listId } from './dashboard.js';
+
 // CRUD
 // C
 export function addTaskSummaryEventListeners() {
@@ -11,7 +13,7 @@ export function addTaskSummaryEventListeners() {
 
     summaryTitleInp.addEventListener('blur', changeTaskName);
     summaryDeadlineInp.addEventListener('blur', changeTaskDeadline);
-    summaryListSelectInp.addEventListener('change', showCreateList);
+    summaryListSelectInp.addEventListener('change', changeList);
     summaryPrioritySelectInp.addEventListener('change', changePriority);
     summaryDescInp.addEventListener('focus', expandTextarea);
     summaryDescInp.addEventListener('blur', shrinkTextarea);
@@ -87,9 +89,20 @@ export async function changeList(e) {
     const newListId = e.target.value;
 
     if (newListId === "create-new") {
-        showCreateList();
-        // addListDiv.style.display = 'block';
-        // addListDiv.style.position = 'fixed';
+        // console.log('before')
+
+        const res = await fetch(`/api/tasks/${taskId}`);
+        const { task } = await res.json()
+        // console.log(listId)
+
+        const change = () => {
+            return new Promise((res, rej) => {
+                showCreateList();
+                res();
+            });
+        }
+        await change();
+        // console.log('after');
     } else {
         const body = { listId: parseInt(newListId, 10) }
         await fetch(`/api/tasks/${taskId}`, {
@@ -100,8 +113,10 @@ export async function changeList(e) {
             body: JSON.stringify(body)
         });
     }
+    // console.log('other after')
 
-    moveTaskFromList(location, taskId, oldListId, newListId);
+
+    await moveTaskFromList(location, taskId, oldListId, newListId);
 };
 
 export async function changePriority(e) {
@@ -200,7 +215,7 @@ async function updateDeadlineTag(taskId, updatedTask, newDeadline, origDeadline)
     }
 }
 
-function moveTaskFromList(location, taskId, oldListId, newListId) {
+async function moveTaskFromList(location, taskId, oldListId, newListId) {
     const stateId = { id: "99" };
     if (location === '#list') {
         const taskContainer = document.querySelector('#tasksContainer');

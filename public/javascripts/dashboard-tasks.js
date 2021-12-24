@@ -6,8 +6,8 @@ import { hideDivContainer, hideTaskSummary } from './display.js'
 export const checkAllBoxes = (e) => {
     const checkBox = document.querySelector('.checkbox-all > input');
     const taskOptions = document.querySelector('.task-options');
-    if(!e.target.classList.contains("checkbox-all")){
-        if(checkBox.checked) {
+    if (!e.target.classList.contains("checkbox-all")) {
+        if (checkBox.checked) {
             const allCheckBox = document.querySelectorAll(".single-task > input");
             allCheckBox.forEach((e) => {
                 if (!e.checked) {
@@ -16,7 +16,7 @@ export const checkAllBoxes = (e) => {
             })
             taskOptions.style.visibility = 'visible';
             taskOptions.style.animation = "fadeIn 1s";
-        } else{
+        } else {
             const allCheckBox = document.querySelectorAll(".single-task > input");
             allCheckBox.forEach((e) => {
                 if (e.checked) {
@@ -29,23 +29,23 @@ export const checkAllBoxes = (e) => {
     }
 }
 
-const uncheckCheckBox = (e) => {
+export const uncheckCheckBox = (e) => {
     const checkBox = document.querySelector('.checkbox-all > input');
     checkBox.checked = false;
 }
 
 export const finishTask = (e) => {
-    /* 
+    /*
     This function completes the task that has check marks on the checkbox.
-    It finishes the task by first getting all the tasks that are checked using 
-    querySelectAll and iterates them and marks the each task in the database as complete 
+    It finishes the task by first getting all the tasks that are checked using
+    querySelectAll and iterates them and marks the each task in the database as complete
     */
     const completeTask = document.querySelector(".completed");
     const taskSummaryDiv = document.querySelector('#task-details');
 
     const selectedTasks = document.querySelectorAll(".single-task > input"); // selects all the tasks
     selectedTasks.forEach(async (e) => {
-        if (e.checked) { // checks the to see if the checkbox is checked or not 
+        if (e.checked) { // checks the to see if the checkbox is checked or not
             const res = await fetch(`/api/tasks/${e.dataset.task}`, { // 20-25 updates the task in database to complete
                 method: "PATCH",
                 headers: {
@@ -61,7 +61,7 @@ export const finishTask = (e) => {
                 const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
                 if (deleteDiv) {
                     deleteDiv.remove();
-                    await hideTaskSummary(taskSummaryDiv); //hides the task summary 
+                    await hideTaskSummary(taskSummaryDiv); //hides the task summary
                 }
                 uncheckCheckBox();
             }
@@ -70,14 +70,15 @@ export const finishTask = (e) => {
 };
 
 export const postPoneTask = async (e) => {
-    /* 
+    /*
     This function postpones the task that has check marks on the checkbox.
-    It postpones the task by first getting all the tasks that are checked using 
+    It postpones the task by first getting all the tasks that are checked using
     querySelectAll and iterates them and postpone the each task in the database
     */
     const selectedTasks = document.querySelectorAll(".single-task > input"); // selects all the tasks
     const extendCal = document.querySelector(".postpone-dates");
     const timeStamp = e.target.getAttribute("value");
+    const extendDiv = document.querySelector('.postpone');
 
     selectedTasks.forEach(async (e) => {
         if (e.checked) { // only updates in database for task with checkmarks
@@ -93,6 +94,7 @@ export const postPoneTask = async (e) => {
             } else {
                 console.log("it worked");
                 extendCal.style.display = 'none';
+                extendDiv.style.animation = 'fetchSuccess 1s';
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
                 uncheckCheckBox();
             }
@@ -101,14 +103,14 @@ export const postPoneTask = async (e) => {
 }
 
 // const changeDeadline = async (e) => {
-// 
+//
 // }
 
 
 export const moveTask = async (e) => {
-    /* 
+    /*
     This function move the task into different list that has check marks on the checkbox.
-    It moves the task by first getting all the tasks that are checked using 
+    It moves the task by first getting all the tasks that are checked using
     querySelectAll and iterates them and changes the list of the tag that it belongs to
     */
     const selectedTask = document.querySelectorAll(".single-task > input"); // selects all the tasks
@@ -141,16 +143,16 @@ export const moveTask = async (e) => {
 }
 
 export const changeTag = async (e) => {
-    /* 
+    /*
     This function changes the tag on the task with check marks on the checkbox.
-    It changes the tag on the task by first getting all the tasks that are checked using 
-    querySelectAll and iterates them and changes that tag that it belongs to 
+    It changes the tag on the task by first getting all the tasks that are checked using
+    querySelectAll and iterates them and changes that tag that it belongs to
     */
     const selectedTasks = document.querySelectorAll(".single-task > input"); // selects all the tasks
     const tag = document.querySelector(".list-of-tags");
     const taskSummaryDiv = document.querySelector('#task-details');
     const url = window.location.href.split('/'); // grabs the url of the current page
-    const taskCategoryName = ['High', 'Medium', 'Low'];
+    const taskCategoryName = ['High', 'Medium', 'Low', 'None'];
     const tagId = e.target.id;
 
     selectedTasks.forEach(async (e) => {
@@ -178,7 +180,7 @@ export const changeTag = async (e) => {
                 if (url.includes("#priority")) {
                     const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
                     if (deleteDiv) deleteDiv.remove();
-                    await hideTaskSummary(taskSummaryDiv); //hides the task summary 
+                    await hideTaskSummary(taskSummaryDiv); //hides the task summary
                 };
                 uncheckCheckBox();
             }
@@ -187,9 +189,9 @@ export const changeTag = async (e) => {
 }
 
 export const deleteTask = (e) => {
-    /* 
+    /*
     This function deletes the task with check marks on the checkbox.
-    It deletes the task by first getting all the tasks that are checked using 
+    It deletes the task by first getting all the tasks that are checked using
     querySelectAll and deletes them from the DOM and the database
     */
     const trashTask = document.querySelector(".delete");
@@ -213,7 +215,7 @@ export const deleteTask = (e) => {
                 const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
                 if (deleteDiv) {
                     deleteDiv.remove();// delets the task item from the DOM
-                    await hideTaskSummary(taskSummaryDiv); //hides the task summary 
+                    await hideTaskSummary(taskSummaryDiv); //hides the task summary
                 }
                 uncheckCheckBox();
             }
@@ -224,7 +226,7 @@ export const deleteTask = (e) => {
 
 export const getDropMenu = (e) => {
     const dropDown = document.querySelectorAll('.drop-square');
-    dropDown.forEach( d => {
+    dropDown.forEach(d => {
         d.addEventListener("click", getDropMenu);
     })
 

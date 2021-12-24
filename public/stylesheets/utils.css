@@ -34,3 +34,11 @@ textarea,
 input {
     font-family: Helvetica, Arial, sans-serif;
 }
+
+.checkbox-container input[type="checkbox"] {
+    margin: 0 auto !important;
+}
+
+.checkbox-container input {
+    margin-top: 4px;
+}

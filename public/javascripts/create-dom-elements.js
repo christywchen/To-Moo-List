@@ -1,7 +1,7 @@
-import { fetchListTasks,fetchTaskSummary, updateListId, deleteList } from './dashboard.js';
+import { fetchListTasks, fetchTaskSummary, updateListId, deleteList } from './dashboard.js';
 import { clearDOMTasks, clearSearchRecs, clearTaskSummary } from './clean-dom.js';
 import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect, toggleTaskHighlight, toggleTaskSummary, showCreateList } from './display.js';
-import { finishTask, getDropMenu, deleteTask } from './dashboard-tasks.js'
+import { finishTask, getDropMenu, deleteTask, uncheckCheckBox } from './dashboard-tasks.js'
 
 export function createSidebarContainer(name, containerType, data,) {
     const container = document.createElement('div');
@@ -64,6 +64,7 @@ export function decorateList(list) {
     list.addEventListener('click', (e) => {
         fetchListTasks(e);
         toggleListSelect(e);
+        uncheckCheckBox(e);
     });
 };
 
@@ -102,6 +103,7 @@ export async function decorateTaskWithPriority(div, taskObj) {
     const { task } = await res.json();
 
     const span = document.createElement('span');
+
     span.setAttribute('data-task', `${task.id}`);
     span.classList = `priority-tag priority-${task.Category.name}`;
     span.innerText = `${task.Category.name}`;
@@ -151,15 +153,16 @@ function decorateSearchItem(div, task) {
 };
 
 // create task summary
-export async function buildTaskSummary(
-    currentTask,
-    currentDeadline,
-    currentTaskId,
-    currentListId,
-    currentList,
-    currentPriorityId,
-    currentPriority,
-    currentDesc) {
+export async function buildTaskSummary(task) {
+    const currentTask = task.name;
+    const currentTaskId = task.id;
+    const currentDeadline = task.deadline;
+    const currentListId = task.listId;
+    const currentList = task.List.name;
+    const currentDesc = task.description;
+    const currentPriorityId = task.categoryId;
+    const currentPriority = task.Category.name;
+
     const taskSummaryContainer = document.createElement('div');
     const taskSummaryParent = document.querySelector('#task-details');
 
@@ -210,9 +213,9 @@ function buildListDiv(currentListId, currentList) {
     const listDiv = document.createElement('div');
     listDiv.setAttribute('id', 'list-div');
     listDiv.innerHTML = `
-        <div id="summary-list">List</div>
-        <select id="summary-list-select" class="summary-inp">
-        <option value="${currentListId}">${currentList}</option>
+    <div id="summary-list">List</div>
+    <select id="summary-list-select" class="summary-inp">
+    <option value="${currentListId}">${currentList}</option>
         </select>
         `;
     return listDiv;
@@ -254,7 +257,6 @@ export async function buildListSelectOptions(currentListId, currentList) {
     const createListOpt = document.createElement('option');
     createListOpt.setAttribute('value', 'create-new');
     createListOpt.innerText = 'Create New';
-    //createListOpt.addEventListener('click', showCreateList);
     listOptions.appendChild(createListOpt);
 }
 

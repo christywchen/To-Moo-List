@@ -241,8 +241,8 @@ export async function toggleTaskHighlight(e) {
 
     if (nextSelection.localName == 'label' ||
         nextSelection.localName == 'span') {
-            nextSelection = nextSelection.parentNode;
-        }
+        nextSelection = nextSelection.parentNode;
+    }
 
     if (prevSelected && e.target.type != 'checkbox') {
         await removeHighlight(prevSelected, nextSelection);
@@ -253,10 +253,11 @@ export async function toggleTaskHighlight(e) {
         }
     } else {
         await addHighlight(nextSelection);
-        if (e.target.type != 'checkbox'){
+        if (e.target.type != 'checkbox') {
             nextSelection.children[0].checked = nextSelection.children[0].checked ? false : true;
         }
     }
+
 }
 
 function removeHighlight(prevSelected, nextSelection) {
@@ -290,7 +291,21 @@ export async function toggleTaskSummary(e) {
 
 function showTaskSummary(taskSummaryDiv, prevSelected, nextSelection) {
     return new Promise((res, rej) => {
-        taskSummaryDiv.classList.add('task-details-display');
+        const taskSummaryDiv = document.querySelector('#task-details');
+        const checked = document.querySelectorAll('input[type="checkbox"]:checked');
+
+        if (checked.length > 1) {
+            checked.forEach(node => {
+                if (node.checked) {
+                    node.parentNode.classList.add('single-task-selected');
+                } else {
+                    node.parentNode.classList.remove('single-task-selected');
+                }
+            });
+            taskSummaryDiv.classList.remove('task-details-display');
+        } else {
+            taskSummaryDiv.classList.add('task-details-display');
+        }
         res();
     });
 }
