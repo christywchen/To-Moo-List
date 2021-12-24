@@ -2,7 +2,7 @@
 
 Live Demo: [To-Moo-List](http://to-moo-list.herokuapp.com/)
 
-![Splash Page](https://postimg.cc/BLGT2JyF)
+[![home-page.png](https://i.postimg.cc/Y9vdK9zd/home-page.png)](https://postimg.cc/BLGT2JyF)
 
 # General Info
 
