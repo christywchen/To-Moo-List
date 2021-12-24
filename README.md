@@ -111,11 +111,34 @@ Anything you had to stop and think about before building
 Descriptions of particular challenges
 Snippets or links to see code for these.
 
-With tasks being populted to the main dashboard in many different ways throughout the code, each task still needed to be populated with the same structure and functionality. This was approached via boilerplate functions to populate and decorate the task divs. < insert code images >.
+With tasks being populted to the main dashboard in many different ways throughout the code, each task still needed to be populated with the same structure and functionality. This was approached via boilerplate functions to populate and decorate the task divs. 
 
-Selecting/deselecting list and task via vanilla javascript was handled in various ways. Deselecting by clicking away from an item was handled via a global click event listener on the document object. This worked well, however provided a separation of concerns issue while debugging at times. Toggling a selection was often handled using async functions and promises to await the appropriate selecting and deselecting sqeuence. < insert promise and toggle functions >
+< insert code images >.
 
-Due to specific database associations between items, each item's particular data needed to be tracked as different parts of the application interacted with that element. To solve this we used the data attribute to store particular identifiers on individual items when possible. Since multiple functions depended on knowing what list was currently selected, we organized our CRUD functions to utilize closure so that this data could be shared and updated when actions were performed. < insert maybe a function that defines a data attribute >. 
+Selecting/deselecting list and task via vanilla javascript was handled in various ways. Deselecting by clicking away from an item was handled via a global click event listener on the document object. This worked well, however provided a separation of concerns issue while debugging at times. Toggling a selection was often handled using async functions and promises to await the appropriate selecting and deselecting sqeuence. 
+
+``` JavaScript
+export function selectList(list) {
+    return new Promise((res, rej) => {
+        list.classList.add('selected-list')
+        res();
+    })
+};
+
+export function deselectList() {
+    return new Promise((res, rej) => {
+        const selected = document.querySelector('.selected-list');
+        if (selected) {
+            selected.classList.remove('selected-list');
+        }
+        res();
+    })
+}
+```
+
+Due to specific database associations between items, each item's particular data needed to be tracked as different parts of the application interacted with that element. To solve this we used the data attribute to store particular identifiers on individual items when possible. Since multiple functions depended on knowing what list was currently selected, we organized our CRUD functions to utilize closure so that this data could be shared and updated when actions were performed. 
+
+< insert maybe a function that defines a data attribute >. 
 
 
 
