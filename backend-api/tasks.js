@@ -1,10 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db/models');
+const taskService = require('./services/task-service');
 const { asyncHandler, taskNotFound, validateCategory, validateTask } = require('../utils');
-const Sequelize = require('sequelize');
-const Op = Sequelize.Op;
-
 
 // get
 router.get('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
@@ -13,10 +10,7 @@ router.get('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     // Does this need destruturing??
     const userId = res.locals.user.id;
 
-    const task = await db.Task.findByPk(taskId, {
-        where: userId,
-        include: [db.List, db.Category]
-    });
+    const task = await taskService.getTaskByPkAndUser(taskId, userId);
 
     if (task) {
         res.status(200);
@@ -28,12 +22,9 @@ router.get('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
 
 // completed
 router.get('/tasks/completed', asyncHandler(async (req, res, next) => {
-    const userId = res.locals.user.id
+    const userId = res.locals.user.id;
 
-    const tasks = await db.Task.findAll({
-        where: { userId },
-        include: [db.List, db.Category]
-    });
+    const tasks = await taskService.getTasksByUser(userId);
 
     if (tasks) {
         res.status(200);
@@ -51,12 +42,8 @@ router.post('/lists/:id(\\d+)', validateTask, asyncHandler(async (req, res) => {
     listId = parseInt(listId, 10)
     const userId = res.locals.user.id;
 
-    const task = await db.Task.create({
-        name,
-        userId,
-        listId,
-        categoryId: 1
-    })
+    const task = await taskService.createTask(name, userId, listId);
+
     res.status(201);
     res.json({ task });
 }));
@@ -64,18 +51,21 @@ router.post('/lists/:id(\\d+)', validateTask, asyncHandler(async (req, res) => {
 // put
 router.put('/tasks/:id(\\d+)', validateTask, asyncHandler(async (req, res, next) => {
     const taskId = parseInt(req.params.id, 10);
-    const task = await db.Task.findByPk(taskId);
+    const task = await taskService.getTaskByPk(taskId);
+
     if (task) {
         //may need to change;
         const { name, description, listId, deadline, isCompleted, categoryId } = req.body;
-        await task.update({
+
+        await taskService.updateTask(
             name,
             description,
             listId,
             deadline,
             isCompleted,
-            categoryId,
-        })
+            categoryId
+        );
+
         res.status(200);
         res.json({ task }) //may need to change;
     } else {
@@ -86,19 +76,14 @@ router.put('/tasks/:id(\\d+)', validateTask, asyncHandler(async (req, res, next)
 // patch
 router.patch('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     const taskId = parseInt(req.params.id, 10);
-    const task = await db.Task.findByPk(taskId);
+    const task = await taskService.getTaskByPk(taskId);
 
+    console.log(task)
     if (task) {
         //may need to change;
-        const { name, description, listId, deadline, isCompleted, categoryId } = req.body;
-        await task.update({
-            name,
-            description,
-            listId,
-            deadline,
-            isCompleted,
-            categoryId,
-        })
+
+        await taskService.updateTask(task, req.body);
+
         res.status(200);
         res.json({ task }) //may need to change;
     } else {
@@ -109,9 +94,11 @@ router.patch('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
 // delete
 router.delete('/tasks/:id(\\d+)', asyncHandler(async (req, res) => {
     const taskId = parseInt(req.params.id, 10);
-    const task = await db.Task.findByPk(taskId);
+
+    const task = await taskService.getTaskByPk(taskId);
+
     if (task) {
-        await task.destroy();
+        await taskService.deleteTask(task);
         res.status(204).end();
     } else {
         next(taskNotFound(taskId));
@@ -120,10 +107,9 @@ router.delete('/tasks/:id(\\d+)', asyncHandler(async (req, res) => {
 
 // getting all tasks by userId
 router.get('/tasks', asyncHandler(async (req, res) => {
-    const tasks = await db.Task.findAll({
-        where: { userId: res.locals.user.id },
-        include: [db.List, db.Category]
-    })
+    const userId = res.locals.user.id
+
+    const tasks = await taskService.getTasksByUser(userId);
 
     res.json({ tasks });
 }));
@@ -136,16 +122,9 @@ router.get('/tasks/today', asyncHandler(async (req, res, next) => {
     let yesterday = new Date();
     yesterday.setDate(today.getDate() - 1);
 
-    const tasks = await db.Task.findAll({
-        where: {
-            userId: res.locals.user.id,
-            deadline: {
-                [Op.lt]: today,
-                [Op.gt]: yesterday
-            }
-        },
-        include: [db.List, db.Category]
-    })
+    const userId = res.locals.user.id
+
+    const tasks = await taskService.getTasksByDate(today, yesterday, userId);
 
     if (tasks) {
         res.status(200);
@@ -161,16 +140,9 @@ router.get('/tasks/tomorrow', asyncHandler(async (req, res, next) => {
     let yesterday = new Date();
     yesterday.setDate(today.getDate());
 
-    const tasks = await db.Task.findAll({
-        where: {
-            userId: res.locals.user.id,
-            deadline: {
-                [Op.lt]: twoDaysAhead,
-                [Op.gt]: yesterday
-            }
-        },
-        include: [db.List, db.Category]
-    })
+    const userId = res.locals.user.id
+
+    const tasks = await taskService.getTasksByDate(twoDaysAhead, yesterday, userId);
 
     if (tasks) {
         res.status(200);
@@ -179,13 +151,11 @@ router.get('/tasks/tomorrow', asyncHandler(async (req, res, next) => {
 }));
 
 // Getting tasks by listId
-router.get('/lists/:listId/tasks', asyncHandler(async (req, res, next) => {
-    const tasks = await db.Task.findAll({
-        where: {
-            listId: req.params.listId
-        },
-        include: [db.List, db.Category]
-    })
+router.get('/lists/:listId/tasks', asyncHandler(async (req, res, next) => { // put in lists router bc of teh endpoint
+    const listId = req.params.listId;
+
+    const tasks = await taskService.getTasksByListId(listId);
+
     if (tasks) {
         res.status(200);
         res.json({ tasks });

@@ -76,6 +76,7 @@ export function populateTasks(tasks, getCompleted = false) {
     if (!Array.isArray(tasks)) tasks = [tasks];
     const tasksContainer = document.getElementById("tasksContainer");
 
+    console.log(tasks)
     tasks.forEach(task => {
         const div = document.createElement("div");
         decorateTaskDiv(div, task);
@@ -106,10 +107,7 @@ async function decorateTaskDiv(div, task) {
     div.appendChild(deadlineSpan);
 };
 
-export async function decorateTaskWithPriority(div, taskObj) {
-    const res = await fetch(`/api/tasks/${taskObj.id}`);
-    const { task } = await res.json();
-
+export async function decorateTaskWithPriority(div, task) {
     const span = document.createElement('span');
 
     span.setAttribute('data-task', `${task.id}`);
