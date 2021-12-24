@@ -37,22 +37,22 @@ The frontend was built with [pug](https://pugjs.org/api/getting-started.html) te
 
 # Primary Components
 
-## User Authorization
+### User Authorization
 User authentication is handled in JavaScript whilst using BCrypt for password hashing. For security, user passwords are hashed before getting saved to the database. When the user logs in, the password they provide are rehashed to see if the match the one with the data base to verify the users credentials. 
 
 << INSERT LOGIN PAGE PICTURE HERE >>
 
-## Dashboard Page
+### Dashboard Page
 This page is where the magic happens. After the user's credentials have been confirmed, the users can access the dashboard page and start creating their own tasks as their reminder application. Users will be able to navigate around the dashboard without page refreshes or reloads. The left side of the page shows a sidebar for list navigation, the center of the page shows a lists of pending tasks, and the right side of the page shows information about task completion progress. When users click on an individual task, a panel will slide out to the right side of the page and show details about the given task.
 
 << INSERT PICTURE OF DASHBOARD PAGE
 
-## Adding Tasks
+### Adding Tasks
 Users can add task first clicking on the **input bar** at the top middle of the page and type the task they want to add. Once the user types something into the  input bar, the **moo** button should appear to finally add the task. If the user doesn't want to click it, they can also add the task by pressing the **Enter key** on their keyboard to add the task as well.
 
 << INSERT PICTURE OF INPUT TASK BAR >>
 
-## Navigating Lists & Creating/Adding Lists
+### Navigating Lists & Creating/Adding Lists
 To navigate through different lists, users can access them by clicking on different tabs on the sidebar to the left of the page. Clicking the **Inbox** link to toggle links for lists provided by default. These include **Today's Tasks**, **Tomorrow's Tasks**, **All Tasks**, and **Completed Tasks**. Users can also click on **Lists** to see a dropdown of custom lists or **Priority** to view a dropdown of lists which organize tasks according to the priority that the user has set for any given task.
 
 << [Maybe add picture of side bar with list menu dropdown?] >>
@@ -63,7 +63,7 @@ Custom lists can be further edited. When hovering over an individual list name, 
 
 << [INSERT PICTURE OF THE ADD BUTTON AND THE POP UP] >>
 
-## Creating Tasks and Editing Task Information
+### Creating Tasks and Editing Task Information
 
 Tasks can be edited individually or bulk edited from the task bar, which is the row of icons at the top of the task container. User can select one or more tasks by checking off tasks and clicking on icons that will mark them complete, postpone the deadline by up to five days, set the deadline further into the future, change the list in which the task(s) belong, and delete the task(s).
 
@@ -71,7 +71,7 @@ INSERT PICTURE OF TASK OPTION BAR
 
 Individual tasks can also be edited by selecting the task from the list. A task summary will slide out to the right side of the screen and offer options to rename the task, edit the deadline, priority, or description, and move them to new or existing lists. Each change to a task is updated dynamically and will be saved to the database as soon as the user clicks a dropdown option or moves their mouse focus away from an input. The webpage will also display the updated information immediately.
 
-## Local Installation
+# Local Installation
 
 The project requires Node.js, NPM, and PostgreSQL and can be installed locally by downloading the repo, creating a PostgreSQL database user with database creation authority, a PostgreSQL database, then saving the credentials to a .env file based on the .env.example file provided in the repo.
 
@@ -90,9 +90,9 @@ Note that the seeder files are necessary for populating the default priorities a
 
 From there, a new account can be created and be used to sign in.
 
-## Future Features
+# Future Features
 
-## Technical implementation details
+# Technical implementation details
 Anything you had to stop and think about before building
 Descriptions of particular challenges
 Snippets or links to see code for these
