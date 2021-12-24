@@ -8,7 +8,7 @@ Live Demo: [To-Moo-List](http://to-moo-list.herokuapp.com/)
 
 ## A Brief Overview
 
-To Moo, or not To Moo? Our choice will always be the latter. 
+To Moo, or not To Moo? Ponder no more. Let it be known that your choice should always be the latter. 
 
 To Moo List is a clone of another web application called [Remember the Milk](https://www.rememberthemilk.com), but with our own twist. This website application is a **online to-do app** to help you stay organized and help remember your tasks/errands. 
 
@@ -73,9 +73,9 @@ Individual tasks can also be edited by selecting the task from the list. A task 
 
 # Local Installation
 
-The project requires Node.js, NPM, and PostgreSQL and can be installed locally by downloading the repo, creating a PostgreSQL database user with database creation authority, a PostgreSQL database, then saving the credentials to a .env file based on the .env.example file provided in the repo.
+The project requires Node.js, NPM, and PostgreSQL. It can be installed locally by downloading the repo, creating a PostgreSQL database user with database creation authority, a PostgreSQL database, then saving the database credentials to a .env file in the root directory based on the provided .env.example file.
 
-Then, run the following within the root directory in order to start the running To Moo List on a local server:
+Then, run the following in the root directory in order to install the necessary dependencies and begin running To Moo List on a local server:
 
 ```
 npm install 
