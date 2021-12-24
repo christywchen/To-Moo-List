@@ -19,7 +19,7 @@
 
 #add-task {
     /* height: inherit; */
-    height: 100vh;
+    height: 94.5vh;
     display: flex;
     flex-direction: column;
     /* margin-bottom: 80px; */
@@ -51,8 +51,9 @@
 #tasksContainer {
     position: relative;
     overflow-y: scroll;
-    padding-bottom: 80px;
+    padding-bottom: 10px;
 }
+
 
 #tasksContainer div {
     padding: 0 3px;
