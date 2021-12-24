@@ -90,9 +90,13 @@ npx dotenv sequelize db:seed:all
 ```
 Note that the seeder files are necessary for populating the default priorities available to tasks: High, Medium, and Low.
 
-From there, a new account can be created and be used to sign in.
+From there, a new account can be created and used to sign in.
 
 # Future Features
+- Recurring tasks
+- Sharing tasks and assigning to fellow users
+- Custom dashboard color themes
+- User info editing
 
 # Technical implementation details
 Anything you had to stop and think about before building
