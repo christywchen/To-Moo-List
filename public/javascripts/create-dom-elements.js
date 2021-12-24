@@ -103,6 +103,7 @@ async function decorateTaskDiv(div, task) {
     div.addEventListener('click', getDropMenu);
     div.addEventListener('click', toggleTaskHighlight);
     div.addEventListener('click', toggleTaskSummary);
+
     div.appendChild(prioritySpan);
     div.appendChild(deadlineSpan);
 };

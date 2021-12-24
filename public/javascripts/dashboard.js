@@ -5,6 +5,7 @@ import { createSidebarContainer, buildTaskSummary, createTaskHtml, populateTasks
 import { selectList, toggleListDisplay, showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown, toggleListSelect, selectNewList } from './display.js';
 import { updateTaskStatus } from './dashboard-recap.js';
 import { initializePage } from './initialize-page.js';
+import { taskId, moveTaskToNewList } from './dashboard-summary.js';
 
 window.addEventListener("load", async (event) => {
     initializePage();
@@ -81,12 +82,17 @@ export async function createList(e) {
                 toggleListSelect(e, div);
 
 
-                selectNewList()
+                selectNewList();
 
-                // const select = document.querySelector(‘#summary-list-select’);
-                // select.innerHTML = ‘’;
+                if (moveTask) {
+                    await moveTaskToNewList(taskId, listId);
+                    await fetchListTasks(e);
+                    const taskRes = await fetch(`/api/lists/${listId}/tasks`);
+                    const { tasks } = await taskRes.json();
+                    populateTasks(tasks);
+                }
+                window.history.replaceState(stateId, `List ${e.target.dataset.listid}`, `/dashboard/#list/${e.target.dataset.listid}`);
 
-                // buildListSelectOptions(listId, list.name)
             }
         } catch (error) {
 
