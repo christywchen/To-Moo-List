@@ -109,6 +109,7 @@ async function decorateTaskDiv(div, task) {
 export async function decorateTaskWithPriority(div, task) {
     const span = document.createElement('span');
 
+    console.log(task)
     span.setAttribute('data-task', `${task.id}`);
     span.classList = `priority-tag priority-${task.Category.name}`;
     span.innerText = `${task.Category.name}`;

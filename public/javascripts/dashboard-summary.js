@@ -87,7 +87,6 @@ export async function changeList(e) {
             });
         }
         await change();
-
     } else {
         moveTasktoExistingList(taskId, e);
     }
@@ -108,7 +107,6 @@ export async function moveTaskToNewList(taskId, newListId) {
 
     console.log(updatedTask)
     moveTask = false;
-
 }
 
 export async function moveTasktoExistingList(taskId, e) {
@@ -133,11 +131,6 @@ export async function changePriority(e) {
     taskId = window.location.href.split('/')[7];
     const newPriorityId = e.target.value;
 
-    // get info about original priority level
-    const res = await fetch(`/api/tasks/${taskId}`);
-    const { task } = await res.json();
-    const origPriorityId = task.categoryId;
-
     const body = { categoryId: parseInt(newPriorityId, 10) }
     const updatedRes = await fetch(`/api/tasks/${taskId}`, {
         method: "PATCH",
@@ -148,7 +141,7 @@ export async function changePriority(e) {
     });
     const { task: updatedTask } = await updatedRes.json();
 
-    updatePriorityTag(updatedTask, newPriorityId, origPriorityId);
+    updatePriorityTag(updatedTask, null);
 };
 
 export async function changeDesc(e) {
@@ -160,7 +153,7 @@ export async function changeDesc(e) {
     const { task } = await res.json();
     const oldTaskDesc = task.description;
 
-    if (newTaskDesc) {
+    if (newTaskDesc && oldTaskDesc !== newTaskDesc) {
         await fetch(`/api/tasks/${taskId}`, {
             method: "PATCH",
             headers: {
@@ -172,7 +165,7 @@ export async function changeDesc(e) {
         if (newTaskDesc !== oldTaskDesc) {
             markSaved('#summary-desc');
         }
-    };
+    }
 };
 
 export async function expandTextarea(e) {

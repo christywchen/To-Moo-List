@@ -86,7 +86,9 @@ router.put('/tasks/:id(\\d+)', validateTask, asyncHandler(async (req, res, next)
 // patch
 router.patch('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     const taskId = parseInt(req.params.id, 10);
-    const task = await db.Task.findByPk(taskId);
+    const task = await db.Task.findByPk(taskId, {
+        include: db.Category
+    });
 
     if (task) {
         //may need to change;
