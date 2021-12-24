@@ -94,11 +94,17 @@ From there, a new account can be created and used to sign in.
 
 # Future Features
 - Recurring tasks
-- Sharing tasks and assigning to fellow users
+- User contacts
+- Sharing and assigning tasks to user in contacts list
 - Custom dashboard color themes
 - User info editing
+- Auto-archiving of completed tasks
+- User can mark a completed task as incomplete
+- Undo button for most list or task change
 
 # Technical implementation details
 Anything you had to stop and think about before building
 Descriptions of particular challenges
 Snippets or links to see code for these
+
+
