@@ -10,7 +10,7 @@ Live Demo: [To-Moo-List](http://to-moo-list.herokuapp.com/)
 
 To Moo, or not To Moo? Ponder no more. 
 
-Let it be known that your choice should always be the latter. 
+Let it be known that you should always just moo it. 
 
 To Moo List is a clone of another web application called [Remember the Milk](https://www.rememberthemilk.com), but with our own twist. This website application is a **online to-do app** to help you stay organized and help remember your tasks/errands. 
 
