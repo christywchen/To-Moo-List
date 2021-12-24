@@ -1,6 +1,5 @@
 const db = require('../../db/models');
 const Sequelize = require('sequelize');
-const task = require('../../db/models/task');
 const Op = Sequelize.Op;
 
 // get
