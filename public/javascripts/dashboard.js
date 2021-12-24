@@ -55,6 +55,8 @@ export async function createTask(e) {
 };
 
 export async function createList(e) {
+    const stateId = { id: "99" };
+
     const listForm = document.querySelector('#add-list-form');
     const listData = document.querySelector('#addList');
     const formData = new FormData(listForm);
@@ -91,7 +93,7 @@ export async function createList(e) {
                     const { tasks } = await taskRes.json();
                     populateTasks(tasks);
                 }
-                window.history.replaceState(stateId, `List ${e.target.dataset.listid}`, `/dashboard/#list/${e.target.dataset.listid}`);
+                window.history.replaceState(stateId, `List ${listId}`, `/dashboard/#list/${listId}`);
 
             }
         } catch (error) {
