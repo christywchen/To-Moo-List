@@ -16,7 +16,6 @@ To Moo List is a clone of another web application called [Remember the Milk](htt
 
 At To Moo List, users can create accounts and access a dashboard tailored for personal task management. From the dashboard, users are able to create tasks, give tasks deadlines and descriptions, tag tasks by priority level, create lists for those tasks, organize tasks into various lists, and mark tasks as complete. Users can also see summaries of all pending tasks, pending tasks that are due today or tomorrow, and postpone any desired tasks. Tasks can be edited individually or edited by bulk.
   
-<< Insert picture of dashboard >>
 ![Splash Page](/public/images/home-page.PNG)
 
 ## Overall Structure
@@ -43,7 +42,7 @@ The frontend was built with [pug](https://pugjs.org/api/getting-started.html) te
 ### User Authorization
 User authentication is handled in JavaScript whilst using BCrypt for password hashing. For security, user passwords are hashed before getting saved to the database. When the user logs in, the password they provide are rehashed to see if the match the one with the data base to verify the users credentials. 
 
-<< INSERT LOGIN PAGE PICTURE HERE >>
+![Login Page](/public/images/login-page.PNG)
 
 ### Dashboard Page
 This page is where the magic happens. After the user's credentials have been confirmed, the users can access the dashboard page and start creating their own tasks as their reminder application. Users will be able to navigate around the dashboard without page refreshes or reloads. The left side of the page shows a sidebar for list navigation, the center of the page shows a lists of pending tasks, and the right side of the page shows information about task completion progress. When users click on an individual task, a panel will slide out to the right side of the page and show details about the given task.
