@@ -1,6 +1,6 @@
 import { updateTaskStatus } from './dashboard-recap.js'
-import { updatePriorityTag } from './dashboard-summary.js'
-import { getDate, buildPrioritySelectOptions } from './create-dom-elements.js';
+import { updatePriorityTag, updateDeadlineTag, changeTaskDeadline } from './dashboard-summary.js'
+import { getDate, buildPrioritySelectOptions, decorateTaskWithDeadline } from './create-dom-elements.js';
 import { hideDivContainer, hideTaskSummary } from './display.js'
 
 export const checkAllBoxes = (e) => {
@@ -28,7 +28,6 @@ export const checkAllBoxes = (e) => {
             taskOptions.style.visibility = 'hidden';
         }
     }
-
 }
 
 export const uncheckCheckBox = (e) => {
@@ -94,19 +93,17 @@ export const postPoneTask = async (e) => {
             if (!res.ok) {
                 console.log("Something went wrong");
             } else {
-                console.log("it worked");
+                const deadlineLabel = document.querySelector(`div[data-task="${e.dataset.task}"]`);
                 extendCal.style.display = 'none';
                 extendDiv.style.animation = 'fetchSuccess 1s';
+                deadlineLabel.childNodes[5].classList.remove('deadline-none');
+                deadlineLabel.childNodes[5].innerText = timeStamp.split(" ").slice(1, 3).join(" ");
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
                 uncheckCheckBox();
             }
         }
     })
 }
-
-// const changeDeadline = async (e) => {
-//
-// }
 
 
 export const moveTask = async (e) => {
@@ -132,11 +129,12 @@ export const moveTask = async (e) => {
             if (!res.ok) {
                 console.log("Something went wrong");
             } else {
-                console.log("it worked");
+                //console.log("it task was moved to a different");
                 const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
-                deleteDiv.remove();
                 await hideTaskSummary(taskSummaryDiv);
+
                 listMenu.style.display = 'none';
+                deleteDiv.remove();
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
                 uncheckCheckBox();
             }
@@ -290,8 +288,8 @@ const createListDropDown = async () => {
         listMenu.appendChild(listOption);
     })
 
-    const hr = document.createElement('hr');
-    listMenu.appendChild(hr);
+    // const hr = document.createElement('hr');
+    // listMenu.appendChild(hr);
     const input = document.createElement('input');
     input.classList = 'add-tag-input'
     input.placeholder = "type new list & enter";
@@ -326,7 +324,7 @@ const createPostPoneList = async () => {
     const date = ["1 days", '2 days', '3 days', '4 days', '5 days']
     for (let i = 0; i < 5; i++) {
         today.setDate(today.getDate() + 1);
-        const readable = new Date(today).toISOString().split('T')[0]
+        const readable = today.toISOString().split('T')[0]
         const div = document.createElement('div');
         div.innerText = date[i] + " (" + readable + ")";
         div.setAttribute("name", "date");
@@ -364,18 +362,26 @@ const createCalendar = async (e) => {
         const selectedTasks = document.querySelectorAll(".single-task > input"); // selects all the tasks
         selectedTasks.forEach(async (e) => {
             if (e.checked) {
-                console.log(e.dataset.task);
-                const res = await fetch(`/api/tasks/${e.dataset.task}`, {
-                    method: "PATCH",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ deadline: `${hiddenCal.value}` })
-                })
-                if (!res.ok) {
-                    console.log("Something went wrong");
+                if (hiddenCal.value == '') {
+                    return;
                 } else {
-                    console.log("it worked");
+                    const newDateVal = new Date(hiddenCal.value).toISOString().replace('T', ' ').replace('Z', '');
+                    console.log(newDateVal)
+                    const res = await fetch(`/api/tasks/${e.dataset.task}`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ deadline: `${newDateVal}` })
+                    })
+                    if (!res.ok) {
+                        console.log("Something went wrong");
+                    } else {
+                        //console.log("it worked");
+                        const deadlineLabel = document.querySelector(`div[data-task="${e.dataset.task}"]`);
+                        const { task: updatedTask } = await res.json();
+                        updateDeadlineTag(updatedTask);
+                    }
                 }
             }
         })

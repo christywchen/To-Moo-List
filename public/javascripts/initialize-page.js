@@ -83,14 +83,16 @@ export const initializePage = async () => {
         hideListOptions(e);
         hideDropDown(e);
         clearSearch(e);
-    })
+    });
+
     addTaskButton.addEventListener('click', createTask);
     addTaskInp.addEventListener('keyup', showTaskButton);
     addListButtonL.addEventListener('click', showCreateList);
     submitListButton.addEventListener('click', (e) => {
         createList(e);
         hideListNameDiv(e);
-    })
+    });
+    
     closeListSubmission.addEventListener('click', hideListNameDiv);
 
     searchField.addEventListener('click', selectSearchField)

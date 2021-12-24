@@ -8,31 +8,28 @@ div.checkbox-container
         input(type="checkbox")
     div(class="task-options")
         div(class="split-3")
-            p(class="tool-tip") Complete Task
             div(class="completed grid-square")
+                div(class="tool-tip") Complete Task
                 i(class="fas fa-check")
-            p(class="tool-tip") Postpone Task
             div(class="postpone grid-square drop-square")
+                div(class="tool-tip") Postpone Task
                 i(class="fas fa-calendar-plus")
                 div(class="postpone-dates dropdown" style='display: none')
-            p(class="tool-tip") ALERT
-            div(class="alert grid-square")
-                i(class="fas fa-tag drop-square")
         div(class="split-3")
-            p(class="tool-tip") Change Due Date
             div(class="due grid-square drop-square")
+                div(class="tool-tip") Change Due Date
                 i(class="fas fa-calendar-week drop-square")
                 div(class="hidden-cal dropdown" style='display: none')
-            p(class="tool-tip") Move to list
             div(class="moveTo grid-square drop-square")
+                div(class="tool-tip") Move to list
                 i(class="fas fa-list-alt drop-square")
                 div(class="list-of-lists dropdown" style='display: none')
-            p(class="tool-tip") Change priority
             div(class="category grid-square drop-square")
+                div(class="tool-tip") Change priority
                 i(class="fas fa-exclamation")
                 div(class="list-of-tags dropdown" style='display: none')
-        p(class="tool-tip") Delete
         div(class="delete grid-square")
+            div(class="tool-tip") Delete
             i(class="fas fa-trash-alt")
 +errorSummary(errors)
 div#add-task-form

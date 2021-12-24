@@ -51,11 +51,6 @@ export async function changeTaskDeadline(e) {
     let newDeadline = e.target.value;
     let body;
 
-    // get info about original deadline
-    const res = await fetch(`/api/tasks/${taskId}`);
-    const { task } = await res.json();
-    const origDeadline = task.deadline;
-
     // create body with new deadline
     if (newDeadline === '') {
         body = { deadline: null };
@@ -73,13 +68,9 @@ export async function changeTaskDeadline(e) {
     });
     const { task: updatedTask } = await updatedRes.json();
 
-    // compare old deadline with new
-    // show a confirmation of save if the deadline has changed
-    // update the due date displayed in the main container
-
-
-    updateDeadlineTag(taskId, updatedTask, newDeadline, origDeadline);
+    updateDeadlineTag(updatedTask);
 };
+
 
 export async function changeList(e) {
     e.stopPropagation();
@@ -204,12 +195,19 @@ export async function updatePriorityTag(taskId, updatedTask, newPriorityId, orig
     }
 }
 
-async function updateDeadlineTag(taskId, updatedTask, newDeadline, origDeadline) {
-    if (getDate(newDeadline) !== getDate(origDeadline) || origDeadline === null) {
+export async function updateDeadlineTag(task) {
+    const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+    const taskDiv = document.querySelector(`div[data-task="${task.id}"]`);
+    console.log(taskDiv);
+    let origDeadline = taskDiv.childNodes[5].innerText;
+    let newDeadline = new Date(task.deadline)
+
+    newDeadline = new Intl.DateTimeFormat('en-US', options).format(newDeadline).split(', ')[1];
+
+    if (origDeadline !== newDeadline || origDeadline === null) {
         markSaved('#deadline-div');
-        const taskDiv = document.querySelector(`div[data-task="${taskId}"]`);
         const oldSpan = taskDiv.children[3];
-        const newSpan = await decorateTaskWithDeadline(taskDiv, updatedTask)
+        const newSpan = await decorateTaskWithDeadline(task.id, task)
         if (oldSpan) oldSpan.replaceWith(newSpan);
         else taskDiv.appendChild(newSpan)
     }

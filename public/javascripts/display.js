@@ -1,4 +1,3 @@
-
 // Fade background
 export function fadeBackground(e) {
     const isFaded = document.querySelector('.page-cover')
@@ -117,7 +116,6 @@ export function hideDropDown(e) {
     const calDiv = document.querySelector('.hidden-cal')
     //const listContainers = document.querySelectorAll('.list-container');
     const searchRecs = document.querySelector('.search-recommendations');
-
     if (e.target.className !== 'logout') {
         if (!listMenu.className.includes(e.target) &&
             !e.target.className.includes('grid-square') &&
@@ -159,6 +157,11 @@ export async function toggleListSelect(e, listDiv) {
     let list = e.target
     if (listDiv) list = listDiv;
     // Lists and Categories have an extra div container.
+    const url = window.location.href.split('/')[4];
+    if (url == '#completed'){
+        const taskOptions = document.querySelector('.task-options');
+        taskOptions.remove();
+    }
 
     if (list.classList.contains('sidebar-box')) {
         list = list.children[0];

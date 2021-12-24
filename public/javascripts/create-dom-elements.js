@@ -64,10 +64,11 @@ export function decorateList(list) {
     list.addEventListener('click', (e) => {
         const iconTarget = e.target.classList.contains('far');
         const listOptionTarget = e.target.classList.contains('list-edit-option');
+        
         if (!iconTarget && !listOptionTarget) {
             fetchListTasks(e);
             toggleListSelect(e);
-
+            // uncheckCheckBox(e);
         }
     });
 };
@@ -92,6 +93,9 @@ export function populateTasks(tasks, getCompleted = false) {
 };
 
 async function decorateTaskDiv(div, task) {
+    const prioritySpan = await decorateTaskWithPriority(div, task);
+    const deadlineSpan = await decorateTaskWithDeadline(div, task);
+    
     div.setAttribute('data-task', `${task.id}`);
     div.classList.add('single-task');
     div.innerHTML = createTaskHtml(task.name, task.id);
@@ -99,15 +103,8 @@ async function decorateTaskDiv(div, task) {
     div.addEventListener('click', getDropMenu);
     div.addEventListener('click', toggleTaskHighlight);
     div.addEventListener('click', toggleTaskSummary);
-
-    if (task.categoryId) {
-        const prioritySpan = await decorateTaskWithPriority(div, task);
-        div.appendChild(prioritySpan);
-    };
-    if (task.deadline) {
-        const deadlineSpan = await decorateTaskWithDeadline(div, task);
-        div.appendChild(deadlineSpan);
-    };
+    div.appendChild(prioritySpan);
+    div.appendChild(deadlineSpan);
 };
 
 export async function decorateTaskWithPriority(div, taskObj) {
