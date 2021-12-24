@@ -100,14 +100,10 @@ async function decorateTaskDiv(div, task) {
     div.addEventListener('click', toggleTaskHighlight);
     div.addEventListener('click', toggleTaskSummary);
 
-    if (task.categoryId) {
-        const prioritySpan = await decorateTaskWithPriority(div, task);
-        div.appendChild(prioritySpan);
-    };
-    if (task.deadline) {
-        const deadlineSpan = await decorateTaskWithDeadline(div, task);
-        div.appendChild(deadlineSpan);
-    };
+    const prioritySpan = await decorateTaskWithPriority(div, task);
+    div.appendChild(prioritySpan);
+    const deadlineSpan = await decorateTaskWithDeadline(div, task);
+    div.appendChild(deadlineSpan);
 };
 
 export async function decorateTaskWithPriority(div, taskObj) {

@@ -176,7 +176,7 @@ export const changeTag = async (e) => {
                     taskSummary.innerHTML = "";
                     tag.style.display = 'none';
                     buildPrioritySelectOptions(taskCategoryName[task.categoryId - 1], task.categoryId); // updates the priority options in the task summary
-                    updatePriorityTag(e.dataset.task, task, tagId, null);
+                    updatePriorityTag(task, null);
                 }
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
                 if (url.includes("#priority")) {
