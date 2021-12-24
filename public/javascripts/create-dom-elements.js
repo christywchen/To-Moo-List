@@ -106,10 +106,7 @@ async function decorateTaskDiv(div, task) {
     div.appendChild(deadlineSpan);
 };
 
-export async function decorateTaskWithPriority(div, taskObj) {
-    const res = await fetch(`/api/tasks/${taskObj.id}`);
-    const { task } = await res.json();
-
+export async function decorateTaskWithPriority(div, task) {
     const span = document.createElement('span');
 
     span.setAttribute('data-task', `${task.id}`);
