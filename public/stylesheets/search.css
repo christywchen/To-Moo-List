@@ -53,3 +53,7 @@
     background-color: white;
     /* max-width: 294px; */
 }
+
+.search-selected.fa-search:hover {
+    color:rgb(51, 121, 193)
+}

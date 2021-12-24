@@ -6,6 +6,7 @@ import { hideDivContainer, hideTaskSummary } from './display.js'
 export const checkAllBoxes = (e) => {
     const checkBox = document.querySelector('.checkbox-all > input');
     const taskOptions = document.querySelector('.task-options');
+
     if (!e.target.classList.contains("checkbox-all")) {
         if (checkBox.checked) {
             const allCheckBox = document.querySelectorAll(".single-task > input");
@@ -27,6 +28,7 @@ export const checkAllBoxes = (e) => {
             taskOptions.style.visibility = 'hidden';
         }
     }
+
 }
 
 export const uncheckCheckBox = (e) => {
@@ -235,7 +237,7 @@ export const getDropMenu = (e) => {
     moveCal.addEventListener('click', (e) => {
         hideDivContainer()
         listMenu.style.display = 'block';
-        listMenu.style.animation = "growDown .5s ease";
+        // listMenu.style.animation = "growDown .5s ease";
         listMenu.classList.add('visible');
     })
 
@@ -244,7 +246,7 @@ export const getDropMenu = (e) => {
     helpCal.addEventListener('click', (e) => {
         hideDivContainer()
         postponeList.style.display = 'block';
-        postponeList.style.animation = "growDown .5s ease";
+        // postponeList.style.animation = "growDown .5s ease";
         postponeList.classList.add('visible');
     })
 
@@ -258,7 +260,7 @@ export const getDropMenu = (e) => {
     tag.addEventListener('click', (e) => {
         hideDivContainer();
         categoryList.style.display = 'block';
-        categoryList.style.animation = "growDown .5s ease";
+        // categoryList.style.animation = "growDown .5s ease";
         categoryList.classList.add('visible');
     })
 
@@ -267,7 +269,7 @@ export const getDropMenu = (e) => {
     calDiv.addEventListener('click', (e) => {
         hideDivContainer()
         getCal.style.display = 'block';
-        getCal.style.animation = "growDown .5s ease";
+        // getCal.style.animation = "growDown .5s ease";
         getCal.classList.add('visible');
     })
 }

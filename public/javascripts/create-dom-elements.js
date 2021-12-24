@@ -14,26 +14,26 @@ export function createSidebarContainer(name, containerType, data,) {
     itemDiv.setAttribute(`data-${containerType}Id`, `${data}`);
     itemDiv.className = `${containerType}-item`;
 
-    const iconsBox = document.createElement('div');
-    const editIcon = document.createElement('div');
-    iconsBox.className = `sidebar-icons`;
-    editIcon.classList.add('far', 'fa-caret-square-down', 'hide-option')
-    editIcon.setAttribute(`data-${containerType}Id`, `${data}`);
-
-
     container.appendChild(itemDiv);
-    container.appendChild(iconsBox);
-    iconsBox.appendChild(editIcon);
 
-    editIcon.addEventListener('click', updateListId);
-    editIcon.addEventListener('click', async (e) => {
-        await hideContainer(`${containerType}-edit-dropdown`);
-        await showContainer(container, listEditDropDown);
-    });
-    return container
+    if (containerType === 'list') {
+        const iconsBox = document.createElement('div');
+        const editIcon = document.createElement('div');
+        iconsBox.className = `sidebar-icons`;
+        editIcon.classList.add('far', 'fa-caret-square-down', 'hide-option')
+        editIcon.setAttribute(`data-${containerType}Id`, `${data}`);
+        container.appendChild(iconsBox);
+        iconsBox.appendChild(editIcon);
+
+        editIcon.addEventListener('click', updateListId);
+        editIcon.addEventListener('click', async (e) => {
+            await hideContainer(`${containerType}-edit-dropdown`);
+            await showContainer(container, listEditDropDown);
+        });
+    }
+
+    return container;
 }
-
-// FIND OPTION DROPDOWN
 
 export function listEditDropDown() {
     const container = document.createElement('div');
@@ -62,20 +62,32 @@ export function listEditDropDown() {
 
 export function decorateList(list) {
     list.addEventListener('click', (e) => {
-        fetchListTasks(e);
-        toggleListSelect(e);
-        uncheckCheckBox(e);
+        const iconTarget = e.target.classList.contains('far');
+        const listOptionTarget = e.target.classList.contains('list-edit-option');
+        if (!iconTarget && !listOptionTarget) {
+            fetchListTasks(e);
+            toggleListSelect(e);
+
+        }
     });
 };
 
-export function populateTasks(tasks) {
+export function populateTasks(tasks, getCompleted = false) {
     if (!Array.isArray(tasks)) tasks = [tasks];
     const tasksContainer = document.getElementById("tasksContainer");
 
     tasks.forEach(task => {
         const div = document.createElement("div");
         decorateTaskDiv(div, task);
-        tasksContainer.appendChild(div);
+        if (getCompleted) {
+            if (task.isCompleted) {
+                tasksContainer.appendChild(div);
+            }
+        } else {
+            if (!task.isCompleted) {
+                tasksContainer.appendChild(div);
+            }
+        }
     });
 };
 
@@ -211,6 +223,7 @@ export function buildDeadlineDiv(currentDeadline) {
 
 function buildListDiv(currentListId, currentList) {
     const listDiv = document.createElement('div');
+    // listDiv.addEventListener('click', showCreateList);
     listDiv.setAttribute('id', 'list-div');
     listDiv.innerHTML = `
     <div id="summary-list">List</div>
@@ -257,6 +270,9 @@ export async function buildListSelectOptions(currentListId, currentList) {
     const createListOpt = document.createElement('option');
     createListOpt.setAttribute('value', 'create-new');
     createListOpt.innerText = 'Create New';
+
+    // createListOpt.addEventListener('change', showCreateList);
+
     listOptions.appendChild(createListOpt);
 }
 

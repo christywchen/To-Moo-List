@@ -21,6 +21,16 @@ const taskNotFound = taskId => {
     err.title = "Task not found";
     err.status = 404;
     return err;
+};
+
+const categoryNotFound = categoryId => {
+    let err;
+    if (categoryId) {
+        err = new Error(`Category with id ${taskId} could not be found.`)
+    } else err = new Error(`Tasks could not be found.`)
+    err.title = "Category not found";
+    err.status = 404;
+    return err;
 }
 
 const handleValidationErrors = (req, res, next) => {
@@ -38,6 +48,20 @@ const handleValidationErrors = (req, res, next) => {
 };
 
 const validateList = [
+    check('name')
+        .exists({ checkFalsy: true })
+        .withMessage("There must be a name for a list."),
+    check('name')
+        .isLength({ max: 50 })
+        .withMessage('The name can only be 50 characters')
+];
+
+const validateTask = [
+    check('name')
+        .exists({ checkFalsy: true })
+];
+
+const validateCategory = [
     check('name')
         .exists({ checkFalsy: true })
         .withMessage("There must be a name for a list."),
@@ -121,6 +145,9 @@ module.exports = {
     loginValidator,
     listNotFoundError,
     validateList,
+    validateTask,
+    validateCategory,
     handleValidationErrors,
     taskNotFound,
+    categoryNotFound,
 };

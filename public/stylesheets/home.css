@@ -34,7 +34,7 @@ footer {
 
 .navbar ul {
     display: grid;
-    grid-template-columns: repeat(5, auto);
+    grid-template-columns: repeat(6, auto);
     list-style: none;
     text-align: center;
     justify-self: end;
@@ -251,4 +251,19 @@ h1 {
     margin: 0 5px;
     color: #8b8b94;
     text-decoration: none;
+}
+
+#demo-user {
+    position: fixed;
+    right: 20px;
+    top: 20px;
+}
+
+#demo-user a {
+    color: rgb(219, 219, 219);
+    text-decoration: none;
+}
+
+#demo-user a:hover {
+    color: white;
 }

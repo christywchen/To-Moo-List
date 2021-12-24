@@ -91,18 +91,18 @@ export async function changeList(e) {
     if (newListId === "create-new") {
         // console.log('before')
 
-        const res = await fetch(`/api/tasks/${taskId}`);
-        const { task } = await res.json()
-        // console.log(listId)
+        // const res = await fetch(`/api/tasks/${taskId}`);
+        // const { task } = await res.json()
+        // // console.log(listId)
 
-        const change = () => {
-            return new Promise((res, rej) => {
-                showCreateList();
-                res();
-            });
-        }
-        await change();
-        // console.log('after');
+        // const change = () => {
+        //     return new Promise((res, rej) => {
+        //         showCreateList();
+        //         res();
+        //     });
+        // }
+        // await change();
+        // // console.log('after');
     } else {
         const body = { listId: parseInt(newListId, 10) }
         await fetch(`/api/tasks/${taskId}`, {
