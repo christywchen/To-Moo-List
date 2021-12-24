@@ -80,6 +80,7 @@ ol li {
 .sidebar-icons {
     display: none;
     color: rgb(117, 165, 228);
+    padding-right: 1px;
 }
 
 .sidebar-box:hover > .sidebar-icons {
@@ -98,12 +99,14 @@ ol li {
     background-color: white;
     z-index: 3;
     box-shadow: 0 1px 4px 1px rgb(0 0 0 / 20%);
-    border-radius: 3px;
+    border-radius: 5px;
 }
 
 .list-edit-option {
     width: 100%;
-    padding-left: 4px;
+    padding-left: 8px;
+    /* border: 1px solid #a5c9e7; */
+    border-radius: 3px;
 }
 
 /* .add-list-button {
@@ -116,9 +119,23 @@ ol li {
 .fa-caret-square-down {
     z-index: 10;
 }
+/*
+.fa-caret-right {
+    width: 17px;
+} */
 
 .fa-caret-right {
     width: 17px;
+    transform: rotate(0deg);
+    transition: 0.2s linear;
+    transform-origin: 5% 40%;
+}
+
+.fa-caret-down {
+    transform: rotate(90deg);
+    transition: 0.2s linear;
+    /* margin-right: 10px; */
+    transform-origin: 5% 40%;
 }
 
 .fa-plus-square {
@@ -133,10 +150,8 @@ ol li {
 .fa-caret-square-down:hover {
     color: #478fca;
     background-color: #a5c9e7;
+    z-index: 10;
 }
-
-
-
 
 .page-cover {
     position: absolute;

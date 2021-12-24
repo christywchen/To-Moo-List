@@ -7,7 +7,7 @@ window.addEventListener("load", async (event) => {
     const userElEmail = document.getElementById("email");
     const userElConfirm = document.getElementById("confirmPassword");
 
-    if (userElUser && (userElUser.className = 'redBox')){
+    if (userElUser && (userElUser.className = 'redBox')) {
         userElUser.className = '';
     }
 
@@ -32,53 +32,54 @@ window.addEventListener("load", async (event) => {
     }
     console.log(errors)
     if (errors) {
-    errors.childNodes.forEach(error => {
-        if (findText(error, 'username')) {
-            userElUser.className = 'redBox';
-            const usernameErr = document.querySelector(".username-error");
-            usernameErr.hidden = false;
-            usernameErr.innerText = error.innerText;
+        errors.childNodes.forEach(error => {
+            if (findText(error, 'username')) {
+                userElUser.className = 'redBox';
+                const usernameErr = document.querySelector(".username-error");
+                usernameErr.hidden = false;
+                usernameErr.innerText = error.innerText;
 
-        };
+            };
 
-        if (findText(error, 'Password')) {
-            userElPass.className = 'redBox';
-            const passwordErr = document.querySelector('.password-error');
-            passwordErr.hidden = false;
-            passwordErr.innerText = error.innerText;
+            if (findText(error, 'provide a valid password')) {
+                userElPass.className = 'redBox';
+                const passwordErr = document.querySelector('.password-error');
+                passwordErr.hidden = false;
+                passwordErr.innerText = error.innerText;
 
-        }
+            }
 
-        if (findText(error, 'First Name')) {
-            userElFirst.className = 'redBox';
-            const firstnameErr = document.querySelector('.firstName-error');
-            firstnameErr.hidden = false;
-            firstnameErr.innerText = error.innerText;
+            if (findText(error, 'first name')) {
+                userElFirst.className = 'redBox';
+                const firstnameErr = document.querySelector('.firstName-error');
+                firstnameErr.hidden = false;
+                firstnameErr.innerText = error.innerText;
 
-        }
+            }
 
-        if (findText(error, 'Last Name')) {
-            userElLast.className = 'redBox';
-            const lastnameErr = document.querySelector('.lastName-error');
-            lastnameErr.hidden = false;
-            lastnameErr.innerText = error.innerText;
-        }
+            if (findText(error, 'last name')) {
+                userElLast.className = 'redBox';
+                const lastnameErr = document.querySelector('.lastName-error');
+                lastnameErr.hidden = false;
+                lastnameErr.innerText = error.innerText;
+            }
 
-        if (findText(error, 'Email')) {
-            userElEmail.className = 'redBox';
-            const emailErr = document.querySelector('.email-error');
-            emailErr.hidden = false;
-            emailErr.innerText = error.innerText;
-        }
+            if (findText(error, 'email')) {
+                userElEmail.className = 'redBox';
+                const emailErr = document.querySelector('.email-error');
+                emailErr.hidden = false;
+                emailErr.innerText = error.innerText;
+            }
 
-        if (findText(error, 'Confirm Password')) {
-            userElConfirm.className = 'redBox';
-            const confirmErr = document.querySelector('.confirmPassword-error');
-            confirmErr.hidden = false;
-            confirmErr.innerText = error.innerText;
+            if (findText(error, 'confirm')) {
+                userElConfirm.className = 'redBox';
+                const confirmErr = document.querySelector('.confirmPassword-error');
+                confirmErr.hidden = false;
+                confirmErr.innerText = error.innerText;
 
-        }
-    })};
+            }
+        })
+    };
 
 
 });

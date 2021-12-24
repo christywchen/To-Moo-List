@@ -2,8 +2,7 @@
 @import url("/stylesheets/sidebar.css");
 @import url("/stylesheets/summary.css");
 @import url("/stylesheets/utils.css");
-@import url("/stylesheets/signup.css");
-@import url("/stylesheets/login.css");
+@import url("/stylesheets/signup-login.css");
 @import url("/stylesheets/errors.css");
 @import url("/stylesheets/sidebar-animation.css");
 @import url("/stylesheets/search.css");

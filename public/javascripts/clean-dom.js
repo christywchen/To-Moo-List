@@ -14,7 +14,7 @@ export function clearSearchRecs() {
             child.remove();
         })
     }
-}
+};
 
 export function clearInput(formId) {
     const form = document.getElementById(`${formId}`);
@@ -26,7 +26,7 @@ export function clearSearch(e) {
         clearSearchRecs();
         clearInput('search');
     }
-}
+};
 
 export function clearTaskSummary() {
     const taskSummary = document.querySelector('#task-details');
@@ -35,4 +35,4 @@ export function clearTaskSummary() {
             taskSummary.removeChild(taskSummary.lastChild);
         }
     }
-}
+};

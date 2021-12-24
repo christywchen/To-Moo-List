@@ -1,8 +1,7 @@
-import { fetchListTasks, updateListId } from './dashboard.js';
+import { fetchListTasks, fetchTaskSummary, updateListId, deleteList } from './dashboard.js';
 import { clearDOMTasks, clearSearchRecs, clearTaskSummary } from './clean-dom.js';
-import { fetchTaskSummary, deleteList} from './dashboard.js';
-import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect, toggleTaskHighlight, toggleTaskSummary } from './display.js';
-import { finishTask, getDropMenu, deleteTask  } from './dashboard-tasks.js'
+import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect, toggleTaskHighlight, toggleTaskSummary, showCreateList } from './display.js';
+import { finishTask, getDropMenu, deleteTask, uncheckCheckBox } from './dashboard-tasks.js'
 
 export function createSidebarContainer(name, containerType, data,) {
     const container = document.createElement('div');
@@ -15,26 +14,26 @@ export function createSidebarContainer(name, containerType, data,) {
     itemDiv.setAttribute(`data-${containerType}Id`, `${data}`);
     itemDiv.className = `${containerType}-item`;
 
-    const iconsBox = document.createElement('div');
-    const editIcon = document.createElement('div');
-    iconsBox.className = `sidebar-icons`;
-    editIcon.classList.add('far', 'fa-caret-square-down', 'hide-option')
-    editIcon.setAttribute(`data-${containerType}Id`, `${data}`);
-
-
     container.appendChild(itemDiv);
-    container.appendChild(iconsBox);
-    iconsBox.appendChild(editIcon);
 
-    editIcon.addEventListener('click', updateListId);
-    editIcon.addEventListener('click', async (e) => {
-        await hideContainer(`${containerType}-edit-dropdown`);
-        await showContainer(container, listEditDropDown);
-    });
-    return container
+    if (containerType === 'list') {
+        const iconsBox = document.createElement('div');
+        const editIcon = document.createElement('div');
+        iconsBox.className = `sidebar-icons`;
+        editIcon.classList.add('far', 'fa-caret-square-down', 'hide-option')
+        editIcon.setAttribute(`data-${containerType}Id`, `${data}`);
+        container.appendChild(iconsBox);
+        iconsBox.appendChild(editIcon);
+
+        editIcon.addEventListener('click', updateListId);
+        editIcon.addEventListener('click', async (e) => {
+            await hideContainer(`${containerType}-edit-dropdown`);
+            await showContainer(container, listEditDropDown);
+        });
+    }
+
+    return container;
 }
-
-// FIND OPTION DROPDOWN
 
 export function listEditDropDown() {
     const container = document.createElement('div');
@@ -63,30 +62,41 @@ export function listEditDropDown() {
 
 export function decorateList(list) {
     list.addEventListener('click', (e) => {
-        fetchListTasks(e);
-        toggleListSelect(e);
+        const iconTarget = e.target.classList.contains('far');
+        const listOptionTarget = e.target.classList.contains('list-edit-option');
+        if (!iconTarget && !listOptionTarget) {
+            fetchListTasks(e);
+            toggleListSelect(e);
+
+        }
     });
 };
 
-export function populateTasks(tasks) {
+export function populateTasks(tasks, getCompleted = false) {
     if (!Array.isArray(tasks)) tasks = [tasks];
     const tasksContainer = document.getElementById("tasksContainer");
 
     tasks.forEach(task => {
         const div = document.createElement("div");
         decorateTaskDiv(div, task);
-        tasksContainer.appendChild(div);
+        if (getCompleted) {
+            if (task.isCompleted) {
+                tasksContainer.appendChild(div);
+            }
+        } else {
+            if (!task.isCompleted) {
+                tasksContainer.appendChild(div);
+            }
+        }
     });
 };
 
 async function decorateTaskDiv(div, task) {
     div.setAttribute('data-task', `${task.id}`);
-    div.classList.add('single-task')
+    div.classList.add('single-task');
     div.innerHTML = createTaskHtml(task.name, task.id);
-    div.addEventListener('click', fetchTaskSummary, {once: true});
-    div.addEventListener('click', finishTask, {once: true});
-    div.addEventListener('click', deleteTask, {once: true});
-    div.addEventListener('click', getDropMenu, {once: true});
+    div.addEventListener('click', fetchTaskSummary);
+    div.addEventListener('click', getDropMenu);
     div.addEventListener('click', toggleTaskHighlight);
     div.addEventListener('click', toggleTaskSummary);
 
@@ -105,6 +115,7 @@ export async function decorateTaskWithPriority(div, taskObj) {
     const { task } = await res.json();
 
     const span = document.createElement('span');
+
     span.setAttribute('data-task', `${task.id}`);
     span.classList = `priority-tag priority-${task.Category.name}`;
     span.innerText = `${task.Category.name}`;
@@ -154,15 +165,16 @@ function decorateSearchItem(div, task) {
 };
 
 // create task summary
-export async function buildTaskSummary(
-    currentTask,
-    currentDeadline,
-    currentTaskId,
-    currentListId,
-    currentList,
-    currentPriorityId,
-    currentPriority,
-    currentDesc) {
+export async function buildTaskSummary(task) {
+    const currentTask = task.name;
+    const currentTaskId = task.id;
+    const currentDeadline = task.deadline;
+    const currentListId = task.listId;
+    const currentList = task.List.name;
+    const currentDesc = task.description;
+    const currentPriorityId = task.categoryId;
+    const currentPriority = task.Category.name;
+
     const taskSummaryContainer = document.createElement('div');
     const taskSummaryParent = document.querySelector('#task-details');
 
@@ -177,7 +189,7 @@ export async function buildTaskSummary(
 
     taskSummaryParent.appendChild(taskSummaryContainer);
     buildListSelectOptions(currentListId, currentList);
-    buildPrioritySelectOptions(currentPriority);
+    buildPrioritySelectOptions(currentPriority, currentPriorityId);
 }
 
 // helper functions for task summary container
@@ -211,11 +223,12 @@ export function buildDeadlineDiv(currentDeadline) {
 
 function buildListDiv(currentListId, currentList) {
     const listDiv = document.createElement('div');
+    // listDiv.addEventListener('click', showCreateList);
     listDiv.setAttribute('id', 'list-div');
     listDiv.innerHTML = `
-        <div id="summary-list">List</div>
-        <select id="summary-list-select" class="summary-inp">
-        <option value="${currentListId}">${currentList}</option>
+    <div id="summary-list">List</div>
+    <select id="summary-list-select" class="summary-inp">
+    <option value="${currentListId}">${currentList}</option>
         </select>
         `;
     return listDiv;
@@ -227,7 +240,6 @@ function buildPriorityDiv(currentPriorityId, currentPriority) {
     priorityDiv.innerHTML = `
         <div id="summary-priority">Priority</div>
         <select id="summary-priority-select" class="summary-inp">
-        <option value="${currentPriorityId}">${currentPriority}</option>
         </select>
         `;
     return priorityDiv;
@@ -258,14 +270,17 @@ export async function buildListSelectOptions(currentListId, currentList) {
     const createListOpt = document.createElement('option');
     createListOpt.setAttribute('value', 'create-new');
     createListOpt.innerText = 'Create New';
+
+    // createListOpt.addEventListener('change', showCreateList);
+
     listOptions.appendChild(createListOpt);
 }
 
-export async function buildPrioritySelectOptions(currentPriority) {
+export async function buildPrioritySelectOptions(currentPriority, currentPriorityId) {
     const priorityRes = await fetch(`/api/categories`);
     const { categories } = await priorityRes.json();
     const priorityOptions = document.querySelector('#summary-priority-select');
-
+    priorityOptions.innerHTML = `<option value="${currentPriorityId}">${currentPriority}</option>`
     populateSelectOptions(categories, currentPriority, priorityOptions);
 }
 

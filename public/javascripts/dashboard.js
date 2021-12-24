@@ -1,8 +1,8 @@
-import { finishTask, postPoneTask, changeCategory, moveTask, getDropMenu, createDropDownMenu } from './dashboard-tasks.js';
+import { finishTask, postPoneTask, changeTag, moveTask, getDropMenu, createDropDownMenu } from './dashboard-tasks.js';
 import { addTaskSummaryEventListeners } from './dashboard-summary.js';
 import { clearDOMTasks, clearSearchRecs } from './clean-dom.js';
 import { createSidebarContainer, buildTaskSummary, createTaskHtml, populateTasks, populateSearchBox, decorateList, buildListSelectOptions } from './create-dom-elements.js';
-import { toggleListDisplay, showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown } from './display.js';
+import { selectList, toggleListDisplay, showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown, toggleListSelect, selectNewList } from './display.js';
 import { updateTaskStatus } from './dashboard-recap.js';
 import { initializePage } from './initialize-page.js';
 
@@ -10,7 +10,7 @@ window.addEventListener("load", async (event) => {
     initializePage();
 });
 
-let listId;
+export let listId;
 
 // C-R-U-D Functions
 // C
@@ -70,12 +70,24 @@ export async function createList(e) {
                 },
             })
             if (!res.ok) throw res
-            const newList = await res.json()
-            // const listId = newList.list.id;
-            listId = newList.list.id;
-            const div = createSidebarContainer(newList.list.name, 'list', listId);
-            decorateList(div);
-            tasksList.appendChild(div);
+            else {
+                const newList = await res.json()
+                // const listId = newList.list.id;
+                listId = newList.list.id;
+                const div = createSidebarContainer(newList.list.name, 'list', listId);
+                decorateList(div);
+                clearDOMTasks();
+                tasksList.appendChild(div);
+                toggleListSelect(e, div);
+
+
+                selectNewList()
+
+                // const select = document.querySelector(‘#summary-list-select’);
+                // select.innerHTML = ‘’;
+
+                // buildListSelectOptions(listId, list.name)
+            }
         } catch (error) {
 
         }
@@ -97,19 +109,11 @@ export async function fetchTaskSummary(e) {
     const currentDeadline = task.deadline;
     const currentListId = task.listId;
     const currentList = task.List.name;
+    const currentDesc = task.description;
     const currentPriorityId = task.categoryId;
     const currentPriority = task.Category.name;
-    const currentDesc = task.description;
 
-    buildTaskSummary(
-        currentTask,
-        currentDeadline,
-        currentTaskId,
-        currentListId,
-        currentList,
-        currentPriorityId,
-        currentPriority,
-        currentDesc);
+    buildTaskSummary(task);
     addTaskSummaryEventListeners();
     if (listName !== '#list') {
         window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/${listName}/${task.listId}/tasks/${task.id}`);
@@ -143,7 +147,11 @@ export async function fetchInboxTasks(fetchPath) {
     const { tasks } = await taskRes.json();
     // TO DO: Needs Error Handling
 
-    populateTasks(tasks);
+    if (fetchPath.split('/')[3] === 'completed') {
+        populateTasks(tasks, 'getCompleted')
+    } else populateTasks(tasks);
+
+
 };
 
 export async function fetchCategoryTasks(e) {
@@ -151,8 +159,6 @@ export async function fetchCategoryTasks(e) {
     clearDOMTasks();
     const stateId = { id: "101" };
     listId = null;
-    // const stateId = { id: "101" };
-    // To DO: update url?
     const categoryId = e.target.dataset.categoryid
 
     if (categoryId) {
@@ -178,12 +184,13 @@ export async function fetchSearch(e) {
         // TO DO: Error handling
         if (!res.ok) throw res
         else {
-            if (e.target.classList.contains('search-button')) {
+            if (e.target.classList.contains('search-button') ||
+                e.target.classList.contains('fa-search')) {
                 clearDOMTasks()
                 populateTasks(tasks);
                 window.history.replaceState(stateId, `Search ${name}`, `/dashboard/search/?q=${searchStr}`);
             } else {
-                populateSearchBox(tasks)
+                populateSearchBox(tasks/*.slice(0, 5)*/)
             }
         }
     }

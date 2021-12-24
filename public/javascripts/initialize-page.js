@@ -1,9 +1,10 @@
-import { createTask, createList, renameList, fetchSearch, fetchListTasks, fetchCategoryTasks } from './dashboard.js'
-import { hideTaskButton, fadeBackground, hideListNameDiv, hideListOptions, hideDropDown, showTaskButton, showCreateList, toggleListDisplay, toggleListSelect, deselectList, selectSearchField } from './display.js';
+import { createTask, createList, renameList, fetchSearch, fetchListTasks, fetchCategoryTasks, fetchInboxTasks } from './dashboard.js'
+import { hideTaskButton, fadeBackground, hideListNameDiv, hideListOptions, hideDropDown, showTaskButton, showCreateList, toggleListDisplay, toggleListSelect, selectList, deselectList, selectSearchField } from './display.js';
 import { createSidebarContainer, decorateList } from './create-dom-elements.js';
-import { createDropDownMenu } from './dashboard-tasks.js';
+import { createDropDownMenu, checkAllBoxes, finishTask, deleteTask, getDropMenu } from './dashboard-tasks.js';
 import { updateTaskStatus } from './dashboard-recap.js';
 import { clearSearch } from './clean-dom.js';
+import { todayTasksRoute } from './dashboard-inbox.js';
 
 export const initializePage = async () => {
     const stateId = { id: "98" };
@@ -17,8 +18,18 @@ export const initializePage = async () => {
     const categoryList = document.getElementById('task-categories');
     const headers = document.querySelectorAll('.list-header-container');
     const inboxLists = document.querySelectorAll('.inbox-list');
+    const buttons = document.querySelectorAll('button');
+    const todaysList = document.getElementById('today');
+    const inboxHeader = document.getElementById('default-lists');
+
+
 
     if (!lists.length) showCreateList()
+    else {
+        fetchInboxTasks(todayTasksRoute);
+        toggleListDisplay(inboxHeader);
+        selectList(todaysList);
+    }
 
     headers.forEach(header => {
         header.addEventListener('click', (e) => {
@@ -43,7 +54,6 @@ export const initializePage = async () => {
         categoryList.appendChild(div);
     })
 
-    const buttons = document.querySelectorAll('button')
     buttons.forEach(button => {
         if (button.className !== 'logout') {
             button.addEventListener('click', e => e.preventDefault())
@@ -62,6 +72,10 @@ export const initializePage = async () => {
     const renameListButton = document.querySelector('.rename-list');
     const searchButton = document.querySelector('.search-button');
     const searchField = document.querySelector('#search');
+    const checkBox = document.querySelector('.checkbox-all');
+    const completeTask = document.querySelector('.completed');
+    const trashTask = document.querySelector('.delete');
+    const searchIcon = document.querySelector('.fa-search');
 
     document.addEventListener('click', (e) => {
         hideTaskButton(e);
@@ -81,6 +95,12 @@ export const initializePage = async () => {
 
     searchField.addEventListener('click', selectSearchField)
     searchField.addEventListener('keyup', fetchSearch);
+
+    searchIcon.addEventListener('click', (e) => {
+        fetchSearch(e);
+        deselectList();
+
+    })
     searchButton.addEventListener('click', (e) => {
         fetchSearch(e);
         deselectList();
@@ -89,6 +109,9 @@ export const initializePage = async () => {
     renameListButton.addEventListener('click', (e) => {
         renameList(e);
     });
+    checkBox.addEventListener("click", checkAllBoxes);
+    completeTask.addEventListener("click", finishTask);
+    trashTask.addEventListener("click", deleteTask);
 
     createDropDownMenu();
     updateTaskStatus();
