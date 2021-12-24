@@ -88,7 +88,7 @@ npx dotenv sequelize db:create
 npx dotenv sequelize db:migrate
 npx dotenv sequelize db:seed:all
 ```
-
+Once all the tables and seeder file has been added to the data, you can run this command to run the application locally on your computer.
 ```
 npm start
 ```
