@@ -15,6 +15,7 @@ export const checkAllBoxes = (e) => {
                 if (!e.checked) {
                     e.checked = true;
                 }
+                e.parentNode.classList.add('single-task-selected');
             })
             if (url !== '#completed') taskOptions.style.visibility = 'visible';
             taskOptions.style.animation = "fadeIn 1s";
@@ -24,6 +25,7 @@ export const checkAllBoxes = (e) => {
                 if (e.checked) {
                     e.checked = false;
                 }
+                e.parentNode.classList.remove('single-task-selected');
             })
             if (url !== '#completed') taskOptions.style.animation = "fadeOut 1s";
             taskOptions.style.visibility = 'hidden';

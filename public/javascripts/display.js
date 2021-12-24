@@ -265,40 +265,59 @@ export async function toggleTaskHighlight(e) {
     const url = window.location.href.split('/')[4];
 
     if (nextSelection.localName == 'label' ||
-        nextSelection.localName == 'span') {
+        nextSelection.localName == 'span' || 
+        e.target.type == 'checkbox') {
         nextSelection = nextSelection.parentNode;
     }
 
-    if (prevSelected && e.target.type != 'checkbox') {
-        await removeHighlight(prevSelected, nextSelection);
-        if (prevSelected != nextSelection) {
-            if (url !== '#completed') taskOptions.style.visibility = 'visible';
-        } else {
-            if (url !== '#completed') taskOptions.style.visibility = 'hidden';
-        }
+    if (prevSelected == nextSelection || e.target.type == 'checkbox'){
+        console.log("remove")
+        await removeHighlight(nextSelection);
+        if (url !== '#completed') taskOptions.style.visibility = 'hidden';
     } else {
-        await addHighlight(nextSelection);
-        if (e.target.type != 'checkbox') {
-            nextSelection.children[0].checked = nextSelection.children[0].checked ? false : true;
-        }
+        if (nextSelection.classList.contains('single-task-selected')) await removeHighlight(nextSelection);
+        else await addHighlight(nextSelection);
     }
+
+    // if (prevSelected && e.target.type != 'checkbox') {
+    //     if (prevSelected != nextSelection) {
+    //         await removeHighlight(prevSelected, nextSelection);
+    //         if (url !== '#completed') taskOptions.style.visibility = 'visible';
+    //     } else {
+    //         if (url !== '#completed') taskOptions.style.visibility = 'hidden';
+    //     }
+    // } else {
+    //     await addHighlight(nextSelection);
+    //     if (e.target.type != 'checkbox') {
+    //         nextSelection.children[0].checked = nextSelection.children[0].checked ? false : true;
+    //     }
+    // }
 
 }
 
-function removeHighlight(prevSelected, nextSelection) {
+function removeHighlight(selectedDiv) {
     return new Promise((res, rej) => {
-        nextSelection.classList.add('single-task-selected');
-        prevSelected.classList.remove('single-task-selected');
-        nextSelection.children[0].checked = nextSelection.children[0].checked ? false : true;
+        selectedDiv.classList.remove('single-task-selected');
+        if (selectedDiv.children[0].checked) selectedDiv.children[0].checked = false;
         res();
     });
 }
+
+// function removeHighlight(prevSelected, nextSelection) {
+//     return new Promise((res, rej) => {
+//         nextSelection.classList.add('single-task-selected');
+//         prevSelected.classList.remove('single-task-selected');
+//         nextSelection.children[0].checked = nextSelection.children[0].checked ? false : true;
+//         res();
+//     });
+// }
 
 function addHighlight(nextSelection) {
     const taskOptions = document.querySelector('.task-options');
     const url = window.location.href.split('/')[4];
     return new Promise((res, rej) => {
         nextSelection.classList.add('single-task-selected');
+        nextSelection.children[0].checked = true;
         if(taskOptions){
             if (url !== '#completed'){
                 taskOptions.style.visibility = 'visible';
