@@ -2,7 +2,7 @@
 
 Live Demo: [To-Moo-List](http://to-moo-list.herokuapp.com/)
 
-<< Insert picture of home page here >>
+![Splash Page](/public/images/home-page.PNG)
 
 # General Info
 
@@ -15,8 +15,9 @@ Let it be known that you should always just moo it.
 To Moo List is a clone of another web application called [Remember the Milk](https://www.rememberthemilk.com), but with our own twist. This website application is a **online to-do app** to help you stay organized and help remember your tasks/errands. 
 
 At To Moo List, users can create accounts and access a dashboard tailored for personal task management. From the dashboard, users are able to create tasks, give tasks deadlines and descriptions, tag tasks by priority level, create lists for those tasks, organize tasks into various lists, and mark tasks as complete. Users can also see summaries of all pending tasks, pending tasks that are due today or tomorrow, and postpone any desired tasks. Tasks can be edited individually or edited by bulk.
-  
-![Splash Page](/public/images/home-page.PNG)
+ 
+ 
+ << INSERT PICTURE OF DASHBOARD >> 
 
 ## Overall Structure
 
