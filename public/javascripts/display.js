@@ -129,7 +129,6 @@ export function hideDropDown(e) {
             categoryList.style.display = 'none';
             searchRecs.style.display = 'none';
             calDiv.style.display = 'none';
-
             deselectSearchField()
         }
     }
@@ -154,6 +153,12 @@ export function deselectSearchField(e) {
 // Toggles
 export async function toggleListSelect(e, listDiv) {
     const prevSelected = document.querySelector('.selected-list');
+    const taskOptions = document.querySelector('.task-options');
+    const checkBox = document.querySelector('.checkbox-all > input');
+    
+    checkBox.checked = false;
+    taskOptions.style.visibility = 'hidden';
+
     let list = e.target
     if (listDiv) list = listDiv;
     // Lists and Categories have an extra div container.

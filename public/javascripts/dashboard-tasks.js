@@ -1,11 +1,12 @@
 import { updateTaskStatus } from './dashboard-recap.js'
 import { updatePriorityTag, updateDeadlineTag, changeTaskDeadline, moveTaskToNewList } from './dashboard-summary.js'
 import { getDate, buildPrioritySelectOptions, decorateTaskWithDeadline } from './create-dom-elements.js';
-import { hideDivContainer, hideTaskSummary } from './display.js'
+import { hideDivContainer, hideTaskSummary, selectNewList } from './display.js'
 
 export const checkAllBoxes = (e) => {
     const checkBox = document.querySelector('.checkbox-all > input');
     const taskOptions = document.querySelector('.task-options');
+    const url = window.location.href.split('/')[4];
 
     if (!e.target.classList.contains("checkbox-all")) {
         if (checkBox.checked) {
@@ -15,7 +16,7 @@ export const checkAllBoxes = (e) => {
                     e.checked = true;
                 }
             })
-            taskOptions.style.visibility = 'visible';
+            if (url !== '#completed') taskOptions.style.visibility = 'visible';
             taskOptions.style.animation = "fadeIn 1s";
         } else {
             const allCheckBox = document.querySelectorAll(".single-task > input");
@@ -24,7 +25,7 @@ export const checkAllBoxes = (e) => {
                     e.checked = false;
                 }
             })
-            taskOptions.style.animation = "fadeOut 1s";
+            if (url !== '#completed') taskOptions.style.animation = "fadeOut 1s";
             taskOptions.style.visibility = 'hidden';
         }
     }
@@ -33,6 +34,11 @@ export const checkAllBoxes = (e) => {
 export const uncheckCheckBox = (e) => {
     const checkBox = document.querySelector('.checkbox-all > input');
     checkBox.checked = false;
+}
+
+export const hideTaskOptions = (e) => {
+    const taskOptions = document.querySelector('.task-options');
+    taskOptions.style.visibility = 'hidden';
 }
 
 export const finishTask = (e) => {
@@ -102,6 +108,7 @@ export const postPoneTask = async (e) => {
                 uncheckCheckBox();
             }
         }
+        selectNewList();
     })
 }
 
@@ -288,45 +295,6 @@ const createListDropDown = async () => {
         listMenu.appendChild(listOption);
     })
 
-    // const hr = document.createElement('hr');
-    // listMenu.appendChild(hr);
-    const input = document.createElement('input');
-    input.classList = 'add-tag-input'
-    input.placeholder = "type new list & enter";
-    input.type = "text";
-    input.addEventListener("keypress", async (e) => {
-        if (e.key === 'Enter') {
-            const res = await fetch('/api/lists', {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ name: `${e.target.value}` })
-            })
-            const menuDiv = document.querySelector('.moveTo')
-            if (!res.ok) {
-                menuDiv.style.animation = "fetchFail 1s";
-                listMenu.style.animation = "fetchFail 1s";
-                window.alert("Could not add a new list");
-                throw res
-            }
-            menuDiv.style.animation = "fetchSuccess 1s";
-            const { list } = await res.json();
-            console.log(list)
-            hideDivContainer();
-            
-            const selectedTasks = document.querySelectorAll(".single-task > input"); // selects all the tasks
-            selectedTasks.forEach(async (e) => {
-                if (e.checked) {
-                    await moveTaskToNewList(e.dataset.task, list.id)
-                    const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
-                    if (deleteDiv) deleteDiv.remove();
-                }
-            })
-            //selectNewList()
-        }
-    });
-    listMenu.appendChild(input);
 }
 
 const createPostPoneList = async () => {

@@ -1,7 +1,7 @@
 import { fetchListTasks, fetchTaskSummary, updateListId, deleteList } from './dashboard.js';
 import { clearDOMTasks, clearSearchRecs, clearTaskSummary } from './clean-dom.js';
 import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect, toggleTaskHighlight, toggleTaskSummary, showCreateList } from './display.js';
-import { finishTask, getDropMenu, deleteTask, uncheckCheckBox } from './dashboard-tasks.js'
+import { finishTask, getDropMenu, deleteTask, uncheckCheckBox, hideTaskOptions } from './dashboard-tasks.js'
 
 export function createSidebarContainer(name, containerType, data,) {
     const container = document.createElement('div');
@@ -68,7 +68,6 @@ export function decorateList(list) {
         if (!iconTarget && !listOptionTarget) {
             fetchListTasks(e);
             toggleListSelect(e);
-            // uncheckCheckBox(e);
         }
     });
 };
@@ -76,7 +75,6 @@ export function decorateList(list) {
 export function populateTasks(tasks, getCompleted = false) {
     if (!Array.isArray(tasks)) tasks = [tasks];
     const tasksContainer = document.getElementById("tasksContainer");
-
     tasks.forEach(task => {
         const div = document.createElement("div");
         decorateTaskDiv(div, task);
