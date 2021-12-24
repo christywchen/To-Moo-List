@@ -115,17 +115,49 @@ With tasks being populted to the main dashboard in many different ways throughou
 
 < insert code images >.
 
+```JavaScript
+function decorateList(list) {
+    list.addEventListener('click', (e) => {
+        const iconTarget = e.target.classList.contains('far');
+        const listOptionTarget = e.target.classList.contains('list-edit-option');
+        
+        if (!iconTarget && !listOptionTarget) {
+            fetchListTasks(e);
+            toggleListSelect(e);
+        }
+    });
+};
+
+function populateTasks(tasks, getCompleted = false) {
+    if (!Array.isArray(tasks)) tasks = [tasks];
+    const tasksContainer = document.getElementById("tasksContainer");
+    tasks.forEach(task => {
+        const div = document.createElement("div");
+        decorateTaskDiv(div, task);
+        if (getCompleted) {
+            if (task.isCompleted) {
+                tasksContainer.appendChild(div);
+            }
+        } else {
+            if (!task.isCompleted) {
+                tasksContainer.appendChild(div);
+            }
+        }
+    });
+};
+```
+
 Selecting/deselecting list and task via vanilla javascript was handled in various ways. Deselecting by clicking away from an item was handled via a global click event listener on the document object. This worked well, however provided a separation of concerns issue while debugging at times. Toggling a selection was often handled using async functions and promises to await the appropriate selecting and deselecting sqeuence. 
 
-``` JavaScript
-export function selectList(list) {
+```JavaScript
+function selectList(list) {
     return new Promise((res, rej) => {
         list.classList.add('selected-list')
         res();
     })
 };
 
-export function deselectList() {
+function deselectList() {
     return new Promise((res, rej) => {
         const selected = document.querySelector('.selected-list');
         if (selected) {
