@@ -46,10 +46,7 @@
 
 #tasksContainer {
     position: relative;
-    height: 86%;
-}
-
-#tasksContainer:hover {
+    height: 85%;
     overflow-y: scroll;
 }
 
