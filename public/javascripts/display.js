@@ -157,11 +157,6 @@ export async function toggleListSelect(e, listDiv) {
     let list = e.target
     if (listDiv) list = listDiv;
     // Lists and Categories have an extra div container.
-    const url = window.location.href.split('/')[4];
-    if (url == '#completed'){
-        const taskOptions = document.querySelector('.task-options');
-        taskOptions.remove();
-    }
 
     if (list.classList.contains('sidebar-box')) {
         list = list.children[0];
@@ -262,6 +257,7 @@ export async function toggleTaskHighlight(e) {
     const prevSelected = document.querySelector('.single-task-selected');
     const taskOptions = document.querySelector('.task-options');
     let nextSelection = e.target;
+    const url = window.location.href.split('/')[4];
 
     if (nextSelection.localName == 'label' ||
         nextSelection.localName == 'span') {
@@ -271,9 +267,9 @@ export async function toggleTaskHighlight(e) {
     if (prevSelected && e.target.type != 'checkbox') {
         await removeHighlight(prevSelected, nextSelection);
         if (prevSelected != nextSelection) {
-            taskOptions.style.visibility = 'visible';
+            if (url !== '#completed') taskOptions.style.visibility = 'visible';
         } else {
-            taskOptions.style.visibility = 'hidden';
+            if (url !== '#completed') taskOptions.style.visibility = 'hidden';
         }
     } else {
         await addHighlight(nextSelection);
@@ -295,10 +291,15 @@ function removeHighlight(prevSelected, nextSelection) {
 
 function addHighlight(nextSelection) {
     const taskOptions = document.querySelector('.task-options');
+    const url = window.location.href.split('/')[4];
     return new Promise((res, rej) => {
         nextSelection.classList.add('single-task-selected');
-        taskOptions.style.visibility = 'visible';
-        taskOptions.style.animation = "fadeIn 1s";
+        if(taskOptions){
+            if (url !== '#completed'){
+                taskOptions.style.visibility = 'visible';
+                taskOptions.style.animation = "fadeIn 1s"; 
+            }
+        }
         res();
     });
 }

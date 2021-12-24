@@ -1,5 +1,5 @@
 import { updateTaskStatus } from './dashboard-recap.js'
-import { updatePriorityTag, updateDeadlineTag, changeTaskDeadline } from './dashboard-summary.js'
+import { updatePriorityTag, updateDeadlineTag, changeTaskDeadline, moveTaskToNewList } from './dashboard-summary.js'
 import { getDate, buildPrioritySelectOptions, decorateTaskWithDeadline } from './create-dom-elements.js';
 import { hideDivContainer, hideTaskSummary } from './display.js'
 
@@ -310,9 +310,20 @@ const createListDropDown = async () => {
                 window.alert("Could not add a new list");
                 throw res
             }
-            e.target.value = "";
             menuDiv.style.animation = "fetchSuccess 1s";
+            const { list } = await res.json();
+            console.log(list)
             hideDivContainer();
+            
+            const selectedTasks = document.querySelectorAll(".single-task > input"); // selects all the tasks
+            selectedTasks.forEach(async (e) => {
+                if (e.checked) {
+                    await moveTaskToNewList(e.dataset.task, list.id)
+                    const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
+                    if (deleteDiv) deleteDiv.remove();
+                }
+            })
+            //selectNewList()
         }
     });
     listMenu.appendChild(input);

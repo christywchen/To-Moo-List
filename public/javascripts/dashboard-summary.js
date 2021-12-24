@@ -12,9 +12,9 @@ export function addTaskSummaryEventListeners() {
     const summaryListSelectInp = document.querySelector('#summary-list-select');
     const summaryPrioritySelectInp = document.querySelector('#summary-priority-select');
     const summaryDescInp = document.querySelector('#summary-desc-textarea');
-
+    
     summaryTitleInp.addEventListener('blur', changeTaskName);
-    summaryDeadlineInp.addEventListener('change', changeTaskDeadline);
+    if(summaryDeadlineInp) summaryDeadlineInp.addEventListener('change', changeTaskDeadline);
     summaryListSelectInp.addEventListener('change', changeList);
     summaryPrioritySelectInp.addEventListener('change', changePriority);
     summaryDescInp.addEventListener('focus', expandTextarea);
@@ -55,9 +55,9 @@ export async function changeTaskDeadline(e) {
     if (newDeadline === '') {
         body = { deadline: null };
     } else {
-        console.log(newDeadline)
+        //console.log(newDeadline)
         newDeadline = new Date(newDeadline).toISOString().replace('T', ' ').replace('Z', '');
-        console.log('new', newDeadline)
+        //console.log('new', newDeadline)
         body = { deadline: newDeadline };
     }
 
