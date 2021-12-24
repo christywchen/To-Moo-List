@@ -17,7 +17,7 @@ To Moo List is a clone of another web application called [Remember the Milk](htt
 At To Moo List, users can create accounts and access a dashboard tailored for personal task management. From the dashboard, users are able to create tasks, give tasks deadlines and descriptions, tag tasks by priority level, create lists for those tasks, organize tasks into various lists, and mark tasks as complete. Users can also see summaries of all pending tasks, pending tasks that are due today or tomorrow, and postpone any desired tasks. Tasks can be edited individually or edited by bulk.
   
 << Insert picture of dashboard >>
-[Splash Page](/public/images/home-page.PNG)
+![Splash Page](/public/images/home-page.PNG)
 
 ## Overall Structure
 
