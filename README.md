@@ -42,34 +42,34 @@ The frontend was built with [pug](https://pugjs.org/api/getting-started.html) te
 ### User Authorization
 User authentication is handled in JavaScript whilst using BCrypt for password hashing. For security, user passwords are hashed before getting saved to the database. When the user logs in, the password they provide are rehashed to see if the match the one with the data base to verify the users credentials. 
 
-![Login Page](/public/images/login-page.PNG)
+[![login-page.png](https://i.postimg.cc/YSndsgY4/login-page.png)](https://postimg.cc/wtN5t1WH)
 
 ### Dashboard Page
 This page is where the magic happens. After the user's credentials have been confirmed, the users can access the dashboard page and start creating their own tasks as their reminder application. Users will be able to navigate around the dashboard without page refreshes or reloads. The left side of the page shows a sidebar for list navigation, the center of the page shows a lists of pending tasks, and the right side of the page shows information about task completion progress. When users click on an individual task, a panel will slide out to the right side of the page and show details about the given task.
 
-<< INSERT PICTURE OF DASHBOARD PAGE
+[![dashboard-page.png](https://i.postimg.cc/4xG27XX3/dashboard-page.png)](https://postimg.cc/Xp2ktSGM)
 
 ### Adding Tasks
 Users can add task first clicking on the **input bar** at the top middle of the page and type the task they want to add. Once the user types something into the  input bar, the **moo** button should appear to finally add the task. If the user doesn't want to click it, they can also add the task by pressing the **Enter key** on their keyboard to add the task as well.
 
-<< INSERT PICTURE OF INPUT TASK BAR >>
+[![input-task-bar.png](https://i.postimg.cc/NjxJRZ0k/input-task-bar.png)](https://postimg.cc/FY7V4W3Y)
 
 ### Navigating Lists & Creating/Adding Lists
 To navigate through different lists, users can access them by clicking on different tabs on the sidebar to the left of the page. Clicking the **Inbox** link to toggle links for lists provided by default. These include **Today's Tasks**, **Tomorrow's Tasks**, **All Tasks**, and **Completed Tasks**. Users can also click on **Lists** to see a dropdown of custom lists or **Priority** to view a dropdown of lists which organize tasks according to the priority that the user has set for any given task.
 
-<< [Maybe add picture of side bar with list menu dropdown?] >>
+[![side-bar-menu.png](https://i.postimg.cc/CKFCY1Sj/side-bar-menu.png)](https://postimg.cc/9DnwYc4M)
 
 If the user would like to create a custom list to further organize their tasks, there is a **+** icon on the left side bar on the page that allows them to do so. Clicking on the icon will initialize a pop-up that prompts the user to enter a list name. Once the user hits the **Add** button, they will be taken to the new list and can begin adding tasks to the list.
 
 Custom lists can be further edited. When hovering over an individual list name, an icon will show up to the right side of the list. When clicked, the user will be provided options to delete or rename the list. If the user chooses to delete the list, all tasks associated with that list will also be removed.
 
-<< [INSERT PICTURE OF THE ADD BUTTON AND THE POP UP] >>
+[![list-add-pop-up.png](https://i.postimg.cc/MGKs5tM2/list-add-pop-up.png)](https://postimg.cc/VJpBLqWD)
 
 ### Creating Tasks and Editing Task Information
 
 Tasks can be edited individually or bulk edited from the task bar, which is the row of icons at the top of the task container. User can select one or more tasks by checking off tasks and clicking on icons that will mark them complete, postpone the deadline by up to five days, set the deadline further into the future, change the list in which the task(s) belong, and delete the task(s).
 
-INSERT PICTURE OF TASK OPTION BAR
+[![task-options.png](https://i.postimg.cc/CKmGKgx9/task-options.png)](https://postimg.cc/R3J6P2fT)
 
 Individual tasks can also be edited by selecting the task from the list. A task summary will slide out to the right side of the screen and offer options to rename the task, edit the deadline, priority, or description, and move them to new or existing lists. Each change to a task is updated dynamically and will be saved to the database as soon as the user clicks a dropdown option or moves their mouse focus away from an input. The webpage will also display the updated information immediately.
 
