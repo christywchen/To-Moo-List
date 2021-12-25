@@ -86,7 +86,7 @@ export async function createList(e) {
 
                 selectNewList();
 
-                if (moveTask) {
+                if (moveTasktoNew) {
                     await moveTaskToNewList(taskId, listId);
                     await fetchListTasks(e);
                     const taskRes = await fetch(`/api/lists/${listId}/tasks`);

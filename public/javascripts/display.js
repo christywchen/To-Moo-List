@@ -1,4 +1,3 @@
-
 // Fade background
 export function fadeBackground(e) {
     const isFaded = document.querySelector('.page-cover')
@@ -117,7 +116,6 @@ export function hideDropDown(e) {
     const calDiv = document.querySelector('.hidden-cal')
     //const listContainers = document.querySelectorAll('.list-container');
     const searchRecs = document.querySelector('.search-recommendations');
-
     if (e.target.className !== 'logout') {
         if (!listMenu.className.includes(e.target) &&
             !e.target.className.includes('grid-square') &&
@@ -131,7 +129,6 @@ export function hideDropDown(e) {
             categoryList.style.display = 'none';
             searchRecs.style.display = 'none';
             calDiv.style.display = 'none';
-
             deselectSearchField()
         }
     }
@@ -156,6 +153,12 @@ export function deselectSearchField(e) {
 // Toggles
 export async function toggleListSelect(e, listDiv) {
     const prevSelected = document.querySelector('.selected-list');
+    const taskOptions = document.querySelector('.task-options');
+    const checkBox = document.querySelector('.checkbox-all > input');
+    
+    checkBox.checked = false;
+    taskOptions.style.visibility = 'hidden';
+
     let list = e.target
     if (listDiv) list = listDiv;
     // Lists and Categories have an extra div container.
@@ -259,43 +262,68 @@ export async function toggleTaskHighlight(e) {
     const prevSelected = document.querySelector('.single-task-selected');
     const taskOptions = document.querySelector('.task-options');
     let nextSelection = e.target;
+    const url = window.location.href.split('/')[4];
 
     if (nextSelection.localName == 'label' ||
-        nextSelection.localName == 'span') {
+        nextSelection.localName == 'span' || 
+        e.target.type == 'checkbox') {
         nextSelection = nextSelection.parentNode;
     }
 
-    if (prevSelected && e.target.type != 'checkbox') {
-        await removeHighlight(prevSelected, nextSelection);
-        if (prevSelected != nextSelection) {
-            taskOptions.style.visibility = 'visible';
-        } else {
-            taskOptions.style.visibility = 'hidden';
-        }
+    if (prevSelected == nextSelection || e.target.type == 'checkbox'){
+        console.log("remove")
+        await removeHighlight(nextSelection);
+        if (url !== '#completed') taskOptions.style.visibility = 'hidden';
     } else {
-        await addHighlight(nextSelection);
-        if (e.target.type != 'checkbox') {
-            nextSelection.children[0].checked = nextSelection.children[0].checked ? false : true;
-        }
+        if (nextSelection.classList.contains('single-task-selected')) await removeHighlight(nextSelection);
+        else await addHighlight(nextSelection);
     }
+
+    // if (prevSelected && e.target.type != 'checkbox') {
+    //     if (prevSelected != nextSelection) {
+    //         await removeHighlight(prevSelected, nextSelection);
+    //         if (url !== '#completed') taskOptions.style.visibility = 'visible';
+    //     } else {
+    //         if (url !== '#completed') taskOptions.style.visibility = 'hidden';
+    //     }
+    // } else {
+    //     await addHighlight(nextSelection);
+    //     if (e.target.type != 'checkbox') {
+    //         nextSelection.children[0].checked = nextSelection.children[0].checked ? false : true;
+    //     }
+    // }
 
 }
 
-function removeHighlight(prevSelected, nextSelection) {
+function removeHighlight(selectedDiv) {
     return new Promise((res, rej) => {
-        nextSelection.classList.add('single-task-selected');
-        prevSelected.classList.remove('single-task-selected');
-        nextSelection.children[0].checked = nextSelection.children[0].checked ? false : true;
+        selectedDiv.classList.remove('single-task-selected');
+        if (selectedDiv.children[0].checked) selectedDiv.children[0].checked = false;
         res();
     });
 }
 
+// function removeHighlight(prevSelected, nextSelection) {
+//     return new Promise((res, rej) => {
+//         nextSelection.classList.add('single-task-selected');
+//         prevSelected.classList.remove('single-task-selected');
+//         nextSelection.children[0].checked = nextSelection.children[0].checked ? false : true;
+//         res();
+//     });
+// }
+
 function addHighlight(nextSelection) {
     const taskOptions = document.querySelector('.task-options');
+    const url = window.location.href.split('/')[4];
     return new Promise((res, rej) => {
         nextSelection.classList.add('single-task-selected');
-        taskOptions.style.visibility = 'visible';
-        taskOptions.style.animation = "fadeIn 1s";
+        nextSelection.children[0].checked = true;
+        if(taskOptions){
+            if (url !== '#completed'){
+                taskOptions.style.visibility = 'visible';
+                taskOptions.style.animation = "fadeIn 1s"; 
+            }
+        }
         res();
     });
 }

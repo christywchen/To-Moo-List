@@ -36,32 +36,37 @@
 
 .dropdown {
     display: none;
-    width: 180px;
+    width: auto;
     height: auto;
     position: absolute;
-    z-index: 2;
+    z-index: 5;
     top: 49px;
     border: 1px solid lightgray;
-    box-shadow: 10px 5px 5px lightgray;
-    margin-left: 128px;
+    border-radius: 5px;
+    /* box-shadow: 10px 5px 5px lightgray; */
+    overflow: hidden;
 }
+
 
 .alert:active {
     background-color: red;
 }
 
 .dropdown div {
+    display:flex;
+    justify-content: center;
+    align-items: center;
     background-color: white;
-    margin: 0;
+    margin:0 auto;
+    width: auto;
     font-size: 14px;
     padding: 5px;
-    border: 1px solid lightgray;
     text-align: center;
     align-content: center;
 }
 
 .dropdown div:hover {
-    background-color: var(--lightest-div-bg);
+    background-color: #b4d4ec;
 }
 
 .dropdown input {
@@ -70,14 +75,47 @@
 
 .dropdown input::placeholder {
     font-size: 12px;
+    text-align: center;
+}
+
+.dropdown-row{
+    width: auto;
+}
+
+.postpone-dates{
+    margin-left: 87px;
+}
+
+.hidden-cal {
+    margin-left: 100px;
+}
+
+.list-of-lists{
+    margin-left: 21px;
+}
+
+.list-of-tags{
+    margin-left: 10px;
 }
 
 .tool-tip {
     position: absolute;
     visibility: hidden;
-    margin-top: 40px;
+    margin-bottom: 75px;
+    font-size: 16px;
     z-index: 4;
-    color: black;
+    width: 90px;
+    height: 40px;
+    color: white;
+    /* text-align: center; */
+    background-color: black;
+    display: flex;
+    align-items: center; /* Vertical center alignment */
+    justify-content: center; /* Horizontal center alignment */
+}
+
+.grid-square:hover span{
+    visibility: visible;
 }
 
 @keyframes growDown {

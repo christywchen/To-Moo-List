@@ -3,7 +3,7 @@ import { showCreateList } from './display.js';
 import { listId } from './dashboard.js';
 
 export let taskId;
-export let moveTask;
+export let moveTasktoNew;
 
 export function addTaskSummaryEventListeners() {
     /*
@@ -16,7 +16,7 @@ export function addTaskSummaryEventListeners() {
     const summaryDescInp = document.querySelector('#summary-desc-textarea');
 
     summaryTitleInp.addEventListener('blur', changeTaskName);
-    summaryDeadlineInp.addEventListener('change', changeTaskDeadline);
+    if (summaryDeadlineInp) summaryDeadlineInp.addEventListener('change', changeTaskDeadline);
     summaryListSelectInp.addEventListener('change', changeList);
     summaryPrioritySelectInp.addEventListener('change', changePriority);
     summaryDescInp.addEventListener('focus', expandTextarea);
@@ -55,8 +55,7 @@ export async function changeTaskName(e) {
 
 export async function changeTaskDeadline(e) {
     /*
-    This function will save any deadline changes made in the task summary.
-    It will make a fetch request to the database
+    This function will save any deadline changes made in the task summary to the database.
     */
     taskId = window.location.href.split('/')[7];
     let newDeadline = e.target.value;
@@ -66,9 +65,9 @@ export async function changeTaskDeadline(e) {
     if (newDeadline === '') {
         body = { deadline: null };
     } else {
-        console.log(newDeadline)
+        //console.log(newDeadline)
         newDeadline = new Date(newDeadline).toISOString().replace('T', ' ').replace('Z', '');
-        console.log('new', newDeadline)
+        //console.log('new', newDeadline)
         body = { deadline: newDeadline };
     }
 
@@ -84,13 +83,20 @@ export async function changeTaskDeadline(e) {
     updateDeadlineTag(updatedTask);
 };
 
+
 export async function changeList(e) {
+    /*
+    This function will save any list changes made in the task summary to the database.
+    If the user chooses to create a new list, the function will go into a promise and then split off to the
+    createList function, which will create a new list and complete the task with the help of moveTaskToNewList.
+    Otherwise, it will split off to the moveTasktoExistingList to move the task to another existing list.
+    */
     e.stopPropagation();
     taskId = window.location.href.split('/')[7];
     const newListId = e.target.value;
 
     if (newListId === "create-new") {
-        moveTask = true;
+        moveTasktoNew = true;
         const change = () => {
             return new Promise((res, rej) => {
                 showCreateList();
@@ -116,8 +122,7 @@ export async function moveTaskToNewList(taskId, newListId) {
     });
     const { task: updatedTask } = await res.json();
 
-    console.log(updatedTask)
-    moveTask = false;
+    moveTasktoNew = false;
 }
 
 export async function moveTasktoExistingList(taskId, e) {
@@ -138,6 +143,9 @@ export async function moveTasktoExistingList(taskId, e) {
 }
 
 export async function changePriority(e) {
+    /*
+    This function will save any priority changes made in the task summary to the database.
+    */
     e.stopPropagation();
     taskId = window.location.href.split('/')[7];
     const newPriorityId = e.target.value;
@@ -156,6 +164,9 @@ export async function changePriority(e) {
 };
 
 export async function changeDesc(e) {
+    /*
+    This function will save any description changes made in the task summary to the database.
+    */
     taskId = window.location.href.split('/')[7];
     const newTaskDesc = e.target.value;
     const body = { description: newTaskDesc };
@@ -179,6 +190,9 @@ export async function changeDesc(e) {
     }
 };
 
+/*
+The below functions will expand or shrink the textarea for the task description upon click.
+*/
 export async function expandTextarea(e) {
     const summaryDescInp = document.querySelector('#summary-desc-textarea');
     summaryDescInp.classList.add('summary-inp-focus');
@@ -189,7 +203,10 @@ export async function shrinkTextarea(e) {
     summaryDescInp.classList.remove('summary-inp-focus');
 }
 
-// helper functions to provide dom changes after a task is edited
+/*
+The below helper functions provide changes to the DOM after a task is edited
+for visual confirmation to the user.
+*/
 function markSaved(parentDiv) {
     let listDiv;
 
@@ -237,7 +254,7 @@ export async function updateDeadlineTag(task) {
     }
 }
 
-async function moveTaskFromList(task) {
+export async function moveTaskFromList(task) {
     const stateId = { id: "99" };
     const location = window.location.href.split('/')[4];
     const oldListId = window.location.href.split('/')[5];

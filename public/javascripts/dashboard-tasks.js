@@ -1,11 +1,12 @@
 import { updateTaskStatus } from './dashboard-recap.js'
-import { updatePriorityTag } from './dashboard-summary.js'
-import { getDate, buildPrioritySelectOptions } from './create-dom-elements.js';
-import { hideDivContainer, hideTaskSummary } from './display.js'
+import { updatePriorityTag, updateDeadlineTag, changeTaskDeadline, moveTaskToNewList, moveTaskFromList } from './dashboard-summary.js'
+import { getDate, buildPrioritySelectOptions, decorateTaskWithDeadline } from './create-dom-elements.js';
+import { hideDivContainer, hideTaskSummary, selectNewList } from './display.js'
 
 export const checkAllBoxes = (e) => {
     const checkBox = document.querySelector('.checkbox-all > input');
     const taskOptions = document.querySelector('.task-options');
+    const url = window.location.href.split('/')[4];
 
     if (!e.target.classList.contains("checkbox-all")) {
         if (checkBox.checked) {
@@ -14,8 +15,9 @@ export const checkAllBoxes = (e) => {
                 if (!e.checked) {
                     e.checked = true;
                 }
+                e.parentNode.classList.add('single-task-selected');
             })
-            taskOptions.style.visibility = 'visible';
+            if (url !== '#completed') taskOptions.style.visibility = 'visible';
             taskOptions.style.animation = "fadeIn 1s";
         } else {
             const allCheckBox = document.querySelectorAll(".single-task > input");
@@ -23,17 +25,22 @@ export const checkAllBoxes = (e) => {
                 if (e.checked) {
                     e.checked = false;
                 }
+                e.parentNode.classList.remove('single-task-selected');
             })
-            taskOptions.style.animation = "fadeOut 1s";
+            if (url !== '#completed') taskOptions.style.animation = "fadeOut 1s";
             taskOptions.style.visibility = 'hidden';
         }
     }
-
 }
 
 export const uncheckCheckBox = (e) => {
     const checkBox = document.querySelector('.checkbox-all > input');
     checkBox.checked = false;
+}
+
+export const hideTaskOptions = (e) => {
+    const taskOptions = document.querySelector('.task-options');
+    taskOptions.style.visibility = 'hidden';
 }
 
 export const finishTask = (e) => {
@@ -84,41 +91,39 @@ export const postPoneTask = async (e) => {
 
     selectedTasks.forEach(async (e) => {
         if (e.checked) { // only updates in database for task with checkmarks
+            const newDateVal = new Date(timeStamp).toISOString().replace('T', ' ').replace('Z', '');
+
             const res = await fetch(`/api/tasks/${e.dataset.task}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ deadline: `${timeStamp}` })
+                body: JSON.stringify({ deadline: `${newDateVal}` })
             })
             if (!res.ok) {
                 console.log("Something went wrong");
             } else {
-                console.log("it worked");
+                const { task: updatedTask } = await res.json();
+                updateDeadlineTag(updatedTask);
+
+                const taskSummary = document.querySelector('#task-details');
+
+                if (taskSummary.classList.contains('task-details-display')) {
+                    console.log('test')
+                    const taskSummaryDate = document.querySelectorAll('#summary-due-date-inp')[1];
+                    taskSummaryDate.setAttribute('value', getDate(newDateVal));
+                }
+
                 extendCal.style.display = 'none';
                 extendDiv.style.animation = 'fetchSuccess 1s';
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
                 uncheckCheckBox();
-            }
 
-
-
-            // need to replace getDate(value) with isostring value converted with no timestamp
-            const taskSummary = document.querySelector('#task-details');
-
-            if (taskSummary.classList.contains('task-details-display')) {
-                console.log('test')
-                const taskSummaryDate = document.querySelectorAll('#summary-due-date-inp')[1];
-                taskSummaryDate.setAttribute('value', getDate(timeStamp));
             }
         }
-
+        selectNewList();
     })
 }
-
-// const changeDeadline = async (e) => {
-//
-// }
 
 
 export const moveTask = async (e) => {
@@ -144,11 +149,16 @@ export const moveTask = async (e) => {
             if (!res.ok) {
                 console.log("Something went wrong");
             } else {
-                console.log("it worked");
+                const { task } = await res.json();
+                console.log(task)
+                //console.log("it task was moved to a different");
                 const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
-                deleteDiv.remove();
                 await hideTaskSummary(taskSummaryDiv);
+
                 listMenu.style.display = 'none';
+
+                moveTaskFromList(task)
+
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
                 uncheckCheckBox();
             }
@@ -302,34 +312,6 @@ const createListDropDown = async () => {
         listMenu.appendChild(listOption);
     })
 
-    const hr = document.createElement('hr');
-    listMenu.appendChild(hr);
-    const input = document.createElement('input');
-    input.classList = 'add-tag-input'
-    input.placeholder = "type new list & enter";
-    input.type = "text";
-    input.addEventListener("keypress", async (e) => {
-        if (e.key === 'Enter') {
-            const res = await fetch('/api/lists', {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ name: `${e.target.value}` })
-            })
-            const menuDiv = document.querySelector('.moveTo')
-            if (!res.ok) {
-                menuDiv.style.animation = "fetchFail 1s";
-                listMenu.style.animation = "fetchFail 1s";
-                window.alert("Could not add a new list");
-                throw res
-            }
-            e.target.value = "";
-            menuDiv.style.animation = "fetchSuccess 1s";
-            hideDivContainer();
-        }
-    });
-    listMenu.appendChild(input);
 }
 
 const createPostPoneList = async () => {
@@ -338,7 +320,7 @@ const createPostPoneList = async () => {
     const date = ["1 days", '2 days', '3 days', '4 days', '5 days']
     for (let i = 0; i < 5; i++) {
         today.setDate(today.getDate() + 1);
-        const readable = new Date(today).toISOString().split('T')[0]
+        const readable = today.toISOString().split('T')[0]
         const div = document.createElement('div');
         div.innerText = date[i] + " (" + readable + ")";
         div.setAttribute("name", "date");
@@ -377,18 +359,33 @@ const createCalendar = async (e) => {
         const selectedTasks = document.querySelectorAll(".single-task > input"); // selects all the tasks
         selectedTasks.forEach(async (e) => {
             if (e.checked) {
-                console.log(e.dataset.task);
-                const res = await fetch(`/api/tasks/${e.dataset.task}`, {
-                    method: "PATCH",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ deadline: `${hiddenCal.value}` })
-                })
-                if (!res.ok) {
-                    console.log("Something went wrong");
+                if (hiddenCal.value == '') {
+                    return;
                 } else {
-                    console.log("it worked");
+                    const newDateVal = new Date(hiddenCal.value).toISOString().replace('T', ' ').replace('Z', '');
+                    // console.log(newDateVal)
+                    const res = await fetch(`/api/tasks/${e.dataset.task}`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ deadline: `${newDateVal}` })
+                    })
+                    if (!res.ok) {
+                        console.log("Something went wrong");
+                    } else {
+                        //console.log("it worked");
+                        // const deadlineLabel = document.querySelector(`div[data-task="${e.dataset.task}"]`);
+                        const { task: updatedTask } = await res.json();
+                        updateDeadlineTag(updatedTask);
+
+                        const taskSummary = document.querySelector('#task-details');
+
+                        if (taskSummary.classList.contains('task-details-display')) {
+                            const taskSummaryDate = document.querySelectorAll('#summary-due-date-inp')[1];
+                            taskSummaryDate.setAttribute('value', getDate(newDateVal));
+                        }
+                    }
                 }
             }
         })
@@ -396,14 +393,6 @@ const createCalendar = async (e) => {
 
 
 
-        // need to replace getDate(hiddenCal.value) with isostring value converted with no timestamp
-        const taskSummary = document.querySelector('#task-details');
-
-        if (taskSummary.classList.contains('task-details-display')) {
-            console.log('test')
-            const taskSummaryDate = document.querySelectorAll('#summary-due-date-inp')[1];
-            taskSummaryDate.setAttribute('value', getDate(hiddenCal.value));
-        }
     });
 }
 
