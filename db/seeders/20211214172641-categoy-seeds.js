@@ -18,6 +18,11 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       },
+      {
+        name: 'None',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
     ])
   },
 

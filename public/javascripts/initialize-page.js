@@ -47,7 +47,8 @@ export const initializePage = async () => {
         decorateList(div);
         taskList.appendChild(div);
     });
-    categories.forEach(category => {
+    categories.forEach((category, i) => {
+        if (i === 3) return
         const div = createSidebarContainer(category.name, 'category', category.id);
         decorateList(div);
         div.addEventListener('click', fetchCategoryTasks);
@@ -83,14 +84,16 @@ export const initializePage = async () => {
         hideListOptions(e);
         hideDropDown(e);
         clearSearch(e);
-    })
+    });
+
     addTaskButton.addEventListener('click', createTask);
     addTaskInp.addEventListener('keyup', showTaskButton);
     addListButtonL.addEventListener('click', showCreateList);
     submitListButton.addEventListener('click', (e) => {
         createList(e);
         hideListNameDiv(e);
-    })
+    });
+    
     closeListSubmission.addEventListener('click', hideListNameDiv);
 
     searchField.addEventListener('click', selectSearchField)

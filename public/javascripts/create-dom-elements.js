@@ -1,7 +1,7 @@
 import { fetchListTasks, fetchTaskSummary, updateListId, deleteList } from './dashboard.js';
 import { clearDOMTasks, clearSearchRecs, clearTaskSummary } from './clean-dom.js';
 import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect, toggleTaskHighlight, toggleTaskSummary, showCreateList } from './display.js';
-import { finishTask, getDropMenu, deleteTask, uncheckCheckBox } from './dashboard-tasks.js'
+import { finishTask, getDropMenu, deleteTask, uncheckCheckBox, hideTaskOptions } from './dashboard-tasks.js'
 
 export function createSidebarContainer(name, containerType, data,) {
     const container = document.createElement('div');
@@ -64,10 +64,10 @@ export function decorateList(list) {
     list.addEventListener('click', (e) => {
         const iconTarget = e.target.classList.contains('far');
         const listOptionTarget = e.target.classList.contains('list-edit-option');
+
         if (!iconTarget && !listOptionTarget) {
             fetchListTasks(e);
             toggleListSelect(e);
-
         }
     });
 };
@@ -75,7 +75,6 @@ export function decorateList(list) {
 export function populateTasks(tasks, getCompleted = false) {
     if (!Array.isArray(tasks)) tasks = [tasks];
     const tasksContainer = document.getElementById("tasksContainer");
-
     tasks.forEach(task => {
         const div = document.createElement("div");
         decorateTaskDiv(div, task);
@@ -92,30 +91,25 @@ export function populateTasks(tasks, getCompleted = false) {
 };
 
 async function decorateTaskDiv(div, task) {
+    const prioritySpan = await decorateTaskWithPriority(div, task);
+    const deadlineSpan = await decorateTaskWithDeadline(div, task);
+
     div.setAttribute('data-task', `${task.id}`);
     div.classList.add('single-task');
     div.innerHTML = createTaskHtml(task.name, task.id);
-    div.addEventListener('click', fetchTaskSummary);
     div.addEventListener('click', getDropMenu);
     div.addEventListener('click', toggleTaskHighlight);
+    div.addEventListener('click', fetchTaskSummary);
     div.addEventListener('click', toggleTaskSummary);
 
-    if (task.categoryId) {
-        const prioritySpan = await decorateTaskWithPriority(div, task);
-        div.appendChild(prioritySpan);
-    };
-    if (task.deadline) {
-        const deadlineSpan = await decorateTaskWithDeadline(div, task);
-        div.appendChild(deadlineSpan);
-    };
+    div.appendChild(prioritySpan);
+    div.appendChild(deadlineSpan);
 };
 
-export async function decorateTaskWithPriority(div, taskObj) {
-    const res = await fetch(`/api/tasks/${taskObj.id}`);
-    const { task } = await res.json();
-
+export async function decorateTaskWithPriority(div, task) {
     const span = document.createElement('span');
 
+    console.log(task)
     span.setAttribute('data-task', `${task.id}`);
     span.classList = `priority-tag priority-${task.Category.name}`;
     span.innerText = `${task.Category.name}`;

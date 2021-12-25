@@ -14,6 +14,16 @@
     /* justify-content: center; */
 }
 
+#search-form label {
+    /* position: relative; */
+    /* border: red 1px solid; */
+    /* padding-bottom: 10px; */
+    height: 46px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .fa-search {
     z-index: 50;
     align-self: center;
@@ -28,7 +38,7 @@
 }
 
 .search-recommendations {
-    top: 48px;
+    top: 40px;
     display: none;
     position: fixed;
     z-index: 10;
@@ -37,7 +47,7 @@
 
 .search-rec {
     padding: 5px;
-    min-width: 290px;
+    min-width: 294px;
     color: black;
     background: white;
     font-size: 13px;

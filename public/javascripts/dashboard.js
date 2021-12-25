@@ -5,6 +5,7 @@ import { createSidebarContainer, buildTaskSummary, createTaskHtml, populateTasks
 import { selectList, toggleListDisplay, showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown, toggleListSelect, selectNewList } from './display.js';
 import { updateTaskStatus } from './dashboard-recap.js';
 import { initializePage } from './initialize-page.js';
+import { taskId, moveTaskToNewList } from './dashboard-summary.js';
 
 window.addEventListener("load", async (event) => {
     initializePage();
@@ -54,6 +55,8 @@ export async function createTask(e) {
 };
 
 export async function createList(e) {
+    const stateId = { id: "99" };
+
     const listForm = document.querySelector('#add-list-form');
     const listData = document.querySelector('#addList');
     const formData = new FormData(listForm);
@@ -81,12 +84,17 @@ export async function createList(e) {
                 toggleListSelect(e, div);
 
 
-                selectNewList()
+                selectNewList();
 
-                // const select = document.querySelector(‘#summary-list-select’);
-                // select.innerHTML = ‘’;
+                if (moveTasktoNew) {
+                    await moveTaskToNewList(taskId, listId);
+                    await fetchListTasks(e);
+                    const taskRes = await fetch(`/api/lists/${listId}/tasks`);
+                    const { tasks } = await taskRes.json();
+                    populateTasks(tasks);
+                }
+                window.history.replaceState(stateId, `List ${listId}`, `/dashboard/#list/${listId}`);
 
-                // buildListSelectOptions(listId, list.name)
             }
         } catch (error) {
 
@@ -101,17 +109,9 @@ export async function fetchTaskSummary(e) {
     // highlightTask(e);
     const stateId = { id: "99" };
     const listName = window.location.href.split('/')[4];
-    const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
+    const taskId = document.querySelector('input[type="checkbox"]:checked');
+    const summaryRes = await fetch(`/api/tasks/${taskId.dataset.task}`);
     const { task } = await summaryRes.json();
-
-    const currentTask = task.name;
-    const currentTaskId = task.id;
-    const currentDeadline = task.deadline;
-    const currentListId = task.listId;
-    const currentList = task.List.name;
-    const currentDesc = task.description;
-    const currentPriorityId = task.categoryId;
-    const currentPriority = task.Category.name;
 
     buildTaskSummary(task);
     addTaskSummaryEventListeners();

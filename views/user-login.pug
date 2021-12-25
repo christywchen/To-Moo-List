@@ -29,6 +29,7 @@ block content
                             button(type='submit') Log In
                                 if !errors
                                     a(href='/dashboard')
-                    p.signup-cta
-                        a(href="/signup") Don't have an account? Sign Up
+                    p.login-signup-cta
+                        a(class='login-signup-link' href="/signup") Don't have an account? Sign Up
+    script(src="/javascripts/errors.js" type="module")
     include splash-footer.pug

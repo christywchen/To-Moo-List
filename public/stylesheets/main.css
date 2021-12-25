@@ -18,7 +18,11 @@
 }
 
 #add-task {
-    height: inherit;
+    /* height: inherit; */
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    /* margin-bottom: 80px; */
 }
 
 .add-task-button {
@@ -46,8 +50,13 @@
 
 #tasksContainer {
     position: relative;
-    height: 85%;
     overflow-y: scroll;
+    padding-bottom: 80px;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; 
 }
 
 #tasksContainer div {
@@ -212,6 +221,11 @@
 }
 
 .priority-Low {
+    background-color: rgb(36, 206, 169);
+}
+
+.priority-None {
+    display: none;
     background-color: rgb(36, 206, 169);
 }
 
