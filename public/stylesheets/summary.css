@@ -74,7 +74,8 @@ textarea.summary-inp {
     text-align: left;
 }
 
-#summary-list-select {
+#summary-list-select,
+#summary-priority-select {
     padding: 0 3px;
     width: 125px;
 }
