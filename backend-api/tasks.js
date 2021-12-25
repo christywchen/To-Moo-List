@@ -90,18 +90,19 @@ router.patch('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
 
     if (task) {
         const { name, description, listId, deadline, isCompleted, categoryId } = req.body;
-        task = await task.update({
+        await task.update({
             name,
             description,
             listId,
             deadline,
             isCompleted,
             categoryId,
-        })
+        });
 
         task = await db.Task.findByPk(taskId, {
             include: db.Category
         });
+
 
         res.status(200);
         res.json({ task }) //may need to change;

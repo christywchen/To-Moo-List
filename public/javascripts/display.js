@@ -155,7 +155,6 @@ export async function toggleListSelect(e, listDiv) {
     const prevSelected = document.querySelector('.selected-list');
     const taskOptions = document.querySelector('.task-options');
     const checkBox = document.querySelector('.checkbox-all > input');
-    
     checkBox.checked = false;
     taskOptions.style.visibility = 'hidden';
 
@@ -167,8 +166,7 @@ export async function toggleListSelect(e, listDiv) {
         list = list.children[0];
     }
     if (prevSelected) {
-        if (list.dataset.listid) {
-            // hide task summary if user switches to another task
+        if (list.dataset.listid || list.classList.contains('inbox-list')) {
             const taskSummaryDiv = document.querySelector('#task-details');
             taskSummaryDiv.classList.remove('task-details-display');
         }
@@ -265,12 +263,12 @@ export async function toggleTaskHighlight(e) {
     const url = window.location.href.split('/')[4];
 
     if (nextSelection.localName == 'label' ||
-        nextSelection.localName == 'span' || 
+        nextSelection.localName == 'span' ||
         e.target.type == 'checkbox') {
         nextSelection = nextSelection.parentNode;
     }
 
-    if (prevSelected == nextSelection || e.target.type == 'checkbox'){
+    if (prevSelected == nextSelection || e.target.type == 'checkbox') {
         console.log("remove")
         await removeHighlight(nextSelection);
         if (url !== '#completed') taskOptions.style.visibility = 'hidden';
@@ -318,10 +316,10 @@ function addHighlight(nextSelection) {
     return new Promise((res, rej) => {
         nextSelection.classList.add('single-task-selected');
         nextSelection.children[0].checked = true;
-        if(taskOptions){
-            if (url !== '#completed'){
+        if (taskOptions) {
+            if (url !== '#completed') {
                 taskOptions.style.visibility = 'visible';
-                taskOptions.style.animation = "fadeIn 1s"; 
+                taskOptions.style.animation = "fadeIn 1s";
             }
         }
         res();

@@ -158,7 +158,6 @@ export async function changePriority(e) {
     });
     const { task: updatedTask } = await updatedRes.json();
 
-    console.log('move', updatedTask.Category.name)
     updatePriorityTag(updatedTask);
 };
 
