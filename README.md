@@ -63,7 +63,7 @@ If the user would like to create a custom list to further organize their tasks, 
 
 Custom lists can be further edited. When hovering over an individual list name, an icon will show up to the right side of the list. When clicked, the user will be provided options to delete or rename the list. If the user chooses to delete the list, all tasks associated with that list will also be removed.
 
-[![list-add-pop-up.png](https://i.postimg.cc/MGKs5tM2/list-add-pop-up.png)](https://postimg.cc/VJpBLqWD)
+[![list-add-pop-up.png](https://i.postimg.cc/9fRVFZ2T/list-add-pop-up.png)](https://postimg.cc/R3B2g3NV)
 
 ### Creating Tasks and Editing Task Information
 
