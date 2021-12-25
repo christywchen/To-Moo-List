@@ -159,6 +159,7 @@ export async function changePriority(e) {
     const { task: updatedTask } = await updatedRes.json();
 
     updatePriorityTag(updatedTask);
+    await moveTaskFromList(updatedTask);
 };
 
 export async function changeDesc(e) {
@@ -256,7 +257,7 @@ export async function moveTaskFromList(task) {
     const location = window.location.href.split('/')[4];
     const oldListId = window.location.href.split('/')[5];
 
-    if (location === '#list') {
+    if (location === '#list' || location === '#priority') {
         const taskContainer = document.querySelector('#tasksContainer');
         const movedTask = document.querySelector(`[data-task="${task.id}"]`);
         taskContainer.removeChild(movedTask);
