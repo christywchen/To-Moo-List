@@ -47,7 +47,8 @@ export const initializePage = async () => {
         decorateList(div);
         taskList.appendChild(div);
     });
-    categories.forEach(category => {
+    categories.forEach((category, i) => {
+        if (i === 3) return
         const div = createSidebarContainer(category.name, 'category', category.id);
         decorateList(div);
         div.addEventListener('click', fetchCategoryTasks);
