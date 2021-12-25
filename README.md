@@ -114,35 +114,22 @@ Snippets or links to see code for these.
 With tasks being populted to the main dashboard in many different ways throughout the code, each task still needed to be populated with the same structure and functionality. This was approached via boilerplate functions to populate and decorate the task divs. 
 
 ```JavaScript
-function decorateList(list) {
-    list.addEventListener('click', (e) => {
-        const iconTarget = e.target.classList.contains('far');
-        const listOptionTarget = e.target.classList.contains('list-edit-option');
-        
-        if (!iconTarget && !listOptionTarget) {
-            fetchListTasks(e);
-            toggleListSelect(e);
-        }
-    });
+async function decorateTaskDiv(div, task) {
+    const prioritySpan = await decorateTaskWithPriority(div, task);
+    const deadlineSpan = await decorateTaskWithDeadline(div, task);
+
+    div.setAttribute('data-task', `${task.id}`);
+    div.classList.add('single-task');
+    div.innerHTML = createTaskHtml(task.name, task.id);
+    div.addEventListener('click', getDropMenu);
+    div.addEventListener('click', toggleTaskHighlight);
+    div.addEventListener('click', fetchTaskSummary);
+    div.addEventListener('click', toggleTaskSummary);
+
+    div.appendChild(prioritySpan);
+    div.appendChild(deadlineSpan);
 };
 
-function populateTasks(tasks, getCompleted = false) {
-    if (!Array.isArray(tasks)) tasks = [tasks];
-    const tasksContainer = document.getElementById("tasksContainer");
-    tasks.forEach(task => {
-        const div = document.createElement("div");
-        decorateTaskDiv(div, task);
-        if (getCompleted) {
-            if (task.isCompleted) {
-                tasksContainer.appendChild(div);
-            }
-        } else {
-            if (!task.isCompleted) {
-                tasksContainer.appendChild(div);
-            }
-        }
-    });
-};
 ```
 
 Selecting/deselecting list via vanilla javascript was handled in various ways. Deselecting by clicking away from an item was handled via a global click event listener on the document object. This worked well, however provided a separation of concerns issue while debugging at times. Toggling a selection was often handled using async functions and promises to await the appropriate selecting and deselecting sqeuence. 
