@@ -97,9 +97,9 @@ async function decorateTaskDiv(div, task) {
     div.setAttribute('data-task', `${task.id}`);
     div.classList.add('single-task');
     div.innerHTML = createTaskHtml(task.name, task.id);
-    div.addEventListener('click', fetchTaskSummary);
     div.addEventListener('click', getDropMenu);
     div.addEventListener('click', toggleTaskHighlight);
+    div.addEventListener('click', fetchTaskSummary);
     div.addEventListener('click', toggleTaskSummary);
 
     div.appendChild(prioritySpan);
@@ -109,6 +109,7 @@ async function decorateTaskDiv(div, task) {
 export async function decorateTaskWithPriority(div, task) {
     const span = document.createElement('span');
 
+    console.log(task)
     span.setAttribute('data-task', `${task.id}`);
     span.classList = `priority-tag priority-${task.Category.name}`;
     span.innerText = `${task.Category.name}`;

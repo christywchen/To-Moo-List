@@ -222,7 +222,6 @@ export function deselectList() {
     })
 }
 
-
 export function showContainer(container, showFn) {
     return new Promise((res, rej) => {
         const newContainer = showFn()
@@ -271,28 +270,12 @@ export async function toggleTaskHighlight(e) {
     }
 
     if (prevSelected == nextSelection || e.target.type == 'checkbox') {
-        console.log("remove")
         await removeHighlight(nextSelection);
         if (url !== '#completed') taskOptions.style.visibility = 'hidden';
     } else {
         if (nextSelection.classList.contains('single-task-selected')) await removeHighlight(nextSelection);
         else await addHighlight(nextSelection);
     }
-
-    // if (prevSelected && e.target.type != 'checkbox') {
-    //     if (prevSelected != nextSelection) {
-    //         await removeHighlight(prevSelected, nextSelection);
-    //         if (url !== '#completed') taskOptions.style.visibility = 'visible';
-    //     } else {
-    //         if (url !== '#completed') taskOptions.style.visibility = 'hidden';
-    //     }
-    // } else {
-    //     await addHighlight(nextSelection);
-    //     if (e.target.type != 'checkbox') {
-    //         nextSelection.children[0].checked = nextSelection.children[0].checked ? false : true;
-    //     }
-    // }
-
 }
 
 function removeHighlight(selectedDiv) {
@@ -303,14 +286,6 @@ function removeHighlight(selectedDiv) {
     });
 }
 
-// function removeHighlight(prevSelected, nextSelection) {
-//     return new Promise((res, rej) => {
-//         nextSelection.classList.add('single-task-selected');
-//         prevSelected.classList.remove('single-task-selected');
-//         nextSelection.children[0].checked = nextSelection.children[0].checked ? false : true;
-//         res();
-//     });
-// }
 
 function addHighlight(nextSelection) {
     const taskOptions = document.querySelector('.task-options');
@@ -331,16 +306,14 @@ function addHighlight(nextSelection) {
 // toggle task summary panel
 export async function toggleTaskSummary(e) {
     const prevSelected = document.querySelector('.single-task-selected');
-    const nextSelection = e.target;
     const taskSummaryDiv = document.querySelector('#task-details');
 
-    if (prevSelected) await showTaskSummary(taskSummaryDiv, prevSelected, nextSelection);
+    if (prevSelected) await showTaskSummary(taskSummaryDiv);
     else await hideTaskSummary(taskSummaryDiv, prevSelected)
 };
 
-function showTaskSummary(taskSummaryDiv, prevSelected, nextSelection) {
+function showTaskSummary(taskSummaryDiv) {
     return new Promise((res, rej) => {
-        const taskSummaryDiv = document.querySelector('#task-details');
         const checked = document.querySelectorAll('input[type="checkbox"]:checked');
 
         if (checked.length > 1) {

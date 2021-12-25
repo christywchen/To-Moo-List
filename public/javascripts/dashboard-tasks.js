@@ -363,7 +363,6 @@ const createCalendar = async (e) => {
                     return;
                 } else {
                     const newDateVal = new Date(hiddenCal.value).toISOString().replace('T', ' ').replace('Z', '');
-                    // console.log(newDateVal)
                     const res = await fetch(`/api/tasks/${e.dataset.task}`, {
                         method: "PATCH",
                         headers: {

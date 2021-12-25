@@ -51,12 +51,17 @@ router.post('/lists/:id(\\d+)', validateTask, asyncHandler(async (req, res) => {
     listId = parseInt(listId, 10)
     const userId = res.locals.user.id;
 
-    const task = await db.Task.create({
+    let task = await db.Task.create({
         name,
         userId,
         listId,
-        categoryId: 1
+        categoryId: 4
     })
+
+    task = await db.Task.findByPk(task.id, {
+        include: db.Category
+    });
+
     res.status(201);
     res.json({ task });
 }));
