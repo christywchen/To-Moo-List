@@ -110,7 +110,6 @@ export async function changeList(e) {
 };
 
 export async function moveTaskToNewList(taskId, newListId) {
-    console.log('inside', taskId, newListId)
     const body = { listId: newListId };
 
     const res = await fetch(`/api/tasks/${taskId}`, {
@@ -120,7 +119,6 @@ export async function moveTaskToNewList(taskId, newListId) {
         },
         body: JSON.stringify(body)
     });
-    const { task: updatedTask } = await res.json();
 
     moveTasktoNew = false;
 }
@@ -160,7 +158,8 @@ export async function changePriority(e) {
     });
     const { task: updatedTask } = await updatedRes.json();
 
-    updatePriorityTag(updatedTask, null);
+    console.log('move', updatedTask.Category.name)
+    updatePriorityTag(updatedTask);
 };
 
 export async function changeDesc(e) {
@@ -226,15 +225,14 @@ function markSaved(parentDiv) {
     }, 1000);
 }
 
-export async function updatePriorityTag(task, origPriorityId) {
-    if (task.categoryId !== origPriorityId || origPriorityId === null) {
-        markSaved('#priority-div');
-        const taskDiv = document.querySelector(`div[data-task="${task.id}"]`);
-        const oldSpan = taskDiv.children[2];
-        const newSpan = await decorateTaskWithPriority(taskDiv, task)
-        if (oldSpan) oldSpan.replaceWith(newSpan);
-        else taskDiv.appendChild(newSpan)
-    }
+export async function updatePriorityTag(task) {
+    markSaved('#priority-div');
+    const taskDiv = document.querySelector(`div[data-task="${task.id}"]`);
+    const oldSpan = taskDiv.children[2];
+    const newSpan = await decorateTaskWithPriority(taskDiv, task)
+    if (oldSpan) oldSpan.replaceWith(newSpan);
+    else taskDiv.appendChild(newSpan)
+
 }
 
 export async function updateDeadlineTag(task) {

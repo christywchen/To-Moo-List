@@ -86,14 +86,11 @@ router.put('/tasks/:id(\\d+)', validateTask, asyncHandler(async (req, res, next)
 // patch
 router.patch('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     const taskId = parseInt(req.params.id, 10);
-    const task = await db.Task.findByPk(taskId, {
-        include: db.Category
-    });
+    let task = await db.Task.findByPk(taskId);
 
     if (task) {
-        //may need to change;
         const { name, description, listId, deadline, isCompleted, categoryId } = req.body;
-        await task.update({
+        task = await task.update({
             name,
             description,
             listId,
@@ -101,6 +98,11 @@ router.patch('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
             isCompleted,
             categoryId,
         })
+
+        task = await db.Task.findByPk(taskId, {
+            include: db.Category
+        });
+
         res.status(200);
         res.json({ task }) //may need to change;
     } else {
