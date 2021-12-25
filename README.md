@@ -2,7 +2,7 @@
 
 Live Demo: [To-Moo-List](http://to-moo-list.herokuapp.com/)
 
-[![home-page.png](https://i.postimg.cc/Y9vdK9zd/home-page.png)](https://postimg.cc/BLGT2JyF)
+[![home-page.png](https://i.postimg.cc/SKB4XRQP/home-page.png)](https://postimg.cc/060FF8wG)
 
 # General Info
 
@@ -42,12 +42,12 @@ The frontend was built with [pug](https://pugjs.org/api/getting-started.html) te
 ### User Authorization
 User authentication is handled in JavaScript whilst using BCrypt for password hashing. For security, user passwords are hashed before getting saved to the database. When the user logs in, the password they provide are rehashed to see if the match the one with the data base to verify the users credentials. 
 
-[![login-page.png](https://i.postimg.cc/YSndsgY4/login-page.png)](https://postimg.cc/wtN5t1WH)
+[![login-page.png](https://i.postimg.cc/6p1tXzkt/login-page.png)](https://postimg.cc/FYc2bbFB)
 
 ### Dashboard Page
 This page is where the magic happens. After the user's credentials have been confirmed, the users can access the dashboard page and start creating their own tasks as their reminder application. Users will be able to navigate around the dashboard without page refreshes or reloads. The left side of the page shows a sidebar for list navigation, the center of the page shows a lists of pending tasks, and the right side of the page shows information about task completion progress. When users click on an individual task, a panel will slide out to the right side of the page and show details about the given task.
 
-[![dashboard-page.png](https://i.postimg.cc/4xG27XX3/dashboard-page.png)](https://postimg.cc/Xp2ktSGM)
+[![dashboard-page.png](https://i.postimg.cc/htGc6N32/dashboard-page.png)](https://postimg.cc/56DhFKJz)
 
 ### Adding Tasks
 Users can add task first clicking on the **input bar** at the top middle of the page and type the task they want to add. Once the user types something into the input bar, the **moo** button should appear to finally add the task, but if the user doesn't type anything into the input bar, the **moo** button will be disabled, thus unable to enter a blank task. If the user doesn't want to click it, they can also add the task by pressing the **Enter key** on their keyboard to add the task as well.
