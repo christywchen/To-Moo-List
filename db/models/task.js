@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'listId',
       onDelete: 'CASCADE'
     });
-    Task.belongsTo(models.Category, { foreignKey: 'categoryId' });
+    Task.belongsTo(models.Priority, { foreignKey: 'priorityId' });
   };
   return Task;
 };

@@ -23,8 +23,8 @@ module.exports = {
         defaultValue: false,
         type: Sequelize.BOOLEAN
       },
-      categoryId: {
-        references: { model: 'Categories' },
+      priorityId: {
+        references: { model: 'Priorities' },
         type: Sequelize.INTEGER
       },
       listId: {
