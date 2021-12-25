@@ -7,6 +7,7 @@ export function fadeBackground(e) {
         div.classList.add('page-cover');
         removeSelfOnClick(div);
         showPageListeners();
+        div.addEventListener('click', hideListNameDiv)
         body.prepend(div);
     }
 };
@@ -94,6 +95,7 @@ export function hideListNameDiv(e) {
             e.target.className === 'submit-list' ||
             e.target.className === 'cancel-submit-list' ||
             e.target.classList.contains('close') ||
+            e.target.classList.contains('page-cover') ||
             e.target.className === 'rename-list') {
             addListDiv.style.display = 'none';
             renameListDiv.style.display = 'none';
