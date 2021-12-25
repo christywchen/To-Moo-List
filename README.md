@@ -50,7 +50,7 @@ This page is where the magic happens. After the user's credentials have been con
 [![dashboard-page.png](https://i.postimg.cc/4xG27XX3/dashboard-page.png)](https://postimg.cc/Xp2ktSGM)
 
 ### Adding Tasks
-Users can add task first clicking on the **input bar** at the top middle of the page and type the task they want to add. Once the user types something into the  input bar, the **moo** button should appear to finally add the task. If the user doesn't want to click it, they can also add the task by pressing the **Enter key** on their keyboard to add the task as well.
+Users can add task first clicking on the **input bar** at the top middle of the page and type the task they want to add. Once the user types something into the input bar, the **moo** button should appear to finally add the task, but if the user doesn't type anything into the input bar, the **moo** button will be disabled, thus unable to enter a blank task. If the user doesn't want to click it, they can also add the task by pressing the **Enter key** on their keyboard to add the task as well.
 
 [![input-task-bar.png](https://i.postimg.cc/NjxJRZ0k/input-task-bar.png)](https://postimg.cc/FY7V4W3Y)
 
@@ -113,8 +113,6 @@ Snippets or links to see code for these.
 
 With tasks being populted to the main dashboard in many different ways throughout the code, each task still needed to be populated with the same structure and functionality. This was approached via boilerplate functions to populate and decorate the task divs. 
 
-< insert code images >.
-
 ```JavaScript
 function decorateList(list) {
     list.addEventListener('click', (e) => {
@@ -147,7 +145,7 @@ function populateTasks(tasks, getCompleted = false) {
 };
 ```
 
-Selecting/deselecting list and task via vanilla javascript was handled in various ways. Deselecting by clicking away from an item was handled via a global click event listener on the document object. This worked well, however provided a separation of concerns issue while debugging at times. Toggling a selection was often handled using async functions and promises to await the appropriate selecting and deselecting sqeuence. 
+Selecting/deselecting list via vanilla javascript was handled in various ways. Deselecting by clicking away from an item was handled via a global click event listener on the document object. This worked well, however provided a separation of concerns issue while debugging at times. Toggling a selection was often handled using async functions and promises to await the appropriate selecting and deselecting sqeuence. 
 
 ```JavaScript
 function selectList(list) {
@@ -171,6 +169,140 @@ function deselectList() {
 Due to specific database associations between items, each item's particular data needed to be tracked as different parts of the application interacted with that element. To solve this we used the data attribute to store particular identifiers on individual items when possible. Since multiple functions depended on knowing what list was currently selected, we organized our CRUD functions to utilize closure so that this data could be shared and updated when actions were performed. 
 
 < insert maybe a function that defines a data attribute >. 
+```javascript
+// C
+export async function createTask(e) {
+    e.preventDefault();
+    const taskData = document.querySelector('#add-task-input');
+    const taskContainer = document.getElementById("tasksContainer");
+    const formData = new FormData(taskData);
+    const name = formData.get('name');
+    const body = { name, listId };
+    const div = document.createElement('div');
+    const input = document.getElementById('name');
+    div.classList.add('single-task')
+    if (input.value.length) {
+        try {
+            const res = await fetch(`/api/lists/${listId}`, {
+                method: 'POST',
+                body: JSON.stringify(body),
+                headers: { "Content-Type": "application/json" }
+            })
+
+            if (!res.ok) {
+                console.error('-Unable to reach database-');
+                if (!listId) alert('Please select a list for your new task')
+                else alert('Opps there was a problem with the server') // TODO
+                throw res // May need to change this
+            }
+            else {
+                const { task } = await res.json();
+
+                populateTasks(task);
+
+                const addTaskButton = document.querySelector('.add-task-button > button');
+                addTaskButton.disabled = true;
+                input.value = "";
+            }
+        } catch (err) {
+            // TODO finish error handling
+        }
+    }
+};
+
+export async function createList(e) {
+    const listForm = document.querySelector('#add-list-form');
+    const listData = document.querySelector('#addList');
+    const formData = new FormData(listForm);
+    const name = formData.get('addList');
+    const body = { name };
+    const tasksList = document.getElementById('task-lists');
+    if (listData.value.length) {
+        try {
+            const res = await fetch('/api/lists', {
+                method: "POST",
+                body: JSON.stringify(body),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+            if (!res.ok) throw res
+            else {
+                const newList = await res.json()
+                // const listId = newList.list.id;
+                listId = newList.list.id;
+                const div = createSidebarContainer(newList.list.name, 'list', listId);
+                decorateList(div);
+                clearDOMTasks();
+                tasksList.appendChild(div);
+                toggleListSelect(e, div);
 
 
+                selectNewList();
 
+                if (moveTask) {
+                    await moveTaskToNewList(taskId, listId);
+                    await fetchListTasks(e);
+                    const taskRes = await fetch(`/api/lists/${listId}/tasks`);
+                    const { tasks } = await taskRes.json();
+                    populateTasks(tasks);
+                }
+                window.history.replaceState(stateId, `List ${e.target.dataset.listid}`, `/dashboard/#list/${e.target.dataset.listid}`);
+
+            }
+        } catch (error) {
+
+        }
+    }
+};
+```
+
+As for selecting/deselecting, we used many functions to help achieve this feature. To select the task, we had a event listener to check to see if a div containing the task is clicked, but if others parts of the div were clicked, (i.e. the label, span etc) we converted back to the parent div in-order to put a highlight feature along with brining the summary of the task. Using the same function we were able to detect whether the same div was being clicked and if it was we would remove the highlight feature as a whole.
+
+```javascript
+async function toggleTaskHighlight(e) {
+    const prevSelected = document.querySelector('.single-task-selected');
+    const taskOptions = document.querySelector('.task-options');
+    let nextSelection = e.target;
+    const url = window.location.href.split('/')[4];
+
+    if (nextSelection.localName == 'label' ||
+        nextSelection.localName == 'span' || 
+        e.target.type == 'checkbox') {
+        nextSelection = nextSelection.parentNode;
+    }
+
+    if (prevSelected == nextSelection || e.target.type == 'checkbox'){
+        await removeHighlight(nextSelection);
+        if (url !== '#completed') taskOptions.style.visibility = 'hidden';
+    } else {
+        if (nextSelection.classList.contains('single-task-selected')) await removeHighlight(nextSelection);
+        else await addHighlight(nextSelection);
+    }
+}
+
+function removeHighlight(selectedDiv) {
+    return new Promise((res, rej) => {
+        selectedDiv.classList.remove('single-task-selected');
+        if (selectedDiv.children[0].checked) selectedDiv.children[0].checked = false;
+        res();
+    });
+}
+
+
+function addHighlight(nextSelection) {
+    const taskOptions = document.querySelector('.task-options');
+    const url = window.location.href.split('/')[4];
+    return new Promise((res, rej) => {
+        nextSelection.classList.add('single-task-selected');
+        nextSelection.children[0].checked = true;
+        if(taskOptions){
+            if (url !== '#completed'){
+                taskOptions.style.visibility = 'visible';
+                taskOptions.style.animation = "fadeIn 1s"; 
+            }
+        }
+        res();
+    });
+}
+```
