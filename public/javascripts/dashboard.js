@@ -107,17 +107,9 @@ export async function fetchTaskSummary(e) {
     // highlightTask(e);
     const stateId = { id: "99" };
     const listName = window.location.href.split('/')[4];
-    const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
+    const taskId = document.querySelector('input[type="checkbox"]:checked');
+    const summaryRes = await fetch(`/api/tasks/${taskId.dataset.task}`);
     const { task } = await summaryRes.json();
-
-    const currentTask = task.name;
-    const currentTaskId = task.id;
-    const currentDeadline = task.deadline;
-    const currentListId = task.listId;
-    const currentList = task.List.name;
-    const currentDesc = task.description;
-    const currentPriorityId = task.categoryId;
-    const currentPriority = task.Category.name;
 
     buildTaskSummary(task);
     addTaskSummaryEventListeners();

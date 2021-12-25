@@ -95,7 +95,6 @@ export async function changeList(e) {
 };
 
 export async function moveTaskToNewList(taskId, newListId) {
-    console.log('inside', taskId, newListId)
     const body = { listId: newListId };
 
     const res = await fetch(`/api/tasks/${taskId}`, {
@@ -107,7 +106,6 @@ export async function moveTaskToNewList(taskId, newListId) {
     });
     const { task: updatedTask } = await res.json();
 
-    console.log(updatedTask)
     moveTask = false;
 
 }
