@@ -97,7 +97,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: 'Replace Dwight\'s stapler',
+        name: 'Replace Ben\'s stapler',
         description: '',
         deadline: today,
         isCompleted: false,
