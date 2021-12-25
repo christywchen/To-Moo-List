@@ -13,18 +13,17 @@
     color: white;
 }
 
+#loginBtCon > button:hover,
+#signupBtCon > button:hover {
+    background-color: var(--main-color);
+}
+
 #login_main,
 #signup_main {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: flex-start;
-}
-
-#login_img_container,
-#img_containe {
-    align-self: center;
-    padding-left: 5px;
 }
 
 #login_container,
@@ -97,4 +96,20 @@
     justify-content: space-between;
     align-items: center;
     width: 500px;
+}
+
+p.login-signup-cta {
+    text-align: center;
+}
+
+.login-signup-link {
+    color: rgb(71, 71, 71);
+    font-style: italic;
+    font-size: 0.9em;
+    line-height: 3em;
+    text-decoration: none;
+}
+
+.login-signup-link:hover {
+    color: var(--main-color);
 }
