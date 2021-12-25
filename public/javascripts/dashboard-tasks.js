@@ -100,7 +100,19 @@ export const postPoneTask = async (e) => {
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
                 uncheckCheckBox();
             }
+
+
+
+            // need to replace getDate(value) with isostring value converted with no timestamp
+            const taskSummary = document.querySelector('#task-details');
+
+            if (taskSummary.classList.contains('task-details-display')) {
+                console.log('test')
+                const taskSummaryDate = document.querySelectorAll('#summary-due-date-inp')[1];
+                taskSummaryDate.setAttribute('value', getDate(timeStamp));
+            }
         }
+
     })
 }
 
@@ -355,6 +367,7 @@ const createCalendar = async (e) => {
     const calDiv = document.querySelector('.hidden-cal');
     calDiv.setAttribute('id', 'deadline-div');
     const today = getDate();
+
     calDiv.innerHTML = `
             <input type="date" min="${today}" value="${today}" id="summary-due-date-inp" class="summary-inp"></input>
             `;
@@ -379,6 +392,18 @@ const createCalendar = async (e) => {
                 }
             }
         })
+
+
+
+
+        // need to replace getDate(hiddenCal.value) with isostring value converted with no timestamp
+        const taskSummary = document.querySelector('#task-details');
+
+        if (taskSummary.classList.contains('task-details-display')) {
+            console.log('test')
+            const taskSummaryDate = document.querySelectorAll('#summary-due-date-inp')[1];
+            taskSummaryDate.setAttribute('value', getDate(hiddenCal.value));
+        }
     });
 }
 

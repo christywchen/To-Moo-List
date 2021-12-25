@@ -4,9 +4,11 @@ import { listId } from './dashboard.js';
 
 export let taskId;
 export let moveTask;
-// CRUD
-// C
+
 export function addTaskSummaryEventListeners() {
+    /*
+    This function adds event listeners to html elements created by the buildTaskSummary function.
+    */
     const summaryTitleInp = document.querySelector('#summary-title');
     const summaryDeadlineInp = document.querySelectorAll('#summary-due-date-inp')[1];
     const summaryListSelectInp = document.querySelector('#summary-list-select');
@@ -24,6 +26,11 @@ export function addTaskSummaryEventListeners() {
 
 // E
 export async function changeTaskName(e) {
+    /*
+    This function updates the task name of each element by saving any changes made to the task name
+    in the task summary panel when the div loses focus.
+    It will make a fetch to the database in order to save
+    */
     taskId = window.location.href.split('/')[7];
     const newTaskName = e.target.innerText;
     const body = { name: newTaskName }
@@ -47,6 +54,10 @@ export async function changeTaskName(e) {
 };
 
 export async function changeTaskDeadline(e) {
+    /*
+    This function will save any deadline changes made in the task summary.
+    It will make a fetch request to the database
+    */
     taskId = window.location.href.split('/')[7];
     let newDeadline = e.target.value;
     let body;
