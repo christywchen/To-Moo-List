@@ -3,10 +3,25 @@
 }
 
 .search-button {
-    display: inline-block;
+    display: none;
+    /* visibility: hidden; */
     margin: 10px;
 }
 
+#search-form {
+    display: flex;
+    position: relative;
+    /* justify-content: center; */
+}
+
+.fa-search {
+    z-index: 50;
+    align-self: center;
+    justify-self: center;
+    left: 470px;
+    color: rgb(221, 220, 220);
+    position: fixed;
+}
 
 .search-container {
     position: relative;
@@ -15,7 +30,7 @@
 .search-recommendations {
     top: 48px;
     display: none;
-    position: absolute;
+    position: fixed;
     z-index: 10;
     box-shadow: 0 1px 4px 1px rgb(0 0 0 / 20%);
 }
@@ -27,4 +42,18 @@
     background: white;
     font-size: 13px;
     border-radius: 3px;
+}
+
+.search {
+    background-color: rgb(51, 121, 193);
+    border: rgb(51, 121, 193) solid 1px;
+}
+
+.search-selected {
+    background-color: white;
+    /* max-width: 294px; */
+}
+
+.search-selected.fa-search:hover {
+    color:rgb(51, 121, 193)
 }

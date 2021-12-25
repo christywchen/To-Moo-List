@@ -17,6 +17,14 @@
     width: 100%;
 }
 
+#add-task {
+    /* height: inherit; */
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    /* margin-bottom: 80px; */
+}
+
 .add-task-button {
     align-self: flex-end;
     margin-top: -40px;
@@ -36,14 +44,19 @@
     transition: all 0.4s;
 }
 
-#tasks-container {
-    position: relative;
-    height: 700px; /* needs revision so that it will fill the height of the parent container */
-    overflow: hidden;
+#add-task-input label {
+    z-index: 1;
 }
 
-#tasksContainer:hover {
+#tasksContainer {
+    position: relative;
     overflow-y: scroll;
+    padding-bottom: 80px;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; 
 }
 
 #tasksContainer div {
@@ -108,21 +121,30 @@
     flex-wrap: wrap;
 }
 
-#add-list-form label {
-    top: 30px;
+#add-list-form label,
+#rename-list-form label {
+    padding-top: 12px;
 }
 
-#add-list-form input {
+#add-list-form input,
+#rename-list-form input {
     align-self: center;
     justify-self: center;
-    top: 70px;
+    margin-top: 0;
+    /* top: 70px; */
     right: 60px;
     width: 315px;
+}
+
+#addList {
+    height: 28px;
 }
 
 .add-list-buttons {
     display: flex;
     flex-direction: row;
+    padding-top: 10px;
+    margin-left: -2px;
 }
 
 .add-list-buttons > button {
@@ -138,15 +160,25 @@
     border: 1px solid #d1d1d1;
 }
 
+.add-task-box p {
+    /* border: red 1px solid; */
+    font-size: 16px;
+}
+
 .close {
-    background-image: url("../images/close-x.png");
-    background-repeat: no-repeat;
+    /* background-image: url("../images/close-x.png");
+    background-repeat: no-repeat; */
     position: absolute;
-    right: 10px;
-    top: 10px;
-    height: 20px;
-    width: 20px;
+    right: 15px;
+    top: 15px;
+    /* height: 20px;
+    width: 20px; */
+    color: rgb(211, 211, 211);
     background-color: white;
+}
+
+.close:hover {
+    color: rgb(168, 168, 168);
 }
 
 /* date and category tags for task items */
@@ -190,4 +222,12 @@
 
 .priority-Low {
     background-color: rgb(36, 206, 169);
+}
+
+.logout:hover {
+    background-color: #032c61;
+}
+
+.logout:active {
+    background-color: #03162f;
 }

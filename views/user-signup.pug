@@ -2,35 +2,39 @@ extends layout.pug
 
 include utils.pug
 
+append head
+  //- add page specific styles by appending to the head
+  link(rel="stylesheet" href="/stylesheets/team.css")
+
 block content
-    div#signup_main
-        div.errMsg(hidden)
-                    +errorSummary(errors)
-    div#signuppage_container
-        a.home-link(href='/')
-            img(src="images/logo-o-dark.png" class="signup_logo")
-        div#signup_container
-            div#img_container
-                img(src='images/office-o.png')
-            div#form_container
-                form(action='/signup' method='post' class="signup_form")
-                    input(type='hidden' name='_csrf' value=csrfToken)
-                    div#username_box
-                        +field('Username', 'username', username)
-                    div#firstname_box
-                        +field('First Name', 'firstName', firstName)
-                    div#lastname_box
-                        +field('Last Name', 'lastName', lastName)
-                    div#email_box
-                        +field('Email Address', 'email', email, 'email')
-                    div#password_box
-                        +field('Password', 'password', password, 'password')
-                    div#confirm_box
-                        +field('Confirm Password', 'confirmPassword', confirmPassword, 'password')
-                    div#signupBtCon
-                        button(type='submit') Sign Up
-                            if !errors
-                                a(href='/dashboard')
-                        button(type='submit')
-                            a(href="/login") Already Has an Account? Log in
-            script(src="/javascripts/errors.js" type="module")
+    include splash-navbar.pug
+    main
+        div#signup_main
+            div.errMsg(hidden)
+                        +errorSummary(errors)
+        div#signuppage_container
+            div#signup_container
+                div#img_container
+                    img(src='images/office-o.png')
+                div#form_container
+                    form(action='/signup' method='post' class="signup_form")
+                        input(type='hidden' name='_csrf' value=csrfToken)
+                        div#username_box
+                            +field('Username', 'username', username)
+                        div#firstname_box
+                            +field('First Name', 'firstName', firstName)
+                        div#lastname_box
+                            +field('Last Name', 'lastName', lastName)
+                        div#email_box
+                            +field('Email Address', 'email', email, 'email')
+                        div#password_box
+                            +field('Password', 'password', password, 'password')
+                        div#confirm_box
+                            +field('Confirm Password', 'confirmPassword', confirmPassword, 'password')
+                        div#signupBtCon
+                            button(type='submit') Sign Up
+                                if !errors
+                                    a(href='/dashboard')
+                    p.login-cta
+                        a(href="/login") Already have an account? Log in
+    include splash-footer.pug

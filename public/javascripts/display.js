@@ -27,17 +27,16 @@ export function showPageListeners() {
 
 function removeSelfOnClick(container) {
     const className = container.className;
-    console.log(className);
     container.addEventListener('click', (e) => {
         hideContainer(className)
     })
 }
 
-
 // Create / Rename List forms
 export async function showCreateList(e) {
     const addListDiv = document.querySelector('#add-list');
     // e.preventDefault();
+    // const targetNotIcon = !e.target.classList.contains('far');
     addListDiv.style.display = 'block';
     addListDiv.style.position = 'fixed';
     fadeBackground();
@@ -53,9 +52,11 @@ export async function showRenameList(e) {
 
 // hide list options
 export function hideListOptions(e) {
-    const box = document.querySelector('.list-edit-dropdown')
-    if (box) {
-        box.remove();
+    if (!e.target.classList.contains('far')) {
+        const box = document.querySelector('.list-edit-dropdown')
+        if (box) {
+            box.remove();
+        }
     }
 }
 
@@ -88,15 +89,21 @@ export function hideListNameDiv(e) {
     if (e.target.className !== 'logout') {
         if (((!addListDiv.contains(e.target) &&
             !renameListDiv.contains(e.target)) &&
+            !e.target.id === 'summary-list-select' &&
+            !e.target.classList.contains('list-edit-option') &&
             !e.target.classList.contains('far')) ||
             e.target.className === 'submit-list' ||
             e.target.className === 'cancel-submit-list' ||
-            e.target.className === 'close' ||
+            e.target.classList.contains('close') ||
             e.target.className === 'rename-list') {
             addListDiv.style.display = 'none';
             renameListDiv.style.display = 'none';
-            const form = document.getElementById('addList');
-            form.value = '';
+            const nameForm = document.getElementById('addList');
+            const renameForm = document.getElementById('renameList');
+
+            nameForm.value = '';
+            renameForm.value = '';
+            hideContainer('page-cover');
         }
     }
 
@@ -107,7 +114,8 @@ export function hideDropDown(e) {
     const listMenu = document.querySelector(".list-of-lists");
     const postponeMenu = document.querySelector(".postpone-dates");
     const categoryList = document.querySelector('.list-of-tags');
-    const listContainers = document.querySelectorAll('.list-container');
+    const calDiv = document.querySelector('.hidden-cal')
+    //const listContainers = document.querySelectorAll('.list-container');
     const searchRecs = document.querySelector('.search-recommendations');
 
     if (e.target.className !== 'logout') {
@@ -115,32 +123,62 @@ export function hideDropDown(e) {
             !e.target.className.includes('grid-square') &&
             !e.target.className.includes('list-header') &&
             !e.target.className.includes('add-tag-input') &&
-            !e.target.className.includes('fas')) {
+            !e.target.className.includes('fas') &&
+            !e.target.className.includes('search')) {
             //e.preventDefault()
             listMenu.style.display = 'none';
             postponeMenu.style.display = 'none';
             categoryList.style.display = 'none';
             searchRecs.style.display = 'none';
+            calDiv.style.display = 'none';
+
+            deselectSearchField()
         }
     }
 };
 
+export function selectSearchField(e) {
+    const searchField = document.querySelector('.search')
+    const searchIcon = document.querySelector('.fa-search');
+    searchField.classList.add('search-selected');
+    searchField.placeholder = 'Search task';
+    searchIcon.classList.add('search-selected');
+}
+
+export function deselectSearchField(e) {
+    const searchField = document.querySelector('.search');
+    const searchIcon = document.querySelector('.fa-search');
+    searchIcon.classList.remove('search-selected');
+    searchField.classList.remove('search-selected');
+    searchField.placeholder = '';
+}
+
 // Toggles
-export async function toggleListSelect(e) {
+export async function toggleListSelect(e, listDiv) {
     const prevSelected = document.querySelector('.selected-list');
     let list = e.target
+    if (listDiv) list = listDiv;
     // Lists and Categories have an extra div container.
+
     if (list.classList.contains('sidebar-box')) {
         list = list.children[0];
     }
-    if (prevSelected) await deselectList()
+    if (prevSelected) {
+        if (list.dataset.listid) {
+            // hide task summary if user switches to another task
+            const taskSummaryDiv = document.querySelector('#task-details');
+            taskSummaryDiv.classList.remove('task-details-display');
+        }
+        await deselectList()
+    }
     await selectList(list)
 
 };
 
-export function toggleListDisplay(container) {
+export function toggleListDisplay(container, e) {
     const icon = container.parentNode.querySelector('.fas');
     const isSelected = container.style.display === 'block';
+    if (e && e.target.classList.contains('fa-plus-square')) return
 
     if (isSelected) {
         container.style.display = 'none';
@@ -148,13 +186,23 @@ export function toggleListDisplay(container) {
         icon.classList.add('fa-caret-right');
     } else {
         container.style.display = 'block';
-        icon.classList.remove('fa-caret-right');
+        // icon.classList.remove('fa-caret-right');
         icon.classList.add('fa-caret-down');
     }
 };
 
+export function selectNewList() {
+    const listHeader = document.querySelector('.lists-header');
+    const icon = listHeader.children[0];
+    const listContainer = document.getElementById('task-lists');
+
+    if (!icon.classList.contains('fa-caret-down')) {
+        toggleListDisplay(listContainer)
+    }
+};
+
 // Promises
-function selectList(list) {
+export function selectList(list) {
     return new Promise((res, rej) => {
         list.classList.add('selected-list')
         res();
@@ -173,7 +221,7 @@ export function deselectList() {
 
 
 export function showContainer(container, showFn) {
-    return new Promise(function (res, rej) {
+    return new Promise((res, rej) => {
         const newContainer = showFn()
         container.appendChild(newContainer)
         res()
@@ -182,12 +230,11 @@ export function showContainer(container, showFn) {
 
 // hide DOM container
 export function hideContainer(className) {
-    return new Promise(function (res, rej) {
+    return new Promise((res, rej) => {
         hideDuplicateBox(className);
         res()
     })
 };
-
 
 // remove container from DOM
 export async function hideDuplicateBox(className) {
@@ -200,10 +247,93 @@ export async function hideDuplicateBox(className) {
 export function hideDivContainer() {
 
     const visibleDiv = document.querySelector('.visible');
-    //console.log(visibleDiv);
     if (visibleDiv) {
         visibleDiv.style.display = 'none';
         visibleDiv.classList.remove('visible');
     };
 
+};
+
+// toggle highlight on task creation
+export async function toggleTaskHighlight(e) {
+    const prevSelected = document.querySelector('.single-task-selected');
+    const taskOptions = document.querySelector('.task-options');
+    let nextSelection = e.target;
+
+    if (nextSelection.localName == 'label' ||
+        nextSelection.localName == 'span') {
+        nextSelection = nextSelection.parentNode;
+    }
+
+    if (prevSelected && e.target.type != 'checkbox') {
+        await removeHighlight(prevSelected, nextSelection);
+        if (prevSelected != nextSelection) {
+            taskOptions.style.visibility = 'visible';
+        } else {
+            taskOptions.style.visibility = 'hidden';
+        }
+    } else {
+        await addHighlight(nextSelection);
+        if (e.target.type != 'checkbox') {
+            nextSelection.children[0].checked = nextSelection.children[0].checked ? false : true;
+        }
+    }
+
+}
+
+function removeHighlight(prevSelected, nextSelection) {
+    return new Promise((res, rej) => {
+        nextSelection.classList.add('single-task-selected');
+        prevSelected.classList.remove('single-task-selected');
+        nextSelection.children[0].checked = nextSelection.children[0].checked ? false : true;
+        res();
+    });
+}
+
+function addHighlight(nextSelection) {
+    const taskOptions = document.querySelector('.task-options');
+    return new Promise((res, rej) => {
+        nextSelection.classList.add('single-task-selected');
+        taskOptions.style.visibility = 'visible';
+        taskOptions.style.animation = "fadeIn 1s";
+        res();
+    });
+}
+
+// toggle task summary panel
+export async function toggleTaskSummary(e) {
+    const prevSelected = document.querySelector('.single-task-selected');
+    const nextSelection = e.target;
+    const taskSummaryDiv = document.querySelector('#task-details');
+
+    if (prevSelected) await showTaskSummary(taskSummaryDiv, prevSelected, nextSelection);
+    else await hideTaskSummary(taskSummaryDiv, prevSelected)
+};
+
+function showTaskSummary(taskSummaryDiv, prevSelected, nextSelection) {
+    return new Promise((res, rej) => {
+        const taskSummaryDiv = document.querySelector('#task-details');
+        const checked = document.querySelectorAll('input[type="checkbox"]:checked');
+
+        if (checked.length > 1) {
+            checked.forEach(node => {
+                if (node.checked) {
+                    node.parentNode.classList.add('single-task-selected');
+                } else {
+                    node.parentNode.classList.remove('single-task-selected');
+                }
+            });
+            taskSummaryDiv.classList.remove('task-details-display');
+        } else {
+            taskSummaryDiv.classList.add('task-details-display');
+        }
+        res();
+    });
+};
+
+export function hideTaskSummary(taskSummaryDiv, prevSelected, nextSelection) {
+    return new Promise((res, rej) => {
+        taskSummaryDiv.classList.remove('task-details-display');
+        res();
+    });
 };

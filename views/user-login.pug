@@ -2,29 +2,33 @@ extends layout.pug
 
 include utils.pug
 
+append head
+  //- add page specific styles by appending to the head
+  link(rel="stylesheet" href="/stylesheets/team.css")
+
 block content
-    div#login_main
-        div.errMsg(hidden)
-            +errorSummary(errors)
-    div#loginpage_container
-        a.home-link(href='/')
-            img(src="images/logo-o-dark.png" class="login_logo" href='/')
-        div#login_container
-            div#login_img_container
-                img(src="images/steak-o.png")
-            div#login_form_container
-                form(action='/login' method='post' class="login_form")
-                    input(type='hidden' name='_csrf' value=csrfToken)
-                    div#user_form
-                        +field('Username', 'username', username)
-                        div.username-error(hidden="true")
-                    div#password_form
-                        +field('Password', 'password', password, 'password')
-                        div.password-error(hidden="true")
-                    div#loginBtCon
-                        button(type='submit') Log In
-                            if !errors
-                                a(href='/dashboard')
-                        button(type='submit')
-                            a(href="/signup") Don't have an account? Sign Up
-            script(src="/javascripts/errors.js" type="module")
+    include splash-navbar.pug
+    main
+        div#login_main
+            div.errMsg(hidden)
+                +errorSummary(errors)
+        div#loginpage_container
+            div#login_container
+                div#login_img_container
+                    img(src="images/cow-skateboard-o.png")
+                div#login_form_container
+                    form(action='/login' method='post' class="login_form")
+                        input(type='hidden' name='_csrf' value=csrfToken)
+                        div#user_form
+                            +field('Username', 'username', username)
+                            div.username-error(hidden="true")
+                        div#password_form
+                            +field('Password', 'password', password, 'password')
+                            div.password-error(hidden="true")
+                        div#loginBtCon
+                            button(type='submit') Log In
+                                if !errors
+                                    a(href='/dashboard')
+                    p.signup-cta
+                        a(href="/signup") Don't have an account? Sign Up
+    include splash-footer.pug

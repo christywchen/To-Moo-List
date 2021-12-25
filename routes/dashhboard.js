@@ -4,8 +4,7 @@ const { requireAuth } = require('../auth');
 
 
 /* GET home page. */
-router.get('/', requireAuth, function (req, res, next) {
-  // console.log(res.locals);
+router.get('/*', requireAuth, function (req, res, next) {
   res.render('dashboard-list', { title: 'Dashboard' });
 });
 

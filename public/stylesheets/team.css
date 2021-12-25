@@ -1,42 +1,44 @@
 @import url("/stylesheets/home.css");
 
-.header-content h2{
-    color: #FFFFFF;
+.header-content h2 {
+    color: #ffffff;
     margin: 15px;
 }
 
-.cow{
+.cow {
     display: flex;
 }
 
-.cow div h2{
+.cow div h2 {
     font-size: 1.75rem;
     margin-bottom: 10px;
 }
 
-.cow div p{
+.cow div p {
     line-height: 1.35;
 }
 
-.c-cow, .j-cow{
-    background-color: #FFFFFF;
+.c-cow,
+.j-cow {
+    background-color: #ffffff;
     margin: 0 auto;
     justify-content: center;
 }
 
-.h-cow, .p-cow{
-    background-color: #075CBE;
+.h-cow,
+.p-cow {
+    background-color: #075cbe;
     margin: 0 auto;
     justify-content: center;
     color: white;
 }
 
-.about-left{
+.about-left {
     align-self: center;
     width: 45%;
 }
 
-.about-right{
+.about-right {
     align-self: center;
     width: 45%;
 }

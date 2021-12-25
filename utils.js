@@ -21,6 +21,16 @@ const taskNotFound = taskId => {
     err.title = "Task not found";
     err.status = 404;
     return err;
+};
+
+const categoryNotFound = categoryId => {
+    let err;
+    if (categoryId) {
+        err = new Error(`Category with id ${taskId} could not be found.`)
+    } else err = new Error(`Tasks could not be found.`)
+    err.title = "Category not found";
+    err.status = 404;
+    return err;
 }
 
 const handleValidationErrors = (req, res, next) => {
@@ -46,10 +56,24 @@ const validateList = [
         .withMessage('The name can only be 50 characters')
 ];
 
+const validateTask = [
+    check('name')
+        .exists({ checkFalsy: true })
+];
+
+const validateCategory = [
+    check('name')
+        .exists({ checkFalsy: true })
+        .withMessage("There must be a name for a list."),
+    check('name')
+        .isLength({ max: 50 })
+        .withMessage('The name can only be 50 characters')
+];
+
 const userValidators = [
     check('username')
         .exists({ checkFalsy: true })
-        .withMessage('Please provide a value for username')
+        .withMessage('Please provide a username')
         .isLength({ max: 50 })
         .withMessage('Username must not be more than 50 characters long')
         .custom((value) => {
@@ -62,21 +86,21 @@ const userValidators = [
         }),
     check('firstName')
         .exists({ checkFalsy: true })
-        .withMessage('Please provide a value for First Name')
+        .withMessage('Please provide a first name')
         .isLength({ max: 50 })
         .withMessage('First Name must not be more than 50 characters long'),
     check('lastName')
         .exists({ checkFalsy: true })
-        .withMessage('Please provide a value for Last Name')
+        .withMessage('Please provide a last name')
         .isLength({ max: 50 })
         .withMessage('Last Name must not be more than 50 characters long'),
     check('email')
         .exists({ checkFalsy: true })
-        .withMessage('Please provide a value for Email Address')
+        .withMessage('Please provide a value for email address')
         .isLength({ max: 255 })
-        .withMessage('Email Address must not be more than 255 characters long')
+        .withMessage('Email address must not be more than 255 characters long')
         .isEmail()
-        .withMessage('Email Address is not a valid email')
+        .withMessage('Email address is not a valid email')
         .custom((value) => {
             return db.User.findOne({ where: { email: value } })
                 .then((user) => {
@@ -87,14 +111,14 @@ const userValidators = [
         }),
     check('password')
         .exists({ checkFalsy: true })
-        .withMessage('Please provide a value for Password')
+        .withMessage('Please provide a valid password')
         .isLength({ max: 50 })
         .withMessage('Password must not be more than 50 characters long')
         .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/, 'g')
         .withMessage('Password must contain at least 1 lowercase letter, uppercase letter, number, and special character (i.e. "!@#$%^&*")'),
     check('confirmPassword')
         .exists({ checkFalsy: true })
-        .withMessage('Please provide a value for Confirm Password')
+        .withMessage('Please confirm your password')
         .isLength({ max: 50 })
         .withMessage('Confirm Password must not be more than 50 characters long')
         .custom((value, { req }) => {
@@ -108,10 +132,10 @@ const userValidators = [
 const loginValidator = [
     check('username')
         .exists({ checkFalsy: true })
-        .withMessage('Please provide a value for username'),
+        .withMessage('Please provide a username'),
     check('password')
         .exists({ checkFalsy: true })
-        .withMessage('Please provide a valid Password')
+        .withMessage('Please provide a valid password')
 ]
 
 module.exports = {
@@ -121,6 +145,9 @@ module.exports = {
     loginValidator,
     listNotFoundError,
     validateList,
+    validateTask,
+    validateCategory,
     handleValidationErrors,
     taskNotFound,
+    categoryNotFound,
 };
