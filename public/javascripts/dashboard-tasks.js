@@ -177,7 +177,6 @@ export const changeTag = async (e) => {
     const tagId = e.target.id;
     const currentPriorityId = window.location.href.split('/')[5];
 
-    console.log(currentPriorityId)
     selectedTasks.forEach(async (e) => {
         if (e.checked) { // only updates in database for task with checkmarks
             const res = await fetch(`/api/tasks/${e.dataset.task}`, {
@@ -232,7 +231,6 @@ export const deleteTask = (e) => {
             if (!res.ok) {
                 console.log("Something went wrong");
             } else {
-                //console.log("Your task was deleted")
                 trashTask.style.animation = "fetchSuccess 1s";
                 updateTaskStatus();
                 const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
