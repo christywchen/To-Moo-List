@@ -110,6 +110,8 @@ export async function fetchTaskSummary(e) {
     const stateId = { id: "99" };
     const listName = window.location.href.split('/')[4];
     const taskId = document.querySelector('input[type="checkbox"]:checked');
+    if (!taskId) return
+    
     const summaryRes = await fetch(`/api/tasks/${taskId.dataset.task}`);
     const { task } = await summaryRes.json();
 
