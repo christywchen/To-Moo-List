@@ -159,6 +159,7 @@ export async function fetchInboxTasks(fetchPath) {
 export async function fetchPriorityTasks(e) {
     e.stopPropagation();
     clearDOMTasks();
+    
     const stateId = { id: "101" };
     listId = null;
     const priorityId = e.target.dataset.priorityid
