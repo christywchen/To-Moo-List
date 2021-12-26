@@ -14,6 +14,7 @@ const prioritiesRouter = require('./backend-api/priorities');
 const searchRouter = require('./backend-api/search')
 const frontListsRouter = require('./routes/lists')
 const { restoreUser } = require('./auth');
+const {loggedIn} = require('./utils')
 
 const app = express();
 
@@ -51,7 +52,7 @@ app.use('/api/priorities', prioritiesRouter);
 app.use('/api/search', searchRouter);
 
 // Gets the splash page
-app.get('/', (req, res) => {
+app.get('/', loggedIn, (req, res) => {
   res.render('splash-home', {
     title: "To Moo List"
   })
@@ -68,6 +69,9 @@ app.get('/upgrade', (req, res) => {
     title: "Upgrade"
   })
 })
+
+
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
