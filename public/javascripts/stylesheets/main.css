@@ -75,10 +75,6 @@
     padding-left: 8px;
 }
 
-.single-task input {
-    pointer-events: none;
-}
-
 .single-task-selected {
     background-color: #ffffc9;
 }
@@ -225,11 +221,6 @@
 }
 
 .priority-Low {
-    background-color: rgb(36, 206, 169);
-}
-
-.priority-None {
-    display: none;
     background-color: rgb(36, 206, 169);
 }
 

@@ -16,7 +16,7 @@ router.get('/tasks/:word(*+)', asyncHandler(async (req, res, next) => {
                 [Op.iLike]: '%' + word + '%'
             }
         },
-        include: [db.List, db.Category]
+        include: [db.List, db.Priority]
     });
 
     if (tasks) {

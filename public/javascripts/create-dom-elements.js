@@ -1,7 +1,7 @@
 import { fetchListTasks, fetchTaskSummary, updateListId, deleteList } from './dashboard.js';
 import { clearDOMTasks, clearSearchRecs, clearTaskSummary } from './clean-dom.js';
 import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect, toggleTaskHighlight, toggleTaskSummary, showCreateList } from './display.js';
-import { finishTask, getDropMenu, deleteTask, uncheckCheckBox } from './dashboard-tasks.js'
+import { finishTask, getDropMenu, deleteTask, uncheckCheckBox, hideTaskOptions } from './dashboard-tasks.js'
 
 export function createSidebarContainer(name, containerType, data,) {
     const container = document.createElement('div');
@@ -64,10 +64,10 @@ export function decorateList(list) {
     list.addEventListener('click', (e) => {
         const iconTarget = e.target.classList.contains('far');
         const listOptionTarget = e.target.classList.contains('list-edit-option');
+
         if (!iconTarget && !listOptionTarget) {
             fetchListTasks(e);
             toggleListSelect(e);
-
         }
     });
 };
@@ -75,8 +75,6 @@ export function decorateList(list) {
 export function populateTasks(tasks, getCompleted = false) {
     if (!Array.isArray(tasks)) tasks = [tasks];
     const tasksContainer = document.getElementById("tasksContainer");
-
-    console.log(tasks)
     tasks.forEach(task => {
         const div = document.createElement("div");
         decorateTaskDiv(div, task);
@@ -93,26 +91,26 @@ export function populateTasks(tasks, getCompleted = false) {
 };
 
 async function decorateTaskDiv(div, task) {
+    const prioritySpan = await decorateTaskWithPriority(div, task);
+    const deadlineSpan = await decorateTaskWithDeadline(div, task);
+
     div.setAttribute('data-task', `${task.id}`);
     div.classList.add('single-task');
     div.innerHTML = createTaskHtml(task.name, task.id);
-    div.addEventListener('click', fetchTaskSummary);
     div.addEventListener('click', getDropMenu);
     div.addEventListener('click', toggleTaskHighlight);
+    div.addEventListener('click', fetchTaskSummary);
     div.addEventListener('click', toggleTaskSummary);
 
-    const prioritySpan = await decorateTaskWithPriority(div, task);
     div.appendChild(prioritySpan);
-    const deadlineSpan = await decorateTaskWithDeadline(div, task);
     div.appendChild(deadlineSpan);
 };
 
 export async function decorateTaskWithPriority(div, task) {
     const span = document.createElement('span');
-
     span.setAttribute('data-task', `${task.id}`);
-    span.classList = `priority-tag priority-${task.Category.name}`;
-    span.innerText = `${task.Category.name}`;
+    span.classList = `priority-tag priority-${task.Priority.name}`;
+    span.innerText = `${task.Priority.name}`;
 
     return span;
 }
@@ -166,8 +164,8 @@ export async function buildTaskSummary(task) {
     const currentListId = task.listId;
     const currentList = task.List.name;
     const currentDesc = task.description;
-    const currentPriorityId = task.categoryId;
-    const currentPriority = task.Category.name;
+    const currentPriorityId = task.priorityId;
+    const currentPriority = task.Priority.name;
 
     const taskSummaryContainer = document.createElement('div');
     const taskSummaryParent = document.querySelector('#task-details');
@@ -271,11 +269,11 @@ export async function buildListSelectOptions(currentListId, currentList) {
 }
 
 export async function buildPrioritySelectOptions(currentPriority, currentPriorityId) {
-    const priorityRes = await fetch(`/api/categories`);
-    const { categories } = await priorityRes.json();
+    const priorityRes = await fetch(`/api/priorities`);
+    const { priorities } = await priorityRes.json();
     const priorityOptions = document.querySelector('#summary-priority-select');
     priorityOptions.innerHTML = `<option value="${currentPriorityId}">${currentPriority}</option>`
-    populateSelectOptions(categories, currentPriority, priorityOptions);
+    populateSelectOptions(priorities, currentPriority, priorityOptions);
 }
 
 function populateSelectOptions(table, currentSelectionName, selectHTMLElementName) {

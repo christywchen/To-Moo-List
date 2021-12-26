@@ -1,4 +1,3 @@
-
 // Fade background
 export function fadeBackground(e) {
     const isFaded = document.querySelector('.page-cover')
@@ -8,6 +7,7 @@ export function fadeBackground(e) {
         div.classList.add('page-cover');
         removeSelfOnClick(div);
         showPageListeners();
+        div.addEventListener('click', hideListNameDiv)
         body.prepend(div);
     }
 };
@@ -95,6 +95,7 @@ export function hideListNameDiv(e) {
             e.target.className === 'submit-list' ||
             e.target.className === 'cancel-submit-list' ||
             e.target.classList.contains('close') ||
+            e.target.classList.contains('page-cover') ||
             e.target.className === 'rename-list') {
             addListDiv.style.display = 'none';
             renameListDiv.style.display = 'none';
@@ -113,11 +114,10 @@ export function hideListNameDiv(e) {
 export function hideDropDown(e) {
     const listMenu = document.querySelector(".list-of-lists");
     const postponeMenu = document.querySelector(".postpone-dates");
-    const categoryList = document.querySelector('.list-of-tags');
+    const priorityList = document.querySelector('.list-of-tags');
     const calDiv = document.querySelector('.hidden-cal')
     //const listContainers = document.querySelectorAll('.list-container');
     const searchRecs = document.querySelector('.search-recommendations');
-
     if (e.target.className !== 'logout') {
         if (!listMenu.className.includes(e.target) &&
             !e.target.className.includes('grid-square') &&
@@ -128,10 +128,9 @@ export function hideDropDown(e) {
             //e.preventDefault()
             listMenu.style.display = 'none';
             postponeMenu.style.display = 'none';
-            categoryList.style.display = 'none';
+            priorityList.style.display = 'none';
             searchRecs.style.display = 'none';
             calDiv.style.display = 'none';
-
             deselectSearchField()
         }
     }
@@ -156,16 +155,20 @@ export function deselectSearchField(e) {
 // Toggles
 export async function toggleListSelect(e, listDiv) {
     const prevSelected = document.querySelector('.selected-list');
+    const taskOptions = document.querySelector('.task-options');
+    const checkBox = document.querySelector('.checkbox-all > input');
+    checkBox.checked = false;
+    taskOptions.style.visibility = 'hidden';
+
     let list = e.target
     if (listDiv) list = listDiv;
-    // Lists and Categories have an extra div container.
+    // Lists and Priorities have an extra div container.
 
     if (list.classList.contains('sidebar-box')) {
         list = list.children[0];
     }
     if (prevSelected) {
-        if (list.dataset.listid) {
-            // hide task summary if user switches to another task
+        if (list.dataset.listid || list.classList.contains('inbox-list')) {
             const taskSummaryDiv = document.querySelector('#task-details');
             taskSummaryDiv.classList.remove('task-details-display');
         }
@@ -219,7 +222,6 @@ export function deselectList() {
     })
 }
 
-
 export function showContainer(container, showFn) {
     return new Promise((res, rej) => {
         const newContainer = showFn()
@@ -259,43 +261,44 @@ export async function toggleTaskHighlight(e) {
     const prevSelected = document.querySelector('.single-task-selected');
     const taskOptions = document.querySelector('.task-options');
     let nextSelection = e.target;
+    const url = window.location.href.split('/')[4];
 
     if (nextSelection.localName == 'label' ||
-        nextSelection.localName == 'span') {
+        nextSelection.localName == 'span' ||
+        e.target.type == 'checkbox') {
         nextSelection = nextSelection.parentNode;
     }
 
-    if (prevSelected && e.target.type != 'checkbox') {
-        await removeHighlight(prevSelected, nextSelection);
-        if (prevSelected != nextSelection) {
-            taskOptions.style.visibility = 'visible';
-        } else {
-            taskOptions.style.visibility = 'hidden';
-        }
+    if (prevSelected == nextSelection || e.target.type == 'checkbox') {
+        await removeHighlight(nextSelection);
+        if (url !== '#completed') taskOptions.style.visibility = 'hidden';
     } else {
-        await addHighlight(nextSelection);
-        if (e.target.type != 'checkbox') {
-            nextSelection.children[0].checked = nextSelection.children[0].checked ? false : true;
-        }
+        if (nextSelection.classList.contains('single-task-selected')) await removeHighlight(nextSelection);
+        else await addHighlight(nextSelection);
     }
-
 }
 
-function removeHighlight(prevSelected, nextSelection) {
+function removeHighlight(selectedDiv) {
     return new Promise((res, rej) => {
-        nextSelection.classList.add('single-task-selected');
-        prevSelected.classList.remove('single-task-selected');
-        nextSelection.children[0].checked = nextSelection.children[0].checked ? false : true;
+        selectedDiv.classList.remove('single-task-selected');
+        if (selectedDiv.children[0].checked) selectedDiv.children[0].checked = false;
         res();
     });
 }
 
+
 function addHighlight(nextSelection) {
     const taskOptions = document.querySelector('.task-options');
+    const url = window.location.href.split('/')[4];
     return new Promise((res, rej) => {
         nextSelection.classList.add('single-task-selected');
-        taskOptions.style.visibility = 'visible';
-        taskOptions.style.animation = "fadeIn 1s";
+        nextSelection.children[0].checked = true;
+        if (taskOptions) {
+            if (url !== '#completed') {
+                taskOptions.style.visibility = 'visible';
+                taskOptions.style.animation = "fadeIn 1s";
+            }
+        }
         res();
     });
 }
@@ -303,16 +306,14 @@ function addHighlight(nextSelection) {
 // toggle task summary panel
 export async function toggleTaskSummary(e) {
     const prevSelected = document.querySelector('.single-task-selected');
-    const nextSelection = e.target;
     const taskSummaryDiv = document.querySelector('#task-details');
 
-    if (prevSelected) await showTaskSummary(taskSummaryDiv, prevSelected, nextSelection);
+    if (prevSelected) await showTaskSummary(taskSummaryDiv);
     else await hideTaskSummary(taskSummaryDiv, prevSelected)
 };
 
-function showTaskSummary(taskSummaryDiv, prevSelected, nextSelection) {
+function showTaskSummary(taskSummaryDiv) {
     return new Promise((res, rej) => {
-        const taskSummaryDiv = document.querySelector('#task-details');
         const checked = document.querySelectorAll('input[type="checkbox"]:checked');
 
         if (checked.length > 1) {

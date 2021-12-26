@@ -36,14 +36,16 @@
 
 .dropdown {
     display: none;
-    width: 180px;
+    width: auto;
     height: auto;
     position: absolute;
-    z-index: 2;
+    z-index: 5;
     top: 49px;
     border: 1px solid lightgray;
-    box-shadow: 10px 5px 5px lightgray;
-    margin-left: 128px;
+    border-radius: 5px;
+    box-shadow: 1px 2px 5px rgb(0 0 0 / 20%);
+    overflow: hidden;
+    margin-top: 3px;
 }
 
 .alert:active {
@@ -51,33 +53,74 @@
 }
 
 .dropdown div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: white;
-    margin: 0;
-    font-size: 14px;
+    margin: 0 auto;
+    width: auto;
+    font-size: 1em;
     padding: 5px;
-    border: 1px solid lightgray;
     text-align: center;
     align-content: center;
 }
 
 .dropdown div:hover {
-    background-color: var(--lightest-div-bg);
-}
-
-.dropdown input {
-    padding: 0 auto;
+    background-color: #b4d4ec;
 }
 
 .dropdown input::placeholder {
     font-size: 12px;
+    text-align: center;
+}
+
+.dropdown-row {
+    width: auto;
+}
+
+.postpone-dates {
+    margin-left: 70px;
+}
+
+.hidden-cal {
+    margin-left: 100px;
+}
+
+.hidden-cal input {
+    margin: 0px;
+}
+
+.hidden-cal input:hover {
+    border: 1px solid rgb(0 0 0 / 0%);
+}
+
+.list-of-lists {
+    margin-left: 14px;
+}
+
+.list-of-tags {
+    margin-left: 4px;
 }
 
 .tool-tip {
     position: absolute;
     visibility: hidden;
-    margin-top: 40px;
+    margin-bottom: 61px;
     z-index: 4;
-    color: black;
+    width: fit-content;
+    height: 28px;
+    color: white;
+    background-color: #6d7174c2;
+    display: flex;
+    align-items: center; /* Vertical center alignment */
+    justify-content: center; /* Horizontal center alignment */
+    border-radius: 5px;
+    font-size: 1em;
+    padding: 9px;
+}
+
+.grid-square:hover span {
+    visibility: visible;
 }
 
 @keyframes growDown {

@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.TEXT,
     deadline: DataTypes.DATE,
     isCompleted: DataTypes.BOOLEAN,
-    categoryId: DataTypes.INTEGER,
+    priorityId: DataTypes.INTEGER,
     listId: DataTypes.INTEGER
   }, {});
   Task.associate = function (models) {
@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'listId',
       onDelete: 'CASCADE'
     });
-    Task.belongsTo(models.Category, { foreignKey: 'categoryId' });
+    Task.belongsTo(models.Priority, { foreignKey: 'priorityId' });
   };
   return Task;
 };

@@ -10,7 +10,7 @@ const dashboardRouter = require('./routes/dashhboard');
 const usersRouter = require('./routes/users');
 const tasksRouter = require('./backend-api/tasks');
 const listsRouter = require('./backend-api/lists')
-const categoriesRouter = require('./backend-api/categories');
+const prioritiesRouter = require('./backend-api/priorities');
 const searchRouter = require('./backend-api/search')
 const frontListsRouter = require('./routes/lists')
 const { restoreUser } = require('./auth');
@@ -47,7 +47,7 @@ app.use(usersRouter);
 app.use('/api/lists', listsRouter);
 app.use('/api', tasksRouter);
 app.use('/lists', frontListsRouter)
-app.use('/api/categories', categoriesRouter);
+app.use('/api/priorities', prioritiesRouter);
 app.use('/api/search', searchRouter);
 
 // Gets the splash page
@@ -79,7 +79,7 @@ app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-  // console.log(err);  
+  // console.log(err);
   // render the error page
   res.status(err.status || 500);
   res.render('error');

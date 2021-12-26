@@ -1,4 +1,4 @@
-import { createTask, createList, renameList, fetchSearch, fetchListTasks, fetchCategoryTasks, fetchInboxTasks } from './dashboard.js'
+import { createTask, createList, renameList, fetchSearch, fetchListTasks, fetchPriorityTasks, fetchInboxTasks } from './dashboard.js'
 import { hideTaskButton, fadeBackground, hideListNameDiv, hideListOptions, hideDropDown, showTaskButton, showCreateList, toggleListDisplay, toggleListSelect, selectList, deselectList, selectSearchField } from './display.js';
 import { createSidebarContainer, decorateList } from './create-dom-elements.js';
 import { createDropDownMenu, checkAllBoxes, finishTask, deleteTask, getDropMenu } from './dashboard-tasks.js';
@@ -13,9 +13,9 @@ export const initializePage = async () => {
     const listRes = await fetch('/api/lists')
     const { lists } = await listRes.json();
     const taskList = document.getElementById('task-lists');
-    const categoryRes = await fetch('/api/categories');
-    const { categories } = await categoryRes.json();
-    const categoryList = document.getElementById('task-categories');
+    const priorityRes = await fetch('/api/priorities');
+    const { priorities } = await priorityRes.json();
+    const priorityList = document.getElementById('task-priorities');
     const headers = document.querySelectorAll('.list-header-container');
     const inboxLists = document.querySelectorAll('.inbox-list');
     const buttons = document.querySelectorAll('button');
@@ -29,6 +29,9 @@ export const initializePage = async () => {
         fetchInboxTasks(todayTasksRoute);
         toggleListDisplay(inboxHeader);
         selectList(todaysList);
+
+        const stateId = { id: "99" };
+        window.history.replaceState(stateId, `Today`, `/dashboard/#today`);
     }
 
     headers.forEach(header => {
@@ -47,11 +50,12 @@ export const initializePage = async () => {
         decorateList(div);
         taskList.appendChild(div);
     });
-    categories.forEach(category => {
-        const div = createSidebarContainer(category.name, 'category', category.id);
+    priorities.forEach((priority, i) => {
+        if (i === 3) return
+        const div = createSidebarContainer(priority.name, 'priority', priority.id);
         decorateList(div);
-        div.addEventListener('click', fetchCategoryTasks);
-        categoryList.appendChild(div);
+        div.addEventListener('click', fetchPriorityTasks);
+        priorityList.appendChild(div);
     })
 
     buttons.forEach(button => {
@@ -83,14 +87,16 @@ export const initializePage = async () => {
         hideListOptions(e);
         hideDropDown(e);
         clearSearch(e);
-    })
+    });
+
     addTaskButton.addEventListener('click', createTask);
     addTaskInp.addEventListener('keyup', showTaskButton);
     addListButtonL.addEventListener('click', showCreateList);
     submitListButton.addEventListener('click', (e) => {
         createList(e);
         hideListNameDiv(e);
-    })
+    });
+
     closeListSubmission.addEventListener('click', hideListNameDiv);
 
     searchField.addEventListener('click', selectSearchField)

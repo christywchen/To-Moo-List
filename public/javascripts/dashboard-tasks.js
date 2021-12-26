@@ -1,11 +1,12 @@
 import { updateTaskStatus } from './dashboard-recap.js'
-import { updatePriorityTag } from './dashboard-summary.js'
-import { getDate, buildPrioritySelectOptions } from './create-dom-elements.js';
-import { hideDivContainer, hideTaskSummary } from './display.js'
+import { updatePriorityTag, updateDeadlineTag, changeTaskDeadline, moveTaskToNewList, moveTaskFromList } from './dashboard-summary.js'
+import { getDate, buildPrioritySelectOptions, decorateTaskWithDeadline } from './create-dom-elements.js';
+import { hideDivContainer, hideTaskSummary, selectNewList } from './display.js'
 
 export const checkAllBoxes = (e) => {
     const checkBox = document.querySelector('.checkbox-all > input');
     const taskOptions = document.querySelector('.task-options');
+    const url = window.location.href.split('/')[4];
 
     if (!e.target.classList.contains("checkbox-all")) {
         if (checkBox.checked) {
@@ -14,8 +15,9 @@ export const checkAllBoxes = (e) => {
                 if (!e.checked) {
                     e.checked = true;
                 }
+                e.parentNode.classList.add('single-task-selected');
             })
-            taskOptions.style.visibility = 'visible';
+            if (url !== '#completed') taskOptions.style.visibility = 'visible';
             taskOptions.style.animation = "fadeIn 1s";
         } else {
             const allCheckBox = document.querySelectorAll(".single-task > input");
@@ -23,17 +25,22 @@ export const checkAllBoxes = (e) => {
                 if (e.checked) {
                     e.checked = false;
                 }
+                e.parentNode.classList.remove('single-task-selected');
             })
-            taskOptions.style.animation = "fadeOut 1s";
+            if (url !== '#completed') taskOptions.style.animation = "fadeOut 1s";
             taskOptions.style.visibility = 'hidden';
         }
     }
-
 }
 
 export const uncheckCheckBox = (e) => {
     const checkBox = document.querySelector('.checkbox-all > input');
     checkBox.checked = false;
+}
+
+export const hideTaskOptions = (e) => {
+    const taskOptions = document.querySelector('.task-options');
+    taskOptions.style.visibility = 'hidden';
 }
 
 export const finishTask = (e) => {
@@ -84,29 +91,37 @@ export const postPoneTask = async (e) => {
 
     selectedTasks.forEach(async (e) => {
         if (e.checked) { // only updates in database for task with checkmarks
+            const newDateVal = new Date(timeStamp).toISOString().replace('T', ' ').replace('Z', '');
+
             const res = await fetch(`/api/tasks/${e.dataset.task}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ deadline: `${timeStamp}` })
+                body: JSON.stringify({ deadline: `${newDateVal}` })
             })
             if (!res.ok) {
                 console.log("Something went wrong");
             } else {
-                console.log("it worked");
+                const { task: updatedTask } = await res.json();
+                updateDeadlineTag(updatedTask);
+
+                const taskSummary = document.querySelector('#task-details');
+
+                if (taskSummary.classList.contains('task-details-display')) {
+                    const taskSummaryDate = document.querySelectorAll('#summary-due-date-inp')[1];
+                    taskSummaryDate.setAttribute('value', getDate(newDateVal));
+                }
+
                 extendCal.style.display = 'none';
                 extendDiv.style.animation = 'fetchSuccess 1s';
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
                 uncheckCheckBox();
             }
         }
+        selectNewList();
     })
 }
-
-// const changeDeadline = async (e) => {
-//
-// }
 
 
 export const moveTask = async (e) => {
@@ -132,11 +147,14 @@ export const moveTask = async (e) => {
             if (!res.ok) {
                 console.log("Something went wrong");
             } else {
-                console.log("it worked");
+                const { task } = await res.json();
                 const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
-                deleteDiv.remove();
                 await hideTaskSummary(taskSummaryDiv);
+
                 listMenu.style.display = 'none';
+
+                moveTaskFromList(task)
+
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
                 uncheckCheckBox();
             }
@@ -154,7 +172,7 @@ export const changeTag = async (e) => {
     const tag = document.querySelector(".list-of-tags");
     const taskSummaryDiv = document.querySelector('#task-details');
     const url = window.location.href.split('/'); // grabs the url of the current page
-    const taskCategoryName = ['High', 'Medium', 'Low', 'None'];
+    const taskPriorityName = ['High', 'Medium', 'Low', 'None'];
     const tagId = e.target.id;
 
     selectedTasks.forEach(async (e) => {
@@ -164,7 +182,7 @@ export const changeTag = async (e) => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ categoryId: `${tagId}` })
+                body: JSON.stringify({ priorityId: `${tagId}` })
             })
             if (!res.ok) {
                 console.log("Something went wrong");
@@ -175,8 +193,8 @@ export const changeTag = async (e) => {
                 if (taskSummary) {
                     taskSummary.innerHTML = "";
                     tag.style.display = 'none';
-                    buildPrioritySelectOptions(taskCategoryName[task.categoryId - 1], task.categoryId); // updates the priority options in the task summary
-                    updatePriorityTag(task, null);
+                    buildPrioritySelectOptions(taskPriorityName[task.priorityId - 1], task.priorityId); // updates the priority options in the task summary
+                    updatePriorityTag(task);
                 }
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
                 if (url.includes("#priority")) {
@@ -255,13 +273,13 @@ export const getDropMenu = (e) => {
     //     window.alert("MOOOOOOOOO")
     // })
 
-    const categoryList = document.querySelector('.list-of-tags');
-    const tag = document.querySelector('.category');
+    const priorityList = document.querySelector('.list-of-tags');
+    const tag = document.querySelector('.priority'); // was .c/ategory
     tag.addEventListener('click', (e) => {
         hideDivContainer();
-        categoryList.style.display = 'block';
-        // categoryList.style.animation = "growDown .5s ease";
-        categoryList.classList.add('visible');
+        priorityList.style.display = 'block';
+        // priorityList.style.animation = "growDown .5s ease";
+        priorityList.classList.add('visible');
     })
 
     const calDiv = document.querySelector('.due');
@@ -290,34 +308,6 @@ const createListDropDown = async () => {
         listMenu.appendChild(listOption);
     })
 
-    const hr = document.createElement('hr');
-    listMenu.appendChild(hr);
-    const input = document.createElement('input');
-    input.classList = 'add-tag-input'
-    input.placeholder = "type new list & enter";
-    input.type = "text";
-    input.addEventListener("keypress", async (e) => {
-        if (e.key === 'Enter') {
-            const res = await fetch('/api/lists', {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ name: `${e.target.value}` })
-            })
-            const menuDiv = document.querySelector('.moveTo')
-            if (!res.ok) {
-                menuDiv.style.animation = "fetchFail 1s";
-                listMenu.style.animation = "fetchFail 1s";
-                window.alert("Could not add a new list");
-                throw res
-            }
-            e.target.value = "";
-            menuDiv.style.animation = "fetchSuccess 1s";
-            hideDivContainer();
-        }
-    });
-    listMenu.appendChild(input);
 }
 
 const createPostPoneList = async () => {
@@ -326,7 +316,7 @@ const createPostPoneList = async () => {
     const date = ["1 days", '2 days', '3 days', '4 days', '5 days']
     for (let i = 0; i < 5; i++) {
         today.setDate(today.getDate() + 1);
-        const readable = new Date(today).toISOString().split('T')[0]
+        const readable = today.toISOString().split('T')[0]
         const div = document.createElement('div');
         div.innerText = date[i] + " (" + readable + ")";
         div.setAttribute("name", "date");
@@ -337,17 +327,17 @@ const createPostPoneList = async () => {
 }
 
 const createTagList = async () => {
-    const categoryList = document.querySelector('.list-of-tags');
-    const tags = await fetch('/api/categories');
-    const { categories } = await tags.json();
-    categories.forEach(tag => {
+    const priorityList = document.querySelector('.list-of-tags');
+    const tags = await fetch('/api/priorities');
+    const { priorities } = await tags.json();
+    priorities.forEach(tag => {
         const div = document.createElement('div');
         div.innerText = tag.name
         div.setAttribute("name", tag.name);
         div.setAttribute("value", tag.name);
         div.setAttribute("id", tag.id);
         div.addEventListener("click", changeTag);
-        categoryList.appendChild(div);
+        priorityList.appendChild(div);
     });
 }
 
@@ -355,6 +345,7 @@ const createCalendar = async (e) => {
     const calDiv = document.querySelector('.hidden-cal');
     calDiv.setAttribute('id', 'deadline-div');
     const today = getDate();
+
     calDiv.innerHTML = `
             <input type="date" min="${today}" value="${today}" id="summary-due-date-inp" class="summary-inp"></input>
             `;
@@ -364,21 +355,39 @@ const createCalendar = async (e) => {
         const selectedTasks = document.querySelectorAll(".single-task > input"); // selects all the tasks
         selectedTasks.forEach(async (e) => {
             if (e.checked) {
-                console.log(e.dataset.task);
-                const res = await fetch(`/api/tasks/${e.dataset.task}`, {
-                    method: "PATCH",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ deadline: `${hiddenCal.value}` })
-                })
-                if (!res.ok) {
-                    console.log("Something went wrong");
+                if (hiddenCal.value == '') {
+                    return;
                 } else {
-                    console.log("it worked");
+                    const newDateVal = new Date(hiddenCal.value).toISOString().replace('T', ' ').replace('Z', '');
+                    const res = await fetch(`/api/tasks/${e.dataset.task}`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ deadline: `${newDateVal}` })
+                    })
+                    if (!res.ok) {
+                        console.log("Something went wrong");
+                    } else {
+                        //console.log("it worked");
+                        // const deadlineLabel = document.querySelector(`div[data-task="${e.dataset.task}"]`);
+                        const { task: updatedTask } = await res.json();
+                        updateDeadlineTag(updatedTask);
+
+                        const taskSummary = document.querySelector('#task-details');
+
+                        if (taskSummary.classList.contains('task-details-display')) {
+                            const taskSummaryDate = document.querySelectorAll('#summary-due-date-inp')[1];
+                            taskSummaryDate.setAttribute('value', getDate(newDateVal));
+                        }
+                    }
                 }
             }
         })
+
+
+
+
     });
 }
 

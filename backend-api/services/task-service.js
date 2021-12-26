@@ -4,20 +4,22 @@ const Op = Sequelize.Op;
 
 // get
 async function getTaskByPk(taskId) {
-    return await db.Task.findByPk(taskId);
+    return await db.Task.findByPk(taskId, {
+        include: [db.Priority]
+    });
 }
 
 async function getTaskByPkAndUser(taskId, userId) {
     return await db.Task.findByPk(taskId, {
         where: userId,
-        include: [db.List, db.Category]
+        include: [db.List, db.Priority]
     });
 }
 
 async function getTasksByUser(userId) {
     return await db.Task.findAll({
         where: { userId },
-        include: [db.List, db.Category]
+        include: [db.List, db.Priority]
     });
 }
 
@@ -26,7 +28,7 @@ async function getTasksByListId(listId) {
         where: {
             listId: listId
         },
-        include: [db.List, db.Category]
+        include: [db.List, db.Priority]
     })
 }
 
@@ -39,7 +41,7 @@ async function getTasksByDate(lessThanDate, greaterThanDate, userId) {
                 [Op.gt]: greaterThanDate
             }
         },
-        include: [db.List, db.Category]
+        include: [db.List, db.Priority]
     })
 }
 
@@ -49,13 +51,13 @@ async function createTask(name, userId, listId) {
         name,
         userId,
         listId,
-        categoryId: 1
+        priorityId: 4
     });
 }
 
 // put/patch
 async function updateTask(task, requestBody) {
-    const { name, description, listId, deadline, isCompleted, categoryId } = requestBody;
+    const { name, description, listId, deadline, isCompleted, priorityId } = requestBody;
 
     return await task.update({
         name,
@@ -63,7 +65,7 @@ async function updateTask(task, requestBody) {
         listId,
         deadline,
         isCompleted,
-        categoryId,
+        priorityId
     });
 }
 

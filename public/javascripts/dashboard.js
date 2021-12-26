@@ -86,7 +86,7 @@ export async function createList(e) {
 
                 selectNewList();
 
-                if (moveTask) {
+                if (moveTasktoNew) {
                     await moveTaskToNewList(taskId, listId);
                     await fetchListTasks(e);
                     const taskRes = await fetch(`/api/lists/${listId}/tasks`);
@@ -109,17 +109,11 @@ export async function fetchTaskSummary(e) {
     // highlightTask(e);
     const stateId = { id: "99" };
     const listName = window.location.href.split('/')[4];
-    const summaryRes = await fetch(`/api/tasks/${e.target.dataset.task}`);
+    const taskId = document.querySelector('input[type="checkbox"]:checked');
+    if (!taskId) return
+    
+    const summaryRes = await fetch(`/api/tasks/${taskId.dataset.task}`);
     const { task } = await summaryRes.json();
-
-    const currentTask = task.name;
-    const currentTaskId = task.id;
-    const currentDeadline = task.deadline;
-    const currentListId = task.listId;
-    const currentList = task.List.name;
-    const currentDesc = task.description;
-    const currentPriorityId = task.categoryId;
-    const currentPriority = task.Category.name;
 
     buildTaskSummary(task);
     addTaskSummaryEventListeners();
@@ -162,19 +156,19 @@ export async function fetchInboxTasks(fetchPath) {
 
 };
 
-export async function fetchCategoryTasks(e) {
+export async function fetchPriorityTasks(e) {
     e.stopPropagation();
     clearDOMTasks();
     const stateId = { id: "101" };
     listId = null;
-    const categoryId = e.target.dataset.categoryid
+    const priorityId = e.target.dataset.priorityid
 
-    if (categoryId) {
-        const res = await fetch(`/api/categories/${categoryId}`);
+    if (priorityId) {
+        const res = await fetch(`/api/priorities/${priorityId}`);
         const { tasks } = await res.json();
         // TO DO: Error Handling
         populateTasks(tasks);
-        window.history.replaceState(stateId, `Priority ${categoryId}`, `/dashboard/#priority/${categoryId}`);
+        window.history.replaceState(stateId, `Priority ${priorityId}`, `/dashboard/#priority/${priorityId}`);
     }
 };
 
