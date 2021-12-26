@@ -1,11 +1,19 @@
 const createError = require('http-errors');
+//customize error message, createError([status], [error object], [properties])
+
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+//morgan is another http request logger middleware for Node.js.It simplifies the
+//process of logging requests to your application.
+
 const { sequelize } = require('./db/models');
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
+// persistent session with connect-session-sequelize
+//https://stackoverflow.com/questions/45619081/persistent-sessions-with-connect-session-sequelize
+
 const dashboardRouter = require('./routes/dashhboard');
 const usersRouter = require('./routes/users');
 const tasksRouter = require('./backend-api/tasks');
@@ -21,6 +29,8 @@ const app = express();
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
+// logger():Logger:Log requests with the given options or a format string.
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser('superSecret'));
@@ -49,6 +59,24 @@ app.use('/api', tasksRouter);
 app.use('/lists', frontListsRouter)
 app.use('/api/categories', categoriesRouter);
 app.use('/api/search', searchRouter);
+
+//checked logged in
+// function loggedIn(req, res, next) {
+//   if (req.user) {
+//     next();
+//   } else {
+//     res.redirect('/login');
+//   }
+// }
+
+// app.get('/', loggedIn, function (req, res, next) {
+//   // req.user - will exist
+//   // load user orders and render them
+//   console.log(req.user);
+//   res.render('dashboard-list')
+// });
+
+
 
 // Gets the splash page
 app.get('/', (req, res) => {

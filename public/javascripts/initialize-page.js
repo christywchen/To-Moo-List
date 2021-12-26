@@ -9,22 +9,37 @@ import { todayTasksRoute } from './dashboard-inbox.js';
 export const initializePage = async () => {
     const stateId = { id: "98" };
     window.history.replaceState(stateId, `Dashboard`, `/dashboard`);
+    //change the url according to the content the webpage shows
 
+    //side-bar Lists
     const listRes = await fetch('/api/lists')
     const { lists } = await listRes.json();
     const taskList = document.getElementById('task-lists');
+    
+    //side-bar Priority/Categories
     const categoryRes = await fetch('/api/categories');
     const { categories } = await categoryRes.json();
     const categoryList = document.getElementById('task-categories');
+
+    //side-bar Lists
     const headers = document.querySelectorAll('.list-header-container');
+
+    //side-bar Inbox: Today's Tasks, Tomorrow's Tasks, All Tasks, and Completed Tasks
     const inboxLists = document.querySelectorAll('.inbox-list');
+
+    //Logout Button
     const buttons = document.querySelectorAll('button');
+
+    //side-bar Today
     const todaysList = document.getElementById('today');
+
+    //side-bar Inbox
     const inboxHeader = document.getElementById('default-lists');
 
 
 
     if (!lists.length) showCreateList()
+    //showCreatedList()
     else {
         fetchInboxTasks(todayTasksRoute);
         toggleListDisplay(inboxHeader);

@@ -72,6 +72,7 @@ export function decorateList(list) {
     });
 };
 
+//populateTasks is decorate all tasks and add them into the tasksContainer.
 export function populateTasks(tasks, getCompleted = false) {
     if (!Array.isArray(tasks)) tasks = [tasks];
     const tasksContainer = document.getElementById("tasksContainer");
@@ -165,6 +166,7 @@ function decorateSearchItem(div, task) {
 };
 
 // create task summary
+//
 export async function buildTaskSummary(task) {
     const currentTask = task.name;
     const currentTaskId = task.id;
@@ -179,6 +181,7 @@ export async function buildTaskSummary(task) {
     const taskSummaryParent = document.querySelector('#task-details');
 
     clearTaskSummary();
+    //clear the task summary from previous task
 
     taskSummaryContainer.setAttribute('id', 'task-editor');
     taskSummaryContainer.appendChild(buildTitleDiv(currentTask));
@@ -189,6 +192,7 @@ export async function buildTaskSummary(task) {
 
     taskSummaryParent.appendChild(taskSummaryContainer);
     buildListSelectOptions(currentListId, currentList);
+
     buildPrioritySelectOptions(currentPriority, currentPriorityId);
 }
 
@@ -260,6 +264,8 @@ function buildDescDiv(currentDesc) {
     return descDiv;
 };
 
+//buildListSelectOptions is to creat an option with a specific attributes.
+
 export async function buildListSelectOptions(currentListId, currentList) {
     const listsRes = await fetch(`/api/lists`);
     const { lists } = await listsRes.json();
@@ -284,6 +290,7 @@ export async function buildPrioritySelectOptions(currentPriority, currentPriorit
     populateSelectOptions(categories, currentPriority, priorityOptions);
 }
 
+//populateSelectOptions is to add the option to an element
 function populateSelectOptions(table, currentSelectionName, selectHTMLElementName) {
     table.forEach(element => {
         if (element.name !== currentSelectionName) {

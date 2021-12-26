@@ -14,10 +14,16 @@ export let listId;
 
 // C-R-U-D Functions
 // C
+
+//createTask is create a new task in the middle part of the page
 export async function createTask(e) {
     e.preventDefault();
     const taskData = document.querySelector('#add-task-input');
+    //'#add-task-input' exist in the box of input task in the main part
+
     const taskContainer = document.getElementById("tasksContainer");
+    //a box to show the lists of tasks below the input box
+
     const formData = new FormData(taskData);
     //create a new formdata with key/value pairs
     const name = formData.get('name');
@@ -25,6 +31,7 @@ export async function createTask(e) {
     const div = document.createElement('div');
     const input = document.getElementById('name');
     div.classList.add('single-task')
+    //
     if (input.value.length) {
         try {
             const res = await fetch(`/api/lists/${listId}`, {
@@ -43,6 +50,7 @@ export async function createTask(e) {
                 const { task } = await res.json();
 
                 populateTasks(task);
+                //populateTasks is decorate all tasks and add them into the tasksContainer.
 
                 const addTaskButton = document.querySelector('.add-task-button > button');
                 addTaskButton.disabled = true;
@@ -54,6 +62,7 @@ export async function createTask(e) {
     }
 };
 
+//Create a new list is implemented by pop up a form
 export async function createList(e) {
     const listForm = document.querySelector('#add-list-form');
     const listData = document.querySelector('#addList');
@@ -76,13 +85,19 @@ export async function createList(e) {
                 // const listId = newList.list.id;
                 listId = newList.list.id;
                 const div = createSidebarContainer(newList.list.name, 'list', listId);
-                decorateList(div);
+                decorateList(div); 
+                //decorate the list in css format
+
                 clearDOMTasks();
+                //clear the tasks which are left from previous list
+
                 tasksList.appendChild(div);
                 toggleListSelect(e, div);
+                //deal with how to invoke the task summary
 
 
                 selectNewList()
+                //create a new list display format
 
                 // const select = document.querySelector(‘#summary-list-select’);
                 // select.innerHTML = ‘’;

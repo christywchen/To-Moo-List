@@ -154,6 +154,9 @@ export function deselectSearchField(e) {
 }
 
 // Toggles
+//toggleListSelect is dealing with the appearance of the task summary.
+//When it selected, it will invoke the task summary; when it is not
+//selected, it will remove the class which will invoke the task summary.
 export async function toggleListSelect(e, listDiv) {
     const prevSelected = document.querySelector('.selected-list');
     let list = e.target
@@ -175,16 +178,27 @@ export async function toggleListSelect(e, listDiv) {
 
 };
 
+//toggleListDisplay happens when click on the side-bar icon.
+// when it has "+" button, return; when it displays in block,such as
+//"Groceries" and "Fun Stuff", remove that displaying new things below
+//the icon, add that displaying new things on the right.
 export function toggleListDisplay(container, e) {
     const icon = container.parentNode.querySelector('.fas');
+    //'.fas' exists in search, Inbox,Lists, Priority, add a list, rename a list
+
     const isSelected = container.style.display === 'block';
     if (e && e.target.classList.contains('fa-plus-square')) return
+    //"fa-plus-square" exists in Lists, for "+" button
 
     if (isSelected) {
+        // isSelected is for "Groceries" and "Fun Stuff"
         container.style.display = 'none';
         icon.classList.remove('fa-caret-down');
+        //'fa-caret-down' means displaying below the icon.
         icon.classList.add('fa-caret-right');
+        //'fa-caret-right' exists in Inbox.It means displaying on the right side
     } else {
+        //else is for Lists
         container.style.display = 'block';
         // icon.classList.remove('fa-caret-right');
         icon.classList.add('fa-caret-down');
@@ -193,6 +207,7 @@ export function toggleListDisplay(container, e) {
 
 export function selectNewList() {
     const listHeader = document.querySelector('.lists-header');
+    //'.list-header' exists for Lists
     const icon = listHeader.children[0];
     const listContainer = document.getElementById('task-lists');
 
@@ -202,6 +217,8 @@ export function selectNewList() {
 };
 
 // Promises
+
+//selectList is adding a class to an element.
 export function selectList(list) {
     return new Promise((res, rej) => {
         list.classList.add('selected-list')
@@ -209,6 +226,7 @@ export function selectList(list) {
     })
 };
 
+//deselectList is removing a class from an element
 export function deselectList() {
     return new Promise((res, rej) => {
         const selected = document.querySelector('.selected-list');
