@@ -1,8 +1,6 @@
-import { finishTask, postPoneTask, changeTag, moveTask, getDropMenu, createDropDownMenu } from './dashboard-tasks.js';
 import { clearDOMTasks, clearSearchRecs } from './clean-dom.js';
-import { createSidebarContainer, buildTaskSummary, createTaskHtml, populateTasks, populateSearchBox, decorateList, buildListSelectOptions } from './create-dom-elements.js';
-import { selectList, toggleListDisplay, showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown, toggleListSelect, selectNewList } from './display.js';
-import { updateTaskStatus } from './display-task-updates.js';
+import { createSidebarContainer, buildTaskSummary, populateTasks, populateSearchBox, decorateList, buildListSelectOptions } from './create-dom-elements.js';
+import { toggleListSelect, selectNewList } from './display.js';
 import { initializePage } from './initialize-page.js';
 import { addTaskSummaryEventListeners, taskId, moveTaskToNewList } from './dashboard-summary.js';
 

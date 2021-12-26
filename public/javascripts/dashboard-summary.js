@@ -1,7 +1,5 @@
-import { getDate, setTaskDeadline, decorateTaskWithPriority, decorateTaskWithDeadline, buildListSelectOptions } from './create-dom-elements.js';
 import { markSaved, updatePriorityTag, updateDeadlineTag, moveTaskFromList, moveTaskFromTodayOrTomorrow } from './display-task-updates.js';
 import { showCreateList } from './display.js';
-import { listId } from './dashboard.js';
 
 export let taskId;
 export let moveTasktoNew;

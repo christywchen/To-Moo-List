@@ -1,4 +1,4 @@
-import { getDate, setTaskDeadline, decorateTaskWithPriority, decorateTaskWithDeadline, buildListSelectOptions } from './create-dom-elements.js';
+import { decorateTaskWithPriority, decorateTaskWithDeadline } from './create-dom-elements.js';
 
 /*
 The below helper functions provide changes to the DOM after a task is edited

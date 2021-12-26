@@ -1,5 +1,4 @@
-import { changeTaskDeadline, moveTaskToNewList } from './dashboard-summary.js'
-import { getDate, buildPrioritySelectOptions, decorateTaskWithDeadline } from './create-dom-elements.js';
+import { getDate, buildPrioritySelectOptions } from './create-dom-elements.js';
 import { hideDivContainer, hideTaskSummary, selectNewList } from './display.js'
 import { updatePriorityTag, updateDeadlineTag, moveTaskFromList, moveTaskFromTodayOrTomorrow, updateTaskStatus } from './display-task-updates.js';
 

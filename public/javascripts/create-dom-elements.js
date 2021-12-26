@@ -1,7 +1,7 @@
 import { fetchListTasks, fetchTaskSummary, updateListId, deleteList } from './dashboard.js';
 import { clearDOMTasks, clearSearchRecs, clearTaskSummary } from './clean-dom.js';
-import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect, toggleTaskHighlight, toggleTaskSummary, showCreateList } from './display.js';
-import { finishTask, getDropMenu, deleteTask, uncheckCheckBox, hideTaskOptions } from './dashboard-tasks.js'
+import { showRenameList, hideContainer, showContainer, deselectList, toggleListSelect, toggleTaskHighlight, toggleTaskSummary } from './display.js';
+import { getDropMenu } from './dashboard-tasks.js'
 
 export function createSidebarContainer(name, containerType, data,) {
     const container = document.createElement('div');
