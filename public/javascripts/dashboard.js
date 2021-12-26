@@ -154,19 +154,19 @@ export async function fetchInboxTasks(fetchPath) {
 
 };
 
-export async function fetchCategoryTasks(e) {
+export async function fetchPriorityTasks(e) {
     e.stopPropagation();
     clearDOMTasks();
     const stateId = { id: "101" };
     listId = null;
-    const categoryId = e.target.dataset.categoryid
+    const priorityId = e.target.dataset.priorityid
 
-    if (categoryId) {
-        const res = await fetch(`/api/categories/${categoryId}`);
+    if (priorityId) {
+        const res = await fetch(`/api/priorities/${priorityId}`);
         const { tasks } = await res.json();
         // TO DO: Error Handling
         populateTasks(tasks);
-        window.history.replaceState(stateId, `Priority ${categoryId}`, `/dashboard/#priority/${categoryId}`);
+        window.history.replaceState(stateId, `Priority ${priorityId}`, `/dashboard/#priority/${priorityId}`);
     }
 };
 

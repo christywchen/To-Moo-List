@@ -109,7 +109,6 @@ export const postPoneTask = async (e) => {
                 const taskSummary = document.querySelector('#task-details');
 
                 if (taskSummary.classList.contains('task-details-display')) {
-                    console.log('test')
                     const taskSummaryDate = document.querySelectorAll('#summary-due-date-inp')[1];
                     taskSummaryDate.setAttribute('value', getDate(newDateVal));
                 }
@@ -150,8 +149,6 @@ export const moveTask = async (e) => {
                 console.log("Something went wrong");
             } else {
                 const { task } = await res.json();
-                console.log(task)
-                //console.log("it task was moved to a different");
                 const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
                 await hideTaskSummary(taskSummaryDiv);
 
@@ -176,7 +173,7 @@ export const changeTag = async (e) => {
     const tag = document.querySelector(".list-of-tags");
     const taskSummaryDiv = document.querySelector('#task-details');
     const url = window.location.href.split('/'); // grabs the url of the current page
-    const taskCategoryName = ['High', 'Medium', 'Low', 'None'];
+    const taskPriorityName = ['High', 'Medium', 'Low', 'None'];
     const tagId = e.target.id;
 
     selectedTasks.forEach(async (e) => {
@@ -186,7 +183,7 @@ export const changeTag = async (e) => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ categoryId: `${tagId}` })
+                body: JSON.stringify({ priorityId: `${tagId}` })
             })
             if (!res.ok) {
                 console.log("Something went wrong");
@@ -197,7 +194,7 @@ export const changeTag = async (e) => {
                 if (taskSummary) {
                     taskSummary.innerHTML = "";
                     tag.style.display = 'none';
-                    buildPrioritySelectOptions(taskCategoryName[task.categoryId - 1], task.categoryId); // updates the priority options in the task summary
+                    buildPrioritySelectOptions(taskPriorityName[task.priorityId - 1], task.priorityId); // updates the priority options in the task summary
                     updatePriorityTag(task);
                 }
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
@@ -277,13 +274,13 @@ export const getDropMenu = (e) => {
     //     window.alert("MOOOOOOOOO")
     // })
 
-    const categoryList = document.querySelector('.list-of-tags');
-    const tag = document.querySelector('.category');
+    const priorityList = document.querySelector('.list-of-tags');
+    const tag = document.querySelector('.priority'); // was .c/ategory
     tag.addEventListener('click', (e) => {
         hideDivContainer();
-        categoryList.style.display = 'block';
-        // categoryList.style.animation = "growDown .5s ease";
-        categoryList.classList.add('visible');
+        priorityList.style.display = 'block';
+        // priorityList.style.animation = "growDown .5s ease";
+        priorityList.classList.add('visible');
     })
 
     const calDiv = document.querySelector('.due');
@@ -331,17 +328,17 @@ const createPostPoneList = async () => {
 }
 
 const createTagList = async () => {
-    const categoryList = document.querySelector('.list-of-tags');
-    const tags = await fetch('/api/categories');
-    const { categories } = await tags.json();
-    categories.forEach(tag => {
+    const priorityList = document.querySelector('.list-of-tags');
+    const tags = await fetch('/api/priorities');
+    const { priorities } = await tags.json();
+    priorities.forEach(tag => {
         const div = document.createElement('div');
         div.innerText = tag.name
         div.setAttribute("name", tag.name);
         div.setAttribute("value", tag.name);
         div.setAttribute("id", tag.id);
         div.addEventListener("click", changeTag);
-        categoryList.appendChild(div);
+        priorityList.appendChild(div);
     });
 }
 

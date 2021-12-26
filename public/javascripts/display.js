@@ -114,7 +114,7 @@ export function hideListNameDiv(e) {
 export function hideDropDown(e) {
     const listMenu = document.querySelector(".list-of-lists");
     const postponeMenu = document.querySelector(".postpone-dates");
-    const categoryList = document.querySelector('.list-of-tags');
+    const priorityList = document.querySelector('.list-of-tags');
     const calDiv = document.querySelector('.hidden-cal')
     //const listContainers = document.querySelectorAll('.list-container');
     const searchRecs = document.querySelector('.search-recommendations');
@@ -128,7 +128,7 @@ export function hideDropDown(e) {
             //e.preventDefault()
             listMenu.style.display = 'none';
             postponeMenu.style.display = 'none';
-            categoryList.style.display = 'none';
+            priorityList.style.display = 'none';
             searchRecs.style.display = 'none';
             calDiv.style.display = 'none';
             deselectSearchField()
@@ -162,7 +162,7 @@ export async function toggleListSelect(e, listDiv) {
 
     let list = e.target
     if (listDiv) list = listDiv;
-    // Lists and Categories have an extra div container.
+    // Lists and Priorities have an extra div container.
 
     if (list.classList.contains('sidebar-box')) {
         list = list.children[0];

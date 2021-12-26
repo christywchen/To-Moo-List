@@ -224,11 +224,6 @@
     background-color: rgb(36, 206, 169);
 }
 
-.priority-None {
-    display: none;
-    background-color: rgb(36, 206, 169);
-}
-
 .logout:hover {
     background-color: #032c61;
 }

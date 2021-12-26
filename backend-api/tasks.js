@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db/models');
-const { asyncHandler, taskNotFound, validateCategory, validateTask } = require('../utils');
+const { asyncHandler, taskNotFound, validatePriority, validateTask } = require('../utils');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
@@ -15,7 +15,7 @@ router.get('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
 
     const task = await db.Task.findByPk(taskId, {
         where: userId,
-        include: [db.List, db.Category]
+        include: [db.List, db.Priority]
     });
 
     if (task) {
@@ -32,7 +32,7 @@ router.get('/tasks/completed', asyncHandler(async (req, res, next) => {
 
     const tasks = await db.Task.findAll({
         where: { userId },
-        include: [db.List, db.Category]
+        include: [db.List, db.Priority]
     });
 
     if (tasks) {
@@ -55,11 +55,11 @@ router.post('/lists/:id(\\d+)', validateTask, asyncHandler(async (req, res) => {
         name,
         userId,
         listId,
-        categoryId: 4
+        priorityId: 4
     })
 
     task = await db.Task.findByPk(task.id, {
-        include: db.Category
+        include: db.Priority
     });
 
     res.status(201);
@@ -72,14 +72,14 @@ router.put('/tasks/:id(\\d+)', validateTask, asyncHandler(async (req, res, next)
     const task = await db.Task.findByPk(taskId);
     if (task) {
         //may need to change;
-        const { name, description, listId, deadline, isCompleted, categoryId } = req.body;
+        const { name, description, listId, deadline, isCompleted, priorityId } = req.body;
         await task.update({
             name,
             description,
             listId,
             deadline,
             isCompleted,
-            categoryId,
+            priorityId,
         })
         res.status(200);
         res.json({ task }) //may need to change;
@@ -94,18 +94,18 @@ router.patch('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
     let task = await db.Task.findByPk(taskId);
 
     if (task) {
-        const { name, description, listId, deadline, isCompleted, categoryId } = req.body;
+        const { name, description, listId, deadline, isCompleted, priorityId } = req.body;
         await task.update({
             name,
             description,
             listId,
             deadline,
             isCompleted,
-            categoryId,
+            priorityId,
         });
 
         task = await db.Task.findByPk(taskId, {
-            include: db.Category
+            include: db.Priority
         });
 
 
@@ -132,7 +132,7 @@ router.delete('/tasks/:id(\\d+)', asyncHandler(async (req, res) => {
 router.get('/tasks', asyncHandler(async (req, res) => {
     const tasks = await db.Task.findAll({
         where: { userId: res.locals.user.id },
-        include: [db.List, db.Category]
+        include: [db.List, db.Priority]
     })
 
     res.json({ tasks });
@@ -154,7 +154,7 @@ router.get('/tasks/today', asyncHandler(async (req, res, next) => {
                 [Op.gt]: yesterday
             }
         },
-        include: [db.List, db.Category]
+        include: [db.List, db.Priority]
     })
 
     if (tasks) {
@@ -179,7 +179,7 @@ router.get('/tasks/tomorrow', asyncHandler(async (req, res, next) => {
                 [Op.gt]: yesterday
             }
         },
-        include: [db.List, db.Category]
+        include: [db.List, db.Priority]
     })
 
     if (tasks) {
@@ -194,7 +194,7 @@ router.get('/lists/:listId/tasks', asyncHandler(async (req, res, next) => {
         where: {
             listId: req.params.listId
         },
-        include: [db.List, db.Category]
+        include: [db.List, db.Priority]
     })
     if (tasks) {
         res.status(200);

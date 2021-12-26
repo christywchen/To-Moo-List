@@ -148,7 +148,7 @@ export async function changePriority(e) {
     taskId = window.location.href.split('/')[7];
     const newPriorityId = e.target.value;
 
-    const body = { categoryId: parseInt(newPriorityId, 10) }
+    const body = { priorityId: parseInt(newPriorityId, 10) }
     const updatedRes = await fetch(`/api/tasks/${taskId}`, {
         method: "PATCH",
         headers: {

@@ -109,10 +109,9 @@ async function decorateTaskDiv(div, task) {
 export async function decorateTaskWithPriority(div, task) {
     const span = document.createElement('span');
 
-    console.log(task)
     span.setAttribute('data-task', `${task.id}`);
-    span.classList = `priority-tag priority-${task.Category.name}`;
-    span.innerText = `${task.Category.name}`;
+    span.classList = `priority-tag priority-${task.Priority.name}`;
+    span.innerText = `${task.Priority.name}`;
 
     return span;
 }
@@ -166,8 +165,8 @@ export async function buildTaskSummary(task) {
     const currentListId = task.listId;
     const currentList = task.List.name;
     const currentDesc = task.description;
-    const currentPriorityId = task.categoryId;
-    const currentPriority = task.Category.name;
+    const currentPriorityId = task.priorityId;
+    const currentPriority = task.Priority.name;
 
     const taskSummaryContainer = document.createElement('div');
     const taskSummaryParent = document.querySelector('#task-details');
@@ -271,11 +270,11 @@ export async function buildListSelectOptions(currentListId, currentList) {
 }
 
 export async function buildPrioritySelectOptions(currentPriority, currentPriorityId) {
-    const priorityRes = await fetch(`/api/categories`);
-    const { categories } = await priorityRes.json();
+    const priorityRes = await fetch(`/api/priorities`);
+    const { priorities } = await priorityRes.json();
     const priorityOptions = document.querySelector('#summary-priority-select');
     priorityOptions.innerHTML = `<option value="${currentPriorityId}">${currentPriority}</option>`
-    populateSelectOptions(categories, currentPriority, priorityOptions);
+    populateSelectOptions(priorities, currentPriority, priorityOptions);
 }
 
 function populateSelectOptions(table, currentSelectionName, selectHTMLElementName) {
