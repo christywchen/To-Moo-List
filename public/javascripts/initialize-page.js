@@ -2,7 +2,7 @@ import { createTask, createList, renameList, fetchSearch, fetchListTasks, fetchP
 import { hideTaskButton, fadeBackground, hideListNameDiv, hideListOptions, hideDropDown, showTaskButton, showCreateList, toggleListDisplay, toggleListSelect, selectList, deselectList, selectSearchField } from './display.js';
 import { createSidebarContainer, decorateList } from './create-dom-elements.js';
 import { createDropDownMenu, checkAllBoxes, finishTask, deleteTask, getDropMenu } from './dashboard-tasks.js';
-import { updateTaskStatus } from './dashboard-recap.js';
+import { updateTaskStatus } from './display-task-updates.js';
 import { clearSearch } from './clean-dom.js';
 import { todayTasksRoute } from './dashboard-inbox.js';
 

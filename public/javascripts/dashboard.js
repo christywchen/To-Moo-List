@@ -1,11 +1,10 @@
 import { finishTask, postPoneTask, changeTag, moveTask, getDropMenu, createDropDownMenu } from './dashboard-tasks.js';
-import { addTaskSummaryEventListeners } from './dashboard-summary.js';
 import { clearDOMTasks, clearSearchRecs } from './clean-dom.js';
 import { createSidebarContainer, buildTaskSummary, createTaskHtml, populateTasks, populateSearchBox, decorateList, buildListSelectOptions } from './create-dom-elements.js';
 import { selectList, toggleListDisplay, showTaskButton, hideTaskButton, showCreateList, hideListOptions, hideListNameDiv, hideDropDown, toggleListSelect, selectNewList } from './display.js';
-import { updateTaskStatus } from './dashboard-recap.js';
+import { updateTaskStatus } from './display-task-updates.js';
 import { initializePage } from './initialize-page.js';
-import { taskId, moveTaskToNewList } from './dashboard-summary.js';
+import { addTaskSummaryEventListeners, taskId, moveTaskToNewList } from './dashboard-summary.js';
 
 window.addEventListener("load", async (event) => {
     initializePage();
@@ -111,7 +110,7 @@ export async function fetchTaskSummary(e) {
     const listName = window.location.href.split('/')[4];
     const taskId = document.querySelector('input[type="checkbox"]:checked');
     if (!taskId) return
-    
+
     const summaryRes = await fetch(`/api/tasks/${taskId.dataset.task}`);
     const { task } = await summaryRes.json();
 

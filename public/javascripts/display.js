@@ -256,7 +256,9 @@ export function hideDivContainer() {
 
 };
 
-// toggle highlight on task creation
+/*
+Functions to toggle highlight on task creation.
+*/
 export async function toggleTaskHighlight(e) {
     const prevSelected = document.querySelector('.single-task-selected');
     const taskOptions = document.querySelector('.task-options');
@@ -303,7 +305,9 @@ function addHighlight(nextSelection) {
     });
 }
 
-// toggle task summary panel
+/*
+Functions to toggle task summary panel.
+*/
 export async function toggleTaskSummary(e) {
     const prevSelected = document.querySelector('.single-task-selected');
     const taskSummaryDiv = document.querySelector('#task-details');
