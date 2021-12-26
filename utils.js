@@ -138,6 +138,14 @@ const loginValidator = [
         .withMessage('Please provide a valid password')
 ]
 
+function loggedIn(req, res, next) {
+    if (req.session.auth) {
+        res.redirect('/dashboard');
+    } else {
+        next();
+    }
+}
+
 module.exports = {
     csrfProtection,
     asyncHandler,
@@ -150,4 +158,5 @@ module.exports = {
     handleValidationErrors,
     taskNotFound,
     priorityNotFound,
+    loggedIn,
 };
