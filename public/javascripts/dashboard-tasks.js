@@ -135,6 +135,7 @@ export const moveTask = async (e) => {
     const listMenu = document.querySelector('.list-of-lists');
     const listId = e.target.id;
     const taskSummaryDiv = document.querySelector('#task-details');
+    const currentListId = window.location.href.split('/')[5];
 
     selectedTask.forEach(async (e) => {
         if (e.checked) { // only updates in database for task with checkmarks
@@ -154,7 +155,7 @@ export const moveTask = async (e) => {
 
                 listMenu.style.display = 'none';
 
-                moveTaskFromList(task)
+                if (currentListId != listId) moveTaskFromList(task);
 
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
                 uncheckCheckBox();
@@ -175,7 +176,9 @@ export const changeTag = async (e) => {
     const url = window.location.href.split('/'); // grabs the url of the current page
     const taskPriorityName = ['High', 'Medium', 'Low', 'None'];
     const tagId = e.target.id;
+    const currentPriorityId = window.location.href.split('/')[5];
 
+    console.log(currentPriorityId)
     selectedTasks.forEach(async (e) => {
         if (e.checked) { // only updates in database for task with checkmarks
             const res = await fetch(`/api/tasks/${e.dataset.task}`, {
@@ -188,8 +191,8 @@ export const changeTag = async (e) => {
             if (!res.ok) {
                 console.log("Something went wrong");
             } else {
-                //console.log("it worked");
                 const { task } = await res.json();
+
                 const taskSummary = document.querySelector('#summary-priority-select');
                 if (taskSummary) {
                     taskSummary.innerHTML = "";
@@ -198,7 +201,7 @@ export const changeTag = async (e) => {
                     updatePriorityTag(task);
                 }
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
-                if (url.includes("#priority")) {
+                if (url.includes("#priority") && currentPriorityId != task.priorityId) {
                     const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
                     if (deleteDiv) deleteDiv.remove();
                     await hideTaskSummary(taskSummaryDiv); //hides the task summary
@@ -268,11 +271,6 @@ export const getDropMenu = (e) => {
         // postponeList.style.animation = "growDown .5s ease";
         postponeList.classList.add('visible');
     })
-
-    // const alert = document.querySelector(".alert");
-    // alert.addEventListener('click', (e) => {
-    //     window.alert("MOOOOOOOOO")
-    // })
 
     const priorityList = document.querySelector('.list-of-tags');
     const tag = document.querySelector('.priority'); // was .c/ategory
