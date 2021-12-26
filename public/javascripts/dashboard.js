@@ -173,10 +173,10 @@ export async function fetchSearch(e) {
             if (e.target.classList.contains('search-button') ||
                 e.target.classList.contains('fa-search')) {
                 clearDOMTasks()
-                populateTasks(tasks);
+                populateTasks(tasks, 'isCompleted');
                 window.history.replaceState(stateId, `Search ${name}`, `/dashboard/search/?q=${searchStr}`);
             } else {
-                populateSearchBox(tasks/*.slice(0, 5)*/)
+                populateSearchBox(tasks.slice(0, 5))
             }
         }
     }

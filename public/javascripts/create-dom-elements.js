@@ -152,7 +152,7 @@ function decorateSearchItem(div, task) {
         deselectList();
         clearSearchRecs()
         clearDOMTasks()
-        populateTasks(task);
+        populateTasks(task, 'isCompleted');
     });
 };
 
