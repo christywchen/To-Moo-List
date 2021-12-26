@@ -258,7 +258,6 @@ export const getDropMenu = (e) => {
     moveCal.addEventListener('click', (e) => {
         hideDivContainer()
         listMenu.style.display = 'block';
-        // listMenu.style.animation = "growDown .5s ease";
         listMenu.classList.add('visible');
     })
 
@@ -267,16 +266,14 @@ export const getDropMenu = (e) => {
     helpCal.addEventListener('click', (e) => {
         hideDivContainer()
         postponeList.style.display = 'block';
-        // postponeList.style.animation = "growDown .5s ease";
         postponeList.classList.add('visible');
     })
 
     const priorityList = document.querySelector('.list-of-tags');
-    const tag = document.querySelector('.priority'); // was .c/ategory
+    const tag = document.querySelector('.priority');
     tag.addEventListener('click', (e) => {
         hideDivContainer();
         priorityList.style.display = 'block';
-        // priorityList.style.animation = "growDown .5s ease";
         priorityList.classList.add('visible');
     })
 
@@ -285,7 +282,6 @@ export const getDropMenu = (e) => {
     calDiv.addEventListener('click', (e) => {
         hideDivContainer()
         getCal.style.display = 'block';
-        // getCal.style.animation = "growDown .5s ease";
         getCal.classList.add('visible');
     })
 }
@@ -347,7 +343,6 @@ const createCalendar = async (e) => {
     calDiv.innerHTML = `
             <input type="date" min="${today}" value="${today}" id="summary-due-date-inp" class="summary-inp"></input>
             `;
-    // Look at dashboard-summary.js on LINE 47-79
     const hiddenCal = document.querySelector('.hidden-cal input');
     hiddenCal.addEventListener('change', (e) => {
         const selectedTasks = document.querySelectorAll(".single-task > input"); // selects all the tasks
@@ -367,8 +362,6 @@ const createCalendar = async (e) => {
                     if (!res.ok) {
                         console.log("Something went wrong");
                     } else {
-                        //console.log("it worked");
-                        // const deadlineLabel = document.querySelector(`div[data-task="${e.dataset.task}"]`);
                         const { task: updatedTask } = await res.json();
                         updateDeadlineTag(updatedTask);
                         moveTaskFromTodayOrTomorrow(updatedTask)

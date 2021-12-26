@@ -34,7 +34,7 @@ export async function createTask(e) {
                 console.error('-Unable to reach database-');
                 if (!listId) alert('Please select a list for your new task')
                 else alert('Uh-oh, there was a problem with the server.') // TODO
-                throw res // May need to change this
+                throw res
             }
             else {
                 const { task } = await res.json();
@@ -46,7 +46,7 @@ export async function createTask(e) {
                 input.value = "";
             }
         } catch (err) {
-            // TODO finish error handling
+
         }
     }
 };
@@ -71,8 +71,7 @@ export async function createList(e) {
             })
             if (!res.ok) throw res
             else {
-                const newList = await res.json()
-                // const listId = newList.list.id;
+                const newList = await res.json();
                 listId = newList.list.id;
                 const div = createSidebarContainer(newList.list.name, 'list', listId);
                 decorateList(div);
@@ -99,11 +98,8 @@ export async function createList(e) {
     }
 };
 
-// Create Categroy Function?
-
 // R
 export async function fetchTaskSummary(e) {
-    // highlightTask(e);
     const stateId = { id: "99" };
     const listName = window.location.href.split('/')[4];
     const taskId = document.querySelector('input[type="checkbox"]:checked');
@@ -121,8 +117,6 @@ export async function fetchTaskSummary(e) {
     }
 };
 
-// TO DO: make update url function?
-
 export async function fetchListTasks(e) {
     e.stopPropagation();
     clearDOMTasks();
@@ -132,8 +126,6 @@ export async function fetchListTasks(e) {
     if (boxTarget || listTarget) {
         listId = e.target.dataset.listid;
         const taskRes = await fetch(`/api/lists/${listId}/tasks`);
-        // TO DO: filter by completed.
-        // api/tasks/compelted --
         const { tasks } = await taskRes.json();
         populateTasks(tasks);
         window.history.replaceState(stateId, `List ${e.target.dataset.listid}`, `/dashboard/#list/${e.target.dataset.listid}`);
@@ -144,12 +136,10 @@ export async function fetchInboxTasks(fetchPath) {
     listId = null;
     const taskRes = await fetch(fetchPath);
     const { tasks } = await taskRes.json();
-    // TO DO: Needs Error Handling
 
     if (fetchPath.split('/')[3] === 'completed') {
         populateTasks(tasks, 'getCompleted')
     } else populateTasks(tasks);
-
 
 };
 
@@ -163,7 +153,6 @@ export async function fetchPriorityTasks(e) {
     if (priorityId) {
         const res = await fetch(`/api/priorities/${priorityId}`);
         const { tasks } = await res.json();
-        // TO DO: Error Handling
         populateTasks(tasks);
         window.history.replaceState(stateId, `Priority ${priorityId}`, `/dashboard/#priority/${priorityId}`);
     }
@@ -179,8 +168,6 @@ export async function fetchSearch(e) {
     if (name.length) {
         const res = await fetch(`/api/search/tasks/${name}`);
         const { tasks } = await res.json();
-        // const searchStr = name.replace(/\'/g, '%27');
-        // TO DO: Error handling
         if (!res.ok) throw res
         else {
             if (e.target.classList.contains('search-button') ||
@@ -271,7 +258,6 @@ export async function deleteList(e) {
     if (!res.ok) {
         console.log('Something went wrong')
     } else {
-        // -- DOM removal isn't working
         console.log('List deleted')
         list.parentNode.remove();
         clearDOMTasks();

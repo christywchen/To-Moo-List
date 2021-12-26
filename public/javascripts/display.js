@@ -35,15 +35,12 @@ function removeSelfOnClick(container) {
 // Create / Rename List forms
 export async function showCreateList(e) {
     const addListDiv = document.querySelector('#add-list');
-    // e.preventDefault();
-    // const targetNotIcon = !e.target.classList.contains('far');
     addListDiv.style.display = 'block';
     addListDiv.style.position = 'fixed';
     fadeBackground();
 }
 
 export async function showRenameList(e) {
-    // e.preventDefault();
     const renameListDiv = document.querySelector('#rename-list');
     renameListDiv.style.display = 'block';
     renameListDiv.style.position = 'fixed';
@@ -108,7 +105,6 @@ export function hideListNameDiv(e) {
         }
     }
 
-    // find all select box classes and remove them.
 };
 
 export function hideDropDown(e) {
@@ -125,7 +121,6 @@ export function hideDropDown(e) {
             !e.target.className.includes('add-tag-input') &&
             !e.target.className.includes('fas') &&
             !e.target.className.includes('search')) {
-            //e.preventDefault()
             listMenu.style.display = 'none';
             postponeMenu.style.display = 'none';
             priorityList.style.display = 'none';
@@ -162,7 +157,6 @@ export async function toggleListSelect(e, listDiv) {
 
     let list = e.target
     if (listDiv) list = listDiv;
-    // Lists and Priorities have an extra div container.
 
     if (list.classList.contains('sidebar-box')) {
         list = list.children[0];
@@ -189,7 +183,6 @@ export function toggleListDisplay(container, e) {
         icon.classList.add('fa-caret-right');
     } else {
         container.style.display = 'block';
-        // icon.classList.remove('fa-caret-right');
         icon.classList.add('fa-caret-down');
     }
 };
