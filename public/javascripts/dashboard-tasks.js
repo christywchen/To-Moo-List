@@ -117,7 +117,6 @@ export const postPoneTask = async (e) => {
                 extendDiv.style.animation = 'fetchSuccess 1s';
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
                 uncheckCheckBox();
-
             }
         }
         selectNewList();

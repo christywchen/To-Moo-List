@@ -75,6 +75,10 @@
     padding-left: 8px;
 }
 
+.single-task input {
+    pointer-events: none;
+}
+
 .single-task-selected {
     background-color: #ffffc9;
 }
