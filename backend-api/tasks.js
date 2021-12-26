@@ -1,10 +1,15 @@
 const express = require('express');
 const router = express.Router();
+
 const taskService = require('./services/task-service');
+const { requireAuth } = require("../auth");
+
 const { asyncHandler, taskNotFound, validateTask } = require('../utils');
 
+router.use(requireAuth);
+
 // Get all tasks
-router.get('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
+router.get('/:id(\\d+)', asyncHandler(async (req, res, next) => {
     const taskId = parseInt(req.params.id, 10);
 
     const userId = res.locals.user.id;
@@ -19,7 +24,7 @@ router.get('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
 }));
 
 // Get completed tasks
-router.get('/tasks/completed', asyncHandler(async (req, res, next) => {
+router.get('/completed', asyncHandler(async (req, res, next) => {
     const userId = res.locals.user.id;
 
     const tasks = await taskService.getTasksByUser(userId);
@@ -33,7 +38,7 @@ router.get('/tasks/completed', asyncHandler(async (req, res, next) => {
 }));
 
 // Getting all tasks by userId
-router.get('/tasks', asyncHandler(async (req, res) => {
+router.get('/', asyncHandler(async (req, res) => {
     const userId = res.locals.user.id
 
     const tasks = await taskService.getTasksByUser(userId);
@@ -42,7 +47,7 @@ router.get('/tasks', asyncHandler(async (req, res) => {
 }));
 
 // Get tasks by date
-router.get('/tasks/today', asyncHandler(async (req, res, next) => {
+router.get('/today', asyncHandler(async (req, res, next) => {
     const today = new Date();
     let tomorrow = new Date();
     tomorrow.setDate(today.getDate() + 1);
@@ -58,7 +63,7 @@ router.get('/tasks/today', asyncHandler(async (req, res, next) => {
     } else next(taskNotFound())
 }))
 
-router.get('/tasks/tomorrow', asyncHandler(async (req, res, next) => {
+router.get('/tomorrow', asyncHandler(async (req, res, next) => {
     const today = new Date();
     let twoDaysAhead = new Date();
     twoDaysAhead.setDate(today.getDate() + 2);
@@ -75,7 +80,7 @@ router.get('/tasks/tomorrow', asyncHandler(async (req, res, next) => {
 }));
 
 // Post new task
-router.post('/lists/:id(\\d+)', validateTask, asyncHandler(async (req, res) => {
+router.post('/', validateTask, asyncHandler(async (req, res) => {
     let { name, listId } = req.body;
     listId = parseInt(listId, 10)
     const userId = res.locals.user.id;
@@ -87,23 +92,8 @@ router.post('/lists/:id(\\d+)', validateTask, asyncHandler(async (req, res) => {
     res.json({ task });
 }));
 
-// Put --- delete since not using??
-router.put('/tasks/:id(\\d+)', validateTask, asyncHandler(async (req, res, next) => {
-    const taskId = parseInt(req.params.id, 10);
-    const task = await taskService.getTaskByPk(taskId);
-
-    if (task) {
-        await taskService.updateTask(task, req.body);
-
-        res.status(200);
-        res.json({ task });
-    } else {
-        next(taskNotFound(taskId));
-    }
-}));
-
 // Patch - update a task
-router.patch('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
+router.patch('/:id(\\d+)', asyncHandler(async (req, res, next) => {
     const taskId = parseInt(req.params.id, 10);
     let task = await taskService.getTaskByPk(taskId);
 
@@ -119,7 +109,7 @@ router.patch('/tasks/:id(\\d+)', asyncHandler(async (req, res, next) => {
 }));
 
 // Delete a task
-router.delete('/tasks/:id(\\d+)', asyncHandler(async (req, res) => {
+router.delete('/:id(\\d+)', asyncHandler(async (req, res) => {
     const taskId = parseInt(req.params.id, 10);
 
     const task = await taskService.getTaskByPk(taskId);

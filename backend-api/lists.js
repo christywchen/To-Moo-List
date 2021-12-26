@@ -39,22 +39,6 @@ router.post('/', validateList, handleValidationErrors, asyncHandler(async (req, 
     res.json({ list });
 }));
 
-// Put - update list name
-router.put('/:id', validateList, handleValidationErrors, asyncHandler(async (req, res, next) => {
-    const listId = parseInt(req.params.id, 10);
-    const list = await listService.getListByPk(listId);
-
-    if (list) {
-        const { name } = req.body;
-        await listService.updateList(list, name);
-
-        res.status(200);
-        res.json({ list })
-    } else {
-        next(listNotFoundError(req.params.id));
-    }
-}));
-
 // Patch - update list name
 router.patch('/:id', validateList, handleValidationErrors, asyncHandler(async (req, res, next) => {
     const listId = parseInt(req.params.id, 10);

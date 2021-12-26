@@ -44,9 +44,9 @@ store.sync();
 
 app.use('/dashboard', dashboardRouter);
 app.use(usersRouter);
-app.use('/api/lists', listsRouter);
-app.use('/api', tasksRouter);
 app.use('/lists', frontListsRouter)
+app.use('/api/lists', listsRouter);
+app.use('/api/tasks', tasksRouter);
 app.use('/api/priorities', prioritiesRouter);
 app.use('/api/search', searchRouter);
 

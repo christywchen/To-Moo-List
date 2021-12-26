@@ -26,7 +26,7 @@ export async function createTask(e) {
     div.classList.add('single-task')
     if (input.value.length) {
         try {
-            const res = await fetch(`/api/lists/${listId}`, {
+            const res = await fetch(`/api/tasks`, {
                 method: 'POST',
                 body: JSON.stringify(body),
                 headers: { "Content-Type": "application/json" }
