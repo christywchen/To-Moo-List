@@ -61,13 +61,10 @@ export async function changeTaskDeadline(e) {
     let newDeadline = e.target.value;
     let body;
 
-    // create body with new deadline
     if (newDeadline === '') {
         body = { deadline: null };
     } else {
-        //console.log(newDeadline)
         newDeadline = new Date(newDeadline).toISOString().replace('T', ' ').replace('Z', '');
-        //console.log('new', newDeadline)
         body = { deadline: newDeadline };
     }
 
@@ -81,6 +78,7 @@ export async function changeTaskDeadline(e) {
     const { task: updatedTask } = await updatedRes.json();
 
     updateDeadlineTag(updatedTask);
+    await moveTaskFromTodayOrTomorrow(updatedTask);
 };
 
 
@@ -268,5 +266,21 @@ export async function moveTaskFromList(task) {
     } else {
         markSaved('#list-div');
         window.history.replaceState(stateId, `List ${task.listId}`, `/dashboard/${location}/${task.listId}/tasks/${task.id}`);
+    }
+}
+
+
+export async function moveTaskFromTodayOrTomorrow(task) {
+    const stateId = { id: "99" };
+    const location = window.location.href.split('/')[4];
+
+    if (location === '#tomorrow' || location === '#today') {
+        const taskContainer = document.querySelector('#tasksContainer');
+        const movedTask = document.querySelector(`[data-task="${task.id}"]`);
+        taskContainer.removeChild(movedTask);
+
+        const taskDetailsDiv = document.querySelector('#task-details');
+        taskDetailsDiv.classList.remove('task-details-display');
+        window.history.replaceState(stateId, `List ${task.listId}`, `/dashboard/${location}`);
     }
 }

@@ -1,5 +1,5 @@
 import { updateTaskStatus } from './dashboard-recap.js'
-import { updatePriorityTag, updateDeadlineTag, changeTaskDeadline, moveTaskToNewList, moveTaskFromList } from './dashboard-summary.js'
+import { updatePriorityTag, updateDeadlineTag, changeTaskDeadline, moveTaskToNewList, moveTaskFromList, moveTaskFromTodayOrTomorrow } from './dashboard-summary.js'
 import { getDate, buildPrioritySelectOptions, decorateTaskWithDeadline } from './create-dom-elements.js';
 import { hideDivContainer, hideTaskSummary, selectNewList } from './display.js'
 
@@ -105,6 +105,7 @@ export const postPoneTask = async (e) => {
             } else {
                 const { task: updatedTask } = await res.json();
                 updateDeadlineTag(updatedTask);
+                moveTaskFromTodayOrTomorrow(updatedTask)
 
                 const taskSummary = document.querySelector('#task-details');
 
@@ -373,6 +374,7 @@ const createCalendar = async (e) => {
                         // const deadlineLabel = document.querySelector(`div[data-task="${e.dataset.task}"]`);
                         const { task: updatedTask } = await res.json();
                         updateDeadlineTag(updatedTask);
+                        moveTaskFromTodayOrTomorrow(updatedTask)
 
                         const taskSummary = document.querySelector('#task-details');
 
@@ -380,6 +382,7 @@ const createCalendar = async (e) => {
                             const taskSummaryDate = document.querySelectorAll('#summary-due-date-inp')[1];
                             taskSummaryDate.setAttribute('value', getDate(newDateVal));
                         }
+
                     }
                 }
             }
