@@ -55,6 +55,7 @@ export async function createTask(e) {
                 const addTaskButton = document.querySelector('.add-task-button > button');
                 addTaskButton.disabled = true;
                 input.value = "";
+                //These three lines makes the input a empty string, and disabled the button.
             }
         } catch (err) {
             // TODO finish error handling
@@ -130,6 +131,7 @@ export async function fetchTaskSummary(e) {
     const currentPriority = task.Category.name;
 
     buildTaskSummary(task);
+    //create task summary
     addTaskSummaryEventListeners();
     if (listName !== '#list') {
         window.history.replaceState(stateId, `Task ${task.id}`, `/dashboard/${listName}/${task.listId}/tasks/${task.id}`);

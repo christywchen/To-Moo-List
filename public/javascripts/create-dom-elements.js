@@ -28,13 +28,16 @@ export function createSidebarContainer(name, containerType, data,) {
         editIcon.addEventListener('click', updateListId);
         editIcon.addEventListener('click', async (e) => {
             await hideContainer(`${containerType}-edit-dropdown`);
+            //hideContainer is to remove a class
             await showContainer(container, listEditDropDown);
+            //add a new container
         });
     }
 
     return container;
 }
 
+//listEditDropDown is to create dropDown div for Lists->Groceries and Lists->Fun Stuff
 export function listEditDropDown() {
     const container = document.createElement('div');
     const renameListOp = document.createElement('div');
@@ -53,6 +56,7 @@ export function listEditDropDown() {
         const listEditDropdown = document.querySelector('.list-edit-dropdown');
         if (listEditDropdown) listEditDropdown.remove();
         showRenameList()
+        //showRenameList is to pop up a block to rename a list
         // fadeBackground();
     })
     deleteListOp.addEventListener('click', deleteList);

@@ -7,11 +7,15 @@ export function fadeBackground(e) {
         const div = document.createElement('div');
         div.classList.add('page-cover');
         removeSelfOnClick(div);
+        //remove a class after clicking
         showPageListeners();
+        //hide the page-cover container after clicking
         body.prepend(div);
+        //insert a new node before the first child of the element
     }
 };
 
+//showPageListeners is to hide the page-cover container after clicking
 export function showPageListeners() {
     const buttons = document.querySelectorAll('button');
     const exitWindow = document.querySelector('.close');
@@ -25,6 +29,7 @@ export function showPageListeners() {
     })
 }
 
+//removeSelfOnClick is to remove a class after clicking
 function removeSelfOnClick(container) {
     const className = container.className;
     container.addEventListener('click', (e) => {

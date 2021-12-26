@@ -60,9 +60,9 @@ app.use('/lists', frontListsRouter)
 app.use('/api/categories', categoriesRouter);
 app.use('/api/search', searchRouter);
 
-//checked logged in
+//automatically get logged in after sign up and be redirected to the task lists /dashboard
 // function loggedIn(req, res, next) {
-//   if (req.user) {
+//   if (req.session.auth && res.local.authenticated) {
 //     next();
 //   } else {
 //     res.redirect('/login');
@@ -70,9 +70,6 @@ app.use('/api/search', searchRouter);
 // }
 
 // app.get('/', loggedIn, function (req, res, next) {
-//   // req.user - will exist
-//   // load user orders and render them
-//   console.log(req.user);
 //   res.render('dashboard-list')
 // });
 
