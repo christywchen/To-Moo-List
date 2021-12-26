@@ -8,11 +8,11 @@ Live Demo: [To-Moo-List](http://to-moo-list.herokuapp.com/)
 
 ## A Brief Overview
 
-To Moo, or not To Moo? Ponder no more. 
+To Moo, or not To Moo? Ponder no more.
 
-Let it be known that you should always just moo it. 
+Let it be known that you should always just moo it.
 
-To Moo List is a clone of another web application called [Remember the Milk](https://www.rememberthemilk.com), but with our own twist. This website application is a **online to-do app** to help you stay organized and help remember your tasks/errands. 
+To Moo List is a clone of another web application called [Remember the Milk](https://www.rememberthemilk.com), but with our own twist. This website application is a **online to-do app** to help you stay organized and help remember your tasks/errands.
 
 At To Moo List, users can create accounts and access a dashboard tailored for personal task management. From the dashboard, users are able to create tasks, give tasks deadlines and descriptions, tag tasks by priority level, create lists for those tasks, organize tasks into various lists, and mark tasks as complete. Users can also see summaries of all pending tasks, pending tasks that are due today or tomorrow, and postpone any desired tasks. Tasks can be edited individually or edited by bulk
 
@@ -26,7 +26,7 @@ This app was built using **JavaScript** on the backend with a **postgreSQL** dat
 The frontend was built with [pug](https://pugjs.org/api/getting-started.html) templates and written in **JavaScript**. **CSS** was used for all styling. The entirety of the user dashboard was created by means of DOM Manipulation and does not require any reloading or refreshing in order to make fetch calls to the backend database. The routes for the frontend also follow **RESTful** convention.
 
 ### Libraries
-* [BCrypt](https://www.npmjs.com/package/bcrypt) 
+* [BCrypt](https://www.npmjs.com/package/bcrypt)
 * [cookie-parser](https://www.npmjs.com/package/cookie-parser)
 * [csurf](https://www.npmjs.com/package/csurf)
 * [express](https://www.npmjs.com/package/express)
@@ -39,7 +39,7 @@ The frontend was built with [pug](https://pugjs.org/api/getting-started.html) te
 # Primary Components
 
 ### User Authorization
-User authentication is handled in JavaScript whilst using BCrypt for password hashing. For security, user passwords are hashed before getting saved to the database. When the user logs in, the password they provide are rehashed to see if the match the one with the data base to verify the users credentials. 
+User authentication is handled in JavaScript whilst using BCrypt for password hashing. For security, user passwords are hashed before getting saved to the database. When the user logs in, the password they provide are rehashed to see if the match the one with the data base to verify the users credentials.
 
 [![login-page.png](https://i.postimg.cc/6p1tXzkt/login-page.png)](https://postimg.cc/FYc2bbFB)
 
@@ -110,7 +110,7 @@ Anything you had to stop and think about before building
 Descriptions of particular challenges
 Snippets or links to see code for these.
 
-With tasks being populted to the main dashboard in many different ways throughout the code, each task still needed to be populated with the same structure and functionality. This was approached via boilerplate functions to populate and decorate the task divs. 
+With tasks being populted to the main dashboard in many different ways throughout the code, each task still needed to be populated with the same structure and functionality. This was approached via boilerplate functions to populate and decorate the task divs.
 
 ```JavaScript
 async function decorateTaskDiv(div, task) {
@@ -131,7 +131,7 @@ async function decorateTaskDiv(div, task) {
 
 ```
 
-Selecting/deselecting list via vanilla javascript was handled in various ways. Deselecting by clicking away from an item was handled via a global click event listener on the document object. This worked well, however provided a separation of concerns issue while debugging at times. Toggling a selection was often handled using async functions and promises to await the appropriate selecting and deselecting sqeuence. 
+Selecting/deselecting list via vanilla javascript was handled in various ways. Deselecting by clicking away from an item was handled via a global click event listener on the document object. This worked well, however provided a separation of concerns issue while debugging at times. Toggling a selection was often handled using async functions and promises to await the appropriate selecting and deselecting sqeuence.
 
 ```JavaScript
 function selectList(list) {
@@ -155,89 +155,35 @@ function deselectList() {
 Due to specific database associations between items, each item's particular data needed to be tracked as different parts of the application interacted with that element. To solve this we used the data attribute to store particular identifiers on individual items when possible. Since multiple functions depended on knowing what list was currently selected, we organized our CRUD functions to utilize closure so that this data could be shared and updated when actions were performed.
 
 ```javascript
-// C
-export async function createTask(e) {
-    e.preventDefault();
-    const taskData = document.querySelector('#add-task-input');
-    const taskContainer = document.getElementById("tasksContainer");
-    const formData = new FormData(taskData);
-    const name = formData.get('name');
-    const body = { name, listId };
-    const div = document.createElement('div');
-    const input = document.getElementById('name');
-    div.classList.add('single-task')
-    if (input.value.length) {
-        try {
-            const res = await fetch(`/api/lists/${listId}`, {
-                method: 'POST',
-                body: JSON.stringify(body),
-                headers: { "Content-Type": "application/json" }
-            })
 
-            if (!res.ok) {
-                console.error('-Unable to reach database-');
-                if (!listId) alert('Please select a list for your new task')
-                else alert('Opps there was a problem with the server') // TODO
-                throw res // May need to change this
-            }
-            else {
-                const { task } = await res.json();
+export function createSidebarContainer(name, containerType, data,) {
+    const container = document.createElement('div');
+    const itemDiv = document.createElement('div');
+    container.classList.add(`${containerType}-box`, 'sidebar-box');
+    container.style.position = 'relative';
+    container.setAttribute(`data-${containerType}Id`, `${data}`);
 
-                populateTasks(task);
+    itemDiv.innerText = name;
+    itemDiv.setAttribute(`data-${containerType}Id`, `${data}`);
+    itemDiv.className = `${containerType}-item`;
 
-                const addTaskButton = document.querySelector('.add-task-button > button');
-                addTaskButton.disabled = true;
-                input.value = "";
-            }
-        } catch (err) {
-            // TODO finish error handling
-        }
-    }
-};
+    container.appendChild(itemDiv);
 
-export async function createList(e) {
-    const listForm = document.querySelector('#add-list-form');
-    const listData = document.querySelector('#addList');
-    const formData = new FormData(listForm);
-    const name = formData.get('addList');
-    const body = { name };
-    const tasksList = document.getElementById('task-lists');
-    if (listData.value.length) {
-        try {
-            const res = await fetch('/api/lists', {
-                method: "POST",
-                body: JSON.stringify(body),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            })
-            if (!res.ok) throw res
-            else {
-                const newList = await res.json()
-                // const listId = newList.list.id;
-                listId = newList.list.id;
-                const div = createSidebarContainer(newList.list.name, 'list', listId);
-                decorateList(div);
-                clearDOMTasks();
-                tasksList.appendChild(div);
-                toggleListSelect(e, div);
+    return container;
+}
 
-
-                selectNewList();
-
-                if (moveTask) {
-                    await moveTaskToNewList(taskId, listId);
-                    await fetchListTasks(e);
-                    const taskRes = await fetch(`/api/lists/${listId}/tasks`);
-                    const { tasks } = await taskRes.json();
-                    populateTasks(tasks);
-                }
-                window.history.replaceState(stateId, `List ${e.target.dataset.listid}`, `/dashboard/#list/${e.target.dataset.listid}`);
-
-            }
-        } catch (error) {
-
-        }
+export async function fetchListTasks(e) {
+    e.stopPropagation();
+    clearDOMTasks();
+    const stateId = { id: "100" };
+    const boxTarget = e.target.classList.contains('list-box');
+    const listTarget = e.target.classList.contains('list-item')
+    if (boxTarget || listTarget) {
+        listId = e.target.dataset.listid;
+        const taskRes = await fetch(`/api/lists/${listId}/tasks`);
+        const { tasks } = await taskRes.json();
+        populateTasks(tasks);
+        window.history.replaceState(stateId, `List ${e.target.dataset.listid}`, `/dashboard/#list/${e.target.dataset.listid}`);
     }
 };
 ```
@@ -252,7 +198,7 @@ async function toggleTaskHighlight(e) {
     const url = window.location.href.split('/')[4];
 
     if (nextSelection.localName == 'label' ||
-        nextSelection.localName == 'span' || 
+        nextSelection.localName == 'span' ||
         e.target.type == 'checkbox') {
         nextSelection = nextSelection.parentNode;
     }
@@ -281,12 +227,6 @@ function addHighlight(nextSelection) {
     return new Promise((res, rej) => {
         nextSelection.classList.add('single-task-selected');
         nextSelection.children[0].checked = true;
-        if(taskOptions){
-            if (url !== '#completed'){
-                taskOptions.style.visibility = 'visible';
-                taskOptions.style.animation = "fadeIn 1s"; 
-            }
-        }
         res();
     });
 }
