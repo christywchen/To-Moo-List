@@ -2,7 +2,7 @@ const db = require('../../db/models');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
-// get
+// Get
 async function getTaskByPk(taskId) {
     return await db.Task.findByPk(taskId, {
         include: [db.Priority]
@@ -23,15 +23,6 @@ async function getTasksByUser(userId) {
     });
 }
 
-async function getTasksByListId(listId) {
-    return await db.Task.findAll({
-        where: {
-            listId: listId
-        },
-        include: [db.List, db.Priority]
-    })
-}
-
 async function getTasksByDate(lessThanDate, greaterThanDate, userId) {
     return await db.Task.findAll({
         where: {
@@ -45,7 +36,7 @@ async function getTasksByDate(lessThanDate, greaterThanDate, userId) {
     })
 }
 
-// post
+// Post
 async function createTask(name, userId, listId) {
     return await db.Task.create({
         name,
@@ -55,7 +46,7 @@ async function createTask(name, userId, listId) {
     });
 }
 
-// put/patch
+// Put/Patch
 async function updateTask(task, requestBody) {
     const { name, description, listId, deadline, isCompleted, priorityId } = requestBody;
 
@@ -69,18 +60,15 @@ async function updateTask(task, requestBody) {
     });
 }
 
-// destroy
+// Destroy
 async function deleteTask(task) {
     await task.destroy();
 }
-
-
 
 module.exports = {
     getTaskByPk,
     getTaskByPkAndUser,
     getTasksByUser,
-    getTasksByListId,
     getTasksByDate,
     createTask,
     updateTask,

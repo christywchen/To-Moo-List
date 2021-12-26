@@ -35,7 +35,7 @@ export async function createTask(e) {
             if (!res.ok) {
                 console.error('-Unable to reach database-');
                 if (!listId) alert('Please select a list for your new task')
-                else alert('Opps there was a problem with the server') // TODO
+                else alert('Uh-oh, there was a problem with the server.') // TODO
                 throw res // May need to change this
             }
             else {
