@@ -14,8 +14,7 @@ Let it be known that you should always just moo it.
 
 To Moo List is a clone of another web application called [Remember the Milk](https://www.rememberthemilk.com), but with our own twist. This website application is a **online to-do app** to help you stay organized and help remember your tasks/errands.
 
-At To Moo List, users can create accounts and access a dashboard tailored for personal task management. From the dashboard, users are able to create tasks, give tasks deadlines and descriptions, tag tasks by priority level, create lists for those tasks, organize tasks into various lists, and mark tasks as complete. Users can also see summaries of all pending tasks, pending tasks that are due today or tomorrow, and postpone any desired tasks. Tasks can be edited individually or edited by bulk.
-
+At To Moo List, users can create accounts and access a dashboard tailored for personal task management. From the dashboard, users are able to create tasks, give tasks deadlines and descriptions, tag tasks by priority level, create lists for those tasks, organize tasks into various lists, and mark tasks as complete. Users can also see summaries of all pending tasks, pending tasks that are due today or tomorrow, and postpone any desired tasks. Tasks can be edited individually or edited by bulk
 
 
 ## Overall Structure
@@ -155,91 +154,36 @@ function deselectList() {
 
 Due to specific database associations between items, each item's particular data needed to be tracked as different parts of the application interacted with that element. To solve this we used the data attribute to store particular identifiers on individual items when possible. Since multiple functions depended on knowing what list was currently selected, we organized our CRUD functions to utilize closure so that this data could be shared and updated when actions were performed.
 
-< insert maybe a function that defines a data attribute >.
 ```javascript
-// C
-export async function createTask(e) {
-    e.preventDefault();
-    const taskData = document.querySelector('#add-task-input');
-    const taskContainer = document.getElementById("tasksContainer");
-    const formData = new FormData(taskData);
-    const name = formData.get('name');
-    const body = { name, listId };
-    const div = document.createElement('div');
-    const input = document.getElementById('name');
-    div.classList.add('single-task')
-    if (input.value.length) {
-        try {
-            const res = await fetch(`/api/lists/${listId}`, {
-                method: 'POST',
-                body: JSON.stringify(body),
-                headers: { "Content-Type": "application/json" }
-            })
 
-            if (!res.ok) {
-                console.error('-Unable to reach database-');
-                if (!listId) alert('Please select a list for your new task')
-                else alert('Opps there was a problem with the server') // TODO
-                throw res // May need to change this
-            }
-            else {
-                const { task } = await res.json();
+export function createSidebarContainer(name, containerType, data,) {
+    const container = document.createElement('div');
+    const itemDiv = document.createElement('div');
+    container.classList.add(`${containerType}-box`, 'sidebar-box');
+    container.style.position = 'relative';
+    container.setAttribute(`data-${containerType}Id`, `${data}`);
 
-                populateTasks(task);
+    itemDiv.innerText = name;
+    itemDiv.setAttribute(`data-${containerType}Id`, `${data}`);
+    itemDiv.className = `${containerType}-item`;
 
-                const addTaskButton = document.querySelector('.add-task-button > button');
-                addTaskButton.disabled = true;
-                input.value = "";
-            }
-        } catch (err) {
-            // TODO finish error handling
-        }
-    }
-};
+    container.appendChild(itemDiv);
 
-export async function createList(e) {
-    const listForm = document.querySelector('#add-list-form');
-    const listData = document.querySelector('#addList');
-    const formData = new FormData(listForm);
-    const name = formData.get('addList');
-    const body = { name };
-    const tasksList = document.getElementById('task-lists');
-    if (listData.value.length) {
-        try {
-            const res = await fetch('/api/lists', {
-                method: "POST",
-                body: JSON.stringify(body),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            })
-            if (!res.ok) throw res
-            else {
-                const newList = await res.json()
-                // const listId = newList.list.id;
-                listId = newList.list.id;
-                const div = createSidebarContainer(newList.list.name, 'list', listId);
-                decorateList(div);
-                clearDOMTasks();
-                tasksList.appendChild(div);
-                toggleListSelect(e, div);
+    return container;
+}
 
-
-                selectNewList();
-
-                if (moveTask) {
-                    await moveTaskToNewList(taskId, listId);
-                    await fetchListTasks(e);
-                    const taskRes = await fetch(`/api/lists/${listId}/tasks`);
-                    const { tasks } = await taskRes.json();
-                    populateTasks(tasks);
-                }
-                window.history.replaceState(stateId, `List ${e.target.dataset.listid}`, `/dashboard/#list/${e.target.dataset.listid}`);
-
-            }
-        } catch (error) {
-
-        }
+export async function fetchListTasks(e) {
+    e.stopPropagation();
+    clearDOMTasks();
+    const stateId = { id: "100" };
+    const boxTarget = e.target.classList.contains('list-box');
+    const listTarget = e.target.classList.contains('list-item')
+    if (boxTarget || listTarget) {
+        listId = e.target.dataset.listid;
+        const taskRes = await fetch(`/api/lists/${listId}/tasks`);
+        const { tasks } = await taskRes.json();
+        populateTasks(tasks);
+        window.history.replaceState(stateId, `List ${e.target.dataset.listid}`, `/dashboard/#list/${e.target.dataset.listid}`);
     }
 };
 ```
