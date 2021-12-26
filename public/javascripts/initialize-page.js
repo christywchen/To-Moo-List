@@ -29,6 +29,9 @@ export const initializePage = async () => {
         fetchInboxTasks(todayTasksRoute);
         toggleListDisplay(inboxHeader);
         selectList(todaysList);
+
+        const stateId = { id: "99" };
+        window.history.replaceState(stateId, `Today`, `/dashboard/#today`);
     }
 
     headers.forEach(header => {
