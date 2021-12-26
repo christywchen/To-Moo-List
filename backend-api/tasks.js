@@ -8,7 +8,16 @@ const { asyncHandler, taskNotFound, validateTask } = require('../utils');
 
 router.use(requireAuth);
 
-// Get all tasks
+// Getting all tasks by userId
+router.get('/', asyncHandler(async (req, res) => {
+    const userId = res.locals.user.id
+
+    const tasks = await taskService.getTasksByUser(userId);
+
+    res.json({ tasks });
+}));
+
+// Get task by taskId
 router.get('/:id(\\d+)', asyncHandler(async (req, res, next) => {
     const taskId = parseInt(req.params.id, 10);
 
@@ -35,15 +44,6 @@ router.get('/completed', asyncHandler(async (req, res, next) => {
     } else {
         next(taskNotFound());
     }
-}));
-
-// Getting all tasks by userId
-router.get('/', asyncHandler(async (req, res) => {
-    const userId = res.locals.user.id
-
-    const tasks = await taskService.getTasksByUser(userId);
-
-    res.json({ tasks });
 }));
 
 // Get tasks by date
