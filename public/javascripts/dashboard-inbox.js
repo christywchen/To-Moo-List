@@ -1,6 +1,5 @@
-import { createTaskHtml, decorateList } from './create-dom-elements.js';
 import { clearDOMTasks } from './clean-dom.js';
-import { fetchTaskSummary, fetchInboxTasks } from './dashboard.js';
+import { fetchInboxTasks } from './dashboard.js';
 
 const allTasks = document.getElementById("all");
 const tomorrow = document.getElementById("tomorrow");
@@ -26,7 +25,7 @@ if (taskDivs) {
     })
 };
 
-function decorateInboxList(list, route, urlName){
+function decorateInboxList(list, route, urlName) {
     list.addEventListener('click', (e) => {
         const stateId = { id: "99" };
         clearDOMTasks();

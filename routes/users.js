@@ -2,13 +2,13 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator');
 const db = require('../db/models');
-const { csrfProtection, asyncHandler, userValidators, loginValidator } = require('../utils');
+const { csrfProtection, asyncHandler, loggedIn, userValidators, loginValidator } = require('../utils');
 const { loginUser, logoutUser } = require('../auth');
 
 const router = express.Router();
 
 // get /signup
-router.get('/signup', csrfProtection, asyncHandler(async (req, res) => {
+router.get('/signup', loggedIn, csrfProtection, asyncHandler(async (req, res) => {
   res.render('user-signup', {
     title: 'Sign Up',
     csrfToken: req.csrfToken(),
@@ -16,7 +16,7 @@ router.get('/signup', csrfProtection, asyncHandler(async (req, res) => {
 
 }));
 
-router.get('/login', csrfProtection, asyncHandler(async (req, res) => {
+router.get('/login', loggedIn, csrfProtection, asyncHandler(async (req, res) => {
   res.render('user-login', {
     title: 'Login',
     csrfToken: req.csrfToken(),

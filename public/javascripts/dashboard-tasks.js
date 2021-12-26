@@ -1,7 +1,6 @@
-import { updateTaskStatus } from './dashboard-recap.js'
-import { updatePriorityTag, updateDeadlineTag, changeTaskDeadline, moveTaskToNewList, moveTaskFromList } from './dashboard-summary.js'
-import { getDate, buildPrioritySelectOptions, decorateTaskWithDeadline } from './create-dom-elements.js';
+import { getDate, buildPrioritySelectOptions } from './create-dom-elements.js';
 import { hideDivContainer, hideTaskSummary, selectNewList } from './display.js'
+import { updatePriorityTag, updateDeadlineTag, moveTaskFromList, moveTaskFromTodayOrTomorrow, updateTaskStatus } from './display-task-updates.js';
 
 export const checkAllBoxes = (e) => {
     const checkBox = document.querySelector('.checkbox-all > input');
@@ -105,11 +104,11 @@ export const postPoneTask = async (e) => {
             } else {
                 const { task: updatedTask } = await res.json();
                 updateDeadlineTag(updatedTask);
+                moveTaskFromTodayOrTomorrow(updatedTask)
 
                 const taskSummary = document.querySelector('#task-details');
 
                 if (taskSummary.classList.contains('task-details-display')) {
-                    console.log('test')
                     const taskSummaryDate = document.querySelectorAll('#summary-due-date-inp')[1];
                     taskSummaryDate.setAttribute('value', getDate(newDateVal));
                 }
@@ -118,7 +117,6 @@ export const postPoneTask = async (e) => {
                 extendDiv.style.animation = 'fetchSuccess 1s';
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
                 uncheckCheckBox();
-
             }
         }
         selectNewList();
@@ -136,6 +134,7 @@ export const moveTask = async (e) => {
     const listMenu = document.querySelector('.list-of-lists');
     const listId = e.target.id;
     const taskSummaryDiv = document.querySelector('#task-details');
+    const currentListId = window.location.href.split('/')[5];
 
     selectedTask.forEach(async (e) => {
         if (e.checked) { // only updates in database for task with checkmarks
@@ -150,14 +149,12 @@ export const moveTask = async (e) => {
                 console.log("Something went wrong");
             } else {
                 const { task } = await res.json();
-                console.log(task)
-                //console.log("it task was moved to a different");
                 const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
                 await hideTaskSummary(taskSummaryDiv);
 
                 listMenu.style.display = 'none';
 
-                moveTaskFromList(task)
+                if (currentListId != listId) moveTaskFromList(task);
 
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
                 uncheckCheckBox();
@@ -176,8 +173,9 @@ export const changeTag = async (e) => {
     const tag = document.querySelector(".list-of-tags");
     const taskSummaryDiv = document.querySelector('#task-details');
     const url = window.location.href.split('/'); // grabs the url of the current page
-    const taskCategoryName = ['High', 'Medium', 'Low', 'None'];
+    const taskPriorityName = ['High', 'Medium', 'Low', 'None'];
     const tagId = e.target.id;
+    const currentPriorityId = window.location.href.split('/')[5];
 
     selectedTasks.forEach(async (e) => {
         if (e.checked) { // only updates in database for task with checkmarks
@@ -186,22 +184,22 @@ export const changeTag = async (e) => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ categoryId: `${tagId}` })
+                body: JSON.stringify({ priorityId: `${tagId}` })
             })
             if (!res.ok) {
                 console.log("Something went wrong");
             } else {
-                //console.log("it worked");
                 const { task } = await res.json();
+
                 const taskSummary = document.querySelector('#summary-priority-select');
                 if (taskSummary) {
                     taskSummary.innerHTML = "";
                     tag.style.display = 'none';
-                    buildPrioritySelectOptions(taskCategoryName[task.categoryId - 1], task.categoryId); // updates the priority options in the task summary
+                    buildPrioritySelectOptions(taskPriorityName[task.priorityId - 1], task.priorityId); // updates the priority options in the task summary
                     updatePriorityTag(task);
                 }
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
-                if (url.includes("#priority")) {
+                if (url.includes("#priority") && currentPriorityId != task.priorityId) {
                     const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
                     if (deleteDiv) deleteDiv.remove();
                     await hideTaskSummary(taskSummaryDiv); //hides the task summary
@@ -233,7 +231,6 @@ export const deleteTask = (e) => {
             if (!res.ok) {
                 console.log("Something went wrong");
             } else {
-                //console.log("Your task was deleted")
                 trashTask.style.animation = "fetchSuccess 1s";
                 updateTaskStatus();
                 const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
@@ -259,7 +256,6 @@ export const getDropMenu = (e) => {
     moveCal.addEventListener('click', (e) => {
         hideDivContainer()
         listMenu.style.display = 'block';
-        // listMenu.style.animation = "growDown .5s ease";
         listMenu.classList.add('visible');
     })
 
@@ -268,22 +264,15 @@ export const getDropMenu = (e) => {
     helpCal.addEventListener('click', (e) => {
         hideDivContainer()
         postponeList.style.display = 'block';
-        // postponeList.style.animation = "growDown .5s ease";
         postponeList.classList.add('visible');
     })
 
-    // const alert = document.querySelector(".alert");
-    // alert.addEventListener('click', (e) => {
-    //     window.alert("MOOOOOOOOO")
-    // })
-
-    const categoryList = document.querySelector('.list-of-tags');
-    const tag = document.querySelector('.category');
+    const priorityList = document.querySelector('.list-of-tags');
+    const tag = document.querySelector('.priority');
     tag.addEventListener('click', (e) => {
         hideDivContainer();
-        categoryList.style.display = 'block';
-        // categoryList.style.animation = "growDown .5s ease";
-        categoryList.classList.add('visible');
+        priorityList.style.display = 'block';
+        priorityList.classList.add('visible');
     })
 
     const calDiv = document.querySelector('.due');
@@ -291,7 +280,6 @@ export const getDropMenu = (e) => {
     calDiv.addEventListener('click', (e) => {
         hideDivContainer()
         getCal.style.display = 'block';
-        // getCal.style.animation = "growDown .5s ease";
         getCal.classList.add('visible');
     })
 }
@@ -331,17 +319,17 @@ const createPostPoneList = async () => {
 }
 
 const createTagList = async () => {
-    const categoryList = document.querySelector('.list-of-tags');
-    const tags = await fetch('/api/categories');
-    const { categories } = await tags.json();
-    categories.forEach(tag => {
+    const priorityList = document.querySelector('.list-of-tags');
+    const tags = await fetch('/api/priorities');
+    const { priorities } = await tags.json();
+    priorities.forEach(tag => {
         const div = document.createElement('div');
         div.innerText = tag.name
         div.setAttribute("name", tag.name);
         div.setAttribute("value", tag.name);
         div.setAttribute("id", tag.id);
         div.addEventListener("click", changeTag);
-        categoryList.appendChild(div);
+        priorityList.appendChild(div);
     });
 }
 
@@ -353,7 +341,6 @@ const createCalendar = async (e) => {
     calDiv.innerHTML = `
             <input type="date" min="${today}" value="${today}" id="summary-due-date-inp" class="summary-inp"></input>
             `;
-    // Look at dashboard-summary.js on LINE 47-79
     const hiddenCal = document.querySelector('.hidden-cal input');
     hiddenCal.addEventListener('change', (e) => {
         const selectedTasks = document.querySelectorAll(".single-task > input"); // selects all the tasks
@@ -373,10 +360,9 @@ const createCalendar = async (e) => {
                     if (!res.ok) {
                         console.log("Something went wrong");
                     } else {
-                        //console.log("it worked");
-                        // const deadlineLabel = document.querySelector(`div[data-task="${e.dataset.task}"]`);
                         const { task: updatedTask } = await res.json();
                         updateDeadlineTag(updatedTask);
+                        moveTaskFromTodayOrTomorrow(updatedTask)
 
                         const taskSummary = document.querySelector('#task-details');
 
@@ -384,6 +370,7 @@ const createCalendar = async (e) => {
                             const taskSummaryDate = document.querySelectorAll('#summary-due-date-inp')[1];
                             taskSummaryDate.setAttribute('value', getDate(newDateVal));
                         }
+
                     }
                 }
             }

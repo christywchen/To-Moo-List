@@ -6,14 +6,15 @@ const logger = require('morgan');
 const { sequelize } = require('./db/models');
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
-const dashboardRouter = require('./routes/dashhboard');
+const dashboardRouter = require('./routes/dashboard');
 const usersRouter = require('./routes/users');
 const tasksRouter = require('./backend-api/tasks');
 const listsRouter = require('./backend-api/lists')
-const categoriesRouter = require('./backend-api/categories');
+const prioritiesRouter = require('./backend-api/priorities');
 const searchRouter = require('./backend-api/search')
 const frontListsRouter = require('./routes/lists')
 const { restoreUser } = require('./auth');
+const {loggedIn} = require('./utils')
 
 const app = express();
 
@@ -44,14 +45,14 @@ store.sync();
 
 app.use('/dashboard', dashboardRouter);
 app.use(usersRouter);
-app.use('/api/lists', listsRouter);
-app.use('/api', tasksRouter);
 app.use('/lists', frontListsRouter)
-app.use('/api/categories', categoriesRouter);
+app.use('/api/lists', listsRouter);
+app.use('/api/tasks', tasksRouter);
+app.use('/api/priorities', prioritiesRouter);
 app.use('/api/search', searchRouter);
 
 // Gets the splash page
-app.get('/', (req, res) => {
+app.get('/', loggedIn, (req, res) => {
   res.render('splash-home', {
     title: "To Moo List"
   })
@@ -69,6 +70,9 @@ app.get('/upgrade', (req, res) => {
   })
 })
 
+
+
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
@@ -79,7 +83,7 @@ app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-  // console.log(err);  
+  // console.log(err);
   // render the error page
   res.status(err.status || 500);
   res.render('error');

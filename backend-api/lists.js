@@ -1,17 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
+const listService = require('./services/list-service');
 const { requireAuth } = require("../auth");
-const db = require('../db/models');
 
 const { asyncHandler, csrfProtection, listNotFoundError, validateList, handleValidationErrors } = require('../utils')
 
 router.use(requireAuth);
 
+// Get all lists by userId
 router.get('/', asyncHandler(async (req, res, next) => {
-    const lists = await db.List.findAll({
-        where: { userId: res.locals.user.id }
-    })
+    const lists = await listService.getListsByUserId(res.locals.user.id);
 
     if (lists) {
         res.json({ lists });
@@ -19,37 +18,36 @@ router.get('/', asyncHandler(async (req, res, next) => {
     } else next(listNotFoundError());
 }));
 
+// Getting all tasks by listId
+router.get('/:listId/tasks', asyncHandler(async (req, res, next) => {
+    const listId = req.params.listId;
+
+    const tasks = await listService.getTasksByListId(listId);
+
+    if (tasks) {
+        res.status(200);
+        res.json({ tasks });
+    } else next(taskNotFound())
+}));
+
+// Post a new list
 router.post('/', validateList, handleValidationErrors, asyncHandler(async (req, res) => {
     const { name } = req.body;
-    const list = await db.List.create({
-        name,
-        userId: res.locals.user.id
-    })
+    const list = await listService.createList(name, res.locals.user.id);
 
     res.status(201);
     res.json({ list });
 }));
 
-router.put('/:id', validateList, handleValidationErrors, asyncHandler(async (req, res, next) => {
-    // TO DO change listId method. Check path
-    const list = await db.List.findByPk(req.params.id);
-
-    if (list) {
-        await list.update({ name: req.body.name });
-        res.status(200);
-        res.json({ list })
-    } else {
-        next(listNotFoundError(req.params.id));
-    }
-}));
-
+// Patch - update list name
 router.patch('/:id', validateList, handleValidationErrors, asyncHandler(async (req, res, next) => {
     const listId = parseInt(req.params.id, 10);
-    const list = await db.List.findByPk(listId);
+    const list = await listService.getListByPk(listId);
 
     if (list) {
         const { name } = req.body;
-        await list.update({ name });
+        await listService.updateList(list, name);
+
         res.status(200);
         res.json({ list })
     } else {
@@ -57,12 +55,13 @@ router.patch('/:id', validateList, handleValidationErrors, asyncHandler(async (r
     }
 }));
 
+// Delete a task
 router.delete('/:id', asyncHandler(async (req, res, next) => {
     const listId = parseInt(req.params.id, 10);
-    const list = await db.List.findByPk(listId)
+    const list = await listService.getListByPk(listId);
 
     if (list) {
-        await list.destroy();
+        await listService.deleteList(list);
         res.status(204).end();
     } else {
         next(listNotFoundError(listId));

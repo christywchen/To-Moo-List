@@ -56,7 +56,7 @@
 
 ::-webkit-scrollbar {
     width: 0px;
-    background: transparent; 
+    background: transparent;
 }
 
 #tasksContainer div {
@@ -73,6 +73,10 @@
 
 .single-task label {
     padding-left: 8px;
+}
+
+.single-task input {
+    pointer-events: none;
 }
 
 .single-task-selected {
@@ -181,7 +185,7 @@
     color: rgb(168, 168, 168);
 }
 
-/* date and category tags for task items */
+/* date and priority tags for task items */
 .deadline-tag {
     margin-left: auto;
     margin-right: 5px;

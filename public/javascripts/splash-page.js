@@ -55,7 +55,7 @@ prevBtn.addEventListener("click", () => {
 let playSlider;
 
 const repeater = () => {
-  playSlider = setInterval(function() {
+  playSlider = setInterval(function () {
     slides.forEach((slide) => {
       slide.classList.remove("active");
     });

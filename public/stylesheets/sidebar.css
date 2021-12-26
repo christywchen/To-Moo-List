@@ -28,7 +28,7 @@ li {
 }
 
 .list-item,
-.category-item,
+.priority-item,
 .inbox-list {
     padding-left: 17px;
     color: rgb(66, 64, 64)

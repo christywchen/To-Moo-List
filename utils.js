@@ -23,12 +23,12 @@ const taskNotFound = taskId => {
     return err;
 };
 
-const categoryNotFound = categoryId => {
+const priorityNotFound = priorityId => {
     let err;
-    if (categoryId) {
-        err = new Error(`Category with id ${taskId} could not be found.`)
+    if (priorityId) {
+        err = new Error(`Priority with id ${taskId} could not be found.`)
     } else err = new Error(`Tasks could not be found.`)
-    err.title = "Category not found";
+    err.title = "Priority not found";
     err.status = 404;
     return err;
 }
@@ -61,7 +61,7 @@ const validateTask = [
         .exists({ checkFalsy: true })
 ];
 
-const validateCategory = [
+const validatePriority = [
     check('name')
         .exists({ checkFalsy: true })
         .withMessage("There must be a name for a list."),
@@ -138,6 +138,14 @@ const loginValidator = [
         .withMessage('Please provide a valid password')
 ]
 
+function loggedIn(req, res, next) {
+    if (req.session.auth) {
+        res.redirect('/dashboard');
+    } else {
+        next();
+    }
+}
+
 module.exports = {
     csrfProtection,
     asyncHandler,
@@ -146,8 +154,9 @@ module.exports = {
     listNotFoundError,
     validateList,
     validateTask,
-    validateCategory,
+    validatePriority,
     handleValidationErrors,
     taskNotFound,
-    categoryNotFound,
+    priorityNotFound,
+    loggedIn,
 };

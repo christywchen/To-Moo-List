@@ -43,23 +43,23 @@
     top: 49px;
     border: 1px solid lightgray;
     border-radius: 5px;
-    /* box-shadow: 10px 5px 5px lightgray; */
+    box-shadow: 1px 2px 5px rgb(0 0 0 / 20%);
     overflow: hidden;
+    margin-top: 3px;
 }
-
 
 .alert:active {
     background-color: red;
 }
 
 .dropdown div {
-    display:flex;
+    display: flex;
     justify-content: center;
     align-items: center;
     background-color: white;
-    margin:0 auto;
+    margin: 0 auto;
     width: auto;
-    font-size: 14px;
+    font-size: 1em;
     padding: 5px;
     text-align: center;
     align-content: center;
@@ -69,52 +69,57 @@
     background-color: #b4d4ec;
 }
 
-.dropdown input {
-    padding: 0 auto;
-}
-
 .dropdown input::placeholder {
     font-size: 12px;
     text-align: center;
 }
 
-.dropdown-row{
+.dropdown-row {
     width: auto;
 }
 
-.postpone-dates{
-    margin-left: 87px;
+.postpone-dates {
+    margin-left: 70px;
 }
 
 .hidden-cal {
     margin-left: 100px;
 }
 
-.list-of-lists{
-    margin-left: 21px;
+.hidden-cal input {
+    margin: 0px;
 }
 
-.list-of-tags{
-    margin-left: 10px;
+.hidden-cal input:hover {
+    border: 1px solid rgb(0 0 0 / 0%);
+}
+
+.list-of-lists {
+    margin-left: 14px;
+}
+
+.list-of-tags {
+    margin-left: 4px;
 }
 
 .tool-tip {
     position: absolute;
     visibility: hidden;
-    margin-bottom: 75px;
-    font-size: 16px;
+    margin-bottom: 61px;
     z-index: 4;
-    width: 90px;
-    height: 40px;
+    width: fit-content;
+    height: 28px;
     color: white;
-    /* text-align: center; */
-    background-color: black;
+    background-color: #828283;
     display: flex;
     align-items: center; /* Vertical center alignment */
     justify-content: center; /* Horizontal center alignment */
+    border-radius: 5px;
+    font-size: 1em;
+    padding: 9px;
 }
 
-.grid-square:hover span{
+.grid-square:hover span {
     visibility: visible;
 }
 

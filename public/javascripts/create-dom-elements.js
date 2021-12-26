@@ -1,7 +1,7 @@
 import { fetchListTasks, fetchTaskSummary, updateListId, deleteList } from './dashboard.js';
 import { clearDOMTasks, clearSearchRecs, clearTaskSummary } from './clean-dom.js';
-import { showRenameList, hideContainer, showContainer, fadeBackground, deselectList, toggleListSelect, toggleTaskHighlight, toggleTaskSummary, showCreateList } from './display.js';
-import { finishTask, getDropMenu, deleteTask, uncheckCheckBox, hideTaskOptions } from './dashboard-tasks.js'
+import { showRenameList, hideContainer, showContainer, deselectList, toggleListSelect, toggleTaskHighlight, toggleTaskSummary } from './display.js';
+import { getDropMenu } from './dashboard-tasks.js'
 
 export function createSidebarContainer(name, containerType, data,) {
     const container = document.createElement('div');
@@ -108,11 +108,9 @@ async function decorateTaskDiv(div, task) {
 
 export async function decorateTaskWithPriority(div, task) {
     const span = document.createElement('span');
-
-    console.log(task)
     span.setAttribute('data-task', `${task.id}`);
-    span.classList = `priority-tag priority-${task.Category.name}`;
-    span.innerText = `${task.Category.name}`;
+    span.classList = `priority-tag priority-${task.Priority.name}`;
+    span.innerText = `${task.Priority.name}`;
 
     return span;
 }
@@ -158,16 +156,21 @@ function decorateSearchItem(div, task) {
     });
 };
 
-// create task summary
+
 export async function buildTaskSummary(task) {
+    /*
+    This function gets called every time a task is selected in the task inbox.
+    It builds the task summary panel and will clear the previous contents each time a different task is selected.
+    */
+
     const currentTask = task.name;
     const currentTaskId = task.id;
     const currentDeadline = task.deadline;
     const currentListId = task.listId;
     const currentList = task.List.name;
     const currentDesc = task.description;
-    const currentPriorityId = task.categoryId;
-    const currentPriority = task.Category.name;
+    const currentPriorityId = task.priorityId;
+    const currentPriority = task.Priority.name;
 
     const taskSummaryContainer = document.createElement('div');
     const taskSummaryParent = document.querySelector('#task-details');
@@ -186,8 +189,13 @@ export async function buildTaskSummary(task) {
     buildPrioritySelectOptions(currentPriority, currentPriorityId);
 }
 
-// helper functions for task summary container
+/*
+The below are helper functions used to build the contents of the task summary panel.
+*/
 function buildTitleDiv(currentTask) {
+    /*
+    This function will build the div where a user can update a task's title in the task summary panel.
+    */
     const titleDiv = document.createElement('div');
     titleDiv.setAttribute('id', 'title-div');
     titleDiv.innerHTML = `
@@ -197,6 +205,9 @@ function buildTitleDiv(currentTask) {
 }
 
 export function buildDeadlineDiv(currentDeadline) {
+    /*
+    This function will build the div where a user can update a task's deadline in the task summary panel.
+    */
     const today = getDate();
     let deadline = '';
 
@@ -216,9 +227,12 @@ export function buildDeadlineDiv(currentDeadline) {
 }
 
 function buildListDiv(currentListId, currentList) {
+    /*
+    This function will build the div in the task summary panel where a user can update a task's list.
+    */
     const listDiv = document.createElement('div');
-    // listDiv.addEventListener('click', showCreateList);
     listDiv.setAttribute('id', 'list-div');
+
     listDiv.innerHTML = `
     <div id="summary-list">List</div>
     <select id="summary-list-select" class="summary-inp">
@@ -229,8 +243,12 @@ function buildListDiv(currentListId, currentList) {
 }
 
 function buildPriorityDiv(currentPriorityId, currentPriority) {
+    /*
+    This function will build the div in the task summary panel where a user can update a task's priority.
+    */
     const priorityDiv = document.createElement('div');
     priorityDiv.setAttribute('id', 'priority-div');
+
     priorityDiv.innerHTML = `
         <div id="summary-priority">Priority</div>
         <select id="summary-priority-select" class="summary-inp">
@@ -240,6 +258,10 @@ function buildPriorityDiv(currentPriorityId, currentPriority) {
 }
 
 function buildDescDiv(currentDesc) {
+    /*
+    This function will build the div in the task summary panel where a user can update their
+    task description via textarea.
+     */
     const descDiv = document.createElement('div');
     descDiv.setAttribute('id', 'desc-div');
     let descText = '';
@@ -255,6 +277,9 @@ function buildDescDiv(currentDesc) {
 };
 
 export async function buildListSelectOptions(currentListId, currentList) {
+    /*
+    This function will build the dropdown options in the task summary panel for updating a task's list.
+    */
     const listsRes = await fetch(`/api/lists`);
     const { lists } = await listsRes.json();
     const listOptions = document.querySelector('#summary-list-select');
@@ -265,20 +290,24 @@ export async function buildListSelectOptions(currentListId, currentList) {
     createListOpt.setAttribute('value', 'create-new');
     createListOpt.innerText = 'Create New';
 
-    // createListOpt.addEventListener('change', showCreateList);
-
     listOptions.appendChild(createListOpt);
 }
 
 export async function buildPrioritySelectOptions(currentPriority, currentPriorityId) {
-    const priorityRes = await fetch(`/api/categories`);
-    const { categories } = await priorityRes.json();
+    /*
+    This function will build the dropdown options in the task summary panel for updating a task's priority.
+    */
+    const priorityRes = await fetch(`/api/priorities`);
+    const { priorities } = await priorityRes.json();
     const priorityOptions = document.querySelector('#summary-priority-select');
     priorityOptions.innerHTML = `<option value="${currentPriorityId}">${currentPriority}</option>`
-    populateSelectOptions(categories, currentPriority, priorityOptions);
+    populateSelectOptions(priorities, currentPriority, priorityOptions);
 }
 
 function populateSelectOptions(table, currentSelectionName, selectHTMLElementName) {
+    /*
+    This function dropdown options and append them to the passed in html element.
+    */
     table.forEach(element => {
         if (element.name !== currentSelectionName) {
             const option = document.createElement('option');
@@ -289,8 +318,10 @@ function populateSelectOptions(table, currentSelectionName, selectHTMLElementNam
     });
 }
 
-// date functions
 export function getDate(day) {
+    /*
+    This function takes the date object and converts dates deadlines to use in the calendar input.
+    */
     let getDay;
     if (day) getDay = new Date(day);
     else getDay = new Date()
@@ -306,6 +337,9 @@ export function getDate(day) {
 }
 
 export function setTaskDeadline(taskDeadline) {
+    /*
+    This function will show the updated deadline for tasks in the inbox.
+    */
     const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
     let deadline = getDate(taskDeadline);
     let today = getDate();

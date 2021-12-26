@@ -14,8 +14,7 @@ Let it be known that you should always just moo it.
 
 To Moo List is a clone of another web application called [Remember the Milk](https://www.rememberthemilk.com), but with our own twist. This website application is a **online to-do app** to help you stay organized and help remember your tasks/errands. 
 
-At To Moo List, users can create accounts and access a dashboard tailored for personal task management. From the dashboard, users are able to create tasks, give tasks deadlines and descriptions, tag tasks by priority level, create lists for those tasks, organize tasks into various lists, and mark tasks as complete. Users can also see summaries of all pending tasks, pending tasks that are due today or tomorrow, and postpone any desired tasks. Tasks can be edited individually or edited by bulk.
- 
+At To Moo List, users can create accounts and access a dashboard tailored for personal task management. From the dashboard, users are able to create tasks, give tasks deadlines and descriptions, tag tasks by priority level, create lists for those tasks, organize tasks into various lists, and mark tasks as complete. Users can also see summaries of all pending tasks, pending tasks that are due today or tomorrow, and postpone any desired tasks. Tasks can be edited individually or edited by bulk
 
 
 ## Overall Structure
@@ -80,7 +79,7 @@ The project requires Node.js, NPM, and PostgreSQL. It can be installed locally b
 Then, run the following in the root directory in order to install the necessary dependencies and begin running To Moo List on a local server:
 
 ```
-npm install 
+npm install
 ```
 Migrate and run the seeder files for the database using:
 ```
@@ -153,9 +152,8 @@ function deselectList() {
 }
 ```
 
-Due to specific database associations between items, each item's particular data needed to be tracked as different parts of the application interacted with that element. To solve this we used the data attribute to store particular identifiers on individual items when possible. Since multiple functions depended on knowing what list was currently selected, we organized our CRUD functions to utilize closure so that this data could be shared and updated when actions were performed. 
+Due to specific database associations between items, each item's particular data needed to be tracked as different parts of the application interacted with that element. To solve this we used the data attribute to store particular identifiers on individual items when possible. Since multiple functions depended on knowing what list was currently selected, we organized our CRUD functions to utilize closure so that this data could be shared and updated when actions were performed.
 
-< insert maybe a function that defines a data attribute >. 
 ```javascript
 // C
 export async function createTask(e) {
