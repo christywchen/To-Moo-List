@@ -163,7 +163,6 @@ export async function fetchSearch(e) {
     const searchData = new FormData(searchForm);
     const name = searchData.get('search');
     const stateId = { id: "103" };
-    clearSearchRecs()
     const searchStr = encodeURIComponent(name)
     if (name.length) {
         const res = await fetch(`/api/search/tasks/${name}`);
@@ -172,7 +171,7 @@ export async function fetchSearch(e) {
         else {
             if (e.target.classList.contains('search-button') ||
                 e.target.classList.contains('fa-search')) {
-                clearDOMTasks()
+                // clearDOMTasks()
                 populateTasks(tasks);
                 window.history.replaceState(stateId, `Search ${name}`, `/dashboard/search/?q=${searchStr}`);
             } else {
