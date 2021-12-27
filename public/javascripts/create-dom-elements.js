@@ -133,6 +133,7 @@ export function createTaskHtml(taskName, taskId) {
 };
 
 export function populateSearchBox(tasks) {
+    clearSearchRecs()
     const recContainer = document.querySelector('.search-recommendations');
     recContainer.style.display = 'block';
 
