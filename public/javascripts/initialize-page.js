@@ -1,7 +1,7 @@
 import { createTask, createList, renameList, fetchSearch, fetchPriorityTasks, fetchInboxTasks } from './dashboard.js'
 import { hideTaskButton, fadeBackground, hideListNameDiv, hideListOptions, hideDropDown, showTaskButton, showCreateList, toggleListDisplay, toggleListSelect, selectList, deselectList, selectSearchField } from './display.js';
 import { createSidebarContainer, decorateList } from './create-dom-elements.js';
-import { createDropDownMenu, checkAllBoxes, finishTask, deleteTask } from './dashboard-tasks.js';
+import { createDropDownMenu, checkAllBoxes, finishTask, deleteTask, createPostPoneList } from './dashboard-tasks.js';
 import { updateTaskStatus } from './display-task-updates.js';
 import { clearSearch } from './clean-dom.js';
 import { todayTasksRoute } from './dashboard-inbox.js';
@@ -21,7 +21,6 @@ export const initializePage = async () => {
     const buttons = document.querySelectorAll('button');
     const todaysList = document.getElementById('today');
     const inboxHeader = document.getElementById('default-lists');
-
 
 
     if (!lists.length) showCreateList()
@@ -78,6 +77,7 @@ export const initializePage = async () => {
     const searchField = document.querySelector('#search');
     const checkBox = document.querySelector('.checkbox-all');
     const completeTask = document.querySelector('.completed');
+    const postpone = document.querySelector('.postpone');
     const trashTask = document.querySelector('.delete');
     const searchIcon = document.querySelector('.fa-search');
 
@@ -96,6 +96,8 @@ export const initializePage = async () => {
         createList(e);
         hideListNameDiv(e);
     });
+
+    postpone.addEventListener('click', createPostPoneList);
 
     closeListSubmission.addEventListener('click', hideListNameDiv);
 
