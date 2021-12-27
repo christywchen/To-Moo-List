@@ -77,7 +77,7 @@ export const finishTask = (e) => {
     })
 };
 
-export const postPoneTask = async (e) => {
+const postPoneTask = async (e) => {
     /*
     This function postpones the task that has check marks on the checkbox.
     It postpones the task by first getting all the tasks that are checked using
@@ -286,11 +286,12 @@ export const getDropMenu = (e) => {
     })
 }
 
-const createListDropDown = async () => {
+export const createListDropDown = async () => {
     const res = await fetch('/api/lists')
     const { lists } = await res.json();
 
     const listMenu = document.querySelector(".list-of-lists");
+    listMenu.innerHTML = "";
     lists.forEach(list => {
         const listOption = document.createElement('div');
         listOption.innerHTML = `${list.name}`;
@@ -301,7 +302,6 @@ const createListDropDown = async () => {
         listOption.addEventListener("click", moveTask);
         listMenu.appendChild(listOption);
     })
-
 }
 
 export const createPostPoneList = async (e) => {
@@ -397,8 +397,6 @@ function capitalize(str) {
 };
 
 export const createDropDownMenu = () => {
-    createListDropDown();
-    //createPostPoneList();
     createTagList();
     createCalendar();
 }

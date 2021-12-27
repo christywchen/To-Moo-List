@@ -1,7 +1,7 @@
 import { createTask, createList, renameList, fetchSearch, fetchPriorityTasks, fetchInboxTasks } from './dashboard.js'
 import { hideTaskButton, fadeBackground, hideListNameDiv, hideListOptions, hideDropDown, showTaskButton, showCreateList, toggleListDisplay, toggleListSelect, selectList, deselectList, selectSearchField } from './display.js';
 import { createSidebarContainer, decorateList } from './create-dom-elements.js';
-import { createDropDownMenu, checkAllBoxes, finishTask, deleteTask, createPostPoneList } from './dashboard-tasks.js';
+import { createDropDownMenu, checkAllBoxes, finishTask, deleteTask, createPostPoneList, createListDropDown, moveTask } from './dashboard-tasks.js';
 import { updateTaskStatus } from './display-task-updates.js';
 import { clearSearch } from './clean-dom.js';
 import { todayTasksRoute } from './dashboard-inbox.js';
@@ -78,6 +78,7 @@ export const initializePage = async () => {
     const checkBox = document.querySelector('.checkbox-all');
     const completeTask = document.querySelector('.completed');
     const postpone = document.querySelector('.postpone');
+    const moveList = document.querySelector('.moveTo');
     const trashTask = document.querySelector('.delete');
     const searchIcon = document.querySelector('.fa-search');
 
@@ -97,8 +98,6 @@ export const initializePage = async () => {
         hideListNameDiv(e);
     });
 
-    postpone.addEventListener('click', createPostPoneList);
-
     closeListSubmission.addEventListener('click', hideListNameDiv);
 
     searchField.addEventListener('click', selectSearchField)
@@ -117,8 +116,11 @@ export const initializePage = async () => {
     renameListButton.addEventListener('click', (e) => {
         renameList(e);
     });
+    
     checkBox.addEventListener("click", checkAllBoxes);
     completeTask.addEventListener("click", finishTask);
+    postpone.addEventListener('click', createPostPoneList);
+    moveList.addEventListener('click', createListDropDown);
     trashTask.addEventListener("click", deleteTask);
 
     createDropDownMenu();
