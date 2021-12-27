@@ -83,45 +83,41 @@ export const postPoneTask = async (e) => {
     It postpones the task by first getting all the tasks that are checked using
     querySelectAll and iterates them and postpone the each task in the database
     */
-    const selectedTasks = document.querySelectorAll(".single-task > input"); // selects all the tasks
+    const selectedTask = document.querySelector('input[type="checkbox"]:checked'); // selects all the tasks
     const extendCal = document.querySelector(".postpone-dates");
     const timeStamp = e.target.getAttribute("value");
     const extendDiv = document.querySelector('.postpone');
-
-    selectedTasks.forEach(async (e) => {
-        if (e.checked) { // only updates in database for task with checkmarks
-            const newDateVal = new Date(timeStamp).toISOString().replace('T', ' ').replace('Z', '');
-
-            const res = await fetch(`/api/tasks/${e.dataset.task}`, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ deadline: `${newDateVal}` })
-            })
-            if (!res.ok) {
-                console.log("Something went wrong");
-            } else {
-                const { task: updatedTask } = await res.json();
-                updateDeadlineTag(updatedTask);
-                moveTaskFromTodayOrTomorrow(updatedTask)
-
-                const taskSummary = document.querySelector('#task-details');
-
-                if (taskSummary.classList.contains('task-details-display')) {
-                    const taskSummaryDate = document.querySelectorAll('#summary-due-date-inp')[1];
-                    taskSummaryDate.setAttribute('value', getDate(newDateVal));
-                }
-
-                extendCal.style.display = 'none';
-                extendDiv.style.animation = 'fetchSuccess 1s';
-                updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
-                uncheckCheckBox();
-            }
-        }
-        selectNewList();
+    
+    const newDateVal = new Date(timeStamp).toISOString().replace('T', ' ').replace('Z', '');
+    const res = await fetch(`/api/tasks/${selectedTask.dataset.task}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ deadline: `${newDateVal}` })
     })
+    if (!res.ok) {
+        console.log("Something went wrong");
+    } else {
+        const { task: updatedTask } = await res.json();
+        updateDeadlineTag(updatedTask);
+        moveTaskFromTodayOrTomorrow(updatedTask)
+
+        const taskSummary = document.querySelector('#task-details');
+
+        if (taskSummary.classList.contains('task-details-display')) {
+            const taskSummaryDate = document.querySelectorAll('#summary-due-date-inp')[1];
+            taskSummaryDate.setAttribute('value', getDate(newDateVal));
+        }
+
+        extendCal.style.display = 'none';
+        extendDiv.style.animation = 'fetchSuccess 1s';
+        updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
+        uncheckCheckBox();
+    }
+    selectNewList();
 }
+
 
 
 export const moveTask = async (e) => {
@@ -308,10 +304,21 @@ const createListDropDown = async () => {
 
 }
 
-const createPostPoneList = async () => {
+export const createPostPoneList = async (e) => {
+    const selectedTasks = document.querySelectorAll('input[type="checkbox"]:checked');
     const postponeList = document.querySelector('.postpone-dates');
-    const today = new Date();
+    if (selectedTasks.length > 1) {
+        alert("Please postpone multiple task by using the calendar option");
+        return
+    }
+
+    const res = await fetch(`/api/tasks/${selectedTasks[0].dataset.task}`);
+    const { task } = await res.json();
+    const today = task.deadline ? new Date(task.deadline) : new Date();
     const date = ["1 days", '2 days', '3 days', '4 days', '5 days']
+
+    postponeList.innerHTML = "";
+
     for (let i = 0; i < 5; i++) {
         today.setDate(today.getDate() + 1);
         const readable = today.toISOString().split('T')[0]
@@ -391,7 +398,7 @@ function capitalize(str) {
 
 export const createDropDownMenu = () => {
     createListDropDown();
-    createPostPoneList();
+    //createPostPoneList();
     createTagList();
     createCalendar();
 }
