@@ -173,12 +173,15 @@ export const changeTag = async (e) => {
     const tag = document.querySelector(".list-of-tags");
     const taskSummaryDiv = document.querySelector('#task-details');
     const url = window.location.href.split('/'); // grabs the url of the current page
-    const taskPriorityName = ['High', 'Medium', 'Low', 'None'];
+    const taskPriorityName = ['LOW', 'MEDIUM', 'HIGH', 'NONE'];
     const tagId = e.target.id;
-    const currentPriorityId = window.location.href.split('/')[5];
+    let currentPriorityId;
 
     selectedTasks.forEach(async (e) => {
         if (e.checked) { // only updates in database for task with checkmarks
+            const currentPriority = e.parentNode.childNodes[4].innerText
+
+            currentPriorityId = taskPriorityName.indexOf(currentPriority) + 1;
             const res = await fetch(`/api/tasks/${e.dataset.task}`, {
                 method: "PATCH",
                 headers: {
@@ -195,11 +198,12 @@ export const changeTag = async (e) => {
                 if (taskSummary) {
                     taskSummary.innerHTML = "";
                     tag.style.display = 'none';
-                    buildPrioritySelectOptions(taskPriorityName[task.priorityId - 1], task.priorityId); // updates the priority options in the task summary
+                    buildPrioritySelectOptions(capitalize(taskPriorityName[task.priorityId - 1]), task.priorityId); // updates the priority options in the task summary
                     updatePriorityTag(task);
                 }
                 updateTaskStatus(); //updates task summary that are on the side that shows how many tasks we have and are complete, etc
                 if (url.includes("#priority") && currentPriorityId != task.priorityId) {
+                    //console.log(currentPriorityId, task.priorityId)
                     const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
                     if (deleteDiv) deleteDiv.remove();
                     await hideTaskSummary(taskSummaryDiv); //hides the task summary
@@ -208,7 +212,7 @@ export const changeTag = async (e) => {
             }
         }
     })
-}
+};
 
 export const deleteTask = (e) => {
     /*
@@ -375,12 +379,13 @@ const createCalendar = async (e) => {
                 }
             }
         })
-
-
-
-
     });
 }
+
+function capitalize(str) {
+    const lower = str.toLowerCase();
+    return str.charAt(0).toUpperCase() + lower.slice(1)
+};
 
 export const createDropDownMenu = () => {
     createListDropDown();

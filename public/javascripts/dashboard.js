@@ -2,7 +2,7 @@ import { clearDOMTasks, clearSearchRecs } from './clean-dom.js';
 import { createSidebarContainer, buildTaskSummary, populateTasks, populateSearchBox, decorateList, buildListSelectOptions } from './create-dom-elements.js';
 import { toggleListSelect, selectNewList } from './display.js';
 import { initializePage } from './initialize-page.js';
-import { addTaskSummaryEventListeners, taskId, moveTaskToNewList } from './dashboard-summary.js';
+import { addTaskSummaryEventListeners, taskId, moveTaskToNewList, moveTasktoNew } from './dashboard-summary.js';
 
 window.addEventListener("load", async (event) => {
     initializePage();
