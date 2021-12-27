@@ -34,9 +34,13 @@
 .add-task-button button {
     color: #ffffff;
     font-weight: bold;
-    background-color: var(--main-color);
+    background-color: var(--button-color-light);
     border-radius: 3px;
     border: none;
+}
+
+.add-task-button button:hover {
+    background-color: var(--main-color);
 }
 
 .add-task-button-transition {

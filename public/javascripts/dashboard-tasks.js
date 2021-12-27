@@ -134,6 +134,7 @@ export const moveTask = async (e) => {
     const listMenu = document.querySelector('.list-of-lists');
     const listId = e.target.id;
     const taskSummaryDiv = document.querySelector('#task-details');
+    const currentLocation = window.location.href.split('/')[4];
     const currentListId = window.location.href.split('/')[5];
 
     selectedTask.forEach(async (e) => {
@@ -150,7 +151,8 @@ export const moveTask = async (e) => {
             } else {
                 const { task } = await res.json();
                 const deleteDiv = document.querySelector(`[data-task="${e.dataset.task}"]`);
-                await hideTaskSummary(taskSummaryDiv);
+
+                if (currentLocation === '#list') await hideTaskSummary(taskSummaryDiv);
 
                 listMenu.style.display = 'none';
 

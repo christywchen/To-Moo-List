@@ -3,6 +3,7 @@ import { createSidebarContainer, buildTaskSummary, populateTasks, populateSearch
 import { toggleListSelect, selectNewList } from './display.js';
 import { initializePage } from './initialize-page.js';
 import { addTaskSummaryEventListeners, taskId, moveTaskToNewList, moveTasktoNew } from './dashboard-summary.js';
+import { updateTaskStatus } from './display-task-updates.js'
 
 window.addEventListener("load", async (event) => {
     initializePage();
@@ -22,6 +23,7 @@ export async function createTask(e) {
     const div = document.createElement('div');
     const input = document.getElementById('name');
     div.classList.add('single-task')
+
     if (input.value.length) {
         try {
             const res = await fetch(`/api/tasks`, {
@@ -44,7 +46,9 @@ export async function createTask(e) {
                 const addTaskButton = document.querySelector('.add-task-button > button');
                 addTaskButton.disabled = true;
                 input.value = "";
+                updateTaskStatus();
             }
+
         } catch (err) {
 
         }
