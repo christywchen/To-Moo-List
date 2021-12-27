@@ -152,6 +152,7 @@ export async function toggleListSelect(e, listDiv) {
     const prevSelected = document.querySelector('.selected-list');
     const taskOptions = document.querySelector('.task-options');
     const checkBox = document.querySelector('.checkbox-all > input');
+    const location = window.location.href.split('/')[4];
     checkBox.checked = false;
     taskOptions.style.visibility = 'hidden';
 
@@ -162,7 +163,7 @@ export async function toggleListSelect(e, listDiv) {
         list = list.children[0];
     }
     if (prevSelected) {
-        if (list.dataset.listid || list.classList.contains('inbox-list')) {
+        if (list.dataset.listid || list.classList.contains('inbox-list') || location === '#priority') {
             const taskSummaryDiv = document.querySelector('#task-details');
             taskSummaryDiv.classList.remove('task-details-display');
         }
