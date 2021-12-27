@@ -54,7 +54,7 @@ export async function moveTaskFromList(task) {
     const location = window.location.href.split('/')[4];
     const oldListId = window.location.href.split('/')[5];
 
-    if (location === '#list' || location === '#priority') {
+    if (location === '#list') {
         const taskContainer = document.querySelector('#tasksContainer');
         const movedTask = document.querySelector(`[data-task="${task.id}"]`);
         taskContainer.removeChild(movedTask);
@@ -64,6 +64,25 @@ export async function moveTaskFromList(task) {
         taskDetailsDiv.classList.remove('task-details-display');
     } else {
         markSaved('#list-div');
+        window.history.replaceState(stateId, `List ${task.listId}`, `/dashboard/${location}/${task.listId}/tasks/${task.id}`);
+    }
+}
+
+export async function moveTaskFromPriority(task) {
+    const stateId = { id: "99" };
+    const location = window.location.href.split('/')[4];
+    const oldListId = window.location.href.split('/')[5];
+
+    if (location === '#priority') {
+        console.log('test')
+        const taskContainer = document.querySelector('#tasksContainer');
+        const movedTask = document.querySelector(`[data-task="${task.id}"]`);
+        taskContainer.removeChild(movedTask);
+        window.history.replaceState(stateId, `List ${oldListId}`, `/dashboard/#list/${oldListId}`);
+
+        const taskDetailsDiv = document.querySelector('#task-details');
+        taskDetailsDiv.classList.remove('task-details-display');
+    } else {
         window.history.replaceState(stateId, `List ${task.listId}`, `/dashboard/${location}/${task.listId}/tasks/${task.id}`);
     }
 }

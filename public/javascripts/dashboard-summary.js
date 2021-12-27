@@ -1,4 +1,4 @@
-import { markSaved, updatePriorityTag, updateDeadlineTag, moveTaskFromList, moveTaskFromTodayOrTomorrow } from './display-task-updates.js';
+import { markSaved, updatePriorityTag, updateDeadlineTag, moveTaskFromList, moveTaskFromPriority, moveTaskFromTodayOrTomorrow } from './display-task-updates.js';
 import { showCreateList } from './display.js';
 
 export let taskId;
@@ -156,7 +156,7 @@ export async function changePriority(e) {
     const { task: updatedTask } = await updatedRes.json();
 
     updatePriorityTag(updatedTask);
-    // await moveTaskFromList(updatedTask);
+    await moveTaskFromPriority(updatedTask);
 };
 
 export async function changeDesc(e) {
