@@ -254,6 +254,7 @@ export function hideDivContainer() {
 Functions to toggle highlight on task creation.
 */
 export async function toggleTaskHighlight(e) {
+    const selectedTasks = document.querySelectorAll('input[type="checkbox"]:checked');
     const prevSelected = document.querySelector('.single-task-selected');
     const taskOptions = document.querySelector('.task-options');
     let nextSelection = e.target;
@@ -267,7 +268,7 @@ export async function toggleTaskHighlight(e) {
 
     if (prevSelected == nextSelection || e.target.type == 'checkbox') {
         await removeHighlight(nextSelection);
-        if (url !== '#completed') taskOptions.style.visibility = 'hidden';
+        if (url !== '#completed' && selectedTasks.length < 1) taskOptions.style.visibility = 'hidden';
     } else {
         if (nextSelection.classList.contains('single-task-selected')) await removeHighlight(nextSelection);
         else await addHighlight(nextSelection);
