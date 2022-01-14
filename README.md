@@ -1,4 +1,4 @@
-# To Moo List
+# To-Moo-List
 
 Live Demo: [To-Moo-List](http://to-moo-list.herokuapp.com/)
 
