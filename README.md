@@ -1,6 +1,6 @@
-# To-Moo-List
+# To Moo List
 
-Live Demo: [To-Moo-List](http://to-moo-list.herokuapp.com/)
+Live Demo: [To Moo List](http://to-moo-list.herokuapp.com/)
 
 [![home-page.png](https://i.postimg.cc/SKB4XRQP/home-page.png)](https://postimg.cc/060FF8wG)
 
