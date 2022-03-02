@@ -1,6 +1,6 @@
 # To Moo List
 
-Live Demo: [To-Moo-List](http://to-moo-list.herokuapp.com/)
+Live Demo: [To Moo List](http://to-moo-list.herokuapp.com/)
 
 [![home-page.png](https://i.postimg.cc/SKB4XRQP/home-page.png)](https://postimg.cc/060FF8wG)
 
@@ -106,9 +106,7 @@ From there, a new account can be created and used to sign in.
 - Undo button for most list or task change
 
 # Technical implementation details
-Anything you had to stop and think about before building
-Descriptions of particular challenges
-Snippets or links to see code for these.
+Here are few snippets of code that we are proud to share with everyone.
 
 With tasks being populted to the main dashboard in many different ways throughout the code, each task still needed to be populated with the same structure and functionality. This was approached via boilerplate functions to populate and decorate the task divs.
 
@@ -232,6 +230,3 @@ function addHighlight(nextSelection) {
 }
 ```
 
-
-### Progress Scorecard Link
-https://docs.google.com/spreadsheets/d/1tW94zEwG8R4jXariT0SETSxYLouczoepHEbebXIsWjM/edit?usp=sharing
