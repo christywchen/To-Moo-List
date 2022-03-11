@@ -6,7 +6,7 @@ const tomorrow = document.getElementById("tomorrow");
 const today = document.getElementById("today");
 const completed = document.getElementById("completed");
 
-const allTasksRoute = `/api/tasks`;
+export const allTasksRoute = `/api/tasks`;
 export const todayTasksRoute = `/api/tasks/today`;
 const tomorrowTasksRoute = `/api/tasks/tomorrow`;
 const completedTasksRoute = `/api/tasks/completed`;

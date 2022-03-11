@@ -85,11 +85,19 @@ router.post('/', validateTask, asyncHandler(async (req, res) => {
     listId = parseInt(listId, 10)
     const userId = res.locals.user.id;
 
-    let task = await taskService.createTask(name, userId, listId);
-    task = await taskService.getTaskByPk(task.id);
+    if (!listId) {
+        let task = await taskService.createTask(name, userId, null);
+        task = await taskService.getTaskByPk(task.id);
+        res.status(201);
+        return res.json({ task });
+    }
 
-    res.status(201);
-    res.json({ task });
+    else {
+        let task = await taskService.createTask(name, userId, listId);
+        task = await taskService.getTaskByPk(task.id);
+        res.status(201);
+        return res.json({ task });
+    }
 }));
 
 // Patch - update a task

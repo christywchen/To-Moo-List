@@ -4,7 +4,7 @@ import { createSidebarContainer, decorateList } from './create-dom-elements.js';
 import { createDropDownMenu, checkAllBoxes, finishTask, deleteTask, createPostPoneList, createListDropDown, moveTask } from './dashboard-tasks.js';
 import { updateTaskStatus } from './display-task-updates.js';
 import { clearSearch } from './clean-dom.js';
-import { todayTasksRoute } from './dashboard-inbox.js';
+import { allTasksRoute } from './dashboard-inbox.js';
 
 export const initializePage = async () => {
     const stateId = { id: "98" };
@@ -19,18 +19,18 @@ export const initializePage = async () => {
     const headers = document.querySelectorAll('.list-header-container');
     const inboxLists = document.querySelectorAll('.inbox-list');
     const buttons = document.querySelectorAll('button');
-    const todaysList = document.getElementById('today');
+    const allList = document.getElementById('all');
     const inboxHeader = document.getElementById('default-lists');
 
 
     if (!lists.length) showCreateList()
     else {
-        fetchInboxTasks(todayTasksRoute);
+        fetchInboxTasks(allTasksRoute);
         toggleListDisplay(inboxHeader);
-        selectList(todaysList);
+        selectList(allList);
 
         const stateId = { id: "99" };
-        window.history.replaceState(stateId, `Today`, `/dashboard/#today`);
+        window.history.replaceState(stateId, `All`, `/dashboard/#all`);
     }
 
     headers.forEach(header => {
