@@ -91,7 +91,7 @@ module.exports = {
         deadline: null,
         isCompleted: false,
         priorityId: 4,
-        listId: 2,
+        listId: 3,
         userId: 1,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -124,7 +124,7 @@ module.exports = {
         deadline: yesterday,
         isCompleted: true,
         priorityId: 1,
-        listId: 3,
+        listId: 4,
         userId: 1,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -135,7 +135,7 @@ module.exports = {
         deadline: null,
         isCompleted: false,
         priorityId: 4,
-        listId: 3,
+        listId: 2,
         userId: 1,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -190,7 +190,7 @@ module.exports = {
         deadline: null,
         isCompleted: false,
         priorityId: 4,
-        listId: 4,
+        listId: 3,
         userId: 1,
         createdAt: new Date(),
         updatedAt: new Date()

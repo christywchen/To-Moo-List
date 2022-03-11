@@ -50,8 +50,8 @@ router.post('/signup', csrfProtection, userValidators, asyncHandler(async (req, 
     await user.save();
 
     loginUser(req, res, user);
-
     res.redirect('/dashboard');
+
   } else {
     const errors = validatorErrors.array().map(error => error.msg);
 
@@ -77,7 +77,7 @@ router.post('/login', csrfProtection, loginValidator, asyncHandler(async (req, r
   if (validatorErrors.isEmpty()) {
 
     const user = await db.User.findOne({
-      where: {username}
+      where: { username }
     })
 
     if (user) {
@@ -87,7 +87,7 @@ router.post('/login', csrfProtection, loginValidator, asyncHandler(async (req, r
         return res.redirect('/dashboard');
       }
     }
-    errors.push("Login failed. Wrong username/password.");
+    errors.push("Login failed. Wrong username or password.");
   } else {
     errors = [...errors, ...validatorErrors.array().map(err => err.msg)];
   }
@@ -99,8 +99,8 @@ router.post('/login', csrfProtection, loginValidator, asyncHandler(async (req, r
   });
 }));
 
-router.post('/logout', (req,res) => {
-  logoutUser(req,res);
+router.post('/logout', (req, res) => {
+  logoutUser(req, res);
   res.redirect('/login');
 })
 

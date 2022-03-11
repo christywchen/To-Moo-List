@@ -123,7 +123,7 @@ const userValidators = [
         .withMessage('Confirm Password must not be more than 50 characters long')
         .custom((value, { req }) => {
             if (value !== req.body.password) {
-                throw new Error('Confirm Password does not match Password');
+                throw new Error('Passwords must match');
             }
             return true;
         }),

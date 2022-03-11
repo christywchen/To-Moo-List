@@ -64,6 +64,7 @@ export async function createList(e) {
     const name = formData.get('addList');
     const body = { name };
     const tasksList = document.getElementById('task-lists');
+
     if (listData.value.length) {
         try {
             const res = await fetch('/api/lists', {
@@ -97,7 +98,7 @@ export async function createList(e) {
 
             }
         } catch (error) {
-
+            console.log(error)
         }
     }
 };

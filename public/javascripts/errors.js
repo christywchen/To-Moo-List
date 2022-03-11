@@ -71,8 +71,10 @@ window.addEventListener("load", async (event) => {
                 emailErr.innerText = error.innerText;
             }
 
-            if (findText(error, 'confirm')) {
+            if (findText(error, 'Password')) {
+                userElPass.className = 'redBox';
                 userElConfirm.className = 'redBox';
+                const passwordDiv = document.querySelector('.password-error');
                 const confirmErr = document.querySelector('.confirmPassword-error');
                 confirmErr.hidden = false;
                 confirmErr.innerText = error.innerText;
@@ -80,7 +82,6 @@ window.addEventListener("load", async (event) => {
             }
         })
     };
-
 
 });
 
