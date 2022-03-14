@@ -1,4 +1,4 @@
-# To Moo List
+# To-Moo List
 
 Live Demo: [To Moo List](http://to-moo-list.herokuapp.com/)
 
@@ -12,9 +12,9 @@ To Moo, or not To Moo? Ponder no more.
 
 Let it be known that you should always just moo it.
 
-To Moo List is a clone of another web application called [Remember the Milk](https://www.rememberthemilk.com), but with our own twist. This website application is a **online to-do app** to help you stay organized and help remember your tasks/errands.
+To-Moo List is a clone of another web application called [Remember the Milk](https://www.rememberthemilk.com), but with our own twist. This website application is a **online to-do app** to help you stay organized and help remember your tasks/errands.
 
-At To Moo List, users can create accounts and access a dashboard tailored for personal task management. From the dashboard, users are able to create tasks, give tasks deadlines and descriptions, tag tasks by priority level, create lists for those tasks, organize tasks into various lists, and mark tasks as complete. Users can also see summaries of all pending tasks, pending tasks that are due today or tomorrow, and postpone any desired tasks. Tasks can be edited individually or edited by bulk
+At To-Moo List, users can create accounts and access a dashboard tailored for personal task management. From the dashboard, users are able to create tasks, give tasks deadlines and descriptions, tag tasks by priority level, create lists for those tasks, organize tasks into various lists, and mark tasks as complete. Users can also see summaries of all pending tasks, pending tasks that are due today or tomorrow, and postpone any desired tasks. Tasks can be edited individually or edited by bulk
 
 
 ## Overall Structure
@@ -76,7 +76,7 @@ Individual tasks can also be edited by selecting the task from the list. A task 
 
 The project requires Node.js, NPM, and PostgreSQL. It can be installed locally by downloading the repo, creating a PostgreSQL database user with database creation authority, a PostgreSQL database, then saving the database credentials to a .env file in the root directory based on the provided .env.example file.
 
-Then, run the following in the root directory in order to install the necessary dependencies and begin running To Moo List on a local server:
+Then, run the following in the root directory in order to install the necessary dependencies and begin running To-Moo List on a local server:
 
 ```
 npm install
