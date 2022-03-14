@@ -8,7 +8,7 @@ Live Demo: [To-Moo List](http://to-moo-list.herokuapp.com/)
 
 ## A Brief Overview
 
-To Moo, or not To Moo? Ponder no more.
+To-Moo, or not To-Moo? Ponder no more.
 
 Let it be known that you should always just moo it.
 
