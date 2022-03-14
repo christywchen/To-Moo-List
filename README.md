@@ -68,7 +68,7 @@ Custom lists can be further edited. When hovering over an individual list name, 
 
 Tasks can be edited individually or bulk edited from the task bar, which is the row of icons at the top of the task container. User can select one or more tasks by checking off tasks and clicking on icons that will mark them complete, postpone the deadline by up to five days, set the deadline further into the future, change the list in which the task(s) belong, and delete the task(s).
 
-[![task-options.png](https://i.postimg.cc/CKmGKgx9/task-options.png)](https://postimg.cc/R3J6P2fT)
+[![task-options.png](https://cdn.discordapp.com/attachments/920929717325021215/953013420368732190/unknown.png)](https://postimg.cc/R3J6P2fT)
 
 Individual tasks can also be edited by selecting the task from the list. A task summary will slide out to the right side of the screen and offer options to rename the task, edit the deadline, priority, or description, and move them to new or existing lists. Each change to a task is updated dynamically and will be saved to the database as soon as the user clicks a dropdown option or moves their mouse focus away from an input. The webpage will also display the updated information immediately.
 
